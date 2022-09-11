@@ -1,0 +1,1 @@
+export { asyncRouteHandler } from './asyncRoute';
