@@ -1,12 +1,11 @@
+import { Sequelize } from 'sequelize';
 import config from 'config';
-import * as mysql from 'mysql2';
 
-console.log(1);
+console.log(config.mysql_database);
 
-const con = mysql.createConnection({
+const sequelize = new Sequelize(config.mysql_database, config.mysql_username, config.mysql_password, {
 	host: config.mysql_host,
-	user: config.mysql_username,
-	password: config.mysql_password
+	dialect: 'mysql'
 });
 
-export default con;
+export default sequelize;

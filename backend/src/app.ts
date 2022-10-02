@@ -4,30 +4,42 @@ import routers from 'api';
 import * as dotenv from 'dotenv';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
-dotenv.config();
-const { xss } = require('express-xss-sanitizer');
 
-// require('dotenv').config()
-// rest of the code remains same
+dotenv.config();
+
+import sequelize from 'databases';
+
+async function assertDatabaseConnectionOk() {
+	console.log(`Checking database connection...`);
+	try {
+		await sequelize.authenticate();
+		console.log('Database connection OK!');
+	} catch (error) {
+		console.log('Unable to connect to the database:');
+		console.log(error.message);
+		process.exit(1);
+	}
+}
+
 const app = express();
 
-// cookie parser
-app.use(cookieParser());
-// configuring CORS
-// app.use(cors());
-app.use(cors({ credentials: true, origin: 'http://localhost:3000' }));
+async function init() {
+	await assertDatabaseConnectionOk();
 
-// parse application/x-www-form-urlencoded
-app.use(bodyParser.urlencoded({ extended: false }));
+	app.use(cookieParser());
 
-// parse application/json
-app.use(bodyParser.json());
+	app.use(cors());
 
-// import 'databases';
+	app.use(bodyParser.urlencoded({ extended: false }));
 
-app.use(xss());
+	app.use(bodyParser.json());
 
-// init route
-app.use(routers);
+	const { xss } = require('express-xss-sanitizer');
+	app.use(xss());
+
+	app.use(routers);
+}
+
+init();
 
 export default app;
