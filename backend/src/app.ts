@@ -7,39 +7,21 @@ import cors from 'cors';
 
 dotenv.config();
 
-import sequelize from 'databases';
-
-async function assertDatabaseConnectionOk() {
-	console.log(`Checking database connection...`);
-	try {
-		await sequelize.authenticate();
-		console.log('Database connection OK!');
-	} catch (error) {
-		console.log('Unable to connect to the database:');
-		console.log(error.message);
-		process.exit(1);
-	}
-}
+import 'databases';
 
 const app = express();
 
-async function init() {
-	await assertDatabaseConnectionOk();
+app.use(cookieParser());
 
-	app.use(cookieParser());
+app.use(cors());
 
-	app.use(cors());
+app.use(bodyParser.urlencoded({ extended: false }));
 
-	app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 
-	app.use(bodyParser.json());
+const { xss } = require('express-xss-sanitizer');
+app.use(xss());
 
-	const { xss } = require('express-xss-sanitizer');
-	app.use(xss());
-
-	app.use(routers);
-}
-
-init();
+app.use(routers);
 
 export default app;
