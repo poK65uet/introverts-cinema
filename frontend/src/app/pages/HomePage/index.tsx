@@ -1,15 +1,24 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { Helmet } from 'react-helmet-async';
 import useStyles from './styles';
+import { Helmet } from 'react-helmet-async';
 import { useGetMessage } from 'queries/message';
+import Banner from 'app/components/Banner';
+import NewMovieList from 'app/components/NewMovieList';
+import UpcomingMovieList from 'app/components/UpcomingMovieList';
 
 export function HomePage() {
+
   const classes = useStyles();
-  const { data: message } = useGetMessage();
+
+  React.useEffect(() => {
+    document.body.style.margin = '0';
+  }, []);
+
   return (
-    <div className={classes.homePage}>
-      <h2>Homepage: </h2>
-      <span>{message}</span>
+    <div className={classes.homePage} >
+      <Banner />
+      <NewMovieList />
+      <UpcomingMovieList />
     </div>
   );
 }
