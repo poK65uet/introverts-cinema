@@ -5,7 +5,7 @@ const useStyles = makeStyles(() => ({
     backgroundColor: '#E5E5E5',
     display: 'flex',
     flexDirection: 'column',
-    height: '100vh',
+    height: '100%',
   },
 }));
 
