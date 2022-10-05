@@ -1,9 +1,9 @@
 import { Router } from 'express';
-import exampleRouters from './example';
+import userRouters from './user';
 
 const router = Router();
 import { asyncRouteHandler } from 'middlewares';
 
-router.use('/example', asyncRouteHandler(exampleRouters));
+router.use('/user', asyncRouteHandler(userRouters));
 
 export default router;
