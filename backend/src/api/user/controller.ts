@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
-import * as service from './Service';
+import * as service from './service';
 import { ApiResponse } from 'utils/rest/ApiResponse';
 
 const getUsers = async (req: Request, res: Response, next: NextFunction) => {
