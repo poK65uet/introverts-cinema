@@ -17,7 +17,6 @@ const useStyles = makeStyles(() => ({
 		},
 	},
 
-
 	movie: {
 		display: 'flex',
 		justifyContent: 'center',
@@ -27,7 +26,13 @@ const useStyles = makeStyles(() => ({
 		color: '#fff',
 		fontSize: '2rem',
 	},
-	
+
+	movieC: {
+		display: 'flex',
+		justifyContent: 'center',
+		alignItems: 'center',
+		height: '20rem',
+	},
 }));
 
 export default useStyles;
