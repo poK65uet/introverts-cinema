@@ -18,7 +18,7 @@ export default function Banner() {
       className={classes.banner}
       autoplay={{
         delay: 2500,
-        disableOnInteraction: false,
+        disableOnInteraction: true,
       }}
       navigation
       pagination={{
@@ -26,11 +26,16 @@ export default function Banner() {
       }}
       loop
       slidesPerView={1}>
-      <SwiperSlide className={classes.movie}>Phim 1</SwiperSlide>
-      <SwiperSlide className={classes.movie}>Phim 2</SwiperSlide>
-      <SwiperSlide className={classes.movie}>Phim 3</SwiperSlide>
-      <SwiperSlide className={classes.movie}>Phim 4</SwiperSlide>
-      <SwiperSlide className={classes.movie}>Phim 5</SwiperSlide>
-    </Swiper>
+
+      <SwiperSlide className={classes.movie}>
+        <img src={require('./assets/banner1.png')} />
+      </SwiperSlide>
+      <SwiperSlide className={classes.movie}>
+        <img src={require('./assets/banner2.png')} />
+      </SwiperSlide>
+      <SwiperSlide className={classes.movie}>
+        <img src={require('./assets/banner3.png')} />
+      </SwiperSlide>
+    </Swiper >
   );
 }
