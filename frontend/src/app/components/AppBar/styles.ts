@@ -20,7 +20,7 @@ const useStyles = makeStyles(() => ({
 		'&:hover': {
 			color: '#FF884B ',
 			transform: 'scale(1.05)',
-			transitionDuration: '.5s !important',
+			transitionDuration: '0.5s',
 		},
 	},
 
