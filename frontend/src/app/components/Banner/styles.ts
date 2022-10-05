@@ -2,7 +2,7 @@ import { makeStyles } from '@mui/styles';
 
 const useStyles = makeStyles(() => ({
   banner: {
-    width: '100%',
+    maxWidth: '100%',
     marginBottom:'1rem',
     '& .swiper-button-next, .swiper-button-prev': {
       color: '#FFD6A5',
@@ -20,6 +20,10 @@ const useStyles = makeStyles(() => ({
     backgroundColor: '#FF884B',
     color: '#fff',
     fontSize: '4rem',
+    '& img': {
+      maxWidth: '100%',
+      objectFit: 'cover',
+    },
   },
 
 }));
