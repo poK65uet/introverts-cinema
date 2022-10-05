@@ -7,4 +7,10 @@ const getUsers = async (req: Request, res: Response, next: NextFunction) => {
 	new ApiResponse(result).send(res);
 };
 
-export { getUsers };
+const addUser = async (req: Request, res: Response, next: NextFunction) => {
+	const newUser = req.body;
+	const result = await service.addUser(newUser);
+	new ApiResponse(result).send(res);
+};
+
+export { getUsers, addUser };

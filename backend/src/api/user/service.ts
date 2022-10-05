@@ -1,11 +1,7 @@
-// import sequelize, { User } from 'databases';
 import { Role, User } from 'databases/models';
-const addUser = async () => {
-	return User.create({
-		email: 'abcd@gmail.com',
-		password: 'password',
-		full_name: 'ab'
-	});
+import UserPayload from './UserPayload';
+const addUser = async (newUser: UserPayload) => {
+	return User.create(newUser);
 };
 
 const getAll = async () => {
@@ -13,4 +9,4 @@ const getAll = async () => {
 	return users;
 };
 
-export { getAll };
+export { getAll, addUser };
