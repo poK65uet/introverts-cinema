@@ -1,8 +1,8 @@
 type UserPayload = {
 	email: string;
 	password: string;
-	full_name: string;
-	birth_day: Date | null;
+	fullNname: string;
+	birthDay: Date | null;
+	roles: string[];
 };
 export default UserPayload;
-

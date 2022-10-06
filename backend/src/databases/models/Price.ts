@@ -1,26 +1,29 @@
 import { DataTypes } from 'sequelize';
 import sequelize from 'databases';
 
-const Role = sequelize.define(
-	'Role',
+const Price = sequelize.define(
+	'Price',
 	{
-		id: {
+		visionType: {
 			allowNull: false,
-			autoIncrement: true,
 			primaryKey: true,
 			type: DataTypes.INTEGER
 		},
-		name: {
+		dayCode: {
 			allowNull: false,
-			unique: true,
+			primaryKey: true,
 			type: DataTypes.STRING
+		},
+		value: {
+			type: DataTypes.BIGINT
 		}
 	},
 	{
-		tableName: 'role',
-		timestamps: false,
+		tableName: 'price',
+		timestamps: true,
+		createdAt: false,
 		underscored: true
 	}
 );
 
-export default Role;
+export default Price;

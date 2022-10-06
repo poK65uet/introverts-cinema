@@ -1,6 +1,5 @@
 import { DataTypes } from 'sequelize';
 import sequelize from 'databases';
-import Role from './Role';
 
 const User = sequelize.define(
 	'User',
@@ -13,6 +12,7 @@ const User = sequelize.define(
 		},
 		email: {
 			allowNull: false,
+			unique: true,
 			type: DataTypes.STRING
 		},
 		password: {

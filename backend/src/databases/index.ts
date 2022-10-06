@@ -17,4 +17,4 @@ sequelize
 	});
 
 export default sequelize;
-// export { User };
+

@@ -1,8 +1,9 @@
 import { DataTypes } from 'sequelize';
 import sequelize from 'databases';
+import Nationality from './Nationality';
 
-const Role = sequelize.define(
-	'Role',
+const Actor = sequelize.define(
+	'Actor',
 	{
 		id: {
 			allowNull: false,
@@ -10,17 +11,22 @@ const Role = sequelize.define(
 			primaryKey: true,
 			type: DataTypes.INTEGER
 		},
-		name: {
+		fullName: {
 			allowNull: false,
-			unique: true,
 			type: DataTypes.STRING
+		},
+		birthDay: {
+			type: DataTypes.DATE
 		}
 	},
 	{
-		tableName: 'role',
+		tableName: 'actor',
 		timestamps: false,
 		underscored: true
 	}
 );
 
-export default Role;
+Nationality.hasOne(Actor);
+Actor.belongsTo(Nationality);
+
+export default Actor;

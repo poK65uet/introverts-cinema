@@ -1,8 +1,8 @@
 import { DataTypes } from 'sequelize';
 import sequelize from 'databases';
 
-const Role = sequelize.define(
-	'Role',
+const Category = sequelize.define(
+	'Category',
 	{
 		id: {
 			allowNull: false,
@@ -17,10 +17,10 @@ const Role = sequelize.define(
 		}
 	},
 	{
-		tableName: 'role',
+		tableName: 'category',
 		timestamps: false,
 		underscored: true
 	}
 );
 
-export default Role;
+export default Category;

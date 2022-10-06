@@ -1,7 +1,8 @@
 import { Role, User } from 'databases/models';
 import UserPayload from './UserPayload';
 const addUser = async (newUser: UserPayload) => {
-	return User.create(newUser);
+	const user = await User.create(newUser);
+	return user;
 };
 
 const getAll = async () => {

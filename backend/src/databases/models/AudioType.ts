@@ -1,8 +1,8 @@
 import { DataTypes } from 'sequelize';
 import sequelize from 'databases';
 
-const Role = sequelize.define(
-	'Role',
+const AudioType = sequelize.define(
+	'AudioType',
 	{
 		id: {
 			allowNull: false,
@@ -10,17 +10,17 @@ const Role = sequelize.define(
 			primaryKey: true,
 			type: DataTypes.INTEGER
 		},
-		name: {
+		code: {
 			allowNull: false,
 			unique: true,
 			type: DataTypes.STRING
 		}
 	},
 	{
-		tableName: 'role',
+		tableName: 'audio_type',
 		timestamps: false,
 		underscored: true
 	}
 );
 
-export default Role;
+export default AudioType;
