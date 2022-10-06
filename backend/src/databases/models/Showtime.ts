@@ -1,6 +1,6 @@
 import { DataTypes } from 'sequelize';
 import sequelize from 'databases';
-import Price from './Price';
+import Room from './Room';
 
 const Showtime = sequelize.define(
 	'Showtime',
@@ -14,15 +14,7 @@ const Showtime = sequelize.define(
 		startTime: {
 			allowNull: false,
 			type: DataTypes.TIME
-		},
-		visionType: {
-			allowNull: false,
-			type: DataTypes.STRING
-        },
-        price: {
-            allowNull: false,
-            type: DataTypes.BIGINT
-        }
+		}
 	},
 	{
 		tableName: 'showtime',
@@ -30,5 +22,7 @@ const Showtime = sequelize.define(
 	}
 );
 
+Room.hasOne(Showtime);
+Showtime.belongsTo(Room);
 
 export default Showtime;
