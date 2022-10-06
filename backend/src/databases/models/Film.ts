@@ -1,7 +1,6 @@
 import { DataTypes } from 'sequelize';
 import sequelize from 'databases';
 import Rated from './Rated';
-import AudioType from './AudioType';
 import Nationality from './Nationality';
 
 const Film = sequelize.define(
@@ -43,9 +42,6 @@ const Film = sequelize.define(
 
 Rated.hasOne(Film);
 Film.belongsTo(Rated);
-
-AudioType.hasOne(Film);
-Film.belongsTo(AudioType);
 
 Nationality.hasOne(Film);
 Film.belongsTo(Nationality);

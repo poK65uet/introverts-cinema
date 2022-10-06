@@ -1,8 +1,9 @@
 import { DataTypes } from 'sequelize';
 import sequelize from 'databases';
+import Showtime from './Showtime';
 
-const Nationality = sequelize.define(
-	'Nationality',
+const Seat = sequelize.define(
+	'Seat',
 	{
 		id: {
 			allowNull: false,
@@ -10,20 +11,25 @@ const Nationality = sequelize.define(
 			primaryKey: true,
 			type: DataTypes.INTEGER
 		},
-		name: {
+		row: {
 			allowNull: false,
-			unique: true,
 			type: DataTypes.STRING
 		},
-		imageUrl: {
+		column: {
+			allowNull: false,
+			type: DataTypes.STRING
+		},
+		status: {
 			type: DataTypes.STRING
 		}
 	},
 	{
-		tableName: 'nationality',
-		timestamps: false,
+		tableName: 'seat',
 		underscored: true
 	}
 );
 
-export default Nationality;
+Showtime.hasOne(Seat);
+Seat.belongsTo(Showtime);
+
+export default Seat;

@@ -1,8 +1,9 @@
 import { DataTypes } from 'sequelize';
 import sequelize from 'databases';
+import Price from './Price';
 
-const Price = sequelize.define(
-	'Price',
+const Showtime = sequelize.define(
+	'Showtime',
 	{
 		id: {
 			allowNull: false,
@@ -10,24 +11,24 @@ const Price = sequelize.define(
 			primaryKey: true,
 			type: DataTypes.INTEGER
 		},
+		startTime: {
+			allowNull: false,
+			type: DataTypes.TIME
+		},
 		visionType: {
 			allowNull: false,
-			type: DataTypes.INTEGER
-		},
-		dayCode: {
-			allowNull: false,
 			type: DataTypes.STRING
-		},
-		value: {
-			type: DataTypes.BIGINT
-		}
+        },
+        price: {
+            allowNull: false,
+            type: DataTypes.BIGINT
+        }
 	},
 	{
-		tableName: 'price',
-		timestamps: true,
-		createdAt: false,
+		tableName: 'showtime',
 		underscored: true
 	}
 );
 
-export default Price;
+
+export default Showtime;
