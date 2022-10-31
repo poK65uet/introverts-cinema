@@ -6,23 +6,17 @@ const useStyles = makeStyles(() => ({
 		maxHeight: '20rem',
 		boxShadow: 'none !important',
 		WebkitTransitionDuration: '1s',
+		'& img': {
+			overflow: 'hidden',
+		},
 		'&:hover': {
 			'& img': {
-				backgroundColor: 'black',
+				backgroundColor: '#1D1C1A',
 			transitionDuration: '0.25s',
 			opacity: '0.9',
 			filter: 'brightness(20%)',
 			}
 		},
-	},
-
-	movie: {
-		display: 'flex',
-		justifyContent: 'center',
-		alignItems: 'center',
-		height: '20rem',
-		width: '12rem',
-		color: '#FFFFFF',
 	},
 
 	information: {
@@ -34,7 +28,7 @@ const useStyles = makeStyles(() => ({
 	actions: {
 		left: '50%',
         transform: 'translate(-50%)',
-		bottom: '1.25rem',
+		bottom: '0.5vw',
 		position: 'fixed',
 		display: 'flex',
 		justifyContent: 'space-around',

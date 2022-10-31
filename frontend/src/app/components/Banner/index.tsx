@@ -1,12 +1,36 @@
 import * as React from 'react';
 import { Box } from '@mui/material';
-import { Swiper, SwiperSlide } from "swiper/react";
-import { Autoplay, Navigation, Pagination } from "swiper"
-import "swiper/css"
-import "swiper/css/navigation"
-import "swiper/css/pagination"
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Autoplay, Navigation, Pagination } from 'swiper'
+import 'swiper/css'
+import 'swiper/css/navigation'
+import 'swiper/css/pagination'
 
 import useStyles from './styles';
+
+interface BannerProps {
+  id: string
+  img: string
+  link: string
+}
+
+const banners: BannerProps[] = [
+  {
+    id: '0',
+    img: require('./assets/banner1.png'),
+    link: '',
+  },
+  {
+    id: '1',
+    img: require('./assets/banner2.png'),
+    link: '',
+  },
+  {
+    id: '2',
+    img: require('./assets/banner3.png'),
+    link: '',
+  },
+]
 
 export default function Banner() {
 
@@ -15,10 +39,9 @@ export default function Banner() {
   return (
     <Swiper
       modules={[Autoplay, Navigation, Pagination]}
-      className={classes.banner}
+      className={classes.swiper}
       autoplay={{
-        delay: 2500,
-        disableOnInteraction: true,
+        delay: 4000,
       }}
       navigation
       pagination={{
@@ -26,16 +49,12 @@ export default function Banner() {
       }}
       loop
       slidesPerView={1}>
-
-      <SwiperSlide className={classes.movie}>
-        <img src={require('./assets/banner1.png')} />
-      </SwiperSlide>
-      <SwiperSlide className={classes.movie}>
-        <img src={require('./assets/banner2.png')} />
-      </SwiperSlide>
-      <SwiperSlide className={classes.movie}>
-        <img src={require('./assets/banner3.png')} />
-      </SwiperSlide>
+      {
+        banners.map((banner: BannerProps, index: number) => {
+          return <SwiperSlide className={classes.banner} key={index} >
+            <img src={banner.img} />
+          </SwiperSlide>
+        })}
     </Swiper >
   );
 }

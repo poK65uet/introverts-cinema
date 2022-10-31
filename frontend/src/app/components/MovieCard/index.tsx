@@ -16,6 +16,7 @@ interface MovieCardProps {
 	img: string
 }
 
+
 export function MovieCard(props: MovieCardProps) {
 
 	const [hover, setHover] = React.useState(false);
@@ -42,8 +43,8 @@ export function MovieCard(props: MovieCardProps) {
 				Thời lượng: {props.duration}
 			</CardContent>
 			<CardActions sx={{ display: hover ? 'flex' : 'none' }} className={classes.actions}>
-				<Button classes={{ root: classes.button }} size="small">Chi tiết</Button>
-				<Button classes={{ root: classes.button }} size="small">Đặt vé</Button>
+				<Button classes={{ root: classes.button }} size='small'>Chi tiết</Button>
+				<Button classes={{ root: classes.button }} size='small'>Đặt vé</Button>
 			</CardActions>
 		</Card >
 	);

@@ -5,43 +5,91 @@ import {
   Divider,
   Typography
 } from '@mui/material';
-import { Swiper, SwiperSlide } from "swiper/react";
-import { Autoplay, Navigation } from "swiper"
-import "swiper/css"
-import "swiper/css/navigation"
-import "swiper/css/effect-coverflow";
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Autoplay, EffectCoverflow, Navigation } from 'swiper'
+import { MovieCard } from 'app/components/MovieCard';
 
 export default function UpcomingMovieList() {
+
   const classes = useStyles();
+
+  interface MovieProps {
+    id: number
+    name: string
+    img: string
+    genre?: string
+  }
+
+  const upcomingMovies: MovieProps[] = [
+    {
+      id: 0,
+      name: 'Bỗng Dưng Trúng Số',
+      img: require('./assets/images/movie1.png'),
+    },
+    {
+      id: 1,
+      name: 'Mười: Lời Nguyền Trở Lại',
+      img: require('./assets/images/movie2.png'),
+    },
+    {
+      id: 2,
+      name: 'Cười',
+      img: require('./assets/images/movie3.png'),
+    },
+    {
+      id: 3,
+      name: 'Ngược Dòng Thời Gian Để Yêu Anh',
+      img: require('./assets/images/movie4.png'),
+    },
+    {
+      id: 4,
+      name: 'Avatar',
+      img: require('./assets/images/movie5.png'),
+    },
+    {
+      id: 5,
+      name: 'Evangelion: 3.0+1.01 Ba Lần Ngày Xưa',
+      img: require('./assets/images/movie6.png')
+    }
+  ]
+
+  const [styleFocus, setStyleFocus] = React.useState(false)
 
   return (
     <Container className={classes.container}>
       <Divider sx={{ mb: 2 }}>
-        <Typography variant='h4' fontWeight={900}>
+        <Typography sx={{ fontSize: '3vw', color: '#1D1C1A' }} fontWeight={900}>
           Phim Sắp Chiếu
         </Typography>
       </Divider>
       <Swiper
-        modules={[Autoplay, Navigation]}
-        className={classes.movieList}
+        modules={[Autoplay, EffectCoverflow, Navigation]}
         autoplay={{
           delay: 4000,
-          disableOnInteraction: false,
+          disableOnInteraction: true,
         }}
+        className={classes.list}
         navigation
-        loop
+        effect='coverflow'
         centeredSlides
-        spaceBetween={1}
+        coverflowEffect={{
+          rotate: 0,
+          modifier: 0,
+        }}
+        loop
         slidesPerView={7}>
-        <SwiperSlide className={classes.movie}>Phim 1</SwiperSlide>
-        <SwiperSlide className={classes.movieblue}>Phim 2</SwiperSlide>
-        <SwiperSlide className={classes.moviegreen}>Phim 3</SwiperSlide>
-        <SwiperSlide className={classes.movieblack}>Phim 4</SwiperSlide>
-        <SwiperSlide className={classes.moviered}>Phim 5</SwiperSlide>
+        {
+          upcomingMovies.map((movie: MovieProps, index: number) => {
+            return <SwiperSlide className={classes.movie} key={index}>
+              <MovieCard
+                id={movie.id}
+                name={movie.name}
+                img={movie.img} />
+            </SwiperSlide>
+          })}
       </Swiper>
     </Container>
   );
-
 }
 
 

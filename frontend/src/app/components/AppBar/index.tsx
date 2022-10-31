@@ -18,16 +18,25 @@ import useStyles from './styles';
 
 export default function AppBar() {
 
-  const [openMenuFilm, setOpenMenuFilm] = React.useState(false);
+  const [openMenuMovie, setOpenMenuMovie] = React.useState(false);
+  const [openMenuSearchMovie, setOpenMenuSearchMovie] = React.useState(false);
   const [login, setLogin] = React.useState(false);
   const [accountOpt, setAccountOpt] = React.useState(false);
 
-  const handleOpenMenuFilm = () => {
-    setOpenMenuFilm(true);
+  const handleOpenMenuMovie = () => {
+    setOpenMenuMovie(true);
   }
 
-  const handleCloseMenuFilm = () => {
-    setOpenMenuFilm(false);
+  const handleCloseMenuMovie = () => {
+    setOpenMenuMovie(false);
+  }
+
+  const handleOpenMenuSearchMovie = () => {
+    setOpenMenuSearchMovie(true);
+  }
+
+  const handleCloseMenuSearchMovie = () => {
+    setOpenMenuSearchMovie(false);
   }
 
   const handleLogin = () => {
@@ -41,14 +50,39 @@ export default function AppBar() {
   const classes = useStyles();
 
   return (
-    <MuiAppBar className={classes.appBar} position='sticky'>
+    <MuiAppBar className={classes.appBar}>
       <Toolbar className={classes.toolBar}>
-        {openMenuFilm ?
+        {openMenuSearchMovie ?
           <Button disableRipple color='inherit' className={classes.button}
-            onMouseOver={handleOpenMenuFilm}
-            onMouseLeave={handleCloseMenuFilm}>
-            <Slide in={openMenuFilm} mountOnEnter unmountOnExit>
-              <List className={classes.filmMenu}>
+            onMouseOver={handleOpenMenuSearchMovie}
+            onMouseLeave={handleCloseMenuSearchMovie}>
+            <Slide in={openMenuSearchMovie} mountOnEnter unmountOnExit>
+              <List className={classes.movieMenu}>
+                <ListItemButton className={classes.button} disableRipple>
+                  PHIM THEO THỂ LOẠI
+                </ListItemButton>
+                <ListItemButton className={classes.button} disableRipple>
+                  PHIM THEO GIỜ CHIẾU
+                </ListItemButton>
+              </List>
+            </Slide>
+          </Button>
+          :
+          <Fade in={!openMenuSearchMovie}>
+            <Button disableRipple color='inherit' className={classes.button}
+              onMouseOver={handleOpenMenuSearchMovie}
+              onMouseLeave={handleCloseMenuSearchMovie}>
+              Tìm kiếm
+              < ExpandMoreIcon />
+            </Button>
+          </Fade>
+        }
+        {openMenuMovie ?
+          <Button disableRipple color='inherit' className={classes.button}
+            onMouseOver={handleOpenMenuMovie}
+            onMouseLeave={handleCloseMenuMovie}>
+            <Slide in={openMenuMovie} mountOnEnter unmountOnExit>
+              <List className={classes.movieMenu}>
                 <ListItemButton className={classes.button} disableRipple>
                   PHIM ĐANG CHIẾU
                 </ListItemButton>
@@ -59,15 +93,14 @@ export default function AppBar() {
             </Slide>
           </Button>
           :
-          <Fade in={!openMenuFilm}>
+          <Fade in={!openMenuMovie}>
             <Button disableRipple color='inherit' className={classes.button}
-              onMouseOver={handleOpenMenuFilm}
-              onMouseLeave={handleCloseMenuFilm}>
+              onMouseOver={handleOpenMenuMovie}
+              onMouseLeave={handleCloseMenuMovie}>
               Phim
               < ExpandMoreIcon />
             </Button>
           </Fade>
-
         }
         <Button disableRipple color='inherit' className={classes.button}>Lịch chiếu</Button>
         <Button disableRipple color='inherit' className={classes.button}>Đặt vé</Button>
