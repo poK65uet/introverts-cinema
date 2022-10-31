@@ -1,9 +1,13 @@
 import { makeStyles } from '@mui/styles';
 
 const useStyles = makeStyles(() => ({
-  banner: {
+  swiper: {
     maxWidth: '100%',
+    height: 'fit-content',
     marginBottom:'1rem',
+    '& .swiper-wrapper':{
+      height: 'fit-content',
+		},
     '& .swiper-button-next, .swiper-button-prev': {
       color: '#FFD6A5',
     },
@@ -12,14 +16,17 @@ const useStyles = makeStyles(() => ({
     },
   },
 
-  movie: {
-    display: 'flex',
+  banner: {
     justifyContent: 'center',
     alignItems: 'center',
-    height: '65vh',
-    backgroundColor: '#FF884B',
+    height: 'fit-content',
+    maxHeight: '35vw',
+    backgroundColor: 'transperant',
     color: '#fff',
     fontSize: '4rem',
+    '& .swiper-slide' : {
+      height: 'fit-content !important',
+    },
     '& img': {
       maxWidth: '100%',
       objectFit: 'cover',

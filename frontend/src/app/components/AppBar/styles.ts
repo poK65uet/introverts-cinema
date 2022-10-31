@@ -3,20 +3,25 @@ import { makeStyles } from '@mui/styles';
 const useStyles = makeStyles(() => ({
 	appBar: {
 		maxHeight: '64px',
-	  	backgroundColor: 'black !important',
+	  	backgroundColor: '#1D1C1A !important',
 		color: 'white !important',
 		display: 'flex',
+		position: 'sticky',
+		zIndexL: 11,
 	},
 
 	toolBar: {
+		display: 'flex',
 		color: 'white',
 		paddingLeft: '1rem !important',
-		justifyContent: 'flex-end',
+		justifyContent: 'center',
 		alignItems: 'stretch !important',
 	},
 
 	button: {
-		marginRight: '2rem !important',
+		minWidth: '12.5vw !important',
+		maxWidth: '12.5vw !important',
+		fontSize: 'max(0,75vw) !important',
 		'&:hover': {
 			color: '#FF884B ',
 			transform: 'scale(1.05)',
@@ -38,9 +43,9 @@ const useStyles = makeStyles(() => ({
 		width: '24px !important',
 	},
 
-	filmMenu: {
+	movieMenu: {
 			top: '64px',
-			backgroundColor: 'black',
+			backgroundColor: '#1D1C1A',
 			position: 'static',
 			color: 'white',
 	},

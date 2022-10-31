@@ -5,22 +5,19 @@ import {
   Divider,
   Typography
 } from '@mui/material';
-import { Swiper, SwiperSlide } from "swiper/react";
-import { Autoplay, EffectCoverflow, Navigation } from "swiper"
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Autoplay, EffectCoverflow, Navigation } from 'swiper'
 import { MovieCard } from 'app/components/MovieCard';
-import "swiper/css"
-import "swiper/css/navigation"
-import "swiper/css/effect-coverflow";
 
 export default function NewMovieList(this: any) {
 
   const classes = useStyles();
 
   interface MovieProps {
-    id: number;
-    name: string;
-    img: string;
-    genre?: string;
+    id: number
+    name: string
+    img: string
+    genre?: string
   }
 
   const newMovies: MovieProps[] = [
@@ -59,14 +56,15 @@ export default function NewMovieList(this: any) {
   return (
     <Container className={classes.container}>
       <Divider sx={{ mb: 2 }}>
-        <Typography variant='h4' fontWeight={900}>
+        <Typography sx={{ fontSize: '3vw', color: '#1D1C1A' }} fontWeight={900}>
           Phim Đang Chiếu
         </Typography>
       </Divider>
       <Swiper
         modules={[Autoplay, EffectCoverflow, Navigation]}
         autoplay={{
-          delay: 5000,
+          delay: 2500,
+          pauseOnMouseEnter: true,
           disableOnInteraction: false,
         }}
         navigation
@@ -77,14 +75,12 @@ export default function NewMovieList(this: any) {
           stretch: -15,
           depth: 50,
           modifier: 1,
-          slideShadows: true,
         }}
         loop
         slidesPerView={5}>
-
         {
           newMovies.map((movie: MovieProps, index: number) => {
-            return <SwiperSlide className={classes.movieC} key={index}>
+            return <SwiperSlide className={classes.movie} key={index}>
               <MovieCard
                 id={movie.id}
                 name={movie.name}
@@ -94,7 +90,6 @@ export default function NewMovieList(this: any) {
       </Swiper>
     </Container >
   );
-
 }
 
 
