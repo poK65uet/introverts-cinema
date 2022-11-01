@@ -50,8 +50,18 @@ export default function AppBar() {
   const classes = useStyles();
 
   return (
-    <MuiAppBar className={classes.appBar}>
-      <Toolbar className={classes.toolBar}>
+    <MuiAppBar className={classes.appBar}
+      color='secondary'
+      position='sticky'
+      sx={{
+        fontSize: { xs: '14px', lg: '16px' },
+      }}
+    >
+      <Toolbar className={classes.toolBar}
+        sx={{
+          fontSize: { xs: '10px', lg: '14px' },
+        }}
+      >
         {openMenuSearchMovie ?
           <Button disableRipple color='inherit' className={classes.button}
             onMouseOver={handleOpenMenuSearchMovie}
@@ -59,10 +69,10 @@ export default function AppBar() {
             <Slide in={openMenuSearchMovie} mountOnEnter unmountOnExit>
               <List className={classes.movieMenu}>
                 <ListItemButton className={classes.button} disableRipple>
-                  PHIM THEO THỂ LOẠI
+                  <span className={classes.buttonText}>PHIM&nbsp;</span> THEO THỂ LOẠI
                 </ListItemButton>
                 <ListItemButton className={classes.button} disableRipple>
-                  PHIM THEO GIỜ CHIẾU
+                  <span className={classes.buttonText}>PHIM&nbsp;</span> THEO GIỜ CHIẾU
                 </ListItemButton>
               </List>
             </Slide>
@@ -105,19 +115,28 @@ export default function AppBar() {
         <Button disableRipple color='inherit' className={classes.button}>Lịch chiếu</Button>
         <Button disableRipple color='inherit' className={classes.button}>Đặt vé</Button>
         {!login ?
-          <Button disableRipple color='inherit' startIcon={< LoginIcon />}
+          <Button
+            sx={{ position: 'absolute' }}
+            disableRipple
+            color='inherit'
+            className={classes.loginButton}
+            startIcon={< LoginIcon sx={{ height: { xs: '0.75em', lg: '1em' } }} />}
             onClick={handleLogin}>
-            Đăng nhập
+            <span className={classes.buttonText}>
+              Đăng nhập
+            </span>
           </Button>
           :
           <>
             <Button
+              sx={{ position: 'absolute' }}
               disableRipple
               color='inherit'
               className={classes.accountButton}
               startIcon={<AccountIcon className={classes.icon} />}
             />
             <Button
+              sx={{ position: 'absolute' }}
               disableRipple
               color='inherit'
               className={classes.optButton}

@@ -1,12 +1,11 @@
 import { makeStyles } from '@mui/styles';
+import { Theme } from '@mui/material';
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme : Theme) => ({
 	appBar: {
-		maxHeight: '64px',
-	  	backgroundColor: '#1D1C1A !important',
 		color: 'white !important',
+		maxHeight: '4em',
 		display: 'flex',
-		position: 'sticky',
 		zIndexL: 11,
 	},
 
@@ -19,39 +18,69 @@ const useStyles = makeStyles(() => ({
 	},
 
 	button: {
-		minWidth: '12.5vw !important',
-		maxWidth: '12.5vw !important',
-		fontSize: 'max(0,75vw) !important',
+		minWidth: '9em !important',
+		maxWidth: '9em',
+		fontSize: '1em !important',
 		'&:hover': {
-			color: '#FF884B ',
-			transform: 'scale(1.05)',
+			color: theme.palette.primary.main,
 			transitionDuration: '0.5s',
+		},
+		[theme.breakpoints.up('sm')]: {
+		  minWidth:'15vw !important',
+		}
+	},
+
+	buttonText: {
+		[theme.breakpoints.down('sm')]: {
+		  display: 'none'
+		}
+	},
+
+	loginButton: {
+		fontSize: '1em !important',
+		right: '1em',
+		height: '4rem',
+		[theme.breakpoints.down('sm')]: {
+			right: '-1rem',
+			height: '56px',
 		},
 	},
 
 	accountButton: {
-		alignItems: 'center',
-		padding: '0 !important',
+		right: '1.5em',
+		height: '4rem',
+		[theme.breakpoints.down('sm')]: {
+			right: '-1.25rem',
+			height: '56px',
+		},
 		'&:hover': {
-			color: '#FF884B ',
+			color: theme.palette.primary.main,
 		},
 	},
 
 	optButton: {
-		marginRight: '-24px !important',
-		padding: '0 !important',
-		width: '24px !important',
+		right: '-0.5rem',
+		height: '4rem',
+		[theme.breakpoints.down('sm')]: {
+			display: 'none !important'
+		}
 	},
 
 	movieMenu: {
-			top: '64px',
-			backgroundColor: '#1D1C1A',
-			position: 'static',
-			color: 'white',
+		top: '5rem',
+		backgroundColor: theme.palette.secondary.main,
+		position: 'static',
+		color: 'white',
+		'&button': {
+			height: '2rem !important',
+		}
 	},
 
 	icon: {
-		fontSize: '50px !important',
+		fontSize: '3rem !important',
+		[theme.breakpoints.down('sm')]: {
+			fontSize: '2rem !important',
+		},
 	},
 }));
 

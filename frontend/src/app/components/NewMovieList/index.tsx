@@ -56,7 +56,7 @@ export default function NewMovieList(this: any) {
   return (
     <Container className={classes.container}>
       <Divider sx={{ mb: 2 }}>
-        <Typography sx={{ fontSize: '3vw', color: '#1D1C1A' }} fontWeight={900}>
+        <Typography sx={{ fontSize: { xs: '1rem', lg: '3rem' } }} color='secondary' fontWeight={900}>
           Phim Đang Chiếu
         </Typography>
       </Divider>
