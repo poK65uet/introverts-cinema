@@ -4,8 +4,8 @@ import { Theme } from '@mui/material';
 const useStyles = makeStyles((theme : Theme) => ({
 	appBar: {
 		color: 'white !important',
-		maxHeight: '4em',
-		display: 'flex',
+		maxHeight: '4rem',
+		minHeight: '3rem',
 		zIndexL: 11,
 	},
 
@@ -18,20 +18,27 @@ const useStyles = makeStyles((theme : Theme) => ({
 	},
 
 	button: {
-		minWidth: '9em !important',
-		maxWidth: '9em',
+		maxWidth: '10rem',
+		minWidth: '10rem !important',
 		fontSize: '1em !important',
 		'&:hover': {
 			color: theme.palette.primary.main,
 			transitionDuration: '0.5s',
 		},
-		[theme.breakpoints.up('sm')]: {
-		  minWidth:'15vw !important',
-		}
+	},
+
+	listButton:{
+		maxWidth: '13rem',
+		minWidth: '13rem !important',
+		fontSize: '1em !important',
+		'&:hover': {
+			color: theme.palette.primary.main,
+			transitionDuration: '0.5s',
+		},
 	},
 
 	buttonText: {
-		[theme.breakpoints.down('sm')]: {
+		[theme.breakpoints.down('md')]: {
 		  display: 'none'
 		}
 	},
@@ -40,19 +47,21 @@ const useStyles = makeStyles((theme : Theme) => ({
 		fontSize: '1em !important',
 		right: '1em',
 		height: '4rem',
-		[theme.breakpoints.down('sm')]: {
-			right: '-1rem',
-			height: '56px',
+	},
+
+	menuButton: {
+		height: '3rem',
+		width: 'fit-content',
+		fontSize: '!important',
+		'&:hover': {
+			color: theme.palette.primary.main,
+			transitionDuration: '0.5s',
 		},
 	},
 
 	accountButton: {
 		right: '1.5em',
 		height: '4rem',
-		[theme.breakpoints.down('sm')]: {
-			right: '-1.25rem',
-			height: '56px',
-		},
 		'&:hover': {
 			color: theme.palette.primary.main,
 		},
@@ -61,9 +70,6 @@ const useStyles = makeStyles((theme : Theme) => ({
 	optButton: {
 		right: '-0.5rem',
 		height: '4rem',
-		[theme.breakpoints.down('sm')]: {
-			display: 'none !important'
-		}
 	},
 
 	movieMenu: {
@@ -79,7 +85,7 @@ const useStyles = makeStyles((theme : Theme) => ({
 	icon: {
 		fontSize: '3rem !important',
 		[theme.breakpoints.down('sm')]: {
-			fontSize: '2rem !important',
+			fontSize: '2rem !important'
 		},
 	},
 }));
