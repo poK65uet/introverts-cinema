@@ -12,7 +12,8 @@ import {
   ExpandMore as ExpandMoreIcon,
   Login as LoginIcon,
   Logout as LogoutIcon,
-  AccountCircle as AccountIcon
+  AccountCircle as AccountIcon,
+  Menu as MenuIcon,
 } from '@mui/icons-material';
 import useStyles from './styles';
 
@@ -54,12 +55,21 @@ export default function AppBar() {
       color='secondary'
       position='sticky'
       sx={{
-        fontSize: { xs: '14px', lg: '16px' },
+        fontSize: { xs: '10px !important', sm: '1em !important' }
       }}
     >
+      <Button
+        sx={{
+          display: { sm: 'none' }
+        }}
+        color='inherit'
+        disableRipple
+        className={classes.menuButton}
+        startIcon={<MenuIcon className={classes.icon} />}
+      />
       <Toolbar className={classes.toolBar}
         sx={{
-          fontSize: { xs: '10px', lg: '14px' },
+          display: { xs: 'none', sm: 'flex' }
         }}
       >
         {openMenuSearchMovie ?
@@ -68,11 +78,11 @@ export default function AppBar() {
             onMouseLeave={handleCloseMenuSearchMovie}>
             <Slide in={openMenuSearchMovie} mountOnEnter unmountOnExit>
               <List className={classes.movieMenu}>
-                <ListItemButton className={classes.button} disableRipple>
-                  <span className={classes.buttonText}>PHIM&nbsp;</span> THEO THỂ LOẠI
+                <ListItemButton className={classes.listButton} disableRipple>
+                  PHIM THEO THỂ LOẠI
                 </ListItemButton>
-                <ListItemButton className={classes.button} disableRipple>
-                  <span className={classes.buttonText}>PHIM&nbsp;</span> THEO GIỜ CHIẾU
+                <ListItemButton className={classes.listButton} disableRipple>
+                  PHIM THEO GIỜ CHIẾU
                 </ListItemButton>
               </List>
             </Slide>
@@ -93,10 +103,10 @@ export default function AppBar() {
             onMouseLeave={handleCloseMenuMovie}>
             <Slide in={openMenuMovie} mountOnEnter unmountOnExit>
               <List className={classes.movieMenu}>
-                <ListItemButton className={classes.button} disableRipple>
+                <ListItemButton className={classes.listButton} disableRipple>
                   PHIM ĐANG CHIẾU
                 </ListItemButton>
-                <ListItemButton className={classes.button} disableRipple>
+                <ListItemButton className={classes.listButton} disableRipple>
                   PHIM SẮP CHIẾU
                 </ListItemButton>
               </List>
@@ -120,7 +130,7 @@ export default function AppBar() {
             disableRipple
             color='inherit'
             className={classes.loginButton}
-            startIcon={< LoginIcon sx={{ height: { xs: '0.75em', lg: '1em' } }} />}
+            startIcon={< LoginIcon sx={{ height: { lg: '0.75em', xl: '1em' } }} />}
             onClick={handleLogin}>
             <span className={classes.buttonText}>
               Đăng nhập
