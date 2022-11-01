@@ -1,7 +1,13 @@
-import { DataTypes } from 'sequelize';
+import { CreationOptional, DataTypes, InferAttributes, InferCreationAttributes, Model } from 'sequelize';
 import sequelize from 'databases';
 
-const Role = sequelize.define(
+export interface RoleModel extends Model<InferAttributes<RoleModel>, InferCreationAttributes<RoleModel>> {
+	// Some fields are optional when calling RoleModel.create() or RoleModel.build(	)
+	id: CreationOptional<number>;
+	name: string;
+}
+
+const Role = sequelize.define<RoleModel>(
 	'Role',
 	{
 		id: {
