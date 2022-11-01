@@ -1,6 +1,7 @@
 import { makeStyles } from '@mui/styles';
+import { Theme } from '@mui/material';
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme : Theme) => ({
   swiper: {
     maxWidth: '100%',
     height: 'fit-content',
@@ -10,6 +11,9 @@ const useStyles = makeStyles(() => ({
 		},
     '& .swiper-button-next, .swiper-button-prev': {
       color: '#FFD6A5',
+      [theme.breakpoints.down('sm')]: {
+        '--swiper-navigation-size': '1.5em',
+      },
     },
     '& .swiper-pagination-bullet-active': {
       backgroundColor: '#FFD6A5',
@@ -17,13 +21,13 @@ const useStyles = makeStyles(() => ({
   },
 
   banner: {
+    maxHeight: '35vw',
     justifyContent: 'center',
     alignItems: 'center',
     height: 'fit-content',
-    maxHeight: '35vw',
     backgroundColor: 'transperant',
     color: '#fff',
-    fontSize: '4rem',
+    fontSize: '1em',
     '& .swiper-slide' : {
       height: 'fit-content !important',
     },

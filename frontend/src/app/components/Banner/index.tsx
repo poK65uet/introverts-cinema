@@ -7,6 +7,7 @@ import 'swiper/css/navigation'
 import 'swiper/css/pagination'
 
 import useStyles from './styles';
+import { Container } from '@mui/system';
 
 interface BannerProps {
   id: string
@@ -41,7 +42,9 @@ export default function Banner() {
       modules={[Autoplay, Navigation, Pagination]}
       className={classes.swiper}
       autoplay={{
-        delay: 4000,
+        delay: 3000,
+        disableOnInteraction: false,
+
       }}
       navigation
       pagination={{
@@ -51,8 +54,9 @@ export default function Banner() {
       slidesPerView={1}>
       {
         banners.map((banner: BannerProps, index: number) => {
-          return <SwiperSlide className={classes.banner} key={index} >
+          return <SwiperSlide key={index} className={classes.banner} >
             <img src={banner.img} />
+            <div style={{ height: 0 }}>&nbsp;</div>
           </SwiperSlide>
         })}
     </Swiper >
