@@ -1,7 +1,9 @@
 import { Role, User } from 'databases/models';
 import UserPayload from './UserPayload';
 const addUser = async (newUser: UserPayload) => {
-	const user = await User.create(newUser);
+	const user = await User.create(newUser, {
+		include: Role
+	});
 	return user;
 };
 
