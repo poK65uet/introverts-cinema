@@ -1,30 +1,21 @@
 import express from 'express';
 import bodyParser from 'body-parser';
-import routers from 'api';
-import * as dotenv from 'dotenv';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
 
+import * as dotenv from 'dotenv';
 dotenv.config();
 
 import sequelize from 'databases';
+import 'databases/models';
 
-async function assertDatabaseConnectionOk() {
-	console.log(`Checking database connection...`);
-	try {
-		await sequelize.authenticate();
-		console.log('Database connection OK!');
-	} catch (error) {
-		console.log('Unable to connect to the database:');
-		console.log(error.message);
-		process.exit(1);
-	}
-}
+import router from 'api';
 
 const app = express();
 
-async function init() {
-	await assertDatabaseConnectionOk();
+const init = async () => {
+	await sequelize.sync();
+	console.log('Finish load database.');
 
 	app.use(cookieParser());
 
@@ -37,8 +28,8 @@ async function init() {
 	const { xss } = require('express-xss-sanitizer');
 	app.use(xss());
 
-	app.use(routers);
-}
+	app.use(router);
+};
 
 init();
 

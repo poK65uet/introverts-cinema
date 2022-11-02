@@ -1,9 +1,12 @@
 import { Router } from 'express';
-import exampleRouters from './example';
+import userRouter from './user';
+import loginRouter from './login';
+import registerRouter from './register';
 
 const router = Router();
-import { asyncRouteHandler } from 'middlewares';
 
-router.use('/example', asyncRouteHandler(exampleRouters));
+router.use('/user', userRouter);
+router.use('/login', loginRouter);
+router.use('/register', registerRouter);
 
 export default router;
