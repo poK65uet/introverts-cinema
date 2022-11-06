@@ -77,7 +77,12 @@ export default function NewMovieList(this: any) {
           modifier: 1,
         }}
         loop
-        slidesPerView={5}>
+        breakpoints={{
+          640: {
+            slidesPerView: 5,
+          },
+        }}
+        slidesPerView={3}>
         {
           newMovies.map((movie: MovieProps, index: number) => {
             return <SwiperSlide className={classes.movie} key={index}>
