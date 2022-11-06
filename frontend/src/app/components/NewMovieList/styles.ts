@@ -6,8 +6,7 @@ const useStyles = makeStyles(() => ({
 		margin: '1rem !important',
 		padding: '0 !important',
 		alignSelf: 'center',
-		maxWidth: '78% !important',
-		maxHeight: '30vw',
+		maxWidth: '100% !important',
 		'& .swiper-button-next, .swiper-button-prev': {
 		color: '#FFD6A5',
 		},
@@ -19,6 +18,7 @@ const useStyles = makeStyles(() => ({
 		justifyContent: 'center',
 		alignItems: 'center',
 		height: 'fit-content',
+		maxHeight: '-webkit-fill-available',
 	},
 }));
 

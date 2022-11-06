@@ -1,5 +1,3 @@
-import { ContentCopy } from '@mui/icons-material';
-import { blue } from '@mui/material/colors';
 import React from 'react';
 import {
 	ToastContainer,

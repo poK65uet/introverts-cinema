@@ -68,7 +68,6 @@ export default function UpcomingMovieList() {
           delay: 4000,
           disableOnInteraction: true,
         }}
-        className={classes.list}
         navigation
         effect='coverflow'
         centeredSlides
@@ -77,7 +76,12 @@ export default function UpcomingMovieList() {
           modifier: 0,
         }}
         loop
-        slidesPerView={7}>
+        breakpoints={{
+          640: {
+            slidesPerView: 7,
+          },
+        }}
+        slidesPerView={4}>
         {
           upcomingMovies.map((movie: MovieProps, index: number) => {
             return <SwiperSlide className={classes.movie} key={index}>
