@@ -24,6 +24,7 @@ import {
 } from '@mui/icons-material';
 
 import useStyles from './styles';
+import { Link } from 'react-router-dom';
 
 export default function AppBar() {
 
@@ -76,13 +77,17 @@ export default function AppBar() {
         fontSize: { xs: '10px !important', sm: '1em !important' }
       }}
     >
-      <Button disableRipple
-        className={classes.logoButton}
-        sx={{
-          position: 'absolute'
-        }} color='secondary'>
-        <img className={classes.logo} src={require('./assets/images/logo.png')} />
-      </Button>
+      <Link to='/' style={{ zIndex: 'inherit' }}>
+        <Button disableRipple
+          className={classes.logoButton}
+          sx={{
+            position: 'absolute'
+          }}
+          color='secondary'
+        >
+          <img className={classes.logo} src={require('./assets/images/logo.png')} />
+        </Button>
+      </Link>
       <Container
         sx={{
           display: { xs: 'flex', sm: 'none' },
