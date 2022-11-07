@@ -8,15 +8,11 @@ import UpcomingMovieList from 'app/components/UpcomingMovieList';
 import MasterDialog from 'app/components/MasterDialog';
 import { notify } from 'app/components/MasterDialog';
 import ConfirmDialog from 'app/components/MasterDialog/ConfirmDialog';
+import Footer from 'app/containers/Footer/index';
 
 export function HomePage() {
 
   const classes = useStyles();
-
-  React.useEffect(() => {
-    document.body.style.margin = '0';
-    document.body.style.color = '#1D1C1A';
-  }, []);
 
   const [open, setOpen] = React.useState(false);
 
@@ -33,7 +29,7 @@ export function HomePage() {
       <Banner />
       <NewMovieList />
       <UpcomingMovieList />
-      <button onClick={() => notify(
+      {/*<button onClick={() => notify(
         {
           type: 'error',
           content: 'Thông báo',
@@ -48,7 +44,8 @@ export function HomePage() {
         open={open}
         handleClose={handleClose}
         title="Xác nhận"
-        content="Xác nhận đặt vé xem phim" />
+        content="Xác nhận đặt vé xem phim" />*/}
+      <Footer />
     </div>
   );
 }

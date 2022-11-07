@@ -5,8 +5,7 @@ const useStyles = makeStyles(() => ({
     backgroundColor: '#E5E5E5',
     display: 'flex',
     flexDirection: 'column',
-    minHeight: '100vh',
-    height: 'fit-content',
+    minHeight: '100%',
   },
 }));
 
