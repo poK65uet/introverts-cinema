@@ -6,7 +6,7 @@ const useStyles = makeStyles(() => ({
 		margin: '1rem !important',
 		padding: '0 !important',
 		alignSelf: 'center',
-		maxWidth: '100% !important',
+		maxWidth: '79% !important',
 		'& .swiper-button-next, .swiper-button-prev': {
 		color: '#FFD6A5',
 		},

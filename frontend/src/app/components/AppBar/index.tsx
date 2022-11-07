@@ -85,7 +85,7 @@ export default function AppBar() {
           }}
           color='secondary'
         >
-          <img className={classes.logo} src={require('./assets/images/logo.png')} />
+          <img className={classes.logo} src={require('app/assets/images/logo.png')} />
         </Button>
       </Link>
       <Container
