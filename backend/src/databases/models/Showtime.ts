@@ -1,6 +1,7 @@
 import { DataTypes } from 'sequelize';
 import sequelize from 'databases';
 import Room from './Room';
+import Film from './Film';
 
 const Showtime = sequelize.define(
 	'Showtime',
@@ -24,5 +25,8 @@ const Showtime = sequelize.define(
 
 Room.hasOne(Showtime);
 Showtime.belongsTo(Room);
+
+Film.hasOne(Showtime);
+Showtime.belongsTo(Film);
 
 export default Showtime;

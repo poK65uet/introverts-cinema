@@ -17,6 +17,12 @@ const Room = sequelize.define(
 		},
 		visionType: {
 			type: DataTypes.STRING
+		},
+		columnNumber: {
+			type: DataTypes.INTEGER
+		},
+		rowNumber: {
+			type: DataTypes.INTEGER
 		}
 	},
 	{
