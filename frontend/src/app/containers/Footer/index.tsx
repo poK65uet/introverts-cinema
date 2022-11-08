@@ -73,7 +73,8 @@ export default function Footer() {
 											pl: '0.5rem',
 											ml: '0.5rem',
 										}}
-										fontWeight={900}>
+										fontWeight={900}
+										alignSelf='flex-end'>
 										Liên hệ:
 									</Grid>
 									<Grid xs={4}>

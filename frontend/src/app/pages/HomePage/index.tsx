@@ -9,6 +9,7 @@ import MasterDialog from 'app/components/MasterDialog';
 import { notify } from 'app/components/MasterDialog';
 import ConfirmDialog from 'app/components/MasterDialog/ConfirmDialog';
 import Footer from 'app/containers/Footer/index';
+import LoginDialog from 'app/components/LoginDialog';
 
 export function HomePage() {
 
@@ -45,6 +46,7 @@ export function HomePage() {
         handleClose={handleClose}
         title="Xác nhận"
         content="Xác nhận đặt vé xem phim" />*/}
+      <LoginDialog />
       <Footer />
     </div>
   );
