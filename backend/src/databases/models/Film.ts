@@ -1,6 +1,5 @@
 import { CreationOptional, DataTypes, InferAttributes, InferCreationAttributes, Model } from 'sequelize';
 import sequelize from 'databases';
-import Rated from './Rated';
 import Nationality from './Nationality';
 
 export interface FilmModel extends Model<InferAttributes<FilmModel>, InferCreationAttributes<FilmModel>> {
@@ -41,6 +40,12 @@ const Film = sequelize.define<FilmModel>(
 		},
 		description: {
 			type: DataTypes.STRING
+		},
+		rated: {
+			type: DataTypes.STRING
+		},
+		status: {
+			type: DataTypes.STRING
 		}
 	},
 	{
@@ -49,9 +54,6 @@ const Film = sequelize.define<FilmModel>(
 		underscored: true
 	}
 );
-
-Rated.hasOne(Film);
-Film.belongsTo(Rated);
 
 Nationality.hasOne(Film);
 Film.belongsTo(Nationality);

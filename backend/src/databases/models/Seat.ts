@@ -27,7 +27,7 @@ const Seat = sequelize.define<SeatModel>(
 			type: DataTypes.STRING
 		},
 		status: {
-			type: DataTypes.STRING
+			type: DataTypes.TINYINT
 		}
 	},
 	{

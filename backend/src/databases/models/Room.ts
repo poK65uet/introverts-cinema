@@ -23,6 +23,12 @@ const Room = sequelize.define<RoomModel>(
 		},
 		visionType: {
 			type: DataTypes.STRING
+		},
+		columnNumber: {
+			type: DataTypes.INTEGER
+		},
+		rowNumber: {
+			type: DataTypes.INTEGER
 		}
 	},
 	{
