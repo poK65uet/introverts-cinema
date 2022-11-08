@@ -1,6 +1,5 @@
 import { makeStyles } from '@mui/styles';
 import { Hidden, Theme } from '@mui/material';
-import { width } from 'dom7';
 
 const useStyles = makeStyles((theme : Theme) => ({
 	appBar: {
