@@ -1,5 +1,6 @@
 import { makeStyles } from '@mui/styles';
-import { Theme } from '@mui/material';
+import { Hidden, Theme } from '@mui/material';
+import { width } from 'dom7';
 
 const useStyles = makeStyles((theme : Theme) => ({
 	appBar: {
@@ -7,6 +8,10 @@ const useStyles = makeStyles((theme : Theme) => ({
 		maxHeight: '4rem',
 		minHeight: '3rem',
 		zIndexL: 11,
+		[theme.breakpoints.down('sm')]: {
+			display: 'flex',
+			flexDirection: 'row-reverse !important',
+		},
 	},
 
 	toolBar: {
@@ -17,9 +22,26 @@ const useStyles = makeStyles((theme : Theme) => ({
 		alignItems: 'stretch !important',
 	},
 
+	logo: {
+		objectFit: 'cover',
+		maxHeight:'-webkit-fill-available',
+		maxWidth:'-webkit-fill-available',
+		marginLeft: 20,
+	},
+
+	logoButton: {
+		left: 0,
+		height: '4rem',
+		[theme.breakpoints.down('sm')]: {
+			height: '3rem',
+		},
+		padding: '0 !important',
+		zIndex: 'inherit',
+	},
+
 	button: {
-		maxWidth: '10rem',
-		minWidth: '10rem !important',
+		maxWidth: '18vw',
+		minWidth: 'min(14rem, 18vw) !important',
 		fontSize: '1em !important',
 		'&:hover': {
 			color: theme.palette.primary.main,
@@ -52,10 +74,17 @@ const useStyles = makeStyles((theme : Theme) => ({
 	menuButton: {
 		height: '3rem',
 		width: 'fit-content',
-		fontSize: '!important',
 		'&:hover': {
 			color: theme.palette.primary.main,
 			transitionDuration: '0.5s',
+		},
+	},
+
+	menuItem: {
+		overflow: 'hidden',
+		backgroundColor: '#1D1C1A',
+		'& .MuiTreeItem-label': {
+			lineHeight: '2.5 !important',
 		},
 	},
 

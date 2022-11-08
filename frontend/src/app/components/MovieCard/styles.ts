@@ -1,9 +1,17 @@
 import { makeStyles } from '@mui/styles';
+import { Theme } from '@mui/material';
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme : Theme) => ({
 
 	container: {
-		maxHeight: '20rem',
+		maxHeight: '20	rem',
+		fontSize: '1.75rem',
+		[theme.breakpoints.down('md')]: {
+			fontSize: '1rem !important',
+		},
+		[theme.breakpoints.down('sm')]: {
+			fontSize: '0.875rem !important',
+		},
 		boxShadow: 'none !important',
 		WebkitTransitionDuration: '1s',
 		'& img': {
@@ -20,15 +28,20 @@ const useStyles = makeStyles(() => ({
 	},
 
 	information: {
+		padding: '0.75em !important',
+		fontSize: '0.675em',
 		top: '0rem',
 		position: 'fixed',
 		color: '#FFFFFF',
 	},
 	
 	actions: {
+		fontSize: '0.75em !important',
+		minWidth: '100%',
+		maxWidth: '100%',
 		left: '50%',
         transform: 'translate(-50%)',
-		bottom: '0.5vw',
+		bottom: 0,
 		position: 'fixed',
 		display: 'flex',
 		justifyContent: 'space-around',
@@ -36,7 +49,10 @@ const useStyles = makeStyles(() => ({
 	},
 
 	button: {
-		margin: '0 1.25rem !important',
+		fontSize: '0.75em !important',
+		width: 'max-content',
+		minWidth: '0 !important',
+		margin: '0 !important',
 		backgroundColor: '#FF884B !important',
 		color: '#FFFFFF !important'
 	},

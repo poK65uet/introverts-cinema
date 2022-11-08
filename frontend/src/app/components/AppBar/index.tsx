@@ -3,26 +3,44 @@ import {
   AppBar as MuiAppBar,
   Toolbar,
   Button,
+  Container,
+  Drawer,
   List,
   ListItemButton,
   Slide,
   Fade,
 } from '@mui/material';
 import {
+  TreeView,
+  TreeItem
+} from '@mui/lab';
+import {
   ExpandMore as ExpandMoreIcon,
+  ChevronRight as ChevronRightIcon,
   Login as LoginIcon,
   Logout as LogoutIcon,
   AccountCircle as AccountIcon,
   Menu as MenuIcon,
 } from '@mui/icons-material';
+
 import useStyles from './styles';
+import { Link } from 'react-router-dom';
 
 export default function AppBar() {
 
   const [openMenuMovie, setOpenMenuMovie] = React.useState(false);
   const [openMenuSearchMovie, setOpenMenuSearchMovie] = React.useState(false);
+  const [openMainMenu, setOpenMainMenu] = React.useState(false);
   const [login, setLogin] = React.useState(false);
   const [accountOpt, setAccountOpt] = React.useState(false);
+
+  const handleClickMainMenu = () => {
+    setOpenMainMenu(!openMainMenu);
+  }
+
+  const handleCloseMainMenu = () => {
+    setOpenMainMenu(false);
+  }
 
   const handleOpenMenuMovie = () => {
     setOpenMenuMovie(true);
@@ -51,23 +69,72 @@ export default function AppBar() {
   const classes = useStyles();
 
   return (
-    <MuiAppBar className={classes.appBar}
+    <MuiAppBar
+      className={classes.appBar}
       color='secondary'
       position='sticky'
       sx={{
         fontSize: { xs: '10px !important', sm: '1em !important' }
       }}
     >
-      <Button
+      <Link to='/' style={{ zIndex: 'inherit' }}>
+        <Button disableRipple
+          className={classes.logoButton}
+          sx={{
+            position: 'absolute'
+          }}
+          color='secondary'
+        >
+          <img className={classes.logo} src={require('app/assets/images/logo.webp')} />
+        </Button>
+      </Link>
+      <Container
         sx={{
-          display: { sm: 'none' }
-        }}
-        color='inherit'
-        disableRipple
-        className={classes.menuButton}
-        startIcon={<MenuIcon className={classes.icon} />}
-      />
-      <Toolbar className={classes.toolBar}
+          display: { xs: 'flex', sm: 'none' },
+          p: 0,
+          flexDirection: 'inherit',
+        }}>
+        <Button
+          className={classes.menuButton}
+          disableRipple
+          color='inherit'
+          onClick={handleClickMainMenu}
+          startIcon={<MenuIcon className={classes.icon} />}
+        />
+        <Drawer
+          open={openMainMenu}
+          onClose={handleCloseMainMenu}
+          color='white !important'
+          sx={{
+            display: { sm: 'none' },
+          }}
+          PaperProps={{
+            sx: {
+              color: 'white !important',
+              top: '3rem',
+            }
+          }}
+          anchor='top' >
+          <TreeView
+            defaultCollapseIcon={<ExpandMoreIcon />}
+            defaultExpandIcon={<ChevronRightIcon />}
+          >
+            <TreeItem nodeId='1' className={classes.menuItem} label='TÌM KIẾM'>
+              <TreeItem nodeId='2' className={classes.menuItem} label='PHIM THEO THỂ LOẠI' />
+              <TreeItem nodeId='3' className={classes.menuItem} label='PHIM THEO GIỜ CHIẾU' />
+            </TreeItem>
+            <TreeItem nodeId='4' className={classes.menuItem} label='PHIM'>
+              <TreeItem nodeId='5' className={classes.menuItem} label='PHIM ĐANG CHIẾU' />
+              <TreeItem nodeId='6' className={classes.menuItem} label='PHIM SẮP CHIẾU' />
+            </TreeItem>
+            <TreeItem nodeId='7' className={classes.menuItem} label='LỊCH CHIẾU' />
+            <TreeItem nodeId='8' className={classes.menuItem} label='ĐẶT VÉ' />
+            <TreeItem nodeId='9' className={classes.menuItem} label='TÀI KHOẢN' />
+          </TreeView>
+        </Drawer>
+      </Container>
+      <Toolbar
+        className={classes.toolBar}
         sx={{
           display: { xs: 'none', sm: 'flex' }
         }}

@@ -5,10 +5,12 @@ const useStyles = makeStyles ((theme : Theme) =>({
 	dialog: {
 		width: 'fit-content',
 		minWidth: '22.5vw',
+		overflow: 'hidden !important',
 		zIndex: 10,
 	},
 	title: {
 		display: 'flex',
+		padding: '8px 12px !important',
 		alignItems: 'center',
 	},
 	content: {

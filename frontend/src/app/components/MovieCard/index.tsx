@@ -33,7 +33,8 @@ export function MovieCard(props: MovieCardProps) {
 
 	return (
 		<Card classes={{ root: classes.container }}
-			onMouseOver={onHover} onMouseLeave={onNotHover}>
+			sx={{ borderRadius: 'unset' }}
+			onMouseOver={onHover} onMouseLeave={onNotHover} >
 			<CardMedia component='img' image={props.img} />
 			<CardContent sx={{ display: hover ? 'inline-block' : 'none' }} className={classes.information}>
 				Tên phim: <strong>{props.name}</strong>
