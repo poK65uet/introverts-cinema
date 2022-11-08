@@ -1,6 +1,5 @@
 import { DataTypes } from 'sequelize';
 import sequelize from 'databases';
-import Rated from './Rated';
 import Nationality from './Nationality';
 
 const Film = sequelize.define(
@@ -31,6 +30,12 @@ const Film = sequelize.define(
 		},
 		description: {
 			type: DataTypes.STRING
+		},
+		rated: {
+			type: DataTypes.STRING
+		},
+		status: {
+			type: DataTypes.STRING
 		}
 	},
 	{
@@ -39,9 +44,6 @@ const Film = sequelize.define(
 		underscored: true
 	}
 );
-
-Rated.hasOne(Film);
-Film.belongsTo(Rated);
 
 Nationality.hasOne(Film);
 Film.belongsTo(Nationality);
