@@ -1,8 +1,18 @@
-import { DataTypes } from 'sequelize';
+import { CreationOptional, DataTypes, InferAttributes, InferCreationAttributes, Model } from 'sequelize';
 import sequelize from 'databases';
 import Nationality from './Nationality';
 
-const Film = sequelize.define(
+export interface FilmModel extends Model<InferAttributes<FilmModel>, InferCreationAttributes<FilmModel>> {
+	id: CreationOptional<number>;
+	title: string;
+	imageUrl: string;
+	trailerUrl: string;
+	duration: number;
+	openingDay: Date;
+	description: string;
+}
+
+const Film = sequelize.define<FilmModel>(
 	'Film',
 	{
 		id: {
