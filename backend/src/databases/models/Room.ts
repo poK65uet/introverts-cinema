@@ -1,7 +1,13 @@
-import { DataTypes } from 'sequelize';
+import { CreationOptional, DataTypes, InferAttributes, InferCreationAttributes, Model } from 'sequelize';
 import sequelize from 'databases';
 
-const Room = sequelize.define(
+export interface RoomModel extends Model<InferAttributes<RoomModel>, InferCreationAttributes<RoomModel>> {
+	id: CreationOptional<number>;
+	name: string;
+	visionType: string;
+}
+
+const Room = sequelize.define<RoomModel>(
 	'Room',
 	{
 		id: {

@@ -1,7 +1,12 @@
-import { DataTypes } from 'sequelize';
+import { CreationOptional, DataTypes, InferAttributes, InferCreationAttributes, Model } from 'sequelize';
 import sequelize from 'databases';
 
-const Rated = sequelize.define(
+export interface RatedModel extends Model<InferAttributes<RatedModel>, InferCreationAttributes<RatedModel>> {
+	id: CreationOptional<number>;
+	code: string;
+}
+
+const Rated = sequelize.define<RatedModel>(
 	'Rated',
 	{
 		id: {
