@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import {
 	Box,
 	Button,
@@ -22,7 +22,7 @@ import useStyles from './styles';
 import { useForm } from 'hooks/useForm';
 
 
-export default function LoginDialog() {
+export default function LoginDialog(props: any) {
 
 	const validate = (fieldValues = values) => {
 		const tmp = { ...errors };
@@ -51,8 +51,8 @@ export default function LoginDialog() {
 			validate
 		);
 
-	const [showPassword, setShowPassword] = React.useState<boolean>(false);
-	const [showError, setShowError] = React.useState<boolean>(false);
+	const [showPassword, setShowPassword] = useState<boolean>(false);
+	const [showError, setShowError] = useState<boolean>(false);
 
 	const handleClickShowPassword = () => {
 		setShowPassword(!showPassword);
@@ -61,7 +61,7 @@ export default function LoginDialog() {
 	const classes = useStyles();
 
 	return (
-		<Dialog open={false}>
+		<Dialog open={props.open} onClose={props.onClose}>
 			<Box
 				className={classes.loginBox}
 				component="form"

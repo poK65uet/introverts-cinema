@@ -15,7 +15,7 @@ export function HomePage() {
 
   const classes = useStyles();
 
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
 
   const handleOpen = () => {
     setOpen(true);
@@ -46,7 +46,6 @@ export function HomePage() {
         handleClose={handleClose}
         title="Xác nhận"
         content="Xác nhận đặt vé xem phim" />*/}
-      <LoginDialog />
       <Footer />
     </div>
   );

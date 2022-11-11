@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useState } from 'react';
 import {
   AppBar as MuiAppBar,
   Toolbar,
@@ -25,14 +25,16 @@ import {
 
 import useStyles from './styles';
 import { Link } from 'react-router-dom';
+import paths from 'paths';
+import LoginDialog from 'app/components/LoginDialog';
 
 export default function AppBar() {
 
-  const [openMenuMovie, setOpenMenuMovie] = React.useState(false);
-  const [openMenuSearchMovie, setOpenMenuSearchMovie] = React.useState(false);
-  const [openMainMenu, setOpenMainMenu] = React.useState(false);
-  const [login, setLogin] = React.useState(false);
-  const [accountOpt, setAccountOpt] = React.useState(false);
+  const [openMenuMovie, setOpenMenuMovie] = useState(false);
+  const [openMenuSearchMovie, setOpenMenuSearchMovie] = useState(false);
+  const [openMainMenu, setOpenMainMenu] = useState(false);
+  const [openLoginDialog, setOpenLoginDialog] = useState(false);
+  const [accountOpt, setAccountOpt] = useState(false);
 
   const handleClickMainMenu = () => {
     setOpenMainMenu(!openMainMenu);
@@ -58,12 +60,13 @@ export default function AppBar() {
     setOpenMenuSearchMovie(false);
   }
 
-  const handleLogin = () => {
-    setLogin(true);
+  const handleOpenLoginDialog = () => {
+    console.log('login')
+    setOpenLoginDialog(true);
   }
 
-  const handleLogout = () => {
-    setLogin(false);
+  const handleCloseLoginDialog = () => {
+    setOpenLoginDialog(false);
   }
 
   const classes = useStyles();
@@ -170,12 +173,16 @@ export default function AppBar() {
             onMouseLeave={handleCloseMenuMovie}>
             <Slide in={openMenuMovie} mountOnEnter unmountOnExit>
               <List className={classes.movieMenu}>
-                <ListItemButton className={classes.listButton} disableRipple>
-                  PHIM ĐANG CHIẾU
-                </ListItemButton>
-                <ListItemButton className={classes.listButton} disableRipple>
-                  PHIM SẮP CHIẾU
-                </ListItemButton>
+                <Link style={{ all: 'unset' }} to={paths.NewMoviePage} >
+                  <ListItemButton className={classes.listButton} disableRipple>
+                    PHIM ĐANG CHIẾU
+                  </ListItemButton>
+                </Link>
+                <Link style={{ all: 'unset' }} to={paths.UpcomingMoviePage} >
+                  <ListItemButton className={classes.listButton} disableRipple>
+                    PHIM SẮP CHIẾU
+                  </ListItemButton>
+                </Link>
               </List>
             </Slide>
           </Button>
@@ -191,14 +198,14 @@ export default function AppBar() {
         }
         <Button disableRipple color='inherit' className={classes.button}>Lịch chiếu</Button>
         <Button disableRipple color='inherit' className={classes.button}>Đặt vé</Button>
-        {!login ?
+        {!openLoginDialog ?
           <Button
             sx={{ position: 'absolute' }}
             disableRipple
             color='inherit'
             className={classes.loginButton}
             startIcon={< LoginIcon sx={{ height: { lg: '0.75em', xl: '1em' } }} />}
-            onClick={handleLogin}>
+            onClick={handleOpenLoginDialog}>
             <span className={classes.buttonText}>
               Đăng nhập
             </span>
@@ -223,6 +230,7 @@ export default function AppBar() {
           </>
         }
       </Toolbar>
+      <LoginDialog open={openLoginDialog} onClose={handleCloseLoginDialog} />
     </MuiAppBar >
   );
 }

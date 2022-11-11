@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useState } from 'react';
 import useStyles from './styles';
 interface SeatProps {
 	seatRow?: string
@@ -10,7 +10,7 @@ interface SeatProps {
 
 export function Seat(props: SeatProps) {
 
-	const [select, setSelect] = React.useState(false);
+	const [select, setSelect] = useState(false);
 
 	const handleClick = () => {
 		setSelect(!select)
