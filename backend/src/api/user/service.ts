@@ -91,7 +91,7 @@ const addUser = async (req: Request) => {
 	} else {
 		data = null;
 		message = 'Email exists!';
-		status = ResponeCodes.BAD_REQUEST;
+		status = ResponeCodes.OK;
 	}
 
 	return {

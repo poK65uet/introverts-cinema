@@ -10,6 +10,8 @@ export interface FilmModel extends Model<InferAttributes<FilmModel>, InferCreati
 	duration: number;
 	openingDay: Date;
 	description: string;
+	rated: string;
+	status: string;
 }
 
 const Film = sequelize.define<FilmModel>(

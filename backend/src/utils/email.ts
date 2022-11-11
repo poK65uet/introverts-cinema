@@ -1,9 +1,10 @@
 import nodemailer from 'nodemailer';
 import config from 'config';
 
-const sendOTP = async (email: string, subject: string, otp: number) => {
+const transporter = nodemailer.createTransport(config.mail_setting);
+
+const sendEmail = async (email: string, subject: string, otp: string) => {
 	try {
-		const transporter = nodemailer.createTransport(config.mail_setting);
 		const mailOptions = {
 			from: config.mail_setting.auth.user,
 			to: email,
@@ -25,4 +26,4 @@ const sendOTP = async (email: string, subject: string, otp: number) => {
 	}
 };
 
-export { sendOTP };
+export { sendEmail };

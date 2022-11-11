@@ -5,6 +5,8 @@ export interface RoomModel extends Model<InferAttributes<RoomModel>, InferCreati
 	id: CreationOptional<number>;
 	name: string;
 	visionType: string;
+	columnNumber: number;
+	rowNumber: number;
 }
 
 const Room = sequelize.define<RoomModel>(
