@@ -5,6 +5,10 @@ export interface RoomModel extends Model<InferAttributes<RoomModel>, InferCreati
 	id: CreationOptional<number>;
 	name: string;
 	visionType: string;
+	columnNumber: number;
+	rowNumber: number;
+	createdAt: CreationOptional<Date>;
+	updatedAt: CreationOptional<Date>;
 }
 
 const Room = sequelize.define<RoomModel>(
@@ -29,6 +33,12 @@ const Room = sequelize.define<RoomModel>(
 		},
 		rowNumber: {
 			type: DataTypes.INTEGER
+		},
+		createdAt: {
+			type: DataTypes.DATE
+		},
+		updatedAt: {
+			type: DataTypes.DATE
 		}
 	},
 	{

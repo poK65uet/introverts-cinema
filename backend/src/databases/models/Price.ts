@@ -6,6 +6,7 @@ export interface PriceModel extends Model<InferAttributes<PriceModel>, InferCrea
 	visionType: number;
 	dayCode: string;
 	value: number;
+	updatedAt: CreationOptional<Date>;
 }
 
 const Price = sequelize.define<PriceModel>(
@@ -27,6 +28,9 @@ const Price = sequelize.define<PriceModel>(
 		},
 		value: {
 			type: DataTypes.BIGINT
+		},
+		updatedAt: {
+			type: DataTypes.DATE
 		}
 	},
 	{

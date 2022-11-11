@@ -3,6 +3,6 @@ interface UserPayload {
 	password: string;
 	fullName: string;
 	birthDay: Date | null;
-};
+}
 
 export default UserPayload;

@@ -9,6 +9,8 @@ export interface TicketModel extends Model<InferAttributes<TicketModel>, InferCr
 	seatColumn: string;
 	time: Date;
 	price: number;
+	createdAt: CreationOptional<Date>;
+	updatedAt: CreationOptional<Date>;
 }
 
 const Ticket = sequelize.define<TicketModel>(
@@ -39,6 +41,12 @@ const Ticket = sequelize.define<TicketModel>(
 		price: {
 			allowNull: false,
 			type: DataTypes.BIGINT
+		},
+		createdAt: {
+			type: DataTypes.DATE
+		},
+		updatedAt: {
+			type: DataTypes.DATE
 		}
 	},
 	{

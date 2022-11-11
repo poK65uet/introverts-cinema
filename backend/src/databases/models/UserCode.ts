@@ -1,15 +1,17 @@
 import { CreationOptional, DataTypes, InferAttributes, InferCreationAttributes, Model } from 'sequelize';
 import sequelize from 'databases';
 
-export interface CategoryModel extends Model<InferAttributes<CategoryModel>, InferCreationAttributes<CategoryModel>> {
+export interface UserCodeModel extends Model<InferAttributes<UserCodeModel>, InferCreationAttributes<UserCodeModel>> {
 	id: CreationOptional<number>;
-	name: string;
+	email: string;
+	code: string;
+	expires: Date;
 	createdAt: CreationOptional<Date>;
 	updatedAt: CreationOptional<Date>;
 }
 
-const Category = sequelize.define<CategoryModel>(
-	'Category',
+const UserCode = sequelize.define<UserCodeModel>(
+	'UserCode',
 	{
 		id: {
 			allowNull: false,
@@ -17,10 +19,19 @@ const Category = sequelize.define<CategoryModel>(
 			primaryKey: true,
 			type: DataTypes.INTEGER
 		},
-		name: {
+		email: {
+			allowNull: false,
+			type: DataTypes.STRING
+		},
+		code: {
 			allowNull: false,
 			unique: true,
 			type: DataTypes.STRING
+		},
+		expires: {
+			allowNull: false,
+			type: DataTypes.DATE,
+			defaultValue: new Date(Date.now() + 1000 * 60 * 30)
 		},
 		createdAt: {
 			type: DataTypes.DATE
@@ -30,9 +41,9 @@ const Category = sequelize.define<CategoryModel>(
 		}
 	},
 	{
-		tableName: 'category',
+		tableName: 'user_code',
 		underscored: true
 	}
 );
 
-export default Category;
+export default UserCode;

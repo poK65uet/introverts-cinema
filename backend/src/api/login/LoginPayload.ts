@@ -1,5 +1,5 @@
 interface LoginPayLoad {
-    email: string;
+	email: string;
 	password: string;
 }
 

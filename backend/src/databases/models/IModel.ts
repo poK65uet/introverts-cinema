@@ -1,7 +1,6 @@
 import { UserModel } from './User';
 import { RoleModel } from './Role';
 import { UserRoleModel } from './UserRole';
-import { RatedModel } from './Rated';
 import { NationalityModel } from './Nationality';
 import { FilmModel } from './Film';
 import { CategoryModel } from './Category';
@@ -20,7 +19,6 @@ export {
 	UserModel,
 	RoleModel,
 	UserRoleModel,
-	RatedModel,
 	FilmModel,
 	CategoryModel,
 	FilmCategoryModel,

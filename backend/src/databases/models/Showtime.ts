@@ -6,6 +6,8 @@ import Film from './Film';
 export interface ShowtimeModel extends Model<InferAttributes<ShowtimeModel>, InferCreationAttributes<ShowtimeModel>> {
 	id: CreationOptional<number>;
 	startTime: Date;
+	createdAt: CreationOptional<Date>;
+	updatedAt: CreationOptional<Date>;
 }
 
 const Showtime = sequelize.define<ShowtimeModel>(
@@ -20,6 +22,12 @@ const Showtime = sequelize.define<ShowtimeModel>(
 		startTime: {
 			allowNull: false,
 			type: DataTypes.TIME
+		},
+		createdAt: {
+			type: DataTypes.DATE
+		},
+		updatedAt: {
+			type: DataTypes.DATE
 		}
 	},
 	{

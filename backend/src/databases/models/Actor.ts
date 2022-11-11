@@ -6,6 +6,8 @@ export interface ActorModel extends Model<InferAttributes<ActorModel>, InferCrea
 	id: CreationOptional<number>;
 	fullName: string;
 	birthDay: string;
+	createdAt: CreationOptional<Date>;
+	updatedAt: CreationOptional<Date>;
 }
 
 const Actor = sequelize.define<ActorModel>(
@@ -23,11 +25,16 @@ const Actor = sequelize.define<ActorModel>(
 		},
 		birthDay: {
 			type: DataTypes.DATE
+		},
+		createdAt: {
+			type: DataTypes.DATE
+		},
+		updatedAt: {
+			type: DataTypes.DATE
 		}
 	},
 	{
 		tableName: 'actor',
-		timestamps: false,
 		underscored: true
 	}
 );
