@@ -1,9 +1,9 @@
 import { Backdrop } from '@mui/material'
-import React from 'react'
+import React, { useState } from 'react'
 import { ThreeCircles } from 'react-loader-spinner';
 
 export default function LoadingLayer() {
-	const [loading, setLoading] = React.useState(false);
+	const [loading, setLoading] = useState(false);
 	const handleClose = () => {
 		setLoading(false);
 	};

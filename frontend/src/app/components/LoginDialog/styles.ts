@@ -6,7 +6,7 @@ const useStyles = makeStyles(() => ({
 		flexDirection: 'column',
 		maxWidth: '50rem',
 		width: '30rem',
-		minHeight: '50vh',
+		minHeight: '52vh',
 		backgroundColor: 'white',
 		borderRadius: '15px',
 		overflow: 'hidden',

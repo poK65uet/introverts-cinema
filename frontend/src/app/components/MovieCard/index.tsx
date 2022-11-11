@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useState } from 'react';
 import {
 	Button,
 	Card,
@@ -19,7 +19,7 @@ interface MovieCardProps {
 
 export function MovieCard(props: MovieCardProps) {
 
-	const [hover, setHover] = React.useState(false);
+	const [hover, setHover] = useState(false);
 
 	const classes = useStyles();
 
