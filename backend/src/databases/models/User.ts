@@ -21,6 +21,8 @@ export interface UserModel extends Model<InferAttributes<UserModel>, InferCreati
 	password: string;
 	fullName: string;
 	birthDay: Date;
+	createdAt: CreationOptional<Date>;
+	updatedAt: CreationOptional<Date>;
 	Roles?: NonAttribute<RoleModel[]>;
 	getRoles: HasManyGetAssociationsMixin<RoleModel>;
 	addRole: HasManyAddAssociationMixin<RoleModel, number>;
@@ -52,6 +54,12 @@ const User = sequelize.define<UserModel>(
 		},
 		birthDay: {
 			type: DataTypes.DATE
+		},
+		createdAt: {
+			type: DataTypes.DATE
+		},
+		updatedAt: {
+			type: DataTypes.DATE
 		}
 	},
 	{
@@ -66,7 +74,6 @@ User.beforeCreate(user => {
 });
 
 User.beforeUpdate(user => {
-	console.log('update');
 	const hashedPassword = bcrypt.hashSync(user.password, 10);
 	user.password = hashedPassword;
 });

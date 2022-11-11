@@ -4,6 +4,8 @@ import sequelize from 'databases';
 export interface CategoryModel extends Model<InferAttributes<CategoryModel>, InferCreationAttributes<CategoryModel>> {
 	id: CreationOptional<number>;
 	name: string;
+	createdAt: CreationOptional<Date>;
+	updatedAt: CreationOptional<Date>;
 }
 
 const Category = sequelize.define<CategoryModel>(
@@ -19,11 +21,16 @@ const Category = sequelize.define<CategoryModel>(
 			allowNull: false,
 			unique: true,
 			type: DataTypes.STRING
+		},
+		createdAt: {
+			type: DataTypes.DATE
+		},
+		updatedAt: {
+			type: DataTypes.DATE
 		}
 	},
 	{
 		tableName: 'category',
-		timestamps: false,
 		underscored: true
 	}
 );

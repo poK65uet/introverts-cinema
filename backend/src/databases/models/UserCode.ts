@@ -1,4 +1,3 @@
-import bcrypt from 'bcrypt';
 import { CreationOptional, DataTypes, InferAttributes, InferCreationAttributes, Model } from 'sequelize';
 import sequelize from 'databases';
 
@@ -8,6 +7,7 @@ export interface UserCodeModel extends Model<InferAttributes<UserCodeModel>, Inf
 	code: string;
 	expires: Date;
 	createdAt: CreationOptional<Date>;
+	updatedAt: CreationOptional<Date>;
 }
 
 const UserCode = sequelize.define<UserCodeModel>(
@@ -35,6 +35,9 @@ const UserCode = sequelize.define<UserCodeModel>(
 		},
 		createdAt: {
 			type: DataTypes.DATE
+		},
+		updatedAt: {
+			type: DataTypes.DATE
 		}
 	},
 	{
@@ -42,10 +45,5 @@ const UserCode = sequelize.define<UserCodeModel>(
 		underscored: true
 	}
 );
-
-// UserCode.beforeCreate(token => {
-// 	const hashedPassword = bcrypt.hashSync(token.code, 10);
-// 	token.code = hashedPassword;
-// });
 
 export default UserCode;

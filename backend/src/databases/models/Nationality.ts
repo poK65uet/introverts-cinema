@@ -6,6 +6,8 @@ export interface NationalityModel
 	id: CreationOptional<number>;
 	name: string;
 	imageUrl: string;
+	createdAt: CreationOptional<Date>;
+	updatedAt: CreationOptional<Date>;
 }
 
 const Nationality = sequelize.define<NationalityModel>(
@@ -24,11 +26,16 @@ const Nationality = sequelize.define<NationalityModel>(
 		},
 		imageUrl: {
 			type: DataTypes.STRING
+		},
+		createdAt: {
+			type: DataTypes.DATE
+		},
+		updatedAt: {
+			type: DataTypes.DATE
 		}
 	},
 	{
 		tableName: 'nationality',
-		timestamps: false,
 		underscored: true
 	}
 );

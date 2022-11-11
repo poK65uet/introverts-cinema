@@ -6,6 +6,8 @@ import Category from './Category';
 export interface FilmCategoryModel
 	extends Model<InferAttributes<FilmCategoryModel>, InferCreationAttributes<FilmCategoryModel>> {
 	id: CreationOptional<number>;
+	createdAt: CreationOptional<Date>;
+	updatedAt: CreationOptional<Date>;
 }
 
 const FilmCategory = sequelize.define<FilmCategoryModel>(
@@ -16,11 +18,16 @@ const FilmCategory = sequelize.define<FilmCategoryModel>(
 			autoIncrement: true,
 			primaryKey: true,
 			type: DataTypes.INTEGER
+		},
+		createdAt: {
+			type: DataTypes.DATE
+		},
+		updatedAt: {
+			type: DataTypes.DATE
 		}
 	},
 	{
 		tableName: 'film_category',
-		timestamps: false,
 		underscored: true
 	}
 );

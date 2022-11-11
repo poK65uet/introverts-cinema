@@ -12,6 +12,8 @@ export interface FilmModel extends Model<InferAttributes<FilmModel>, InferCreati
 	description: string;
 	rated: string;
 	status: string;
+	createdAt: CreationOptional<Date>;
+	updatedAt: CreationOptional<Date>;
 }
 
 const Film = sequelize.define<FilmModel>(
@@ -48,11 +50,16 @@ const Film = sequelize.define<FilmModel>(
 		},
 		status: {
 			type: DataTypes.STRING
+		},
+		createdAt: {
+			type: DataTypes.DATE
+		},
+		updatedAt: {
+			type: DataTypes.DATE
 		}
 	},
 	{
 		tableName: 'film',
-		timestamps: false,
 		underscored: true
 	}
 );

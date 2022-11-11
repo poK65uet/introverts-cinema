@@ -6,6 +6,8 @@ export interface DirectorModel extends Model<InferAttributes<DirectorModel>, Inf
 	id: CreationOptional<number>;
 	fullName: string;
 	birthDay: string;
+	createdAt: CreationOptional<Date>;
+	updatedAt: CreationOptional<Date>;
 }
 
 const Director = sequelize.define<DirectorModel>(
@@ -23,11 +25,16 @@ const Director = sequelize.define<DirectorModel>(
 		},
 		birthDay: {
 			type: DataTypes.DATE
+		},
+		createdAt: {
+			type: DataTypes.DATE
+		},
+		updatedAt: {
+			type: DataTypes.DATE
 		}
 	},
 	{
 		tableName: 'director',
-		timestamps: false,
 		underscored: true
 	}
 );

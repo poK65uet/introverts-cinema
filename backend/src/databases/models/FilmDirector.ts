@@ -6,6 +6,8 @@ import Director from './Director';
 export interface FilmDirectorModel
 	extends Model<InferAttributes<FilmDirectorModel>, InferCreationAttributes<FilmDirectorModel>> {
 	id: CreationOptional<number>;
+	createdAt: CreationOptional<Date>;
+	updatedAt: CreationOptional<Date>;
 }
 
 const FilmDirector = sequelize.define<FilmDirectorModel>(
@@ -16,11 +18,16 @@ const FilmDirector = sequelize.define<FilmDirectorModel>(
 			autoIncrement: true,
 			primaryKey: true,
 			type: DataTypes.INTEGER
+		},
+		createdAt: {
+			type: DataTypes.DATE
+		},
+		updatedAt: {
+			type: DataTypes.DATE
 		}
 	},
 	{
 		tableName: 'film_director',
-		timestamps: false,
 		underscored: true
 	}
 );

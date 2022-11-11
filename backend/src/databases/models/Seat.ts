@@ -7,6 +7,8 @@ export interface SeatModel extends Model<InferAttributes<SeatModel>, InferCreati
 	row: string;
 	column: string;
 	status: string;
+	createdAt: CreationOptional<Date>;
+	updatedAt: CreationOptional<Date>;
 }
 
 const Seat = sequelize.define<SeatModel>(
@@ -28,6 +30,12 @@ const Seat = sequelize.define<SeatModel>(
 		},
 		status: {
 			type: DataTypes.TINYINT
+		},
+		createdAt: {
+			type: DataTypes.DATE
+		},
+		updatedAt: {
+			type: DataTypes.DATE
 		}
 	},
 	{
