@@ -61,7 +61,6 @@ export default function AppBar() {
   }
 
   const handleOpenLoginDialog = () => {
-    console.log('login')
     setOpenLoginDialog(true);
   }
 

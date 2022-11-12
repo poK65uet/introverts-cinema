@@ -1,17 +1,14 @@
 import { Backdrop } from '@mui/material'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { ThreeCircles } from 'react-loader-spinner';
+import { store } from 'store';
 
 export default function LoadingLayer() {
-	const [loading, setLoading] = useState(false);
-	const handleClose = () => {
-		setLoading(false);
-	};
-	const handleOpen = () => {
-		setLoading(true);
-	};
+
+	const isLoading = store.getState().loading.isLoading;
+
 	return (
-		<Backdrop open={loading} sx={{ fontSize: '1rem', zIndex: 100 }}>
+		<Backdrop open={isLoading} sx={{ fontSize: '1rem', zIndex: 100 }}>
 			<ThreeCircles
 				wrapperStyle={{ fontSize: '0.5em' }}
 				height='10em'
