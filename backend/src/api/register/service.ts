@@ -7,10 +7,50 @@ import RoleCodes from 'utils/constant/RoleCode';
 import ResponeCodes from 'utils/constant/ResponeCode';
 import { sendEmail } from 'utils/email';
 import { UserCodeModel } from 'databases/models/UserCode';
+import { throws } from 'assert';
 
 const generateCode = () => {
 	const code = `${Math.floor(100000 + Math.random() * 900000)}`;
 	return code;
+};
+
+function generateToken(userId: number, roleIds: number[]) {
+	const token = jwt.sign({ userId, roleIds }, config.secret_key, {
+		expiresIn: config.expires_in
+	});
+	return token;
+}
+
+const checkEmail = async (req: Request) => {
+	let data: boolean;
+	let message: string;
+	let status: number;
+
+	try {
+		const email = req.body.email;
+		const user = await User.findOne({
+			where: {
+				email
+			}
+		});
+		if (user) {
+			data = false;
+			message = 'Email exists!';
+			status = ResponeCodes.OK;
+		} else {
+			data = true;
+			message = 'Email not exists!';
+			status = ResponeCodes.OK;
+		}
+
+		return {
+			data,
+			message,
+			status
+		};
+	} catch (error) {
+		throw error;
+	}
 };
 
 const sendCode = async (req: Request) => {
@@ -18,16 +58,8 @@ const sendCode = async (req: Request) => {
 	let message: string;
 	let status: number;
 
-	const email = req.body.email;
-	const user = await User.findOne({
-		where: {
-			email
-		}
-	});
-	if (user) {
-		message = 'Email exists!';
-		status = ResponeCodes.OK;
-	} else {
+	try {
+		const email = req.body.email;
 		const code = generateCode();
 		await UserCode.create({
 			email,
@@ -36,13 +68,15 @@ const sendCode = async (req: Request) => {
 		await sendEmail(email, 'Verify your email address', code);
 		message = 'Send code successfully!';
 		status = ResponeCodes.CREATED;
-	}
 
-	return {
-		data,
-		message,
-		status
-	};
+		return {
+			data,
+			message,
+			status
+		};
+	} catch (error) {
+		throw error;
+	}
 };
 
 const verifyCode = async (req: Request) => {
@@ -50,36 +84,40 @@ const verifyCode = async (req: Request) => {
 	let message: string;
 	let status: number;
 
-	const { email, code } = req.body;
+	try {
+		const { email, code } = req.body;
 
-	const registerUser = await UserCode.findOne({
-		where: {
-			code,
-			email
-		}
-	});
+		const registerUser = await UserCode.findOne({
+			where: {
+				code,
+				email
+			}
+		});
 
-	if (!registerUser) {
-		data = null;
-		message = 'Incorrect code!';
-		status = ResponeCodes.OK;
-	} else {
-		if (registerUser.expires < new Date(Date.now())) {
+		if (!registerUser) {
 			data = null;
-			message = 'Expired code!';
+			message = 'Incorrect code!';
 			status = ResponeCodes.OK;
 		} else {
-			data = registerUser;
-			message = 'Verify code successfully!';
-			status = ResponeCodes.OK;
+			if (registerUser.expires < new Date(Date.now())) {
+				data = null;
+				message = 'Expired code!';
+				status = ResponeCodes.OK;
+			} else {
+				data = registerUser;
+				message = 'Verify code successfully!';
+				status = ResponeCodes.OK;
+			}
 		}
-	}
 
-	return {
-		data,
-		message,
-		status
-	};
+		return {
+			data,
+			message,
+			status
+		};
+	} catch (error) {
+		throw error;
+	}
 };
 
 const register = async (req: Request) => {
@@ -87,27 +125,15 @@ const register = async (req: Request) => {
 	let message: string;
 	let status: number;
 
-	const newUser: RegisterPayLoad = req.body;
-	const { email, password, fullName, birthDay } = newUser;
-	const [user, created] = await User.findOrCreate({
-		where: {
-			email
-		},
-		defaults: {
-			password,
-			fullName,
-			birthDay
-		}
-	});
+	try {
+		const newUser: RegisterPayLoad = req.body;
+		const user = await User.create(newUser);
 
-	if (created) {
 		await user.addRole(RoleCodes.CUSTOMER);
 		// const roles = await user.getRoles();
 		const roleIds = [RoleCodes.CUSTOMER];
 
-		const token = jwt.sign({ userId: user.id, roleIds }, config.secret_key, {
-			expiresIn: config.expires_in
-		});
+		const token = generateToken(user.id, roleIds);
 
 		data = {
 			user,
@@ -115,17 +141,15 @@ const register = async (req: Request) => {
 		};
 		message = 'Register successfully!';
 		status = ResponeCodes.CREATED;
-	} else {
-		data = null;
-		message = 'Email exists!';
-		status = ResponeCodes.OK;
-	}
 
-	return {
-		data,
-		message,
-		status
-	};
+		return {
+			data,
+			message,
+			status
+		};
+	} catch (error) {
+		throw error;
+	}
 };
 
-export { register, sendCode, verifyCode };
+export { register, sendCode, verifyCode, checkEmail };
