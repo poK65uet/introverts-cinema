@@ -88,7 +88,7 @@ const useStyles = makeStyles((theme : Theme) => ({
 	},
 
 	accountButton: {
-		right: '1.5em',
+		right: '2.25em',
 		height: '4rem',
 		'&:hover': {
 			color: theme.palette.primary.main,

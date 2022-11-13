@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   AppBar as MuiAppBar,
   Toolbar,
@@ -27,6 +27,8 @@ import useStyles from './styles';
 import { Link } from 'react-router-dom';
 import paths from 'paths';
 import LoginDialog from 'app/components/LoginDialog';
+import { store } from 'store';
+import { useSelector } from 'react-redux';
 
 export default function AppBar() {
 
@@ -67,6 +69,11 @@ export default function AppBar() {
   const handleCloseLoginDialog = () => {
     setOpenLoginDialog(false);
   }
+
+  const loading = useSelector(state => state)
+
+  useEffect(() => {
+  }, [loading])
 
   const classes = useStyles();
 
@@ -197,7 +204,7 @@ export default function AppBar() {
         }
         <Button disableRipple color='inherit' className={classes.button}>Lịch chiếu</Button>
         <Button disableRipple color='inherit' className={classes.button}>Đặt vé</Button>
-        {!openLoginDialog ?
+        {!store.getState().login.isLoggedin ?
           <Button
             sx={{ position: 'absolute' }}
             disableRipple

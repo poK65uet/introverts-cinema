@@ -8,7 +8,6 @@ const initialState: LoadingState = {
   isLoading: false
 };
 
-
 export const loadingSlice = createSlice({
   name: 'loading',
   initialState: initialState,
