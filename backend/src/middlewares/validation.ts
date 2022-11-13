@@ -22,13 +22,13 @@ const verifyToken = (req: Request, res: Response, next: NextFunction) => {
 		if (err) {
 			return new ApiResponse(err, 'Unauthorized!', ResponeCodes.UNAUTHORIZED).send(res);
 		}
-		req.body.token = decoded;
+		res.locals = decoded;
 		next();
 	});
 };
 
 const verifyAdmin = async (req: Request, res: Response, next: NextFunction) => {
-	const token: IToken = req.body.token;
+	const token = res.locals;
 	if (!token || !token.roleIds.includes(RoleCodes.ADMIN)) {
 		return new ApiResponse(null, 'Not permission!', ResponeCodes.UNAUTHORIZED).send(res);
 	}
@@ -36,7 +36,7 @@ const verifyAdmin = async (req: Request, res: Response, next: NextFunction) => {
 };
 
 const verifyCustomer = async (req: Request, res: Response, next: NextFunction) => {
-	const token: IToken = req.body.token;
+	const token = res.locals;
 	if (!token || !token.roleIds.includes(RoleCodes.CUSTOMER)) {
 		return new ApiResponse(null, 'Not permission!', ResponeCodes.UNAUTHORIZED).send(res);
 	}
