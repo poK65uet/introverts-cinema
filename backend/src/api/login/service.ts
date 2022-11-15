@@ -19,43 +19,55 @@ const login = async (loginData: LoginPayLoad) => {
 	let data;
 	let message: string;
 	let status: number;
-	const { email, password } = loginData;
 
-	const user = await verifyEmail(email);
+	try {
+		const { email, password } = loginData;
 
-	if (user) {
-		const verifyPassword = bcrypt.compareSync(password, user.password);
-		if (!verifyPassword) {
+		if(!email || !password) {
 			data = null;
-			message = 'Wrong password!';
-			status = ResponeCodes.OK;
+			message = 'Invalid email or password';
+			status = ResponeCodes.BAD_REQUEST;
 		} else {
-			const roles = user.Roles;
+			const user = await verifyEmail(email);
 
-			const roleIds = roles.map(role => role.id);
+			if (user) {
+				const verifyPassword = bcrypt.compareSync(password, user.password);
+				if (!verifyPassword) {
+					data = null;
+					message = 'Wrong password!';
+					status = ResponeCodes.OK;
+				} else {
+					const roles = user.Roles;
+	
+					const roleIds = roles.map(role => role.id);
+	
+					const token = jwt.sign({ userId: user.id, roleIds }, config.secret_key, {
+						expiresIn: config.expires_in
+					});
+	
+					data = {
+						user,
+						token
+					};
+					message = 'Login successfully!';
+					status = ResponeCodes.OK;
+				}
+			}
+			else {
+				data = null;
+				message = 'Failed login!';
+				status = ResponeCodes.NOT_FOUND;
+			}
+		} 
 
-			const token = jwt.sign({ userId: user.id, roleIds }, config.secret_key, {
-				expiresIn: config.expires_in
-			});
-
-			data = {
-				user,
-				token
-			};
-			message = 'Login successfully!';
-			status = ResponeCodes.OK;
-		}
-	} else {
-		data = null;
-		message = 'Invalid email!';
-		status = ResponeCodes.OK;
+		return {
+			data,
+			message,
+			status
+		};
+	} catch (error) {
+		throw error;
 	}
-
-	return {
-		data,
-		message,
-		status
-	};
 };
 
 export { login };
