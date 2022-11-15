@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   AppBar as MuiAppBar,
   Toolbar,
@@ -9,6 +9,12 @@ import {
   ListItemButton,
   Slide,
   Fade,
+  Paper,
+  ClickAwayListener,
+  MenuList,
+  MenuItem,
+  Grow,
+  Popper,
 } from '@mui/material';
 import {
   TreeView,
@@ -19,6 +25,7 @@ import {
   ChevronRight as ChevronRightIcon,
   Login as LoginIcon,
   Logout as LogoutIcon,
+  Person as ProfileIcon,
   AccountCircle as AccountIcon,
   Menu as MenuIcon,
 } from '@mui/icons-material';
@@ -27,55 +34,48 @@ import useStyles from './styles';
 import { Link } from 'react-router-dom';
 import paths from 'paths';
 import LoginDialog from 'app/components/LoginDialog';
-import { store } from 'store';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { RootState } from 'store';
+import { loginActions } from 'app/components/LoginDialog/slice';
 
 export default function AppBar() {
 
-  const [openMenuMovie, setOpenMenuMovie] = useState(false);
-  const [openMenuSearchMovie, setOpenMenuSearchMovie] = useState(false);
-  const [openMainMenu, setOpenMainMenu] = useState(false);
-  const [openLoginDialog, setOpenLoginDialog] = useState(false);
-  const [accountOpt, setAccountOpt] = useState(false);
+  const [openMenuMovie, setOpenMenuMovie] = useState(false)
+  const [openMenuSearchMovie, setOpenMenuSearchMovie] = useState(false)
+  const [openMainMenu, setOpenMainMenu] = useState(false)
+  const [openLoginDialog, setOpenLoginDialog] = useState(false)
+  const [openOpt, setOpenOpt] = useState(false)
 
-  const handleClickMainMenu = () => {
-    setOpenMainMenu(!openMainMenu);
+  const handleClickMainMenu = () => setOpenMainMenu(!openMainMenu)
+  const handleCloseMainMenu = () => setOpenMainMenu(false)
+  const handleOpenMenuMovie = () => setOpenMenuMovie(true)
+  const handleCloseMenuMovie = () => setOpenMenuMovie(false)
+  const handleOpenMenuSearchMovie = () => setOpenMenuSearchMovie(true)
+  const handleCloseMenuSearchMovie = () => setOpenMenuSearchMovie(false)
+  const handleOpenLoginDialog = () => setOpenLoginDialog(true)
+  const handleCloseLoginDialog = () => setOpenLoginDialog(false)
+  const handleOpenOpt = () => setOpenOpt(true)
+  const handleCloseOpt = () => setOpenOpt(false)
+
+  const anchorRef = useRef<HTMLButtonElement>(null);
+  const prevOpen = useRef(openOpt);
+
+  const dispatch = useDispatch()
+
+  const handleLogout = () => {
+    dispatch(loginActions.logout())
+    handleCloseOpt
   }
-
-  const handleCloseMainMenu = () => {
-    setOpenMainMenu(false);
-  }
-
-  const handleOpenMenuMovie = () => {
-    setOpenMenuMovie(true);
-  }
-
-  const handleCloseMenuMovie = () => {
-    setOpenMenuMovie(false);
-  }
-
-  const handleOpenMenuSearchMovie = () => {
-    setOpenMenuSearchMovie(true);
-  }
-
-  const handleCloseMenuSearchMovie = () => {
-    setOpenMenuSearchMovie(false);
-  }
-
-  const handleOpenLoginDialog = () => {
-    setOpenLoginDialog(true);
-  }
-
-  const handleCloseLoginDialog = () => {
-    setOpenLoginDialog(false);
-  }
-
-  const loading = useSelector(state => state)
-
-  useEffect(() => {
-  }, [loading])
 
   const classes = useStyles();
+
+  const store = useSelector<RootState, RootState>(state => state)
+
+  useEffect(() => {
+    if (prevOpen.current === true && openOpt === false)
+      anchorRef.current!.focus();
+    prevOpen.current = openOpt;
+  }, [store, openOpt])
 
   return (
     <MuiAppBar
@@ -204,37 +204,87 @@ export default function AppBar() {
         }
         <Button disableRipple color='inherit' className={classes.button}>Lịch chiếu</Button>
         <Button disableRipple color='inherit' className={classes.button}>Đặt vé</Button>
-        {!store.getState().login.isLoggedin ?
-          <Button
-            sx={{ position: 'absolute' }}
-            disableRipple
-            color='inherit'
-            className={classes.loginButton}
-            startIcon={< LoginIcon sx={{ height: { lg: '0.75em', xl: '1em' } }} />}
-            onClick={handleOpenLoginDialog}>
-            <span className={classes.buttonText}>
-              Đăng nhập
-            </span>
-          </Button>
-          :
-          <>
-            <Button
-              sx={{ position: 'absolute' }}
-              disableRipple
-              color='inherit'
-              className={classes.accountButton}
-              startIcon={<AccountIcon className={classes.icon} />}
-            />
-            <Button
-              sx={{ position: 'absolute' }}
-              disableRipple
-              color='inherit'
-              className={classes.optButton}
+        <Button
+          sx={{
+            position: 'absolute',
+            display: store.login.isLoggedin ? 'none' : 'flex'
+          }}
+          disableRipple
+          color='inherit'
+          className={classes.loginButton}
+          startIcon={< LoginIcon sx={{ height: { lg: '0.75em', xl: '1em' } }} />}
+          onClick={handleOpenLoginDialog}>
+          <span className={classes.buttonText}>
+            Đăng nhập
+          </span>
+        </Button>
+        <Button
+          sx={{
+            position: 'absolute',
+            display: store.login.isLoggedin ? 'flex' : 'none'
+          }}
+          disableRipple
+          color='inherit'
+          className={classes.accountButton}
+          startIcon={<AccountIcon className={classes.icon} />}
+        />
+        <Button
+          sx={{
+            position: 'absolute',
+          }}
+          disableRipple
+          color='inherit'
+          ref={anchorRef}
+          className={classes.optButton}
+          onClick={handleOpenOpt}
+          disabled={!store.login.isLoggedin}
+          hidden={!store.login.isLoggedin}
+        ><ExpandMoreIcon />
+        </Button>
+        <Popper
+          sx={{ display: store.login.isLoggedin ? 'initial' : 'none' }}
+          open={openOpt}
+          anchorEl={anchorRef.current}
+          role={undefined}
+          placement="bottom-start"
+          transition
+          disablePortal
+        >
+          {({ TransitionProps, placement }) => (
+            <Grow
+              {...TransitionProps}
+              style={{
+                transformOrigin:
+                  placement === 'top-end' ? 'right bottom' : 'right top',
+              }}
             >
-              <ExpandMoreIcon />
-            </Button>
-          </>
-        }
+              <Paper sx={{
+                bgcolor: '#1D1C1A',
+                color: 'inherit',
+                borderStartEndRadius: 0,
+              }}>
+                <ClickAwayListener onClickAway={handleCloseOpt}>
+                  <MenuList>
+                    <MenuItem
+                      disableRipple
+                      className={classes.optItems}
+                      onClick={handleCloseOpt}>
+                      <ProfileIcon sx={{ pr: 1, mr: 'auto' }} />
+                      Thông tin
+                    </MenuItem>
+                    <MenuItem
+                      disableRipple
+                      className={classes.optItems}
+                      onClick={handleLogout}>
+                      <LogoutIcon sx={{ pr: 1, mr: 'auto' }} />
+                      Đăng xuất
+                    </MenuItem>
+                  </MenuList>
+                </ClickAwayListener>
+              </Paper>
+            </Grow>
+          )}
+        </Popper>
       </Toolbar>
       <LoginDialog open={openLoginDialog} onClose={handleCloseLoginDialog} />
     </MuiAppBar >

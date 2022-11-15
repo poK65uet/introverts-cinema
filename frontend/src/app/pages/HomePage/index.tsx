@@ -10,12 +10,16 @@ import { notify } from 'app/components/MasterDialog';
 import ConfirmDialog from 'app/components/MasterDialog/ConfirmDialog';
 import Footer from 'app/containers/Footer/index';
 import LoginDialog from 'app/components/LoginDialog';
+import { loginActions } from '../../components/LoginDialog/slice';
+import { useDispatch } from 'react-redux';
 
 export function HomePage() {
 
   const classes = useStyles();
 
   const [open, setOpen] = useState(false);
+
+  const dispatch = useDispatch();
 
   const handleOpen = () => {
     setOpen(true);

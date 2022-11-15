@@ -1,7 +1,6 @@
 import { Backdrop } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import { ThreeCircles } from 'react-loader-spinner';
-import { store } from 'store';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from 'store';
 

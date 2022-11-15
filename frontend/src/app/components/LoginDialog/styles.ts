@@ -15,14 +15,12 @@ const useStyles = makeStyles(() => ({
   button: {
     borderRadius: '15px !important',
     transform: 'translate3d(0, 0, 0)',
-    transition: 'all 0.3s !important',
+    transition: '0.5s',
     '&:hover': {
       transform: 'scale(1.05)',
-      transitionDuration: '0.35s !important',
     },
     '&:active': {
       transform: 'translateY(2px)',
-      transitionDuration: '0.35s !important',
     },
   },
   '@media screen and (min-height: 450px)': {

@@ -12,14 +12,13 @@ const useStyles = makeStyles((theme: Theme) => ({
       fontSize: '0.875rem !important',
     },
     boxShadow: 'none !important',
-    WebkitTransitionDuration: '1s',
     '& img': {
+      transition: '0.5s',
       overflow: 'hidden',
     },
     '&:hover': {
       '& img': {
         backgroundColor: '#1D1C1A',
-        transitionDuration: '0.25s',
         opacity: '0.9',
         filter: 'brightness(20%)',
       },
@@ -31,7 +30,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     fontSize: '0.675em',
     top: '0rem',
     position: 'fixed',
-    color: '#FFFFFF',
+    color: theme.palette.text.secondary,
   },
 
   actions: {
@@ -53,7 +52,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     minWidth: '0 !important',
     margin: '0 !important',
     backgroundColor: '#FF884B !important',
-    color: '#FFFFFF !important',
+    color: theme.palette.text.secondary + '!important',
   },
 }));
 

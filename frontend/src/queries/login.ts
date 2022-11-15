@@ -14,5 +14,7 @@ export const login = async (
   } catch (e) {
     return false;
   }
-  return response.data.data.user !== null;
+  await sessionStorage.setItem('token', response.data.data.token);
+
+  return response.data.data.user !== undefined;
 };

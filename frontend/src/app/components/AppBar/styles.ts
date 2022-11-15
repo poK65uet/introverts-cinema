@@ -1,5 +1,5 @@
 import { makeStyles } from '@mui/styles';
-import { Hidden, Theme } from '@mui/material';
+import { Theme } from '@mui/material';
 
 const useStyles = makeStyles((theme: Theme) => ({
   appBar: {
@@ -42,9 +42,9 @@ const useStyles = makeStyles((theme: Theme) => ({
     maxWidth: '18vw',
     minWidth: 'min(14rem, 18vw) !important',
     fontSize: '1em !important',
+    transition: '0.5s',
     '&:hover': {
       color: theme.palette.primary.main,
-      transitionDuration: '0.5s',
     },
   },
 
@@ -52,9 +52,9 @@ const useStyles = makeStyles((theme: Theme) => ({
     maxWidth: '13rem',
     minWidth: '13rem !important',
     fontSize: '1em !important',
+    transition: '0.35s !important',
     '&:hover': {
       color: theme.palette.primary.main,
-      transitionDuration: '0.5s',
     },
   },
 
@@ -73,9 +73,9 @@ const useStyles = makeStyles((theme: Theme) => ({
   menuButton: {
     height: '3rem',
     width: 'fit-content',
+    transition: '0.5s',
     '&:hover': {
       color: theme.palette.primary.main,
-      transitionDuration: '0.5s',
     },
   },
 
@@ -96,8 +96,15 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
 
   optButton: {
-    right: '-0.5rem',
+    right: 0,
     height: '4rem',
+  },
+
+  optItems: {
+    transition: '0.5s',
+    '&:hover': {
+      color: theme.palette.primary.main,
+    },
   },
 
   movieMenu: {

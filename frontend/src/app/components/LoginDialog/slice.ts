@@ -7,7 +7,9 @@ export interface LoginState {
 }
 
 const initialState: LoginState = {
-  isLoggedin: false,
+  isLoggedin:
+    sessionStorage.getItem('token') !== undefined &&
+    sessionStorage.getItem('token') !== null,
   isLoading: false,
 };
 
@@ -19,8 +21,12 @@ export const loginSlice = createSlice({
   name: 'login',
   initialState: initialState,
   reducers: {
-    logout: (state, action) => {
+    logout: state => {
       state.isLoggedin = false;
+      sessionStorage.removeItem('token');
+    },
+    keepLogin: state => {
+      state.isLoggedin = true;
     },
   },
   extraReducers: builder => {

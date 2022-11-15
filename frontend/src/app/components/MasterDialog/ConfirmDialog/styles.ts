@@ -19,9 +19,9 @@ const useStyles = makeStyles((theme: Theme) => ({
     width: '50%',
     backgroundColor: '#1D1C1A !important',
     color: 'white !important',
+    transition: '0.5s',
     '&:hover': {
       color: '#FF884B !important',
-      transitionDuration: '0.5s',
     },
   },
 
@@ -29,9 +29,9 @@ const useStyles = makeStyles((theme: Theme) => ({
     width: '50%',
     backgroundColor: '#FF884B !important',
     color: 'white !important',
+    transition: '0.5s',
     '&:hover': {
       color: '#1D1C1A !important',
-      transitionDuration: '0.5s',
     },
   },
 }));
