@@ -3,16 +3,15 @@ import React, { useEffect, useState } from 'react'
 import { ThreeCircles } from 'react-loader-spinner';
 import { store } from 'store';
 import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from 'store';
 
 export default function LoadingLayer() {
 
-	const loading = useSelector(state => state)
+	const loading = useSelector<RootState, RootState>(state => state)
 	const [isLoading, setIsLoading] = useState(true);
-	const RTKstore = store.getState();
 
 	useEffect(() => {
-		setIsLoading(RTKstore.loading.isLoading || RTKstore.login.isLoading)
-		console.log(RTKstore.login.isLoggedin);
+		setIsLoading(loading.loading.isLoading || loading.login.isLoading)
 	}, [loading])
 
 	return (

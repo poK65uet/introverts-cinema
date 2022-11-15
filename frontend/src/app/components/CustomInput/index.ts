@@ -1,7 +1,7 @@
-import RadioGroup from "./RadioGroup";
-import TextField from "./TextField";
+import RadioGroup from './RadioGroup';
+import TextField from './TextField';
 
 export const CustomInput = {
-	RadioGroup, 
-	TextField,
+  RadioGroup,
+  TextField,
 };
