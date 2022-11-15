@@ -6,8 +6,6 @@ import { User, UserCode } from 'databases/models';
 import RoleCodes from 'utils/constant/RoleCode';
 import ResponeCodes from 'utils/constant/ResponeCode';
 import { sendEmail } from 'utils/email';
-import { UserCodeModel } from 'databases/models/UserCode';
-import { throws } from 'assert';
 
 const generateCode = () => {
 	const code = `${Math.floor(100000 + Math.random() * 900000)}`;
@@ -28,21 +26,26 @@ const checkEmail = async (req: Request) => {
 
 	try {
 		const email = req.body.email;
-		const user = await User.findOne({
-			where: {
-				email
-			}
-		});
-		if (user) {
+		if (!email) {
 			data = false;
-			message = 'Email exists!';
-			status = ResponeCodes.OK;
+			message = 'Invalid email';
+			status = ResponeCodes.BAD_REQUEST;
 		} else {
-			data = true;
-			message = 'Email not exists!';
-			status = ResponeCodes.OK;
+			const user = await User.findOne({
+				where: {
+					email
+				}
+			});
+			if (user) {
+				data = false;
+				message = 'Email exists!';
+				status = ResponeCodes.OK;
+			} else {
+				data = true;
+				message = 'Email not exists!';
+				status = ResponeCodes.OK;
+			}
 		}
-
 		return {
 			data,
 			message,
@@ -60,15 +63,20 @@ const sendCode = async (req: Request) => {
 
 	try {
 		const email = req.body.email;
-		const code = generateCode();
-		await UserCode.create({
-			email,
-			code
-		});
-		await sendEmail(email, 'Verify your email address', code);
-		message = 'Send code successfully!';
-		status = ResponeCodes.CREATED;
-
+		if (!email) {
+			data = null;
+			message = 'Invalid email';
+			status = ResponeCodes.BAD_REQUEST;
+		} else {
+			const code = generateCode();
+			await UserCode.create({
+				email,
+				code
+			});
+			await sendEmail(email, 'Verify your email address', code);
+			message = 'Send code successfully!';
+			status = ResponeCodes.CREATED;
+		}
 		return {
 			data,
 			message,
@@ -87,29 +95,34 @@ const verifyCode = async (req: Request) => {
 	try {
 		const { email, code } = req.body;
 
-		const registerUser = await UserCode.findOne({
-			where: {
-				code,
-				email
-			}
-		});
-
-		if (!registerUser) {
+		if (!email || !code) {
 			data = null;
-			message = 'Incorrect code!';
-			status = ResponeCodes.OK;
+			message = 'Invalid email or code';
+			status = ResponeCodes.BAD_REQUEST;
 		} else {
-			if (registerUser.expires < new Date(Date.now())) {
+			const registerUser = await UserCode.findOne({
+				where: {
+					code,
+					email
+				}
+			});
+
+			if (!registerUser) {
 				data = null;
-				message = 'Expired code!';
+				message = 'Incorrect code!';
 				status = ResponeCodes.OK;
 			} else {
-				data = registerUser;
-				message = 'Verify code successfully!';
-				status = ResponeCodes.OK;
+				if (registerUser.expires < new Date(Date.now())) {
+					data = null;
+					message = 'Expired code!';
+					status = ResponeCodes.OK;
+				} else {
+					data = registerUser;
+					message = 'Verify code successfully!';
+					status = ResponeCodes.OK;
+				}
 			}
 		}
-
 		return {
 			data,
 			message,
@@ -127,20 +140,26 @@ const register = async (req: Request) => {
 
 	try {
 		const newUser: RegisterPayLoad = req.body;
-		const user = await User.create(newUser);
+		if (!newUser.email || !newUser.password) {
+			data = null;
+			message = 'Invalid email or password';
+			status = ResponeCodes.BAD_REQUEST;
+		} else {
+			const user = await User.create(newUser);
 
-		await user.addRole(RoleCodes.CUSTOMER);
-		// const roles = await user.getRoles();
-		const roleIds = [RoleCodes.CUSTOMER];
+			await user.addRole(RoleCodes.CUSTOMER);
+			// const roles = await user.getRoles();
+			const roleIds = [RoleCodes.CUSTOMER];
 
-		const token = generateToken(user.id, roleIds);
+			const token = generateToken(user.id, roleIds);
 
-		data = {
-			user,
-			token
-		};
-		message = 'Register successfully!';
-		status = ResponeCodes.CREATED;
+			data = {
+				user,
+				token
+			};
+			message = 'Register successfully!';
+			status = ResponeCodes.CREATED;
+		}
 
 		return {
 			data,
