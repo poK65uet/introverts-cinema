@@ -42,7 +42,7 @@ const getUserById = async (req: Request<{ id: number }>) => {
 
 	if (isNaN(id)) {
 		data = null;
-		message = 'Invalid user identifier';
+		message = 'Invalid identifier';
 		status = ResponeCodes.BAD_REQUEST;
 	} else {
 		const user = await User.findByPk(id, { include: Role });
@@ -71,27 +71,31 @@ const addUser = async (req: Request) => {
 
 	const newUser: UserPayload = req.body;
 
-	const { email, password, fullName, birthDay } = newUser;
-	const [user, created] = await User.findOrCreate({
-		where: {
-			email
-		},
-		defaults: {
-			password,
-			fullName,
-			birthDay
-		}
-	});
-
-	if (created) {
-		await user.addRole(RoleCodes.CUSTOMER);
-		data = user;
-		message = 'Added user successfully!';
-		status = ResponeCodes.CREATED;
-	} else {
+	const { email, password } = newUser;
+	if (!email || !password) {
 		data = null;
-		message = 'Email exists!';
-		status = ResponeCodes.OK;
+		message = 'Email or password null';
+		status = ResponeCodes.BAD_REQUEST;
+	} else {
+		const [user, created] = await User.findOrCreate({
+			where: {
+				email
+			},
+			defaults: {
+				...newUser
+			}
+		});
+
+		if (created) {
+			await user.addRole(RoleCodes.CUSTOMER);
+			data = user;
+			message = 'Added user successfully!';
+			status = ResponeCodes.CREATED;
+		} else {
+			data = null;
+			message = 'Email exists!';
+			status = ResponeCodes.OK;
+		}
 	}
 
 	return {
