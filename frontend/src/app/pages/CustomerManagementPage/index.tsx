@@ -2,14 +2,19 @@ import * as React from 'react';
 import Box from '@mui/material/Box';
 import useStyles from './style';
 import { DataGrid, GridColDef, GridValueGetterParams } from '@mui/x-data-grid';
-import DeleteIcon from '@mui/icons-material/Delete';
-import EditIcon from '@mui/icons-material/Edit';
-// import GridActionsCellItem from '@mui/x-data-grid-pro';
+import deleteIcon from '@mui/icons-material/Delete';
+import editIcon from '@mui/icons-material/Edit';
 
 export default function CustomerManagementPage() {
 
 
   const classes = useStyles();
+
+  interface editButton {
+    customerId: number
+    icon: any
+  }
+
   function createData(
     id: number,
     customerName: string,
@@ -71,12 +76,10 @@ export default function CustomerManagementPage() {
       type: 'any',
       headerName: 'Tùy chọn',
       width: 200,
-      // editable: true, getActions: () => [
-        // <GridActionsCellItem icon={<EditIcon />} label="Edit" />,
-        // <GridActionsCellItem icon={<DeleteIcon />} label="Delete" />,
-      // ],
     },
   ];
+
+  
 
   return (
     // <h2>Trang quản lý khách hàng </h2>
