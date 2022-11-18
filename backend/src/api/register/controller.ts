@@ -9,7 +9,7 @@ const checkEmail = async (req: Request, res: Response) => {
 		const result = await service.checkEmail(req);
 		return new ApiResponse(result.data, result.message, result.status).send(res);
 	} catch (error) {
-		return new ApiResponse(error, 'Error!', ResponeCodes.ERROR).send(res);
+		return new ApiResponse(error.message, "Couldn't check email.", ResponeCodes.ERROR).send(res);
 	}
 };
 
@@ -24,7 +24,7 @@ const sendCode = async (req: Request, res: Response) => {
 			return new ApiResponse(checkEmailResult.data, checkEmailResult.message, checkEmailResult.status).send(res);
 		}
 	} catch (error) {
-		return new ApiResponse(error, 'Error!', ResponeCodes.ERROR).send(res);
+		return new ApiResponse(error.message, "Couldn't send code.", ResponeCodes.ERROR).send(res);
 	}
 };
 
@@ -46,7 +46,7 @@ const verifyAndRegister = async (req: Request, res: Response) => {
 			return new ApiResponse(verifyResult.data, verifyResult.message, verifyResult.status).send(res);
 		}
 	} catch (error) {
-		return new ApiResponse(error, 'Error!', ResponeCodes.ERROR).send(res);
+		return new ApiResponse(error.message, "Couldn't register.", ResponeCodes.ERROR).send(res);
 	}
 };
 
