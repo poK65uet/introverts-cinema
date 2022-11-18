@@ -36,13 +36,12 @@ export const loginSlice = createSlice({
     });
     builder.addCase(loginThunk.fulfilled, (state, action) => {
       if (action.payload) {
-        console.log('LOGIN SUCCESS');
-        state.isLoading = false;
-
         state.isLoggedin = true;
-      } else {
-        console.log('LOGIN FAILED');
         state.isLoading = false;
+        console.log(state.isLoggedin + ' LOGIN SUCCESS');
+      } else {
+        state.isLoading = false;
+        console.log('LOGIN FAILED');
       }
     });
     builder.addCase(loginThunk.rejected, state => {

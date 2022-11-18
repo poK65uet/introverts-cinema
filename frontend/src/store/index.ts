@@ -1,13 +1,15 @@
 import { configureStore } from '@reduxjs/toolkit';
 import homeReducer from 'app/pages/HomePage/slice';
-import loginReducer from 'app/components/LoginDialog/slice'
-import loadingReducer from 'app/components/LoadingLayer/slice'
+import loginReducer from 'app/components/LoginDialog/slice';
+import registerReducer from 'app/components/LoginDialog/EmailVerification/slice';
+import loadingReducer from 'app/components/LoadingLayer/slice';
 
 export const store = configureStore({
   reducer: {
     home: homeReducer,
     login: loginReducer,
-    loading: loadingReducer
+    register: registerReducer,
+    loading: loadingReducer,
   },
 });
 // Infer the `RootState` and `AppDispatch` types from the store itself

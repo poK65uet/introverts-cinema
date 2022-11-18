@@ -1,28 +1,36 @@
 import { makeStyles } from '@mui/styles';
+import { Theme } from '@mui/material';
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme: Theme) => ({
+  dialog: {
+    [theme.breakpoints.down('sm')]: {
+      fontSize: '0.875rem',
+    },
+  },
+
   loginBox: {
     display: 'flex',
     flexDirection: 'column',
-    maxWidth: '50rem',
-    width: '30rem',
-    minHeight: '52vh',
     backgroundColor: 'white',
     borderRadius: '15px',
     overflow: 'hidden',
     padding: '2em',
   },
-  button: {
+
+  loginButton: {
     borderRadius: '15px !important',
-    transform: 'translate3d(0, 0, 0)',
-    transition: '0.5s',
+    transition: '0.5s !important',
+    boxShadow: 'none !important',
     '&:hover': {
-      transform: 'scale(1.05)',
-    },
-    '&:active': {
-      transform: 'translateY(2px)',
+      backgroundColor: theme.palette.primary.dark,
     },
   },
+
+  registerButton: {
+    borderRadius: '15px !important',
+    transition: '0.5s !important',
+  },
+
   '@media screen and (min-height: 450px)': {
     root: {
       alignItems: 'center',

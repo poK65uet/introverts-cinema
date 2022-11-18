@@ -14,7 +14,11 @@ export const login = async (
   } catch (e) {
     return false;
   }
-  await sessionStorage.setItem('token', response.data.data.token);
+  if (
+    response.data.data.token !== null &&
+    response.data.data.token !== undefined
+  )
+    await sessionStorage.setItem('token', response.data.data.token);
 
   return response.data.data.user !== undefined;
 };
