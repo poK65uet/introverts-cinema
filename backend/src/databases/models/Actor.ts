@@ -1,11 +1,13 @@
-import { CreationOptional, DataTypes, InferAttributes, InferCreationAttributes, Model } from 'sequelize';
+import { CreationOptional, DataTypes, ForeignKey, InferAttributes, InferCreationAttributes, Model, NonAttribute } from 'sequelize';
 import sequelize from 'databases';
-import Nationality from './Nationality';
+import Nationality, { NationalityModel } from './Nationality';
 
 export interface ActorModel extends Model<InferAttributes<ActorModel>, InferCreationAttributes<ActorModel>> {
 	id: CreationOptional<number>;
 	fullName: string;
-	birthDay: string;
+	birthDay: Date;
+	NationalityId: ForeignKey<NationalityModel['id']>;
+	Nationality?: NonAttribute<NationalityModel>;
 	createdAt: CreationOptional<Date>;
 	updatedAt: CreationOptional<Date>;
 }
@@ -25,6 +27,9 @@ const Actor = sequelize.define<ActorModel>(
 		},
 		birthDay: {
 			type: DataTypes.DATE
+		},
+		NationalityId: {
+			type: DataTypes.INTEGER
 		},
 		createdAt: {
 			type: DataTypes.DATE
