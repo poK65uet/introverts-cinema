@@ -1,15 +1,15 @@
 import { Request } from 'express';
-import { Nationality } from 'databases/models';
+import { Category } from 'databases/models';
 import ResponeCodes from 'utils/constant/ResponeCode';
-import NationalityPayload from './NationalityPayload';
+import CategoryPayload from './CategoryPayload';
 
-const getNationalities = async (req: Request) => {
+const getCategories = async (req: Request) => {
 	try {
 		let data;
 		let message: string;
 		let status: number;
 
-		data = await Nationality.findAll();
+		data = await Category.findAll();
 		message = 'Get all successfully!';
 		status = ResponeCodes.OK;
 
@@ -23,7 +23,7 @@ const getNationalities = async (req: Request) => {
 	}
 };
 
-const getNationalityById = async (req: Request) => {
+const getCategoryById = async (req: Request) => {
 	try {
 		let data;
 		let message: string;
@@ -36,13 +36,13 @@ const getNationalityById = async (req: Request) => {
 			message = 'Invalid identifier.';
 			status = ResponeCodes.BAD_REQUEST;
 		} else {
-			const nationlity = await Nationality.findByPk(id);
-			if (!nationlity) {
+			const category = await Category.findByPk(id);
+			if (!category) {
 				data = null;
 				message = 'Not found.';
 				status = ResponeCodes.NOT_FOUND;
 			} else {
-				data = nationlity;
+				data = category;
 				message = 'Get successfully!';
 				status = ResponeCodes.OK;
 			}
@@ -58,37 +58,23 @@ const getNationalityById = async (req: Request) => {
 	}
 };
 
-const addNationality = async (req: Request) => {
+const addCategory = async (req: Request) => {
 	try {
 		let data;
 		let message: string;
 		let status: number;
 
-		const newNationality: NationalityPayload = req.body;
+		const newCategory: CategoryPayload = req.body;
 
-		if (!newNationality.name) {
+		if (!newCategory.name) {
 			data = null;
 			message = 'Name null.';
 			status = ResponeCodes.BAD_REQUEST;
 		} else {
-			const [nationlity, created] = await Nationality.findOrCreate({
-				where: {
-					name: newNationality.name
-				},
-				defaults: {
-					...newNationality
-				}
-			});
-
-			if (created) {
-				data = nationlity;
-				message = 'Add successfully!';
-				status = ResponeCodes.CREATED;
-			} else {
-				data = null;
-				message = 'Nationality exists.';
-				status = ResponeCodes.OK;
-			}
+			const category = await Category.create(newCategory);
+			data = category;
+			message = 'Add successfully!';
+			status = ResponeCodes.CREATED;
 		}
 
 		return {
@@ -101,7 +87,7 @@ const addNationality = async (req: Request) => {
 	}
 };
 
-const updateNationality = async (req: Request) => {
+const updateCategory = async (req: Request) => {
 	try {
 		let data;
 		let message: string;
@@ -114,8 +100,8 @@ const updateNationality = async (req: Request) => {
 			message = 'Invalid identifier.';
 			status = ResponeCodes.BAD_REQUEST;
 		} else {
-			const updateNationality = req.body;
-			data = await Nationality.update(updateNationality, {
+			const updateCategory = req.body;
+			data = await Category.update(updateCategory, {
 				where: {
 					id
 				}
@@ -134,7 +120,7 @@ const updateNationality = async (req: Request) => {
 	}
 };
 
-const deleteNationality = async (req: Request) => {
+const deleteCategory = async (req: Request) => {
 	try {
 		let data;
 		let message: string;
@@ -147,7 +133,7 @@ const deleteNationality = async (req: Request) => {
 			message = 'Invalid identifier.';
 			status = ResponeCodes.BAD_REQUEST;
 		} else {
-			data = await Nationality.destroy({
+			data = await Category.destroy({
 				where: {
 					id
 				}
@@ -166,4 +152,4 @@ const deleteNationality = async (req: Request) => {
 	}
 };
 
-export { getNationalities, getNationalityById, addNationality, updateNationality, deleteNationality };
+export { getCategories, getCategoryById, addCategory, updateCategory, deleteCategory };

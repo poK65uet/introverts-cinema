@@ -20,11 +20,10 @@ function generateToken(userId: number, roleIds: number[]) {
 }
 
 const checkEmail = async (req: Request) => {
-	let data: boolean;
-	let message: string;
-	let status: number;
-
 	try {
+		let data: boolean;
+		let message: string;
+		let status: number;
 		const email = req.body.email;
 		if (!email) {
 			data = false;
@@ -57,11 +56,10 @@ const checkEmail = async (req: Request) => {
 };
 
 const sendCode = async (req: Request) => {
-	let data;
-	let message: string;
-	let status: number;
-
 	try {
+		let data;
+		let message: string;
+		let status: number;
 		const email = req.body.email;
 		if (!email) {
 			data = null;
@@ -88,11 +86,10 @@ const sendCode = async (req: Request) => {
 };
 
 const verifyCode = async (req: Request) => {
-	let data;
-	let message: string;
-	let status: number;
-
 	try {
+		let data;
+		let message: string;
+		let status: number;
 		const { email, code } = req.body;
 
 		if (!email || !code) {
@@ -134,11 +131,10 @@ const verifyCode = async (req: Request) => {
 };
 
 const register = async (req: Request) => {
-	let data;
-	let message: string;
-	let status: number;
-
 	try {
+		let data;
+		let message: string;
+		let status: number;
 		const newUser: RegisterPayLoad = req.body;
 		if (!newUser.email || !newUser.password) {
 			data = null;

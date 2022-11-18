@@ -23,144 +23,164 @@ const getPagination = (page: string, size: string) => {
 };
 
 const getUsers = async (req: Request) => {
-	const page = req.query.page as string;
-	const size = req.query.size as string;
-	const { limit, offset } = getPagination(page, size);
-	const users = await User.findAndCountAll({
-		limit,
-		offset
-	});
-	return users;
+	try {
+		const page = req.query.page as string;
+		const size = req.query.size as string;
+		const { limit, offset } = getPagination(page, size);
+		const users = await User.findAndCountAll({
+			limit,
+			offset
+		});
+		return users;
+	} catch (error) {
+		throw error;
+	}
 };
 
 const getUserById = async (req: Request<{ id: number }>) => {
-	let data: UserModel | null;
-	let message: string;
-	let status: number;
+	try {
+		let data: UserModel | null;
+		let message: string;
+		let status: number;
 
-	const id = req.params.id;
+		const id = req.params.id;
 
-	if (isNaN(id)) {
-		data = null;
-		message = 'Invalid identifier';
-		status = ResponeCodes.BAD_REQUEST;
-	} else {
-		const user = await User.findByPk(id, { include: Role });
-		if (!user) {
+		if (isNaN(id)) {
 			data = null;
-			message = 'User not found';
-			status = ResponeCodes.NOT_FOUND;
+			message = 'Invalid identifier.';
+			status = ResponeCodes.BAD_REQUEST;
 		} else {
-			data = user;
-			message = 'Get successfully!';
-			status = ResponeCodes.OK;
+			const user = await User.findByPk(id);
+			if (!user) {
+				data = null;
+				message = 'User not found.';
+				status = ResponeCodes.NOT_FOUND;
+			} else {
+				data = user;
+				message = 'Get successfully!';
+				status = ResponeCodes.OK;
+			}
 		}
-	}
 
-	return {
-		data,
-		message,
-		status
-	};
+		return {
+			data,
+			message,
+			status
+		};
+	} catch (error) {
+		throw error;
+	}
 };
 
 const addUser = async (req: Request) => {
-	let data: UserPayload;
-	let message: string;
-	let status: number;
+	try {
+		let data;
+		let message: string;
+		let status: number;
 
-	const newUser: UserPayload = req.body;
+		const newUser: UserPayload = req.body;
 
-	const { email, password } = newUser;
-	if (!email || !password) {
-		data = null;
-		message = 'Email or password null';
-		status = ResponeCodes.BAD_REQUEST;
-	} else {
-		const [user, created] = await User.findOrCreate({
-			where: {
-				email
-			},
-			defaults: {
-				...newUser
-			}
-		});
-
-		if (created) {
-			await user.addRole(RoleCodes.CUSTOMER);
-			data = user;
-			message = 'Added user successfully!';
-			status = ResponeCodes.CREATED;
-		} else {
+		const { email, password } = newUser;
+		if (!email || !password) {
 			data = null;
-			message = 'Email exists!';
-			status = ResponeCodes.OK;
-		}
-	}
+			message = 'Email or password null.';
+			status = ResponeCodes.BAD_REQUEST;
+		} else {
+			const [user, created] = await User.findOrCreate({
+				where: {
+					email
+				},
+				defaults: {
+					...newUser
+				}
+			});
 
-	return {
-		data,
-		message,
-		status
-	};
+			if (created) {
+				await user.addRole(RoleCodes.CUSTOMER);
+				data = user;
+				message = 'Add user successfully!';
+				status = ResponeCodes.CREATED;
+			} else {
+				data = null;
+				message = 'Email exists.';
+				status = ResponeCodes.OK;
+			}
+		}
+
+		return {
+			data,
+			message,
+			status
+		};
+	} catch (error) {
+		throw error;
+	}
 };
 
 const updateUser = async (req: Request<{ id: number }>) => {
-	let data;
-	let message: string;
-	let status: number;
+	try {
+		let data;
+		let message: string;
+		let status: number;
 
-	const id = req.params.id;
+		const id = req.params.id;
 
-	if (isNaN(id)) {
-		data = null;
-		message = 'Invalid user identifier';
-		status = ResponeCodes.BAD_REQUEST;
-	} else {
-		const updateUser: UserPayload = req.body;
-		data = await User.update(updateUser, {
-			where: {
-				id
-			},
-			individualHooks: true
-		});
-		message = 'Updated user successfully!';
-		status = ResponeCodes.OK;
+		if (isNaN(id)) {
+			data = null;
+			message = 'Invalid user identifier';
+			status = ResponeCodes.BAD_REQUEST;
+		} else {
+			const updateUser: UserPayload = req.body;
+			data = await User.update(updateUser, {
+				where: {
+					id
+				},
+				individualHooks: true
+			});
+			message = 'Update user successfully!';
+			status = ResponeCodes.OK;
+		}
+
+		return {
+			data,
+			message,
+			status
+		};
+	} catch (error) {
+		throw error;
 	}
-
-	return {
-		data,
-		message,
-		status
-	};
 };
 
 const deleteUser = async (req: Request<{ id: number }>) => {
-	let data;
-	let message: string;
-	let status: number;
+	try {
+		let data;
+		let message: string;
+		let status: number;
 
-	const id = req.params.id;
+		const id = req.params.id;
 
-	if (isNaN(id)) {
-		data = null;
-		message = 'Invalid user identifier';
-		status = ResponeCodes.BAD_REQUEST;
-	} else {
-		data = await User.destroy({
-			where: {
-				id
-			}
-		});
-		message = 'Deleted user successfully!';
-		status = ResponeCodes.OK;
+		if (isNaN(id)) {
+			data = null;
+			message = 'Invalid user identifier.';
+			status = ResponeCodes.BAD_REQUEST;
+		} else {
+			data = await User.destroy({
+				where: {
+					id
+				}
+			});
+			message = 'Delete user successfully!';
+			status = ResponeCodes.OK;
+		}
+
+		return {
+			data,
+			message,
+			status
+		};
+	} catch (error) {
+		throw error;
 	}
-
-	return {
-		data,
-		message,
-		status
-	};
 };
 
 export { getUsers, getUserById, addUser, updateUser, deleteUser };
