@@ -1,9 +1,11 @@
 import * as React from 'react';
 import Box from '@mui/material/Box';
 import useStyles from './style';
-import { DataGrid, GridColDef, GridValueGetterParams } from '@mui/x-data-grid';
-import deleteIcon from '@mui/icons-material/Delete';
-import editIcon from '@mui/icons-material/Edit';
+import { DataGrid, GridColDef, GridToolbar, GridValueGetterParams } from '@mui/x-data-grid';
+import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
+import Button from '@mui/material/Button/Button';
+import { IconButton } from '@mui/material';
 
 export default function CustomerManagementPage() {
 
@@ -76,6 +78,16 @@ export default function CustomerManagementPage() {
       type: 'any',
       headerName: 'Tùy chọn',
       width: 200,
+      renderCell: () => (
+          <Box>
+          <IconButton aria-label="edit">
+            <EditIcon />
+          </IconButton>
+          <IconButton aria-label="delete">
+            <DeleteIcon />
+          </IconButton>
+          </Box>
+      ),
     },
   ];
 
@@ -91,6 +103,9 @@ export default function CustomerManagementPage() {
         rowsPerPageOptions={[5]}
         disableSelectionOnClick
         experimentalFeatures={{ newEditingApi: true }}
+        components={{
+          Toolbar: GridToolbar,
+        }}
       />
     </Box>
   );
