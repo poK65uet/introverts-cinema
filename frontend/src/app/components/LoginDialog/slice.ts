@@ -4,6 +4,7 @@ import { login } from 'queries/login';
 export interface LoginState {
   isLoggedin: boolean;
   isLoading: boolean;
+  dialogAction: 'login' | 'validateEmail' | 'register';
 }
 
 const initialState: LoginState = {
@@ -11,11 +12,8 @@ const initialState: LoginState = {
     sessionStorage.getItem('token') !== undefined &&
     sessionStorage.getItem('token') !== null,
   isLoading: false,
+  dialogAction: 'login',
 };
-
-function timeout(delay: number) {
-  return new Promise(res => setTimeout(res, delay));
-}
 
 export const loginSlice = createSlice({
   name: 'login',
@@ -28,6 +26,9 @@ export const loginSlice = createSlice({
     keepLogin: state => {
       state.isLoggedin = true;
     },
+    changeAction: (state, action) => {
+      state.dialogAction = action.payload;
+    },
   },
   extraReducers: builder => {
     builder.addCase(loginThunk.pending, state => {
@@ -35,27 +36,30 @@ export const loginSlice = createSlice({
       console.log('LOGGING IN');
     });
     builder.addCase(loginThunk.fulfilled, (state, action) => {
+      state.isLoading = false;
       if (action.payload) {
         state.isLoggedin = true;
-        state.isLoading = false;
-        console.log(state.isLoggedin + ' LOGIN SUCCESS');
+        console.log('LOGIN SUCCESS');
       } else {
-        state.isLoading = false;
         console.log('LOGIN FAILED');
       }
     });
     builder.addCase(loginThunk.rejected, state => {
-      console.log('LOGIN ERROR');
       state.isLoading = false;
+      console.log('LOGIN ERROR');
     });
   },
 });
 
+function timeout(delay: number) {
+  return new Promise(res => setTimeout(res, delay));
+}
+
 export const loginThunk = createAsyncThunk(
   'login/login',
   async (data: { email: string; password: string }, reject) => {
-    await timeout(500);
     const success = await login(data.email, data.password);
+    await timeout(500);
     return success;
   },
 );

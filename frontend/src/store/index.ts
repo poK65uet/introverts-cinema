@@ -1,7 +1,7 @@
 import { configureStore } from '@reduxjs/toolkit';
 import homeReducer from 'app/pages/HomePage/slice';
 import loginReducer from 'app/components/LoginDialog/slice';
-import registerReducer from 'app/components/LoginDialog/EmailVerification/slice';
+import registerReducer from 'app/components/LoginDialog/EmailValidate/slice';
 import loadingReducer from 'app/components/LoadingLayer/slice';
 
 export const store = configureStore({

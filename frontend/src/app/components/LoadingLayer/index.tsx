@@ -10,7 +10,7 @@ export default function LoadingLayer() {
 	const [isLoading, setIsLoading] = useState(true);
 
 	useEffect(() => {
-		setIsLoading(loading.loading.isLoading || loading.login.isLoading)
+		setIsLoading(loading.loading.isLoading || loading.login.isLoading || loading.register.isLoading)
 	}, [loading])
 
 	return (

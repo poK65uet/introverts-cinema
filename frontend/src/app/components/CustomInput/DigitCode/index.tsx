@@ -2,6 +2,8 @@ import React, { useEffect } from 'react'
 import useDigitInput from 'react-digit-input';
 import Grid from '@mui/material/Unstable_Grid2';
 import useStyles from './styles';
+import { useDispatch } from 'react-redux';
+import { registerActions } from '../../LoginDialog/EmailValidate/slice';
 
 export default function DigitCode() {
   const [value, onChange] = React.useState('');
@@ -12,18 +14,19 @@ export default function DigitCode() {
     onChange,
   });
 
+  const dispatch = useDispatch()
   useEffect(() => {
-    sessionStorage.setItem('verify_code', value)
+    dispatch(registerActions.storeOTP(value))
   }, [value])
 
   const classes = useStyles();
   return (
     <Grid
       container
-      width='10.5em'
-      height='2.25em '
-      alignSelf='center'
-      m='auto'>
+      width='5.5em'
+      height='2.125.em '
+      m='auto'
+    >
       {[0, 1, 2, 3, 4, 5].map((index: number) => {
         return (
           <Grid xs={2} key={index}>

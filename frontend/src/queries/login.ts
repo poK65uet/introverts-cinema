@@ -1,5 +1,6 @@
 import axios, { AxiosResponse } from 'axios';
 import config from 'config';
+import { useQuery } from 'react-query';
 
 export const login = async (
   email: string,
@@ -18,7 +19,10 @@ export const login = async (
     response.data.data.token !== null &&
     response.data.data.token !== undefined
   )
-    await sessionStorage.setItem('token', response.data.data.token);
+    sessionStorage.setItem('token', response.data.data.token);
 
   return response.data.data.user !== undefined;
 };
+
+export const useLogin = (email: string, password: string) =>
+  useQuery(['login'], () => login(email, password));
