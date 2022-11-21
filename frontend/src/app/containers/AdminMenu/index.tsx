@@ -46,28 +46,32 @@ function AdminMenu(props: { className: string }) {
           className={tab === 0 ? classes.activeTab : classes.tab}
           component={Link}
           label="Quản lý Khách hàng"
-          icon=<PeopleIcon />
+          icon={<PeopleIcon />}
+          iconPosition="start"
           to={paths.CustomerManagement}
         />
         <Tab
           className={tab === 1 ? classes.activeTab : classes.tab}
           component={Link}
           label="Quản lý phòng chiếu"
-          icon=<CameraIndoorIcon />
+          icon={<CameraIndoorIcon />}
+          iconPosition="start"
           to={paths.RoomManagement}
         />
         <Tab
           className={tab === 2 ? classes.activeTab : classes.tab}
           component={Link}
           label="Quản lý phim"
-          icon=<CameraRollIcon />
+          icon={<CameraRollIcon />}
+          iconPosition="start"
           to={paths.FilmManagement}
         />
         <Tab
           className={tab === 3 ? classes.activeTab : classes.tab}
           component={Link}
           label="Quản lý vé"
-          icon=<LocalActivityIcon />
+          icon={<LocalActivityIcon />}
+          iconPosition="start"
           to={paths.TicketManagement}
         />
       </Tabs>
