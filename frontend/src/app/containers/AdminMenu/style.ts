@@ -1,18 +1,16 @@
 import { makeStyles } from '@mui/styles';
+import { Theme } from '@mui/material';
 
-const useStyles = makeStyles(() => ({
-
+const useStyles = makeStyles((theme: Theme) => ({
   tab: {
-
+    justifyContent: 'left !important',
   },
 
   activeTab: {
-  
+    transition: '0.5s',
   },
 
-  wrapper: {
-    alignItems: "flex-start"
-  },
+  wrapper: {},
 }));
 
 export default useStyles;
