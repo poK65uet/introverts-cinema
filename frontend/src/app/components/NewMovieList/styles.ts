@@ -1,6 +1,7 @@
 import { makeStyles } from '@mui/styles';
+import { Theme } from '@mui/material';
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme: Theme) => ({
   container: {
     margin: '1rem !important',
     padding: '0 !important',
@@ -8,6 +9,10 @@ const useStyles = makeStyles(() => ({
     maxWidth: '79% !important',
     '& .swiper-button-next, .swiper-button-prev': {
       color: '#FFD6A5',
+    },
+    fontSize: '1em',
+    [theme.breakpoints.down('sm')]: {
+      fontSize: '0.5em',
     },
   },
 

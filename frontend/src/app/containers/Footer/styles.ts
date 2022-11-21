@@ -5,7 +5,6 @@ const useStyles = makeStyles((theme: Theme) => ({
   footer: {
     bottom: '0',
     position: 'initial',
-    marginTop: '1rem',
     maxWidth: '100vw',
     fontSize: '1.2rem',
     [theme.breakpoints.down('sm')]: {

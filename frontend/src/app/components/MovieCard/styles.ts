@@ -3,13 +3,10 @@ import { Theme } from '@mui/material';
 
 const useStyles = makeStyles((theme: Theme) => ({
   container: {
-    maxHeight: '20	rem',
-    fontSize: '1.75rem',
+    fontSize: '1.75em',
+    position: 'relative',
     [theme.breakpoints.down('md')]: {
-      fontSize: '1rem !important',
-    },
-    [theme.breakpoints.down('sm')]: {
-      fontSize: '0.875rem !important',
+      fontSize: '1em !important',
     },
     boxShadow: 'none !important',
     '& img': {
@@ -29,7 +26,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     padding: '0.75em !important',
     fontSize: '0.675em',
     top: '0rem',
-    position: 'fixed',
+    position: 'absolute',
     color: theme.palette.text.secondary,
   },
 
@@ -39,8 +36,8 @@ const useStyles = makeStyles((theme: Theme) => ({
     maxWidth: '100%',
     left: '50%',
     transform: 'translate(-50%)',
-    bottom: 0,
-    position: 'fixed',
+    bottom: 2,
+    position: 'absolute',
     display: 'flex',
     justifyContent: 'space-around',
     filter: 'brightness(100%) !important',
