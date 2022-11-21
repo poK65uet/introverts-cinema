@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
 import { HomePage } from 'app/pages/HomePage';
 import AdminMenu from 'app/containers/AdminMenu';
 import FilmManagementPage from 'app/pages/FilmManagementPage';
@@ -9,6 +9,7 @@ const RootLayout = () => {
   return (
     <BrowserRouter>
       <Switch>
+        <Redirect from='/admin' exact to='admin/customers' />
         <Route path="/" component={HomePage} exact={true} />
         <Route path="/admin" component={AdminPage}>
         </Route>
