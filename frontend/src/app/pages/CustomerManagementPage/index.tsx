@@ -6,6 +6,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import Button from '@mui/material/Button/Button';
 import { IconButton } from '@mui/material';
+import { Today } from '@mui/icons-material';
 
 export default function CustomerManagementPage() {
 
@@ -21,25 +22,25 @@ export default function CustomerManagementPage() {
     id: number,
     customerFullname: string,
     customerEmail: string,
-    customerBirthday: Date,
-    customerStatus: any,
-    customerOption: any,
+    customerBirthday: string,
   ) {
-    return { id, customerFullname, customerEmail, customerBirthday, customerStatus, customerOption };
+    return { id, customerFullname, customerEmail, customerBirthday,
+      
+    };
   }
   
   const rows = [
-    createData(1, 'Nguyễn Văn A', 'a@gmail.com', new Date("09/09/1999"), null, null),
-    createData(2, 'Nguyễn Văn B', 'b@gmail.com', new Date("09/09/1999"), null, null),
-    createData(3, 'Nguyễn Văn C', 'c@gmail.com', new Date("09/09/1999"), null, null),
-    createData(4, 'Nguyễn Văn D', 'd@gmail.com', new Date("09/09/1999"), null, null),
-    createData(5, 'Nguyễn Văn E', 'e@gmail.com', new Date("09/09/1999"), null, null),
-    createData(6, 'Nguyễn Văn A', 'a@gmail.com', new Date("09/09/1999"), null, null),
-    createData(7, 'Nguyễn Văn B', 'b@gmail.com', new Date("09/09/1999"), null, null),
-    createData(8, 'Nguyễn Văn C', 'c@gmail.com', new Date("09/09/1999"), null, null),
-    createData(9, 'Nguyễn Văn D', 'd@gmail.com', new Date("09/09/1999"), null, null),
-    createData(10, 'Nguyễn Văn E', 'e@gmail.com', new Date("09/09/1999"), null, null),
-    createData(11, 'Nguyễn Văn E', 'e@gmail.com', new Date("09/09/1999"), null, null),
+    createData(1, 'Nguyễn Văn A', 'a@gmail.com', '09/09/1999'),
+    createData(2, 'Nguyễn Văn B', 'b@gmail.com', '09/09/1999'),
+    createData(3, 'Nguyễn Văn C', 'c@gmail.com', '09/09/1999'),
+    createData(4, 'Nguyễn Văn D', 'd@gmail.com', '09/09/1999'),
+    createData(5, 'Nguyễn Văn E', 'e@gmail.com', '09/09/1999'),
+    createData(6, 'Nguyễn Văn A', 'a@gmail.com', '09/09/1999'),
+    createData(7, 'Nguyễn Văn B', 'b@gmail.com', '09/09/1999'),
+    createData(8, 'Nguyễn Văn C', 'c@gmail.com', '09/09/1999'),
+    createData(9, 'Nguyễn Văn D', 'd@gmail.com', '09/09/1999'),
+    createData(10, 'Nguyễn Văn E', 'e@gmail.com', '09/09/1999'),
+    createData(11, 'Nguyễn Văn E', 'e@gmail.com', '09/09/1999'),
   ];
 
   const columns: GridColDef[] = [
@@ -47,18 +48,18 @@ export default function CustomerManagementPage() {
       field: 'id',
       headerName: 'ID',
       type: 'number',
-      width: 90,
+      width: 110,
     },
     {
       field: 'customerFullname',
       headerName: 'Họ tên',
-      width: 220,
+      width: 300,
       editable: true,
     },
     {
       field: 'customerEmail',
       headerName: 'Email',
-      width: 220,
+      width: 250,
       editable: true,
     },
     {
@@ -66,13 +67,6 @@ export default function CustomerManagementPage() {
       headerName: 'Ngày sinh',
       type: 'date',
       width: 200,
-      editable: true,
-    },
-    {
-      field: 'customerStatus',
-      headerName: 'Trạng thái',
-      type: 'any',
-      width: 160,
       editable: true,
     },
     {
