@@ -5,7 +5,7 @@ import { DataGrid, GridColDef, GridToolbar, GridValueGetterParams } from '@mui/x
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import Button from '@mui/material/Button/Button';
-import { IconButton } from '@mui/material';
+import { IconButton, Typography } from '@mui/material';
 import { Today } from '@mui/icons-material';
 
 export default function CustomerManagementPage() {
@@ -24,11 +24,12 @@ export default function CustomerManagementPage() {
     customerEmail: string,
     customerBirthday: string,
   ) {
-    return { id, customerFullname, customerEmail, customerBirthday,
-      
+    return {
+      id, customerFullname, customerEmail, customerBirthday,
+
     };
   }
-  
+
   const rows = [
     createData(1, 'Nguyễn Văn A', 'a@gmail.com', '09/09/1999'),
     createData(2, 'Nguyễn Văn B', 'b@gmail.com', '09/09/1999'),
@@ -75,23 +76,25 @@ export default function CustomerManagementPage() {
       headerName: 'Tùy chọn',
       width: 200,
       renderCell: () => (
-          <Box>
+        <Box>
           <IconButton aria-label="edit">
             <EditIcon />
           </IconButton>
           <IconButton aria-label="delete">
             <DeleteIcon />
           </IconButton>
-          </Box>
+        </Box>
       ),
     },
   ];
 
-  
+
 
   return (
-    // <h2>Trang quản lý khách hàng </h2>
     <Box className={classes.customerTable}>
+      <Typography variant="h5" sx={{fontWeight:'bold'}}>
+        Trang quản lý khách hàng
+      </Typography>
       <DataGrid
         rows={rows}
         columns={columns}
