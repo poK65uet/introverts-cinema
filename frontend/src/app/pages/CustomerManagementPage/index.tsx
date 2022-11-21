@@ -92,9 +92,9 @@ export default function CustomerManagementPage() {
 
   return (
     <Box className={classes.customerTable}>
-      <Typography variant="h5" sx={{fontWeight:'bold'}}>
+      {/* <Typography variant="h5" sx={{fontWeight:'bold'}}>
         Trang quản lý khách hàng
-      </Typography>
+      </Typography> */}
       <DataGrid
         rows={rows}
         columns={columns}
