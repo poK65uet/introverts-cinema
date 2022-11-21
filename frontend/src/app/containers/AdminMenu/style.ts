@@ -9,6 +9,10 @@ const useStyles = makeStyles(() => ({
   activeTab: {
   
   },
+
+  wrapper: {
+    alignItems: "flex-start"
+  },
 }));
 
 export default useStyles;
