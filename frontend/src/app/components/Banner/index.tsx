@@ -7,7 +7,6 @@ import 'swiper/css/navigation'
 import 'swiper/css/pagination'
 
 import useStyles from './styles';
-import { Container } from '@mui/system';
 
 interface BannerProps {
   id: string

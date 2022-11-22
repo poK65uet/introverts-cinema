@@ -14,6 +14,7 @@ interface MovieCardProps {
 	genre?: string
 	duration?: string
 	img: string
+	height?: string | undefined
 }
 
 

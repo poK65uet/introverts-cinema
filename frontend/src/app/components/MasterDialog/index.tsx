@@ -34,6 +34,6 @@ export const notify = (props: MasterDialogProps) => {
 export default function MasterDialog(props?: ToastContainerProps) {
 
 	return (
-		<ToastContainer style={{ zIndex: 9 }} position='bottom-left' {...props} />
+		<ToastContainer position='bottom-left' {...props} />
 	);
 }
