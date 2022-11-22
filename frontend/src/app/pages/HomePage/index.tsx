@@ -32,15 +32,7 @@ export function HomePage() {
       <Banner />
       <NewMovieList />
       <UpcomingMovieList />
-      {/*<button onClick={() => notify(
-        {
-          type: 'error',
-          content: 'Thông báo',
-        })}>
-        Bật Notify
-      </button>
-      <MasterDialog />
-      <button onClick={handleOpen}>
+      {/*<button onClick={handleOpen}>
         Bật
       </button>
       <ConfirmDialog

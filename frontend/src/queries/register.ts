@@ -1,10 +1,13 @@
 import axios, { AxiosResponse } from 'axios';
 import config from 'config';
 
-export const sendCode = async (
+export const register = async (
   email: string,
   password: string,
   otp: number,
+  fullName: string,
+  birthDay: string,
+  //phone: string,
 ): Promise<string | boolean> => {
   let response: AxiosResponse<any>;
   try {
@@ -12,6 +15,9 @@ export const sendCode = async (
       email: email,
       password: password,
       code: otp,
+      fullName: fullName,
+      birthDay: birthDay,
+      //phone: phone,
     });
   } catch (e) {
     return false;

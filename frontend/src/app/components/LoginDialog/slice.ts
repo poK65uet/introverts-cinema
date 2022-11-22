@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { login } from 'queries/login';
+import { notify } from 'app/components/MasterDialog/index';
 
 export interface LoginState {
   isLoggedin: boolean;
@@ -23,9 +24,6 @@ export const loginSlice = createSlice({
       state.isLoggedin = false;
       sessionStorage.removeItem('token');
     },
-    keepLogin: state => {
-      state.isLoggedin = true;
-    },
     changeAction: (state, action) => {
       state.dialogAction = action.payload;
     },
@@ -39,6 +37,10 @@ export const loginSlice = createSlice({
       state.isLoading = false;
       if (action.payload) {
         state.isLoggedin = true;
+        notify({
+          type: 'success',
+          content: 'Đăng nhập thành công',
+        });
         console.log('LOGIN SUCCESS');
       } else {
         console.log('LOGIN FAILED');

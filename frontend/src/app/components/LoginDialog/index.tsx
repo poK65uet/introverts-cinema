@@ -9,6 +9,7 @@ import { RootState } from 'store';
 import { registerActions } from './Register/slice';
 import Register from './Register';
 import Login from './Login';
+import { notify } from 'app/components/MasterDialog';
 
 export default function LoginDialog(props: any) {
 
@@ -35,6 +36,20 @@ export default function LoginDialog(props: any) {
       handleCloseDialog()
     }
   }, [store.login.isLoggedin])
+
+  useEffect(() => {
+    if (store.register.isRegisterSuccessAccount !== undefined) {
+      dispatch(loginThunk({
+        email: store.register.isRegisterSuccessAccount.email,
+        password: store.register.isRegisterSuccessAccount.password
+      }))
+      notify(
+        {
+          type: 'success',
+          content: 'Đăng ký thành công',
+        })
+    }
+  }, [store.register.isRegisterSuccessAccount])
 
   const classes = useStyles();
 

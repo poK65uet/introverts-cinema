@@ -27,7 +27,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     fontSize: '0.675em',
     top: '0rem',
     position: 'absolute',
-    color: theme.palette.text.secondary,
+    color: '#FFFFFF',
   },
 
   actions: {
@@ -49,7 +49,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     minWidth: '0 !important',
     margin: '0 !important',
     backgroundColor: '#FF884B !important',
-    color: theme.palette.text.secondary + '!important',
+    color: '#FFFFFF' + '!important',
   },
 }));
 

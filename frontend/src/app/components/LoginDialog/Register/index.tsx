@@ -20,7 +20,7 @@ import { CustomInput } from 'app/components/CustomInput';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from 'store';
 import { useForm } from 'hooks/useForm';
-import { sendCodeThunk, validateEmailThunk, registerActions } from './slice';
+import { sendCodeThunk, validateEmailThunk, registerActions, registerThunk } from './slice';
 import { isValidEmail } from './validation';
 
 export default function Register() {
@@ -39,11 +39,6 @@ export default function Register() {
         if (!isValidEmail(fieldValues.email)) { tmp.email = 'Email của bạn không hợp lệ'; }
       }
     }
-    if ('dob' in fieldValues) {
-      tmp.dob = '';
-      const today = new Date();
-      if (fieldValues.dob > today) tmp.dob = 'Ngày sinh không hợp lệ'
-    }
 
     if ('password' in fieldValues) {
       tmp.password = '';
@@ -56,6 +51,13 @@ export default function Register() {
       if (fieldValues.repassword.length == 0) { tmp.repassword = 'Vui lòng nhập lại mật khẩu của bạn'; }
       else { if (fieldValues.repassword !== values.password) { tmp.repassword = 'Mật khẩu nhập lại không đúng'; } }
     }
+
+    if ('birthDay' in fieldValues) {
+      tmp.birthDay = '';
+      const today = new Date();
+      if (fieldValues.birthDay > today) tmp.birthDay = 'Ngày sinh không hợp lệ'
+    }
+
     setErrors({ ...tmp });
     if (fieldValues == values) {
       return Object.values(tmp).every((x) => x == '');
@@ -68,8 +70,8 @@ export default function Register() {
         email: '',
         password: '',
         repassword: '',
-        fullname: '',
-        dob: null,
+        fullName: '',
+        birthDay: null,
         number: '',
       },
       true,
@@ -95,9 +97,16 @@ export default function Register() {
   }
 
   const handleClickSignUp = () => {
-    if (store.register.isEmailValid) {
-      if (validate(values)) {
+    if (validate(values)) {
+      if (store.register.isEmailValid && store.register.OTP?.toString().length == 6) {
         console.log('sign_up');
+        dispatch(registerThunk({
+          email: values.email,
+          password: values.password,
+          fullName: values.fullName,
+          birthDay: values.birthDay,
+          otp: store.register.OTP
+        }))
       }
     }
   }
@@ -164,10 +173,10 @@ export default function Register() {
       <Grid xs={12} container columnSpacing={2}>
         <Grid xs={7}>
           <CustomInput.TextField
-            name='fullname'
+            name='fullName'
             label='Tên'
-            value={values.fullname}
-            error={errors.fullname}
+            value={values.fullName}
+            error={errors.fullName}
             margin='dense'
             onChange={handleInputChange}
             inputProps={{ maxLength: '32' }}
@@ -176,18 +185,18 @@ export default function Register() {
         <Grid xs={5}>
           <CustomInput.DatePicker
             label='Ngày sinh'
-            value={values.dob}
-            error={errors.dob}
+            value={values.birthDay}
+            error={errors.birthDay}
             margin='dense'
             onClick={() => {
-              console.log(errors.dob);
+              console.log(errors.birthDay);
             }}
-            onChange={(dob: any) => {
-              if (dob === null) return;
-              validate({ dob: dob });
+            onChange={(birthDay: any) => {
+              if (birthDay === null) return;
+              validate({ birthDay: birthDay });
               setValues({
                 ...values,
-                dob: dob,
+                birthDay: birthDay,
               });
             }}
           />
@@ -226,7 +235,7 @@ export default function Register() {
           endAdornment: (
             <InputAdornment position='end'>
               <IconButton
-                tabIndex={undefined}
+                tabIndex={-1}
                 onClick={handleClickShowPassword}
               >
                 {showPassword ? <Visibility /> : <VisibilityOff />}
@@ -249,6 +258,7 @@ export default function Register() {
           endAdornment: (
             <InputAdornment position='end'>
               <IconButton
+                tabIndex={-1}
                 onClick={handleClickShowRepassword}
               >
                 {showRepassword ? <Visibility /> : <VisibilityOff />}

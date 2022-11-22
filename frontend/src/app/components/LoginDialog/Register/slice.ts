@@ -1,21 +1,23 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { sendCode } from 'queries/sendCode';
 import { validateEmail } from 'queries/validateEmail';
+import { register } from 'queries/register';
+import { notify } from 'app/components/MasterDialog';
 
 export interface RegisterState {
   isLoading: boolean;
   OTP: number | undefined;
   isEmailValid: boolean | 'unfilled_email' | undefined;
-  validatedEmail: string | undefined;
   isOTPSent: boolean;
+  isRegisterSuccessAccount: { email: string; password: string } | undefined;
 }
 
 const initialState: RegisterState = {
   isLoading: false,
   OTP: undefined,
   isEmailValid: undefined,
-  validatedEmail: undefined,
   isOTPSent: false,
+  isRegisterSuccessAccount: undefined,
 };
 
 export const registerSlice = createSlice({
@@ -24,9 +26,9 @@ export const registerSlice = createSlice({
   reducers: {
     reset: state => {
       state.isEmailValid = undefined;
-      state.validatedEmail = undefined;
       state.isOTPSent = false;
       state.OTP = undefined;
+      state.isRegisterSuccessAccount = undefined;
     },
     changeEmail: state => {
       state.isEmailValid = undefined;
@@ -43,14 +45,12 @@ export const registerSlice = createSlice({
     });
     builder.addCase(validateEmailThunk.fulfilled, (state, action) => {
       state.isLoading = false;
-      if (action.payload.check == true) {
+      if (action.payload == true) {
         state.isEmailValid = true;
-        state.validatedEmail = action.payload.email;
         console.log('VALIDATE SUCCESS');
       } else {
-        state.validatedEmail = undefined;
-        if (action.payload.check == 'unfilled_email') {
-          state.isEmailValid = action.payload.check;
+        if (action.payload == 'unfilled_email') {
+          state.isEmailValid = action.payload;
           console.log('VALIDATE FAILED');
         } else {
           state.isEmailValid = false;
@@ -84,19 +84,43 @@ export const registerSlice = createSlice({
       state.isOTPSent = false;
       console.log('SEND OTP ERROR');
     });
+
+    builder.addCase(registerThunk.pending, state => {
+      state.isLoading = true;
+      console.log('REGISTERING');
+    });
+    builder.addCase(registerThunk.fulfilled, (state, action) => {
+      state.isLoading = false;
+      if (action.payload.status == '201') {
+        state.isRegisterSuccessAccount = {
+          email: action.payload.email,
+          password: action.payload.password,
+        };
+        console.log('REGISTER SUCCESS');
+      } else {
+        if (action.payload.status == '200') {
+          console.log('REGISTER FAILED - CODE EXPIRED/INCORRECT');
+          notify({
+            type: 'error',
+            content: 'Kiểm tra lại mã OTP',
+          });
+        } else {
+          console.log('REGISTER FAILED');
+        }
+      }
+    });
+    builder.addCase(registerThunk.rejected, state => {
+      state.isLoading = false;
+      console.log('REGISTER ERROR');
+    });
   },
 });
-
-function timeout(delay: number) {
-  return new Promise(res => setTimeout(res, delay));
-}
 
 export const validateEmailThunk = createAsyncThunk(
   'register/validateEmail',
   async (data: { email: string }, reject) => {
-    await timeout(500);
     const receivedData = await validateEmail(data.email);
-    return { check: receivedData, email: data.email };
+    return receivedData;
   },
 );
 
@@ -105,6 +129,29 @@ export const sendCodeThunk = createAsyncThunk(
   async (data: { email: string | undefined }, reject) => {
     const receivedData = await sendCode(data.email);
     return receivedData;
+  },
+);
+
+export const registerThunk = createAsyncThunk(
+  'register/register',
+  async (
+    data: {
+      email: string;
+      password: string;
+      otp: number;
+      fullName: string;
+      birthDay: string;
+    },
+    reject,
+  ) => {
+    const receivedData = await register(
+      data.email,
+      data.password,
+      data.otp,
+      data.fullName,
+      data.birthDay,
+    );
+    return { status: receivedData, email: data.email, password: data.password };
   },
 );
 
