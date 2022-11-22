@@ -30,8 +30,7 @@ const UserCode = sequelize.define<UserCodeModel>(
 		},
 		expires: {
 			allowNull: false,
-			type: DataTypes.DATE,
-			defaultValue: new Date(Date.now() + 1000 * 60 * 30)
+			type: DataTypes.DATE
 		},
 		createdAt: {
 			type: DataTypes.DATE

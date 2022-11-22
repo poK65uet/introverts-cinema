@@ -67,9 +67,11 @@ const sendCode = async (req: Request) => {
 			status = ResponeCodes.BAD_REQUEST;
 		} else {
 			const code = generateCode();
-			await UserCode.create({
+			const expires = new Date(Date.now() + 1000 * 60 * 30);
+			const userCode = await UserCode.create({
 				email,
-				code
+				code,
+				expires
 			});
 			await sendEmail(email, 'Verify your email address', code);
 			message = 'Send code successfully!';
