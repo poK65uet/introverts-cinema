@@ -13,12 +13,16 @@ import {
 	deleteFilmDirectors,
 	getFilmCategories,
 	addFilmCategories,
-	deleteFilmCategories
+	deleteFilmCategories,
+	getOpeningFilm,
+	getUpcomingFilm
 } from './controller';
 
 const router = Router();
 
 router.get('/pagination', getFilms);
+router.get('/opening', getOpeningFilm);
+router.get('/upcoming', getUpcomingFilm);
 
 router.get('/:id', getFilm);
 router.post('/', addFilm);

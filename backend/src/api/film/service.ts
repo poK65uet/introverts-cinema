@@ -3,6 +3,7 @@ import { Actor, Film, Nationality } from 'databases/models';
 import ResponeCodes from 'utils/constant/ResponeCode';
 import FilmPayload from './FilmPayload';
 import { FilmModel } from 'databases/models/IModel';
+import { Op } from 'sequelize';
 
 const getFilms = async (req: Request) => {
 	try {
@@ -317,6 +318,64 @@ const deleteFilmCategories = async (film: FilmModel, categories: number[]) => {
 	}
 };
 
+const getOpeningFilm = async () => {
+	try {
+		let data;
+		let message: string;
+		let status: number;
+
+		data = await Film.findAll({
+			where: {
+				openingDay: {
+					[Op.lte]: new Date(Date.now())
+				},
+				status: {
+					[Op.eq]: 'active'
+				}
+			}
+		});
+		message = 'Get opening film successfully!';
+		status = ResponeCodes.OK;
+
+		return {
+			data,
+			message,
+			status
+		};
+	} catch (error) {
+		throw error;
+	}
+};
+
+const getUpcomingFilm = async () => {
+	try {
+		let data;
+		let message: string;
+		let status: number;
+
+		data = await Film.findAll({
+			where: {
+				openingDay: {
+					[Op.gt]: new Date(Date.now())
+				},
+				status: {
+					[Op.eq]: 'active'
+				}
+			}
+		});
+		message = 'Get upcoming film successfully!';
+		status = ResponeCodes.OK;
+
+		return {
+			data,
+			message,
+			status
+		};
+	} catch (error) {
+		throw error;
+	}
+};
+
 export {
 	getFilms,
 	getFilmById,
@@ -331,5 +390,7 @@ export {
 	deleteFilmDirectors,
 	getFilmCategories,
 	addFilmCategories,
-	deleteFilmCategories
+	deleteFilmCategories,
+	getOpeningFilm,
+	getUpcomingFilm
 };

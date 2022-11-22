@@ -82,7 +82,8 @@ const Film = sequelize.define<FilmModel>(
 			type: DataTypes.STRING
 		},
 		status: {
-			type: DataTypes.STRING
+			type: DataTypes.STRING,
+			defaultValue: 'inactive'
 		},
 		NationalityId: {
 			type: DataTypes.INTEGER
