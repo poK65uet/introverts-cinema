@@ -6,6 +6,7 @@ import nationalityRouter from './nationality';
 import actorRouter from './actor';
 import directorRouter from './director';
 import categoryRouter from './category';
+import filmRouter from './film';
 
 const router = Router();
 
@@ -16,5 +17,6 @@ router.use('/nationalities', nationalityRouter);
 router.use('/actors', actorRouter);
 router.use('/directors', directorRouter);
 router.use('/categories', categoryRouter);
+router.use('/films', filmRouter);
 
 export default router;
