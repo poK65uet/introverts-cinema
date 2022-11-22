@@ -9,14 +9,11 @@ import { IconButton, Typography } from '@mui/material';
 import { Today } from '@mui/icons-material';
 
 export default function CustomerManagementPage() {
+  const [pageSize, setPageSize] = React.useState<number>(5);
 
 
   const classes = useStyles();
 
-  interface editButton {
-    customerId: number
-    icon: any
-  }
 
   function createData(
     id: number,
@@ -92,16 +89,13 @@ export default function CustomerManagementPage() {
 
   return (
     <Box className={classes.customerTable}>
-      {/* <Typography variant="h5" sx={{fontWeight:'bold'}}>
-        Trang quản lý khách hàng
-      </Typography> */}
       <DataGrid
+        pageSize={pageSize}
+        onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
+        rowsPerPageOptions={[5, 10, 20]}
+        pagination
         rows={rows}
         columns={columns}
-        pageSize={5}
-        rowsPerPageOptions={[5, 10, 20]}
-        disableSelectionOnClick
-        experimentalFeatures={{ newEditingApi: true }}
         components={{
           Toolbar: GridToolbar,
         }}
