@@ -4,7 +4,7 @@ import { login } from 'queries/login';
 export interface LoginState {
   isLoggedin: boolean;
   isLoading: boolean;
-  dialogAction: 'login' | 'validateEmail' | 'register';
+  dialogAction: 'login' | 'register';
 }
 
 const initialState: LoginState = {

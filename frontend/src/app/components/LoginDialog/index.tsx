@@ -6,16 +6,11 @@ import useStyles from './styles';
 import { loginThunk, loginActions } from './slice';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from 'store';
-import EmailValidate from './EmailValidate';
-import { registerActions } from './EmailValidate/slice';
+import { registerActions } from './Register/slice';
 import Register from './Register';
 import Login from './Login';
 
 export default function LoginDialog(props: any) {
-
-  interface PageAction {
-    action: 'login' | 'validateEmail' | 'register'
-  }
 
   const store = useSelector<RootState, RootState>(state => state)
 
@@ -50,9 +45,7 @@ export default function LoginDialog(props: any) {
       className={classes.dialog}>
       {store.login.dialogAction == 'login' ?
         <Login />
-        : store.register.isEmailValid !== true ?
-          <EmailValidate />
-          : <Register />
+        : <Register />
       }
     </Dialog >
   )

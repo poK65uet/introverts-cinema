@@ -3,7 +3,7 @@ import useDigitInput from 'react-digit-input';
 import Grid from '@mui/material/Unstable_Grid2';
 import useStyles from './styles';
 import { useDispatch } from 'react-redux';
-import { registerActions } from '../../LoginDialog/EmailValidate/slice';
+import { registerActions } from '../../LoginDialog/Register/slice';
 
 export default function DigitCode() {
   const [value, onChange] = React.useState('');

@@ -4,8 +4,8 @@ import {
 	FormLabel,
 	Radio,
 	RadioGroup as MuiRadioGroup
-} from "@mui/material";
-import { ReactElement } from "react";
+} from '@mui/material';
+import { ReactElement } from 'react';
 
 export default function RadioGroup(props: any): ReactElement {
 	const { name, label, value, onChange, items } = props;

@@ -28,6 +28,9 @@ export const registerSlice = createSlice({
       state.isOTPSent = false;
       state.OTP = undefined;
     },
+    changeEmail: state => {
+      state.isEmailValid = undefined;
+    },
     storeOTP: (state, action) => {
       state.OTP = action.payload;
     },
