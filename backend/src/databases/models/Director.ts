@@ -1,8 +1,28 @@
-import { DataTypes } from 'sequelize';
+import {
+	CreationOptional,
+	DataTypes,
+	ForeignKey,
+	InferAttributes,
+	InferCreationAttributes,
+	Model,
+	NonAttribute,
+	BelongsToGetAssociationMixin
+} from 'sequelize';
 import sequelize from 'databases';
-import Nationality from './Nationality';
+import Nationality, { NationalityModel } from './Nationality';
 
-const Director = sequelize.define(
+export interface DirectorModel extends Model<InferAttributes<DirectorModel>, InferCreationAttributes<DirectorModel>> {
+	id: CreationOptional<number>;
+	fullName: string;
+	birthDay: Date;
+	NationalityId: ForeignKey<NationalityModel['id']>;
+	Nationality?: NonAttribute<NationalityModel>;
+	createdAt: CreationOptional<Date>;
+	updatedAt: CreationOptional<Date>;
+	getNationality: BelongsToGetAssociationMixin<NationalityModel>;
+}
+
+const Director = sequelize.define<DirectorModel>(
 	'Director',
 	{
 		id: {
@@ -17,11 +37,19 @@ const Director = sequelize.define(
 		},
 		birthDay: {
 			type: DataTypes.DATE
+		},
+		NationalityId: {
+			type: DataTypes.INTEGER
+		},
+		createdAt: {
+			type: DataTypes.DATE
+		},
+		updatedAt: {
+			type: DataTypes.DATE
 		}
 	},
 	{
-        tableName: 'director',
-        timestamps: false,
+		tableName: 'director',
 		underscored: true
 	}
 );

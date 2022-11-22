@@ -1,7 +1,17 @@
-import { DataTypes } from 'sequelize';
+import { CreationOptional, DataTypes, InferAttributes, InferCreationAttributes, Model } from 'sequelize';
 import sequelize from 'databases';
 
-const Room = sequelize.define(
+export interface RoomModel extends Model<InferAttributes<RoomModel>, InferCreationAttributes<RoomModel>> {
+	id: CreationOptional<number>;
+	name: string;
+	visionType: string;
+	columnNumber: number;
+	rowNumber: number;
+	createdAt: CreationOptional<Date>;
+	updatedAt: CreationOptional<Date>;
+}
+
+const Room = sequelize.define<RoomModel>(
 	'Room',
 	{
 		id: {
@@ -23,6 +33,12 @@ const Room = sequelize.define(
 		},
 		rowNumber: {
 			type: DataTypes.INTEGER
+		},
+		createdAt: {
+			type: DataTypes.DATE
+		},
+		updatedAt: {
+			type: DataTypes.DATE
 		}
 	},
 	{

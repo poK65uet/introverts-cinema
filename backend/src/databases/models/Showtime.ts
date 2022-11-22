@@ -1,9 +1,16 @@
-import { DataTypes } from 'sequelize';
+import { CreationOptional, DataTypes, InferAttributes, InferCreationAttributes, Model } from 'sequelize';
 import sequelize from 'databases';
 import Room from './Room';
 import Film from './Film';
 
-const Showtime = sequelize.define(
+export interface ShowtimeModel extends Model<InferAttributes<ShowtimeModel>, InferCreationAttributes<ShowtimeModel>> {
+	id: CreationOptional<number>;
+	startTime: Date;
+	createdAt: CreationOptional<Date>;
+	updatedAt: CreationOptional<Date>;
+}
+
+const Showtime = sequelize.define<ShowtimeModel>(
 	'Showtime',
 	{
 		id: {
@@ -15,6 +22,12 @@ const Showtime = sequelize.define(
 		startTime: {
 			allowNull: false,
 			type: DataTypes.TIME
+		},
+		createdAt: {
+			type: DataTypes.DATE
+		},
+		updatedAt: {
+			type: DataTypes.DATE
 		}
 	},
 	{

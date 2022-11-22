@@ -1,7 +1,9 @@
 import Router from 'express';
-import { register } from './controller';
+import { checkEmail, sendCode, verifyAndRegister } from './controller';
 
 const router = Router();
-router.post('/', register);
+router.post('/', verifyAndRegister);
+router.post('/sendCode', sendCode);
+router.post('/checkEmail', checkEmail);
 
 export default router;

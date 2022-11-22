@@ -5,6 +5,8 @@ export interface RoleModel extends Model<InferAttributes<RoleModel>, InferCreati
 	// Some fields are optional when calling RoleModel.create() or RoleModel.build(	)
 	id: CreationOptional<number>;
 	name: string;
+	createdAt: CreationOptional<Date>;
+	updatedAt: CreationOptional<Date>;
 }
 
 const Role = sequelize.define<RoleModel>(
@@ -20,11 +22,16 @@ const Role = sequelize.define<RoleModel>(
 			allowNull: false,
 			unique: true,
 			type: DataTypes.STRING
+		},
+		createdAt: {
+			type: DataTypes.DATE
+		},
+		updatedAt: {
+			type: DataTypes.DATE
 		}
 	},
 	{
 		tableName: 'role',
-		timestamps: false,
 		underscored: true
 	}
 );

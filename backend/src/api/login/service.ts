@@ -1,64 +1,73 @@
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
-import { User } from 'databases/models';
-import LoginPayLoad from './LoginPayload';
 import config from 'config';
-import { UserModel } from 'databases/models/User';
-
-interface LoginResponse {
-	user: UserModel;
-	token: string;
-}
+import LoginPayLoad from './LoginPayload';
+import { Role, User } from 'databases/models';
+import ResponeCodes from 'utils/constant/ResponeCode';
 
 const verifyEmail = async (email: string) => {
 	const user = await User.findOne({
 		where: {
 			email
-		}
+		},
+		include: Role
 	});
 	return user;
 };
 
 const login = async (loginData: LoginPayLoad) => {
-	let data: LoginResponse;
+	let data;
 	let message: string;
 	let status: number;
-	const { email, password } = loginData;
 
-	const user = await verifyEmail(email);
+	try {
+		const { email, password } = loginData;
 
-	if (!user) {
-		data = null;
-		message = 'Invalid email!';
-		status = 401;
-	} else {
-		const verifyPassword = bcrypt.compareSync(password, user.password);
-		if (!verifyPassword) {
+		if(!email || !password) {
 			data = null;
-			message = 'Invalid password!';
-			status = 401;
+			message = 'Invalid email or password';
+			status = ResponeCodes.BAD_REQUEST;
 		} else {
-			const roles = await user.getRoles();
-			const roleIds = roles.map(role => role.id);
+			const user = await verifyEmail(email);
 
-			const token = jwt.sign({ userId: user.id, roleIds }, config.secret_key, {
-				expiresIn: config.expires_in
-			});
+			if (user) {
+				const verifyPassword = bcrypt.compareSync(password, user.password);
+				if (!verifyPassword) {
+					data = null;
+					message = 'Wrong password!';
+					status = ResponeCodes.OK;
+				} else {
+					const roles = user.Roles;
+	
+					const roleIds = roles.map(role => role.id);
+	
+					const token = jwt.sign({ userId: user.id, roleIds }, config.secret_key, {
+						expiresIn: config.expires_in
+					});
+	
+					data = {
+						user,
+						token
+					};
+					message = 'Login successfully!';
+					status = ResponeCodes.OK;
+				}
+			}
+			else {
+				data = null;
+				message = 'Failed login!';
+				status = ResponeCodes.NOT_FOUND;
+			}
+		} 
 
-			data = {
-				user,
-				token
-			};
-			message = 'Login successfully!';
-			status = 200;
-		}
+		return {
+			data,
+			message,
+			status
+		};
+	} catch (error) {
+		throw error;
 	}
-
-	return {
-		data,
-		message,
-		status
-	};
 };
 
 export { login };

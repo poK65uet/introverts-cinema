@@ -14,11 +14,13 @@ import Price from './Price';
 import Showtime from './Showtime';
 import Seat from './Seat';
 import Ticket from './Ticket';
+import UserCode from './UserCode';
 
 export {
 	User,
 	Role,
 	UserRole,
+	UserCode,
 	Film,
 	Category,
 	FilmCategory,

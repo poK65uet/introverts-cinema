@@ -1,8 +1,19 @@
-import { DataTypes } from 'sequelize';
+import { CreationOptional, DataTypes, InferAttributes, InferCreationAttributes, Model } from 'sequelize';
 import sequelize from 'databases';
 import User from './User';
 
-const Ticket = sequelize.define(
+export interface TicketModel extends Model<InferAttributes<TicketModel>, InferCreationAttributes<TicketModel>> {
+	id: CreationOptional<number>;
+	room: string;
+	seatRow: string;
+	seatColumn: string;
+	time: Date;
+	price: number;
+	createdAt: CreationOptional<Date>;
+	updatedAt: CreationOptional<Date>;
+}
+
+const Ticket = sequelize.define<TicketModel>(
 	'Ticket',
 	{
 		id: {
@@ -30,6 +41,12 @@ const Ticket = sequelize.define(
 		price: {
 			allowNull: false,
 			type: DataTypes.BIGINT
+		},
+		createdAt: {
+			type: DataTypes.DATE
+		},
+		updatedAt: {
+			type: DataTypes.DATE
 		}
 	},
 	{
