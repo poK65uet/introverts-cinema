@@ -1,7 +1,8 @@
 interface RegisterPayLoad {
-    email: string;
+	email: string;
 	password: string;
 	fullName?: string;
+	phone?: string;
 	birthDay?: Date;
 }
 

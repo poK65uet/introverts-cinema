@@ -1,9 +1,11 @@
+import bcrypt from 'bcrypt';
 import { Request } from 'express';
 import { Role, User } from 'databases/models';
 import { UserModel } from 'databases/models/IModel';
 import ResponeCodes from 'utils/constant/ResponeCode';
 import UserPayload from './UserPayload';
 import RoleCodes from 'utils/constant/RoleCode';
+import UserInfo from './UserInfo';
 
 const getPagination = (page: string, size: string) => {
 	const pageNumber = Number.parseInt(page);
@@ -37,13 +39,13 @@ const getUsers = async (req: Request) => {
 	}
 };
 
-const getUserById = async (req: Request<{ id: number }>) => {
+const getUserById = async (req: Request) => {
 	try {
 		let data: UserModel | null;
 		let message: string;
 		let status: number;
 
-		const id = req.params.id;
+		const id = parseInt(req.params.id);
 
 		if (isNaN(id)) {
 			data = null;
@@ -117,25 +119,24 @@ const addUser = async (req: Request) => {
 	}
 };
 
-const updateUser = async (req: Request<{ id: number }>) => {
+const updateUser = async (req: Request) => {
 	try {
 		let data;
 		let message: string;
 		let status: number;
 
-		const id = req.params.id;
+		const id = parseInt(req.params.id);
 
 		if (isNaN(id)) {
 			data = null;
-			message = 'Invalid user identifier';
+			message = 'Invalid user identifier.';
 			status = ResponeCodes.BAD_REQUEST;
 		} else {
-			const updateUser: UserPayload = req.body;
-			data = await User.update(updateUser, {
+			const info: UserInfo = req.body;
+			data = await User.update(info, {
 				where: {
 					id
-				},
-				individualHooks: true
+				}
 			});
 			message = 'Update user successfully!';
 			status = ResponeCodes.OK;
@@ -151,13 +152,51 @@ const updateUser = async (req: Request<{ id: number }>) => {
 	}
 };
 
-const deleteUser = async (req: Request<{ id: number }>) => {
+const changePassword = async (req: Request) => {
 	try {
 		let data;
 		let message: string;
 		let status: number;
 
-		const id = req.params.id;
+		const id = parseInt(req.params.id);
+
+		if (isNaN(id)) {
+			data = null;
+			message = 'Invalid user identifier.';
+			status = ResponeCodes.BAD_REQUEST;
+		} else {
+			const password = bcrypt.hashSync(req.body.password, 10);
+			data = await User.update(
+				{
+					password
+				},
+				{
+					where: {
+						id
+					}
+				}
+			);
+			message = 'Change password successfully!';
+			status = ResponeCodes.OK;
+		}
+
+		return {
+			data,
+			message,
+			status
+		};
+	} catch (error) {
+		throw error;
+	}
+};
+
+const deleteUser = async (req: Request) => {
+	try {
+		let data;
+		let message: string;
+		let status: number;
+
+		const id = parseInt(req.params.id);
 
 		if (isNaN(id)) {
 			data = null;
@@ -183,4 +222,4 @@ const deleteUser = async (req: Request<{ id: number }>) => {
 	}
 };
 
-export { getUsers, getUserById, addUser, updateUser, deleteUser };
+export { getUsers, getUserById, addUser, updateUser, deleteUser, changePassword };

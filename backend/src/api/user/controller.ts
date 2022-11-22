@@ -14,7 +14,7 @@ const getUsers = async (req: Request, res: Response) => {
 };
 
 // GET: /users/:id
-const getUser = async (req: Request<{ id: number }>, res: Response) => {
+const getUser = async (req: Request, res: Response) => {
 	try {
 		const result = await service.getUserById(req);
 		const { data, message, status } = result;
@@ -36,7 +36,7 @@ const addUser = async (req: Request, res: Response) => {
 };
 
 // PATCH: /users/:id
-const updateUser = async (req: Request<{ id: number }>, res: Response) => {
+const updateUser = async (req: Request, res: Response) => {
 	try {
 		const result = await service.updateUser(req);
 		const { data, message, status } = result;
@@ -46,8 +46,19 @@ const updateUser = async (req: Request<{ id: number }>, res: Response) => {
 	}
 };
 
+// PATCH: /users/:id/changePassword
+const changePassword = async (req: Request, res: Response) => {
+	try {
+		const result = await service.changePassword(req);
+		const { data, message, status } = result;
+		return new ApiResponse(data, message, status).send(res);
+	} catch (error) {
+		return new ApiResponse(error.message, "Couldn't change password.", ResponeCodes.ERROR).send(res);
+	}
+};
+
 // DELETE: /users/:id
-const deleteUser = async (req: Request<{ id: number }>, res: Response) => {
+const deleteUser = async (req: Request, res: Response) => {
 	try {
 		const result = await service.deleteUser(req);
 		const { data, message, status } = result;
@@ -57,4 +68,4 @@ const deleteUser = async (req: Request<{ id: number }>, res: Response) => {
 	}
 };
 
-export { getUsers, getUser, addUser, updateUser, deleteUser };
+export { getUsers, getUser, addUser, updateUser, deleteUser, changePassword };
