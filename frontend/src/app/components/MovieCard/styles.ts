@@ -48,7 +48,6 @@ const useStyles = makeStyles((theme: Theme) => ({
     width: 'max-content',
     minWidth: '0 !important',
     margin: '0 !important',
-    backgroundColor: '#FF884B !important',
     color: '#FFFFFF' + '!important',
   },
 }));

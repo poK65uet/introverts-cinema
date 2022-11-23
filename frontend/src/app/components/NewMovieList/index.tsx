@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import useStyles from './styles';
 import {
   Container,
@@ -8,19 +8,24 @@ import {
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay, EffectCoverflow, Navigation } from 'swiper'
 import { MovieCard } from 'app/components/MovieCard';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from 'store';
+import { getNewMoviesThunk } from '../Movies/slice';
 
 export default function NewMovieList(this: any) {
 
   const classes = useStyles();
 
-  interface MovieProps {
-    id: number
-    name: string
-    img: string
-    genre?: string
-  }
+  const store = useSelector<RootState, RootState>(state => state)
 
-  const newMovies: MovieProps[] = [
+  const dispatch = useDispatch();
+  useEffect(() => {
+    if (!store.movies.getNewMovies) {
+      dispatch(getNewMoviesThunk())
+    };
+  }, [store.movies.getNewMovies])
+
+  const upcomingMovies: any = [
     {
       id: 0,
       name: 'Bỗng Dưng Trúng Số',
@@ -84,12 +89,13 @@ export default function NewMovieList(this: any) {
         }}
         slidesPerView={3}>
         {
-          newMovies.map((movie: MovieProps, index: number) => {
+          store.movies.newMovieList.map((movie: any, index: number) => {
             return <SwiperSlide className={classes.movie} key={index}>
               <MovieCard
                 id={movie.id}
-                name={movie.name}
-                img={movie.img} />
+                name={movie.title}
+                img={movie.imageUrl}
+                duration={movie.duration + ' phút'} />
             </SwiperSlide>
           })}
       </Swiper>

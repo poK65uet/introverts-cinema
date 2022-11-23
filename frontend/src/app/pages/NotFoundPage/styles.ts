@@ -1,5 +1,5 @@
 import { makeStyles } from '@mui/styles';
-import background from './assets/bg-404.png';
+import background from './assets/images/bg-404.png';
 import { Theme } from '@mui/material';
 
 const useStyles = makeStyles((theme: Theme) => ({

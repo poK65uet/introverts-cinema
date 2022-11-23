@@ -1,6 +1,6 @@
 import { Box } from '@mui/material'
 import useStyles from './styles';
-import icon from './assets/ic-404.png'
+import icon from './assets/images/ic-404.png'
 
 export default function NotFoundPage() {
 
