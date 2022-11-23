@@ -17,7 +17,7 @@ export default function NewMoviePage() {
 	return (
 		<div className={classes.newMoviePage}>
 			<Divider sx={{ m: 2 }} variant='middle' textAlign='left'>
-				<Typography sx={{ fontSize: { xs: '1.5rem', sm: '3rem', md: '4rem' }, py: { xs: 1, md: 2, lg: 4 } }} color='secondary' fontWeight={900}>
+				<Typography sx={{ fontSize: { xs: '1.5rem', sm: '2rem', md: '3rem' }, py: { xs: 1, md: 2, lg: 4 } }} color='secondary' fontWeight={900}>
 					Phim Đang Chiếu
 				</Typography>
 			</Divider >
