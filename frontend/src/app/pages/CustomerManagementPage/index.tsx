@@ -7,9 +7,11 @@ import EditIcon from '@mui/icons-material/Edit';
 import Button from '@mui/material/Button/Button';
 import { IconButton, Typography } from '@mui/material';
 import { Today } from '@mui/icons-material';
+import { usegetUsers } from '../../../queries/getUsers'
 
 export default function CustomerManagementPage() {
   const [pageSize, setPageSize] = React.useState<number>(5);
+  const [page, setPage] = React.useState(0);
 
 
   const classes = useStyles();
@@ -40,6 +42,8 @@ export default function CustomerManagementPage() {
     createData(10, 'Nguyễn Văn E', 'e@gmail.com', '09/09/1999'),
     createData(11, 'Nguyễn Văn E', 'e@gmail.com', '09/09/1999'),
   ];
+
+  // let rows = usegetUsers(page, pageSize);
 
   const columns: GridColDef[] = [
     {
@@ -90,10 +94,12 @@ export default function CustomerManagementPage() {
   return (
     <Box className={classes.customerTable}>
       <DataGrid
+        page={page}
+        onPageChange={(newPage) => setPage(newPage)}
         pageSize={pageSize}
         onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
         rowsPerPageOptions={[5, 10, 20]}
-        pagination
+        // pagination
         rows={rows}
         columns={columns}
         components={{
