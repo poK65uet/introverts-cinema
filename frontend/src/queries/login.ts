@@ -5,7 +5,7 @@ import { useQuery } from 'react-query';
 export const login = async (
   email: string,
   password: string,
-): Promise<boolean> => {
+): Promise<any> => {
   let response: AxiosResponse<any>;
   try {
     response = await axios.post(`${config.apiEndpoint}/login`, {

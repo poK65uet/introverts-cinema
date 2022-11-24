@@ -3,26 +3,18 @@ import config from 'config';
 import { useQuery } from 'react-query';
 
 export const getUsers = async (
-  email: string,
-  password: string,
-): Promise<boolean> => {
+  page: number,
+  size: number,
+): Promise<any> => {
   let response: AxiosResponse<any>;
   try {
-    response = await axios.post(`${config.apiEndpoint}/user`, {
-      email: email,
-      password: password,
+    response = await axios.get(`${config.apiEndpoint}/users/pagination?page=${page}&size=${size}`, {
     });
   } catch (e) {
-    return false;
+    return null;
   }
-  if (
-    response.data.data.token !== null &&
-    response.data.data.token !== undefined
-  )
-    sessionStorage.setItem('token', response.data.data.token);
-
-  return response.data.data.user !== undefined;
+  return response.data.data;
 };
 
-export const usegetUsers = (email: string, password: string) =>
-  useQuery(['users'], () => getUsers(email, password));
+export const usegetUsers = (page: number, size: number) =>
+  useQuery(['users'], () => getUsers(page, size));
