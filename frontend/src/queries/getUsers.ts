@@ -1,4 +1,4 @@
-import axios, { AxiosResponse } from 'axios';
+import axios, { AxiosResponse } from 'axios'; 
 import config from 'config';
 import { useQuery } from 'react-query';
 
