@@ -7,7 +7,10 @@ interface FilmPayload {
 	description?: string;
 	rated?: string;
 	status?: string;
-	NationalityId?: number;
+	Nationality: number;
+	Categories?: number[];
+	Actors?: number[];
+	Directors?: number[];
 }
 
 export default FilmPayload;

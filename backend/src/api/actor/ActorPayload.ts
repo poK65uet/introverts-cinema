@@ -1,7 +1,7 @@
 interface ActorPayload {
 	fullName: string;
 	birthDay?: Date;
-	NationalityId?: number;
+	Nationality?: number;
 }
 
 export default ActorPayload;

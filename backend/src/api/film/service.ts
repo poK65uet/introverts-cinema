@@ -2,7 +2,6 @@ import { Request } from 'express';
 import { Actor, Category, Director, Film, Nationality } from 'databases/models';
 import ResponeCodes from 'utils/constant/ResponeCode';
 import FilmPayload from './FilmPayload';
-import { FilmModel } from 'databases/models/IModel';
 import { Op } from 'sequelize';
 
 const getFilms = async (req: Request) => {
@@ -91,6 +90,7 @@ const addFilm = async (req: Request) => {
 		let status: number;
 
 		const newFilm: FilmPayload = req.body;
+		const { Nationality, Categories, Actors, Directors } = newFilm;
 
 		if (!newFilm.title) {
 			data = null;
@@ -98,6 +98,12 @@ const addFilm = async (req: Request) => {
 			status = ResponeCodes.BAD_REQUEST;
 		} else {
 			const film = await Film.create(newFilm);
+
+			if (Nationality) await film.setNationality(Nationality);
+			if (Categories) await film.setCategories(Categories);
+			if (Actors) await film.setActors(Actors);
+			if (Directors) await film.setDirectors(Directors);
+
 			data = film;
 			message = 'Add successfully!';
 			status = ResponeCodes.CREATED;
@@ -126,12 +132,17 @@ const updateFilm = async (req: Request) => {
 			message = 'Invalid identifier.';
 			status = ResponeCodes.BAD_REQUEST;
 		} else {
-			const updateFilm = req.body;
-			data = await Film.update(updateFilm, {
-				where: {
-					id
-				}
-			});
+			const updateFilm: FilmPayload = req.body;
+			const { Nationality, Categories, Actors, Directors } = updateFilm;
+
+			const film = await Film.findByPk(id);
+			data = await film.update(updateFilm);
+
+			if (Nationality) await film.setNationality(Nationality);
+			if (Categories) await film.setCategories(Categories);
+			if (Actors) await film.setActors(Actors);
+			if (Directors) await film.setDirectors(Directors);
+
 			message = 'Updated successfully!';
 			status = ResponeCodes.OK;
 		}
@@ -168,169 +179,6 @@ const deleteFilm = async (req: Request) => {
 			status = ResponeCodes.OK;
 		}
 
-		return {
-			data,
-			message,
-			status
-		};
-	} catch (error) {
-		throw error;
-	}
-};
-
-const getFilmActors = async (film: FilmModel) => {
-	try {
-		let data;
-		let message: string;
-		let status: number;
-		data = await film.getActors();
-		message = 'Get actors successfully!';
-		status = ResponeCodes.OK;
-		return {
-			data,
-			message,
-			status
-		};
-	} catch (error) {
-		throw error;
-	}
-};
-
-const addFilmActors = async (film: FilmModel, actors: number[]) => {
-	try {
-		let data;
-		let message: string;
-		let status: number;
-		data = await film.addActors(actors);
-		message = 'Add actors successfully!';
-		status = ResponeCodes.OK;
-		return {
-			data,
-			message,
-			status
-		};
-	} catch (error) {
-		throw error;
-	}
-};
-
-const deleteFilmActors = async (film: FilmModel, actors: number[]) => {
-	try {
-		let data;
-		let message: string;
-		let status: number;
-		data = await film.removeActors(actors);
-		message = 'Delete actors successfully!';
-		status = ResponeCodes.OK;
-		return {
-			data,
-			message,
-			status
-		};
-	} catch (error) {
-		throw error;
-	}
-};
-
-const getFilmDirectors = async (film: FilmModel) => {
-	try {
-		let data;
-		let message: string;
-		let status: number;
-		data = await film.getDirectors();
-		message = 'Get directors successfully!';
-		status = ResponeCodes.OK;
-		return {
-			data,
-			message,
-			status
-		};
-	} catch (error) {
-		throw error;
-	}
-};
-
-const addFilmDirectors = async (film: FilmModel, directors: number[]) => {
-	try {
-		let data;
-		let message: string;
-		let status: number;
-		data = await film.addDirectors(directors);
-		message = 'Add directors successfully!';
-		status = ResponeCodes.OK;
-		return {
-			data,
-			message,
-			status
-		};
-	} catch (error) {
-		throw error;
-	}
-};
-
-const deleteFilmDirectors = async (film: FilmModel, directors: number[]) => {
-	try {
-		let data;
-		let message: string;
-		let status: number;
-		data = await film.removeDirectors(directors);
-		message = 'Delete directors successfully!';
-		status = ResponeCodes.OK;
-		return {
-			data,
-			message,
-			status
-		};
-	} catch (error) {
-		throw error;
-	}
-};
-
-const getFilmCategories = async (film: FilmModel) => {
-	try {
-		let data;
-		let message: string;
-		let status: number;
-		data = await film.getCategories();
-		message = 'Get categories successfully!';
-		status = ResponeCodes.OK;
-		return {
-			data,
-			message,
-			status
-		};
-	} catch (error) {
-		throw error;
-	}
-};
-
-const addFilmCategories = async (film: FilmModel, categories: number[]) => {
-	try {
-		console.log(categories);
-		let data;
-		let message: string;
-		let status: number;
-		data = await film.addCategories(categories);
-		message = 'Add categories successfully!';
-		status = ResponeCodes.OK;
-		return {
-			data,
-			message,
-			status
-		};
-	} catch (error) {
-		throw error;
-	}
-};
-
-const deleteFilmCategories = async (film: FilmModel, categories: number[]) => {
-	try {
-		let data;
-		let message: string;
-		let status: number;
-		data = await film.removeCategories(categories);
-		message = 'Delete categories successfully!';
-		status = ResponeCodes.OK;
 		return {
 			data,
 			message,
@@ -399,21 +247,4 @@ const getUpcomingFilm = async () => {
 	}
 };
 
-export {
-	getFilms,
-	getFilmById,
-	addFilm,
-	updateFilm,
-	deleteFilm,
-	getFilmActors,
-	addFilmActors,
-	deleteFilmActors,
-	getFilmDirectors,
-	addFilmDirectors,
-	deleteFilmDirectors,
-	getFilmCategories,
-	addFilmCategories,
-	deleteFilmCategories,
-	getOpeningFilm,
-	getUpcomingFilm
-};
+export { getFilms, getFilmById, addFilm, updateFilm, deleteFilm, getOpeningFilm, getUpcomingFilm };
