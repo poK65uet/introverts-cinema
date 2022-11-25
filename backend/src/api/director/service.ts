@@ -36,7 +36,9 @@ const getDirectorById = async (req: Request) => {
 			message = 'Invalid identifier.';
 			status = ResponeCodes.BAD_REQUEST;
 		} else {
-			const director = await Director.findByPk(id);
+			const director = await Director.findByPk(id, {
+				include: Nationality
+			});
 			if (!director) {
 				data = null;
 				message = 'Not found.';
@@ -65,6 +67,7 @@ const addDirector = async (req: Request) => {
 		let status: number;
 
 		const newDirector: DirectorPayload = req.body;
+		const { Nationality } = newDirector;
 
 		if (!newDirector.fullName) {
 			data = null;
@@ -72,6 +75,8 @@ const addDirector = async (req: Request) => {
 			status = ResponeCodes.BAD_REQUEST;
 		} else {
 			const director = await Director.create(newDirector);
+			if (Nationality) await director.setNationality(Nationality);
+
 			data = director;
 			message = 'Add successfully!';
 			status = ResponeCodes.CREATED;
@@ -100,12 +105,13 @@ const updateDirector = async (req: Request) => {
 			message = 'Invalid identifier.';
 			status = ResponeCodes.BAD_REQUEST;
 		} else {
-			const updateDirector = req.body;
-			data = await Director.update(updateDirector, {
-				where: {
-					id
-				}
-			});
+			const updateDirector: DirectorPayload = req.body;
+			const { Nationality } = updateDirector;
+
+			const director = await Director.findByPk(id);
+			data = await director.update(updateDirector);
+			if (Nationality) await director.setNationality(Nationality);
+
 			message = 'Updated successfully!';
 			status = ResponeCodes.OK;
 		}
