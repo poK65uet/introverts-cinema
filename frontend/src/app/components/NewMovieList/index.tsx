@@ -14,8 +14,6 @@ import { getNewMoviesThunk } from '../Movies/slice';
 
 export default function NewMovieList(this: any) {
 
-  const classes = useStyles();
-
   const store = useSelector<RootState, RootState>(state => state)
 
   const dispatch = useDispatch();
@@ -25,38 +23,7 @@ export default function NewMovieList(this: any) {
     };
   }, [store.movies.getNewMovies])
 
-  const upcomingMovies: any = [
-    {
-      id: 0,
-      name: 'Bỗng Dưng Trúng Số',
-      img: require('./assets/images/movie1.png'),
-    },
-    {
-      id: 1,
-      name: 'Mười: Lời Nguyền Trở Lại',
-      img: require('./assets/images/movie2.png'),
-    },
-    {
-      id: 2,
-      name: 'Cười',
-      img: require('./assets/images/movie3.png'),
-    },
-    {
-      id: 3,
-      name: 'Ngược Dòng Thời Gian Để Yêu Anh',
-      img: require('./assets/images/movie4.png'),
-    },
-    {
-      id: 4,
-      name: 'Avatar',
-      img: require('./assets/images/movie5.png'),
-    },
-    {
-      id: 5,
-      name: 'Evangelion: 3.0+1.01 Ba Lần Ngày Xưa',
-      img: require('./assets/images/movie6.png')
-    }
-  ]
+  const classes = useStyles();
 
   return (
     <Container className={classes.container}>

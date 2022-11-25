@@ -153,7 +153,7 @@ export default function Login(props: any) {
           <FormControlLabel
             sx={{ fontSize: '0.875em', fontFamily: '' }}
             disableTypography
-            control={<Checkbox disableRipple sx={{ color: '#FF884B' }} />}
+            control={<Checkbox disableFocusRipple sx={{ color: '#FF884B' }} />}
             label='Duy trì đăng nhập'
           />
         </Grid>
@@ -164,7 +164,7 @@ export default function Login(props: any) {
       <Button
         fullWidth
         variant='contained'
-        disableRipple
+        disableFocusRipple
         sx={{ my: 1, p: 1, fontWeight: 'bold', color: 'white' }}
         className={classes.loginButton}
         onClick={handleClickSubmit}
@@ -178,7 +178,7 @@ export default function Login(props: any) {
       <Button
         fullWidth
         variant='outlined'
-        disableRipple
+        disableFocusRipple
         sx={{ my: 1, fontWeight: 'bold', borderWidth: '2px !important' }}
         className={classes.registerButton}
         onClick={() => { dispatch(loginActions.changeAction('validateEmail')) }}

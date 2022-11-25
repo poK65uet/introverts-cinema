@@ -279,7 +279,7 @@ export default function Register() {
       <span style={{}}>
         {store.register.isEmailValid ?
           <Button
-            disableRipple
+            disableFocusRipple
             variant='text'
             size='small'
             onClick={handleSendCode}
@@ -292,7 +292,7 @@ export default function Register() {
         fullWidth
         variant='contained'
         sx={{ mt: 2, p: 1, fontWeight: 'bold', color: 'white' }}
-        disableRipple
+        disableFocusRipple
         className={classes.loginButton}
         onClick={handleClickSignUp}
       >

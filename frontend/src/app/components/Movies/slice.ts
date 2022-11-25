@@ -1,7 +1,8 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { getMovieById, getNewMovies, getUpcomingMovies } from 'queries/movies';
+import { getNewMovies, getUpcomingMovies } from 'queries/movies';
 
 export interface MoviesState {
+  isLoading: boolean;
   getNewMovies: boolean;
   getUpcomingMovies: boolean;
   newMovieList: string[];
@@ -9,10 +10,11 @@ export interface MoviesState {
 }
 
 const initialState: MoviesState = {
+  isLoading: false,
   getNewMovies: false,
   getUpcomingMovies: false,
   newMovieList: ['', ''],
-  upcomingMovieList: [''],
+  upcomingMovieList: ['', '', ''],
 };
 
 export const moviesSlice = createSlice({
@@ -21,25 +23,31 @@ export const moviesSlice = createSlice({
   reducers: {},
   extraReducers: builder => {
     builder.addCase(getNewMoviesThunk.pending, state => {
+      state.isLoading = true;
       console.log('GETTING NEW MOVIES');
     });
     builder.addCase(getNewMoviesThunk.fulfilled, (state, action) => {
+      state.isLoading = false;
       state.newMovieList = action.payload;
       state.getNewMovies = true;
       console.log('GET NEW MOVIES SUCCESS');
     });
     builder.addCase(getNewMoviesThunk.rejected, state => {
+      state.isLoading = false;
       console.log('GET NEW MOVIES ERROR');
     });
     builder.addCase(getUpcomingMoviesThunk.pending, state => {
+      state.isLoading = true;
       console.log('GETTING UPCOMING MOVIES');
     });
     builder.addCase(getUpcomingMoviesThunk.fulfilled, (state, action) => {
+      state.isLoading = false;
       state.upcomingMovieList = action.payload;
       state.getUpcomingMovies = true;
       console.log('GET UPCOMING MOVIES SUCCESS');
     });
     builder.addCase(getUpcomingMoviesThunk.rejected, state => {
+      state.isLoading = false;
       console.log('GET UPCOMING MOVIES ERROR');
     });
   },

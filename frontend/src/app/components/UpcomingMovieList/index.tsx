@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import useStyles from './styles';
 import {
   Container,
@@ -8,52 +8,22 @@ import {
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay, EffectCoverflow, Navigation } from 'swiper'
 import { MovieCard } from 'app/components/MovieCard';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from 'store';
+import { getUpcomingMoviesThunk } from '../Movies/slice';
 
 export default function UpcomingMovieList() {
 
+  const store = useSelector<RootState, RootState>(state => state)
+
+  const dispatch = useDispatch();
+  useEffect(() => {
+    if (!store.movies.getUpcomingMovies) {
+      dispatch(getUpcomingMoviesThunk())
+    };
+  }, [store.movies.getUpcomingMovies])
+
   const classes = useStyles();
-
-  interface MovieProps {
-    id: number
-    name: string
-    img: string
-    genre?: string
-  }
-
-  const upcomingMovies: MovieProps[] = [
-    {
-      id: 0,
-      name: 'Bỗng Dưng Trúng Số',
-      img: require('./assets/images/movie1.png'),
-    },
-    {
-      id: 1,
-      name: 'Mười: Lời Nguyền Trở Lại',
-      img: require('./assets/images/movie2.png'),
-    },
-    {
-      id: 2,
-      name: 'Cười',
-      img: require('./assets/images/movie3.png'),
-    },
-    {
-      id: 3,
-      name: 'Ngược Dòng Thời Gian Để Yêu Anh',
-      img: require('./assets/images/movie4.png'),
-    },
-    {
-      id: 4,
-      name: 'Avatar',
-      img: require('./assets/images/movie5.png'),
-    },
-    {
-      id: 5,
-      name: 'Evangelion: 3.0+1.01 Ba Lần Ngày Xưa',
-      img: require('./assets/images/movie6.png')
-    }
-  ]
-
-  const [styleFocus, setStyleFocus] = React.useState(false)
 
   return (
     <Container className={classes.container}>
@@ -83,12 +53,13 @@ export default function UpcomingMovieList() {
         }}
         slidesPerView={4}>
         {
-          upcomingMovies.map((movie: MovieProps, index: number) => {
+          store.movies.upcomingMovieList.map((movie: any, index: number) => {
             return <SwiperSlide className={classes.movie} key={index}>
               <MovieCard
                 id={movie.id}
-                name={movie.name}
-                img={movie.img} />
+                name={movie.title}
+                img={movie.imageUrl}
+                duration={movie.duration + ' phút'} />
             </SwiperSlide>
           })}
       </Swiper>

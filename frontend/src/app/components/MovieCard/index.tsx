@@ -53,14 +53,26 @@ export function MovieCard(props: MovieCardProps) {
 					bottom: props.hideContent ? '5%' : ''
 				}}>
 				<Button variant={'outlined'}
-					sx={{ bgcolor: props.hideContent ? 'none' : '#FF884B' }}
+					sx={{
+						bgcolor: props.hideContent ? 'none' : '#FF884B',
+						'&:hover': {
+							bgcolor: props.hideContent ? '#FF884B' : ''
+						}
+					}}
 					classes={{ root: classes.button }}
+					disableFocusRipple
 					size='small'
 					href={`/movie-detail/${props.id}`}>
 					Chi tiết
 				</Button>
 				<Button variant={'outlined'}
-					sx={{ bgcolor: props.hideContent ? 'none' : '#FF884B' }}
+					sx={{
+						bgcolor: props.hideContent ? 'none' : '#FF884B',
+						'&:hover': {
+							bgcolor: props.hideContent ? '#FF884B' : ''
+						}
+					}}
+					disableFocusRipple
 					classes={{ root: classes.button }}
 					size='small'>
 					Đặt vé

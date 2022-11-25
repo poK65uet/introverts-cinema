@@ -105,7 +105,7 @@ export default function AppBar() {
         }}>
         <Button
           className={classes.menuButton}
-          disableRipple
+          disableFocusRipple
           color='inherit'
           onClick={handleClickMainMenu}
           startIcon={<MenuIcon className={classes.icon} />}
