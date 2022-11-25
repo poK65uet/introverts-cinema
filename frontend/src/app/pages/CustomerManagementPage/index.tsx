@@ -1,54 +1,41 @@
-import * as React from 'react';
 import Box from '@mui/material/Box';
 import useStyles from './style';
+import LinearProgress from '@mui/material/LinearProgress';
 import { DataGrid, GridColDef, GridToolbar, GridValueGetterParams } from '@mui/x-data-grid';
-import DeleteIcon from '@mui/icons-material/Delete';
-import EditIcon from '@mui/icons-material/Edit';
-import Button from '@mui/material/Button/Button';
-import { IconButton, Typography } from '@mui/material';
-import { Today } from '@mui/icons-material';
+// import DeleteIcon from '@mui/icons-material/Delete';
+// import EditIcon from '@mui/icons-material/Edit';
+// import Button from '@mui/material/Button/Button';
+// import { IconButton, Typography } from '@mui/material';
+// import { Today } from '@mui/icons-material';
 import { usegetUsers } from '../../../queries/getUsers'
+import { useState } from 'react';
 
 export default function CustomerManagementPage() {
-  const [pageSize, setPageSize] = React.useState<number>(5);
-  const [page, setPage] = React.useState(0);
-
-
+  const [pageSize, setPageSize] = useState(5);
+  const [page, setPage] = useState(0);
   const classes = useStyles();
+  const [rows, setRows] = useState([]);
 
+  
+  // let rows = [];
 
-  function createData(
-    id: number,
-    customerFullname: string,
-    customerEmail: string,
-    customerBirthday: string,
-  ) {
-    return {
-      id, customerFullname, customerEmail, customerBirthday,
-
-    };
+  const updateRows = async () => {
+    const {data} = await usegetUsers(page, pageSize);
+    if(data !== undefined) 
+      setRows(data.rows);
   }
+  updateRows();
 
-  // let rows = [
-  //   createData(1, 'Nguyễn Văn A', 'a@gmail.com', '09/09/1999'),
-  //   createData(2, 'Nguyễn Văn B', 'b@gmail.com', '09/09/1999'),
-  //   createData(3, 'Nguyễn Văn C', 'c@gmail.com', '09/09/1999'),
-  //   createData(4, 'Nguyễn Văn D', 'd@gmail.com', '09/09/1999'),
-  //   createData(5, 'Nguyễn Văn E', 'e@gmail.com', '09/09/1999'),
-  // ];
-
-  let rows = [];
-
-  let { data } = usegetUsers(page, pageSize);
-  // let { rows } = data.rows;
-  // if(rows == 0) {
-  //   rows = [];
-  // }
-  // console.log(data);
-  if(data !== undefined) {
-    rows = data.rows;
-    // console.log(data.rows);
+  const handlePageChange = async (newPage: number) => {
+      setPage(newPage);
+      updateRows();
   }
+  
+  const handlePageSizeChange = async (newPageSize: number) => {
+    setPageSize(newPageSize);
+    
+    updateRows();
+}
 
   const columns: GridColDef[] = [
     {
@@ -109,15 +96,16 @@ export default function CustomerManagementPage() {
     <Box className={classes.customerTable}>
       <DataGrid
         page={page}
-        onPageChange={(newPage) => setPage(newPage)}
         pageSize={pageSize}
-        onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
+        onPageChange={(newPage) => handlePageChange(newPage)}
+        onPageSizeChange={(newPageSize) => handlePageSizeChange(newPageSize)}
         rowsPerPageOptions={[5, 10, 20]}
-        // pagination
         rows={rows}
         columns={columns}
+        // loading
         components={{
           Toolbar: GridToolbar,
+          LoadingOverlay: LinearProgress,
         }}
       />
     </Box>
