@@ -29,64 +29,77 @@ export default function CustomerManagementPage() {
     };
   }
 
-  // const rows = [
-  //   createData(1, 'Nguyễn Văn A', 'a@gmail.com', '09/09/1999'),
-  //   createData(2, 'Nguyễn Văn B', 'b@gmail.com', '09/09/1999'),
-  //   createData(3, 'Nguyễn Văn C', 'c@gmail.com', '09/09/1999'),
-  //   createData(4, 'Nguyễn Văn D', 'd@gmail.com', '09/09/1999'),
-  //   createData(5, 'Nguyễn Văn E', 'e@gmail.com', '09/09/1999'),
-  //   createData(6, 'Nguyễn Văn A', 'a@gmail.com', '09/09/1999'),
-  //   createData(7, 'Nguyễn Văn B', 'b@gmail.com', '09/09/1999'),
-  //   createData(8, 'Nguyễn Văn C', 'c@gmail.com', '09/09/1999'),
-  //   createData(9, 'Nguyễn Văn D', 'd@gmail.com', '09/09/1999'),
-  //   createData(10, 'Nguyễn Văn E', 'e@gmail.com', '09/09/1999'),
-  //   createData(11, 'Nguyễn Văn E', 'e@gmail.com', '09/09/1999'),
-  // ];
+  const rows = [
+    createData(1, 'Nguyễn Văn A', 'a@gmail.com', '09/09/1999'),
+    createData(2, 'Nguyễn Văn B', 'b@gmail.com', '09/09/1999'),
+    createData(3, 'Nguyễn Văn C', 'c@gmail.com', '09/09/1999'),
+    createData(4, 'Nguyễn Văn D', 'd@gmail.com', '09/09/1999'),
+    createData(5, 'Nguyễn Văn E', 'e@gmail.com', '09/09/1999'),
+    createData(6, 'Nguyễn Văn A', 'a@gmail.com', '09/09/1999'),
+    createData(7, 'Nguyễn Văn B', 'b@gmail.com', '09/09/1999'),
+    createData(8, 'Nguyễn Văn C', 'c@gmail.com', '09/09/1999'),
+    createData(9, 'Nguyễn Văn D', 'd@gmail.com', '09/09/1999'),
+    createData(10, 'Nguyễn Văn E', 'e@gmail.com', '09/09/1999'),
+    createData(11, 'Nguyễn Văn E', 'e@gmail.com', '09/09/1999'),
+  ];
 
-  let rows = usegetUsers(page, pageSize);
+  // let {data : data } = usegetUsers(page, pageSize);
+  // let rows = data.rows;
+  // if(rows == 0) {
+  //   rows = [];
+  // }
 
   const columns: GridColDef[] = [
     {
       field: 'id',
       headerName: 'ID',
       type: 'number',
-      width: 110,
+      width: 70,
     },
     {
-      field: 'customerFullname',
+      field: 'fullName',
       headerName: 'Họ tên',
-      width: 300,
-      editable: true,
+      width: 200,
     },
     {
-      field: 'customerEmail',
+      field: 'email',
       headerName: 'Email',
-      width: 250,
-      editable: true,
+      width: 200,
     },
     {
-      field: 'customerBirthday',
+      field: 'birthDay',
       headerName: 'Ngày sinh',
       type: 'date',
-      width: 200,
-      editable: true,
+      width: 150,
     },
     {
-      field: 'customerOption',
-      type: 'any',
-      headerName: 'Tùy chọn',
-      width: 200,
-      renderCell: () => (
-        <Box>
-          <IconButton aria-label="edit">
-            <EditIcon />
-          </IconButton>
-          <IconButton aria-label="delete">
-            <DeleteIcon />
-          </IconButton>
-        </Box>
-      ),
+      field: 'createdAt',
+      headerName: 'Ngày tạo',
+      type: 'date',
+      width: 150,
     },
+    {
+      field: 'updatedAt',
+      headerName: 'Ngày cập nhật',
+      type: 'date',
+      width: 200,
+    },
+    // {
+    //   field: 'customerOption',
+    //   type: 'any',
+    //   headerName: 'Tùy chọn',
+    //   width: 200,
+    //   renderCell: () => (
+    //     <Box>
+    //       <IconButton aria-label="edit">
+    //         <EditIcon />
+    //       </IconButton>
+    //       <IconButton aria-label="delete">
+    //         <DeleteIcon />
+    //       </IconButton>
+    //     </Box>
+    //   ),
+    // },
   ];
 
 

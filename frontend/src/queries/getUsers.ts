@@ -12,7 +12,7 @@ import { useQuery } from 'react-query';
 export const getUsers = async (
   page: number,
   size: number, 
-): Promise<readonly any[]> => {
+): Promise<any> => {
   let response: AxiosResponse<any>;
   try {
     response = await axios.get(`${config.apiEndpoint}/users/pagination?page=${page}&size=${size}`, {
@@ -20,7 +20,7 @@ export const getUsers = async (
   } catch (e) {
     return [];
   }
-  return response.data.data;
+  return response.data;
 };
 
 export const usegetUsers = (page: number, size: number) =>
