@@ -2,13 +2,6 @@ import axios, { AxiosResponse } from 'axios';
 import config from 'config';
 import { useQuery } from 'react-query';
 
-// interface Users {
-//   id: number,
-//   customerFullname: string,
-//   customerEmail: string,
-//   customerBirthday: string,
-// }
-
 export const getUsers = async (
   page: number,
   size: number, 
@@ -20,7 +13,7 @@ export const getUsers = async (
   } catch (e) {
     return [];
   }
-  return response.data;
+  return response.data.data;
 };
 
 export const usegetUsers = (page: number, size: number) =>

@@ -29,25 +29,26 @@ export default function CustomerManagementPage() {
     };
   }
 
-  const rows = [
-    createData(1, 'Nguyễn Văn A', 'a@gmail.com', '09/09/1999'),
-    createData(2, 'Nguyễn Văn B', 'b@gmail.com', '09/09/1999'),
-    createData(3, 'Nguyễn Văn C', 'c@gmail.com', '09/09/1999'),
-    createData(4, 'Nguyễn Văn D', 'd@gmail.com', '09/09/1999'),
-    createData(5, 'Nguyễn Văn E', 'e@gmail.com', '09/09/1999'),
-    createData(6, 'Nguyễn Văn A', 'a@gmail.com', '09/09/1999'),
-    createData(7, 'Nguyễn Văn B', 'b@gmail.com', '09/09/1999'),
-    createData(8, 'Nguyễn Văn C', 'c@gmail.com', '09/09/1999'),
-    createData(9, 'Nguyễn Văn D', 'd@gmail.com', '09/09/1999'),
-    createData(10, 'Nguyễn Văn E', 'e@gmail.com', '09/09/1999'),
-    createData(11, 'Nguyễn Văn E', 'e@gmail.com', '09/09/1999'),
-  ];
+  // let rows = [
+  //   createData(1, 'Nguyễn Văn A', 'a@gmail.com', '09/09/1999'),
+  //   createData(2, 'Nguyễn Văn B', 'b@gmail.com', '09/09/1999'),
+  //   createData(3, 'Nguyễn Văn C', 'c@gmail.com', '09/09/1999'),
+  //   createData(4, 'Nguyễn Văn D', 'd@gmail.com', '09/09/1999'),
+  //   createData(5, 'Nguyễn Văn E', 'e@gmail.com', '09/09/1999'),
+  // ];
 
-  // let {data : data } = usegetUsers(page, pageSize);
-  // let rows = data.rows;
+  let rows = [];
+
+  let { data } = usegetUsers(page, pageSize);
+  // let { rows } = data.rows;
   // if(rows == 0) {
   //   rows = [];
   // }
+  // console.log(data);
+  if(data !== undefined) {
+    rows = data.rows;
+    // console.log(data.rows);
+  }
 
   const columns: GridColDef[] = [
     {
