@@ -36,7 +36,9 @@ const getDirectorById = async (req: Request) => {
 			message = 'Invalid identifier.';
 			status = ResponeCodes.BAD_REQUEST;
 		} else {
-			const director = await Director.findByPk(id);
+			const director = await Director.findByPk(id, {
+				include: Nationality
+			});
 			if (!director) {
 				data = null;
 				message = 'Not found.';

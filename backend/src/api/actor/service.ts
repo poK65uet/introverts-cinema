@@ -1,5 +1,5 @@
 import { Request } from 'express';
-import { Actor } from 'databases/models';
+import { Actor, Nationality } from 'databases/models';
 import ResponeCodes from 'utils/constant/ResponeCode';
 import ActorPayload from './ActorPayload';
 
@@ -36,7 +36,9 @@ const getActorById = async (req: Request) => {
 			message = 'Invalid identifier.';
 			status = ResponeCodes.BAD_REQUEST;
 		} else {
-			const actor = await Actor.findByPk(id);
+			const actor = await Actor.findByPk(id, {
+				include: Nationality
+			});
 			if (!actor) {
 				data = null;
 				message = 'Not found.';

@@ -1,5 +1,5 @@
 import { Request } from 'express';
-import { Actor, Film, Nationality } from 'databases/models';
+import { Actor, Category, Director, Film, Nationality } from 'databases/models';
 import ResponeCodes from 'utils/constant/ResponeCode';
 import FilmPayload from './FilmPayload';
 import { FilmModel } from 'databases/models/IModel';
@@ -39,7 +39,29 @@ const getFilmById = async (req: Request) => {
 			status = ResponeCodes.BAD_REQUEST;
 		} else {
 			const film = await Film.findByPk(id, {
-				include: Nationality
+				include: [
+					{
+						model: Nationality
+					},
+					{
+						model: Category,
+						through: {
+							attributes: []
+						}
+					},
+					{
+						model: Actor,
+						through: {
+							attributes: []
+						}
+					},
+					{
+						model: Director,
+						through: {
+							attributes: []
+						}
+					}
+				]
 			});
 			if (!film) {
 				data = null;
@@ -284,6 +306,7 @@ const getFilmCategories = async (film: FilmModel) => {
 
 const addFilmCategories = async (film: FilmModel, categories: number[]) => {
 	try {
+		console.log(categories);
 		let data;
 		let message: string;
 		let status: number;
