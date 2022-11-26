@@ -19,6 +19,6 @@ router.use('/actors', actorRouter);
 router.use('/directors', directorRouter);
 router.use('/categories', categoryRouter);
 router.use('/films', filmRouter);
-router.use('/banner', bannerRouter);
+router.use('/banners', bannerRouter);
 
 export default router;
