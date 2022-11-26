@@ -3,6 +3,7 @@ import { Actor, Category, Director, Film, Nationality } from 'databases/models';
 import ResponeCodes from 'utils/constant/ResponeCode';
 import FilmPayload from './FilmPayload';
 import { Op } from 'sequelize';
+import Status from '../../utils/constant/Status';
 
 const getFilms = async (req: Request) => {
 	try {
@@ -201,7 +202,7 @@ const getOpeningFilm = async () => {
 					[Op.lte]: new Date(Date.now())
 				},
 				status: {
-					[Op.eq]: 'active'
+					[Op.eq]: Status.ACTIVE
 				}
 			}
 		});
@@ -230,7 +231,7 @@ const getUpcomingFilm = async () => {
 					[Op.gt]: new Date(Date.now())
 				},
 				status: {
-					[Op.eq]: 'active'
+					[Op.eq]: Status.ACTIVE
 				}
 			}
 		});

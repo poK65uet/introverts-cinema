@@ -51,7 +51,7 @@ export default function UpcomingMovieList() {
         loop
         breakpoints={{
           640: {
-            slidesPerView: 7,
+            slidesPerView: 8,
           },
         }}
         slidesPerView={4}>

@@ -10,7 +10,9 @@ const useStyles = makeStyles(() => ({
   movieTittle: {
     textTransform: 'uppercase',
   },
-  movieDetail: {},
+  movieDetail: {
+    display: 'inline',
+  },
 }));
 
 export default useStyles;

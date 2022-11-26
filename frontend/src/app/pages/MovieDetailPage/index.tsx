@@ -10,15 +10,15 @@ import { Update as DurationIcon } from '@mui/icons-material';
 import NotFoundPage from 'app/pages/NotFoundPage/index';
 
 export default function MovieDetailPage() {
+  const store = useSelector<RootState, RootState>(state => state)
+
   let { movieId } = useParams<{ movieId: string | undefined }>()
 
-  const store = useSelector<RootState, RootState>(state => state)
   const { data: movie } = useGetMovieById(movieId)
-
-  console.log(movie === undefined);
 
   const classes = useStyles()
 
+  console.log(movie);
   return (
     <div className={classes.movieDetailPage} >
       {movie !== undefined ?
@@ -27,6 +27,7 @@ export default function MovieDetailPage() {
           columnSpacing={{ xs: 0, md: 2 }}
           p={{ xs: 4, sm: 8, md: 4 }}
         >
+
           <Grid xs={12} md={2.5} px={{ xs: 4, sm: 8, md: 2 }}>
             <CardMedia component='img' image={movie?.imageUrl} />
           </Grid>
@@ -66,7 +67,14 @@ export default function MovieDetailPage() {
                 >
                   Thể loại:
                 </Typography>
-                Hoạt hình
+                <div>
+                  {movie?.Categories.map((category: any, index: number) => {
+                    return <div key={index} className={classes.movieDetail}>
+                      {category.name + (index < movie.Categories.length - 1 ? `,` : '.')}
+                      &nbsp;
+                    </div>
+                  })}
+                </div>
               </Grid>
               <Grid xs={12} display='inline-flex' alignItems='center'>
                 <Typography
@@ -78,7 +86,14 @@ export default function MovieDetailPage() {
                 >
                   Diễn viên:
                 </Typography>
-                Nazuka Kaori, Ikeda Shuichi, Tanaka Mayumi
+                <span>
+                  {movie?.Actors.map((actor: any, index: number) => {
+                    return <div className={classes.movieDetail} key={index}>
+                      {actor.fullName + (index < movie.Actors.length - 1 ? `,` : '.')}
+                      &nbsp;
+                    </div>
+                  })}
+                </span>
               </Grid>
               <Grid xs={12} display='inline-flex' alignItems='center'>
                 <Typography
@@ -89,7 +104,14 @@ export default function MovieDetailPage() {
                 >
                   Đạo diễn:
                 </Typography>
-                Taniguchi Goro
+                <span>
+                  {movie?.Directors.map((director: any, index: number) => {
+                    return <div className={classes.movieDetail} key={index}>
+                      {director.fullName + (index < movie.Directors.length - 1 ? `,` : '.')}
+                      &nbsp;
+                    </div>
+                  })}
+                </span>
               </Grid>
               <Grid xs={12} display='inline-flex' alignItems='center'>
                 <Typography
@@ -100,7 +122,7 @@ export default function MovieDetailPage() {
                 >
                   Quốc gia:
                 </Typography>
-                Nhật Bản
+                {movie?.Nationality?.name}
               </Grid>
             </Grid>
           </Grid>
@@ -112,6 +134,13 @@ export default function MovieDetailPage() {
             borderBottom={2}
           >
             MÔ TẢ PHIM
+          </Grid>
+          <Grid xs={12}
+            fontSize={{ xs: '1em', lg: '1.5em' }}
+            fontFamily=''
+            mt={4}
+          >
+            {movie?.description}
           </Grid>
         </Grid>
         : <NotFoundPage />}
