@@ -24,7 +24,7 @@ const useStyles = makeStyles((theme: Theme) => ({
 
   information: {
     padding: '0.75em !important',
-    fontSize: '0.675em',
+    fontSize: '0.625em',
     top: '0rem',
     position: 'absolute',
     color: '#FFFFFF',

@@ -29,7 +29,7 @@ export const getMovieById = async (id: string | undefined): Promise<any> => {
   try {
     response = await axios.get(`${config.apiEndpoint}/films/${id}`);
   } catch (e) {
-    return '';
+    return undefined;
   }
   return response.data.data;
 };

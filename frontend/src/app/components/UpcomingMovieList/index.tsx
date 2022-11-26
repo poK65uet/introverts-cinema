@@ -28,7 +28,10 @@ export default function UpcomingMovieList() {
   return (
     <Container className={classes.container}>
       <Divider sx={{ mb: 2 }}>
-        <Typography sx={{ fontSize: { xs: '1rem', sm: '2rem', md: '3rem' } }} color='secondary' fontWeight={900}>
+        <Typography
+          sx={{ fontSize: { xs: '1rem', sm: '2rem', md: '3rem' } }}
+          color='secondary'
+          fontWeight={900}>
           Phim Sắp Chiếu
         </Typography>
       </Divider>
