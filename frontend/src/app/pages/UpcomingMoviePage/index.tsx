@@ -7,32 +7,32 @@ import Grid from '@mui/material/Unstable_Grid2';
 import useStyles from './styles'
 import { MovieCard } from 'app/components/MovieCard';
 import { useSelector, useDispatch } from 'react-redux';
-import { getNewMoviesThunk } from 'app/components/Movies/slice';
+import { getUpcomingMoviesThunk } from 'app/components/Movies/slice';
 import { RootState } from 'store';
 import { Link } from 'react-router-dom';
 
-export default function NewMoviePage() {
+export default function UpcomingMoviePage() {
 
   const store = useSelector<RootState, RootState>(state => state)
 
   const dispatch = useDispatch();
   useEffect(() => {
-    if (!store.movies.getNewMovies) {
-      dispatch(getNewMoviesThunk())
+    if (!store.movies.getUpcomingMovies) {
+      dispatch(getUpcomingMoviesThunk())
     };
 
-  }, [store.movies.getNewMovies])
+  }, [store.movies.getUpcomingMovies])
 
   const classes = useStyles()
 
   return (
-    <div className={classes.newMoviePage}>
+    <div className={classes.upcomingMoviePage}>
       <Divider sx={{ m: 2 }} variant='middle' textAlign='left'>
         <Typography sx={{
           fontSize: { xs: '1.5rem', sm: '2rem', md: '3rem' },
           py: { xs: 1, md: 2, lg: 3 }
         }} color='secondary' fontWeight={900}>
-          Phim Đang Chiếu
+          Phim Sắp Chiếu
         </Typography>
       </Divider >
       <Grid container xs={12}
@@ -42,7 +42,7 @@ export default function NewMoviePage() {
         px={{ xs: 3, sm: 6, lg: 12 }}
         columnSpacing={{ xs: 1, sm: 2, lg: 4 }}
         rowSpacing={{ xs: 2, sm: 4, lg: 8 }}>
-        {store.movies.newMovieList.map((movie: any, index: number) => {
+        {store.movies.upcomingMovieList.map((movie: any, index: number) => {
           return <Grid xs={6} md={3} fontSize='1.25rem' key={index}>
             <MovieCard
               id={movie.id}

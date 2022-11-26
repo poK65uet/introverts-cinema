@@ -22,6 +22,7 @@ import { RootState } from 'store';
 import { useForm } from 'hooks/useForm';
 import { sendCodeThunk, validateEmailThunk, registerActions, registerThunk } from './slice';
 import { isValidEmail } from './validation';
+import { notify } from 'app/components/MasterDialog/index';
 
 export default function Register() {
 
@@ -72,7 +73,7 @@ export default function Register() {
         repassword: '',
         fullName: '',
         birthDay: null,
-        number: '',
+        phone: '',
       },
       true,
       validate
@@ -98,15 +99,23 @@ export default function Register() {
 
   const handleClickSignUp = () => {
     if (validate(values)) {
-      if (store.register.isEmailValid && store.register.OTP?.toString().length == 6) {
-        console.log('sign_up');
-        dispatch(registerThunk({
-          email: values.email,
-          password: values.password,
-          fullName: values.fullName,
-          birthDay: values.birthDay,
-          otp: store.register.OTP
-        }))
+      if (store.register.isEmailValid) {
+        if (store.register.OTP?.toString().length == 6) {
+          console.log('sign_up');
+          dispatch(registerThunk({
+            email: values.email,
+            password: values.password,
+            otp: store.register.OTP,
+            fullName: values.fullName,
+            phone: values.phone,
+            birthDay: values.birthDay,
+          }))
+        } else {
+          notify({
+            type: 'error',
+            content: 'Mã OTP không hợp lệ',
+          });
+        }
       }
     }
   }
@@ -204,10 +213,10 @@ export default function Register() {
       </Grid>
       <Grid xs={12}>
         <CustomInput.TextField
-          name='number'
+          name='phone'
           label='SĐT'
-          value={values.number}
-          error={errors.number}
+          value={values.phone}
+          error={errors.phone}
           onChange={handleInputChange}
           margin='dense'
           inputProps={{ maxLength: '16' }}
@@ -270,7 +279,7 @@ export default function Register() {
       <span style={{}}>
         {store.register.isEmailValid ?
           <Button
-            disableRipple
+            disableFocusRipple
             variant='text'
             size='small'
             onClick={handleSendCode}
@@ -283,7 +292,7 @@ export default function Register() {
         fullWidth
         variant='contained'
         sx={{ mt: 2, p: 1, fontWeight: 'bold', color: 'white' }}
-        disableRipple
+        disableFocusRipple
         className={classes.loginButton}
         onClick={handleClickSignUp}
       >

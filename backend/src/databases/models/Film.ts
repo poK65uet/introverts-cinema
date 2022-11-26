@@ -11,6 +11,7 @@ import {
 import sequelize from 'databases';
 import Nationality from './Nationality';
 import { ActorModel, CategoryModel, DirectorModel, NationalityModel } from './IModel';
+import Status from 'utils/constant/Status';
 
 export interface FilmModel extends Model<InferAttributes<FilmModel>, InferCreationAttributes<FilmModel>> {
 	id: CreationOptional<number>;
@@ -70,7 +71,7 @@ const Film = sequelize.define<FilmModel>(
 		},
 		status: {
 			type: DataTypes.STRING,
-			defaultValue: 'inactive'
+			defaultValue: Status.ACTIVE
 		},
 		createdAt: {
 			type: DataTypes.DATE

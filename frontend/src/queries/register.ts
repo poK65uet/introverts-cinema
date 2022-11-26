@@ -6,8 +6,8 @@ export const register = async (
   password: string,
   otp: number,
   fullName: string,
+  phone: string,
   birthDay: string,
-  //phone: string,
 ): Promise<string | boolean> => {
   let response: AxiosResponse<any>;
   try {
@@ -16,8 +16,8 @@ export const register = async (
       password: password,
       code: otp,
       fullName: fullName,
+      phone: phone,
       birthDay: birthDay,
-      //phone: phone,
     });
   } catch (e) {
     return false;

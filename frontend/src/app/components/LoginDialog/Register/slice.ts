@@ -140,6 +140,7 @@ export const registerThunk = createAsyncThunk(
       password: string;
       otp: number;
       fullName: string;
+      phone: string;
       birthDay: string;
     },
     reject,
@@ -149,6 +150,7 @@ export const registerThunk = createAsyncThunk(
       data.password,
       data.otp,
       data.fullName,
+      data.phone,
       data.birthDay,
     );
     return { status: receivedData, email: data.email, password: data.password };

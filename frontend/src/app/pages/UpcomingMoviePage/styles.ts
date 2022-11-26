@@ -1,7 +1,7 @@
 import { makeStyles } from '@mui/styles';
 
 const useStyles = makeStyles(() => ({
-  newMoviePage: {
+  upcomingMoviePage: {
     backgroundColor: '#E5E5E5',
     display: 'flex',
     flexDirection: 'column',

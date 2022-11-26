@@ -10,14 +10,19 @@ export default function LoadingLayer() {
 	const [isLoading, setIsLoading] = useState(true);
 
 	useEffect(() => {
-		setIsLoading(loading.loading.isLoading || loading.login.isLoading || loading.register.isLoading)
+		setIsLoading(
+			loading.loading.isLoading
+			|| loading.movies.isLoading
+			|| loading.login.isLoading
+			|| loading.register.isLoading
+		)
 	}, [loading])
 
 	return (
 		<Backdrop open={isLoading} sx={{ fontSize: '1rem', zIndex: 1500, width: '100vw' }}>
 			<ThreeCircles
 				wrapperStyle={{ fontSize: '0.5em' }}
-				height='10em'
+				height='10em'	
 				width='10em'
 				color='#FF884B'
 				outerCircleColor='#FF884B'
