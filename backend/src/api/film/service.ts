@@ -204,6 +204,12 @@ const getOpeningFilm = async () => {
 				status: {
 					[Op.eq]: Status.ACTIVE
 				}
+			},
+			include: {
+				model: Category,
+				through: {
+					attributes: []
+				}
 			}
 		});
 		message = 'Get opening film successfully!';
@@ -232,6 +238,12 @@ const getUpcomingFilm = async () => {
 				},
 				status: {
 					[Op.eq]: Status.ACTIVE
+				}
+			},
+			include: {
+				model: Category,
+				through: {
+					attributes: []
 				}
 			}
 		});
