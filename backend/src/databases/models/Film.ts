@@ -63,7 +63,7 @@ const Film = sequelize.define<FilmModel>(
 			type: DataTypes.DATE
 		},
 		description: {
-			type: DataTypes.STRING
+			type: DataTypes.TEXT
 		},
 		rated: {
 			type: DataTypes.STRING
