@@ -1,15 +1,15 @@
 import { Request } from 'express';
-import { Director, Nationality } from 'databases/models';
+import { Banner } from 'databases/models';
 import ResponeCodes from 'utils/constant/ResponeCode';
-import DirectorPayload from './DirectorPayload';
+import BannerPayload from './BannerPayload';
 
-const getDirectors = async (req: Request) => {
+const getBanners = async (req: Request) => {
 	try {
 		let data;
 		let message: string;
 		let status: number;
 
-		data = await Director.findAll();
+		data = await Banner.findAll();
 		message = 'Get all successfully!';
 		status = ResponeCodes.OK;
 
@@ -23,7 +23,7 @@ const getDirectors = async (req: Request) => {
 	}
 };
 
-const getDirectorById = async (req: Request) => {
+const getBannerById = async (req: Request) => {
 	try {
 		let data;
 		let message: string;
@@ -36,15 +36,13 @@ const getDirectorById = async (req: Request) => {
 			message = 'Invalid identifier.';
 			status = ResponeCodes.BAD_REQUEST;
 		} else {
-			const director = await Director.findByPk(id, {
-				include: Nationality
-			});
-			if (!director) {
+			const banner = await Banner.findByPk(id);
+			if (!banner) {
 				data = null;
 				message = 'Not found.';
 				status = ResponeCodes.NOT_FOUND;
 			} else {
-				data = director;
+				data = banner;
 				message = 'Get successfully!';
 				status = ResponeCodes.OK;
 			}
@@ -60,27 +58,17 @@ const getDirectorById = async (req: Request) => {
 	}
 };
 
-const addDirector = async (req: Request) => {
+const addBanner = async (req: Request) => {
 	try {
 		let data;
 		let message: string;
 		let status: number;
 
-		const newDirector: DirectorPayload = req.body;
-		const { Nationality } = newDirector;
-
-		if (!newDirector.fullName) {
-			data = null;
-			message = 'Name null.';
-			status = ResponeCodes.BAD_REQUEST;
-		} else {
-			const director = await Director.create(newDirector);
-			if (Nationality) await director.setNationality(Nationality);
-
-			data = director;
-			message = 'Add successfully!';
-			status = ResponeCodes.CREATED;
-		}
+		const newBanner: BannerPayload = req.body;
+		const banner = await Banner.create(newBanner);
+		data = banner;
+		message = 'Add successfully!';
+		status = ResponeCodes.CREATED;
 
 		return {
 			data,
@@ -92,7 +80,7 @@ const addDirector = async (req: Request) => {
 	}
 };
 
-const updateDirector = async (req: Request) => {
+const updateBanner = async (req: Request) => {
 	try {
 		let data;
 		let message: string;
@@ -105,13 +93,12 @@ const updateDirector = async (req: Request) => {
 			message = 'Invalid identifier.';
 			status = ResponeCodes.BAD_REQUEST;
 		} else {
-			const updateDirector: DirectorPayload = req.body;
-			const { Nationality } = updateDirector;
-
-			const director = await Director.findByPk(id);
-			data = await director.update(updateDirector);
-			if (Nationality) await director.setNationality(Nationality);
-
+			const updateBanner = req.body;
+			data = await Banner.update(updateBanner, {
+				where: {
+					id
+				}
+			});
 			message = 'Updated successfully!';
 			status = ResponeCodes.OK;
 		}
@@ -126,7 +113,7 @@ const updateDirector = async (req: Request) => {
 	}
 };
 
-const deleteDirector = async (req: Request) => {
+const deleteBanner = async (req: Request) => {
 	try {
 		let data;
 		let message: string;
@@ -139,7 +126,7 @@ const deleteDirector = async (req: Request) => {
 			message = 'Invalid identifier.';
 			status = ResponeCodes.BAD_REQUEST;
 		} else {
-			data = await Director.destroy({
+			data = await Banner.destroy({
 				where: {
 					id
 				}
@@ -158,4 +145,4 @@ const deleteDirector = async (req: Request) => {
 	}
 };
 
-export { getDirectors, getDirectorById, addDirector, updateDirector, deleteDirector };
+export { getBanners, getBannerById, addBanner, updateBanner, deleteBanner };

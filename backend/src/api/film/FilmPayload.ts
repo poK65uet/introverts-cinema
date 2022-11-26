@@ -1,4 +1,4 @@
-interface DirectorPayload {
+interface FilmPayload {
 	title: string;
 	imageUrl?: string;
 	trailerUrl?: string;
@@ -7,7 +7,10 @@ interface DirectorPayload {
 	description?: string;
 	rated?: string;
 	status?: string;
-	NationalityId?: number;
+	Nationality: number;
+	Categories?: number[];
+	Actors?: number[];
+	Directors?: number[];
 }
 
-export default DirectorPayload;
+export default FilmPayload;

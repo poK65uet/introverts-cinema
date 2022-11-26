@@ -1,11 +1,8 @@
 import {
-	BelongsToGetAssociationMixin,
-	BelongsToManyAddAssociationsMixin,
-	BelongsToManyGetAssociationsMixin,
-	BelongsToManyRemoveAssociationsMixin,
+	BelongsToManySetAssociationsMixin,
+	BelongsToSetAssociationMixin,
 	CreationOptional,
 	DataTypes,
-	ForeignKey,
 	InferAttributes,
 	InferCreationAttributes,
 	Model,
@@ -27,26 +24,16 @@ export interface FilmModel extends Model<InferAttributes<FilmModel>, InferCreati
 	status: string;
 	createdAt: CreationOptional<Date>;
 	updatedAt: CreationOptional<Date>;
-	NationalityId: ForeignKey<NationalityModel['id']>;
 
 	Nationality?: NonAttribute<NationalityModel>;
 	Categories?: NonAttribute<CategoryModel[]>;
 	Actors?: NonAttribute<ActorModel[]>;
 	Directors?: NonAttribute<DirectorModel[]>;
 
-	getNationality: BelongsToGetAssociationMixin<NationalityModel>;
-
-	getCategories: BelongsToManyGetAssociationsMixin<CategoryModel>;
-	addCategories: BelongsToManyAddAssociationsMixin<CategoryModel, CategoryModel['id']>;
-	removeCategories: BelongsToManyRemoveAssociationsMixin<CategoryModel, CategoryModel['id']>;
-
-	getActors: BelongsToManyGetAssociationsMixin<ActorModel>;
-	addActors: BelongsToManyAddAssociationsMixin<ActorModel, ActorModel['id']>;
-	removeActors: BelongsToManyRemoveAssociationsMixin<ActorModel, ActorModel['id']>;
-
-	getDirectors: BelongsToManyGetAssociationsMixin<DirectorModel>;
-	addDirectors: BelongsToManyAddAssociationsMixin<DirectorModel, DirectorModel['id']>;
-	removeDirectors: BelongsToManyRemoveAssociationsMixin<DirectorModel, DirectorModel['id']>;
+	setNationality: BelongsToSetAssociationMixin<NationalityModel, NationalityModel['id']>;
+	setCategories: BelongsToManySetAssociationsMixin<CategoryModel, CategoryModel['id']>;
+	setActors: BelongsToManySetAssociationsMixin<ActorModel, ActorModel['id']>;
+	setDirectors: BelongsToManySetAssociationsMixin<DirectorModel, DirectorModel['id']>;
 }
 
 const Film = sequelize.define<FilmModel>(
@@ -76,7 +63,7 @@ const Film = sequelize.define<FilmModel>(
 			type: DataTypes.DATE
 		},
 		description: {
-			type: DataTypes.STRING
+			type: DataTypes.TEXT
 		},
 		rated: {
 			type: DataTypes.STRING
@@ -84,9 +71,6 @@ const Film = sequelize.define<FilmModel>(
 		status: {
 			type: DataTypes.STRING,
 			defaultValue: 'inactive'
-		},
-		NationalityId: {
-			type: DataTypes.INTEGER
 		},
 		createdAt: {
 			type: DataTypes.DATE

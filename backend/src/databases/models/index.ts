@@ -15,6 +15,7 @@ import Showtime from './Showtime';
 import Seat from './Seat';
 import Ticket from './Ticket';
 import UserCode from './UserCode';
+import Banner from './Banner';
 
 export {
 	User,
@@ -22,6 +23,7 @@ export {
 	UserRole,
 	UserCode,
 	Film,
+	Banner,
 	Category,
 	FilmCategory,
 	Nationality,
