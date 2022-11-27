@@ -3,7 +3,7 @@ import config from 'config';
 
 const transporter = nodemailer.createTransport(config.mail_setting);
 
-const sendEmail = async (email: string, subject: string, otp: string) => {
+const sendEmail = (email: string, subject: string, otp: string) => {
 	try {
 		const mailOptions = {
 			from: config.mail_setting.auth.user,
@@ -20,7 +20,7 @@ const sendEmail = async (email: string, subject: string, otp: string) => {
 		 </div>
 		  `
 		};
-		await transporter.sendMail(mailOptions);
+		transporter.sendMail(mailOptions);
 	} catch (error) {
 		console.log(error);
 	}
