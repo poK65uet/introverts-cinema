@@ -41,7 +41,6 @@ import { loginActions } from 'app/components/LoginDialog/slice';
 export default function AppBar() {
 
   const [openMenuMovie, setOpenMenuMovie] = useState(false)
-  const [openMenuSearchMovie, setOpenMenuSearchMovie] = useState(false)
   const [openMainMenu, setOpenMainMenu] = useState(false)
   const [openLoginDialog, setOpenLoginDialog] = useState(false)
   const [openOpt, setOpenOpt] = useState(false)
@@ -50,8 +49,6 @@ export default function AppBar() {
   const handleCloseMainMenu = () => setOpenMainMenu(false)
   const handleOpenMenuMovie = () => setOpenMenuMovie(true)
   const handleCloseMenuMovie = () => setOpenMenuMovie(false)
-  const handleOpenMenuSearchMovie = () => setOpenMenuSearchMovie(true)
-  const handleCloseMenuSearchMovie = () => setOpenMenuSearchMovie(false)
   const handleOpenLoginDialog = () => setOpenLoginDialog(true)
   const handleCloseLoginDialog = () => setOpenLoginDialog(false)
   const handleOpenOpt = () => setOpenOpt(true)
@@ -148,31 +145,6 @@ export default function AppBar() {
           display: { xs: 'none', sm: 'flex' }
         }}
       >
-        {openMenuSearchMovie ?
-          <Button disableRipple color='inherit' className={classes.button}
-            onMouseOver={handleOpenMenuSearchMovie}
-            onMouseLeave={handleCloseMenuSearchMovie}>
-            <Slide in={openMenuSearchMovie} mountOnEnter unmountOnExit>
-              <List className={classes.movieMenu}>
-                <ListItemButton className={classes.listButton} disableRipple>
-                  PHIM THEO THỂ LOẠI
-                </ListItemButton>
-                <ListItemButton className={classes.listButton} disableRipple>
-                  PHIM THEO GIỜ CHIẾU
-                </ListItemButton>
-              </List>
-            </Slide>
-          </Button>
-          :
-          <Fade in={!openMenuSearchMovie}>
-            <Button disableRipple color='inherit' className={classes.button}
-              onMouseOver={handleOpenMenuSearchMovie}
-              onMouseLeave={handleCloseMenuSearchMovie}>
-              Tìm kiếm
-              < ExpandMoreIcon />
-            </Button>
-          </Fade>
-        }
         {openMenuMovie ?
           <Button disableRipple color='inherit' className={classes.button}
             onMouseOver={handleOpenMenuMovie}

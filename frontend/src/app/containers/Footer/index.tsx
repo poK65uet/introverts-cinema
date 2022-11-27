@@ -22,7 +22,7 @@ export default function Footer() {
       <footer className={classes.footer}>
         <Grid container columnSpacing={1}>
           <Grid xs={4} md={2}>
-            <img src={require('app/assets/images/logo.webp')} className={classes.logo} />
+            <img src={require('app/assets/images/logo1.webp')} className={classes.logo} />
           </Grid>
           <Grid container xs={8} md={10}>
             <Grid container xs={4} md={6} sx={{ pl: { xs: '0.5em', md: '4em' } }}>

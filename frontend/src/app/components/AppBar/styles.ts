@@ -26,6 +26,8 @@ const useStyles = makeStyles((theme: Theme) => ({
     maxHeight: '-webkit-fill-available',
     maxWidth: '-webkit-fill-available',
     marginLeft: 20,
+    paddingTop: 4,
+    paddingBottom: 4,
   },
 
   logoButton: {
@@ -46,6 +48,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     '&:hover': {
       color: theme.palette.primary.main,
     },
+    margin: '0 2rem !important',
   },
 
   listButton: {
