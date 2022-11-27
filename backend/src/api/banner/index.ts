@@ -3,10 +3,10 @@ import { getBanners, getBanner, addBanner, updateBanner, deleteBanner } from './
 
 const router = Router();
 
-router.get('/pagination', getBanners);
+router.get('/', getBanners);
 router.get('/:id', getBanner);
 router.post('/', addBanner);
-router.patch('/:id', updateBanner);
+router.put('/:id', updateBanner);
 router.delete('/:id', deleteBanner);
 
 export default router;
