@@ -2,6 +2,7 @@ import { Request } from 'express';
 import { Banner } from 'databases/models';
 import ResponeCodes from 'utils/constant/ResponeCode';
 import BannerPayload from './BannerPayload';
+import Status from 'utils/constant/Status';
 
 const getBanners = async (req: Request) => {
 	try {
@@ -9,7 +10,11 @@ const getBanners = async (req: Request) => {
 		let message: string;
 		let status: number;
 
-		data = await Banner.findAll();
+		data = await Banner.findAll({
+			where: {
+				status: Status.ACTIVE
+			}
+		});
 		message = 'Get all successfully!';
 		status = ResponeCodes.OK;
 
