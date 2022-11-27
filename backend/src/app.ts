@@ -13,13 +13,18 @@ import router from 'api';
 
 const app = express();
 
+const corsOptions = {
+	origin: '*',
+	optionsSuccessStatus: 200
+};
+
 const init = async () => {
 	await sequelize.sync();
 	console.log('Finish load database.');
 
 	app.use(cookieParser());
 
-	app.use(cors());
+	app.use(cors(corsOptions));
 
 	app.use(bodyParser.urlencoded({ extended: false }));
 
