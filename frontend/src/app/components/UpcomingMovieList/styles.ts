@@ -3,11 +3,10 @@ import { Theme } from '@mui/material';
 
 const useStyles = makeStyles((theme: Theme) => ({
   container: {
-    margin: '1rem 0 !important',
+    margin: '5rem 0 2rem 0 !important',
     padding: '0 !important',
     alignSelf: 'center',
-    maxWidth: '100% !important',
-    maxHeight: '30vw',
+    minWidth: '90%',
     [theme.breakpoints.down('md')]: {
       maxHeight: '45vw',
     },
@@ -16,14 +15,13 @@ const useStyles = makeStyles((theme: Theme) => ({
     },
     '& .swiper': {
       height: '22.5rem ',
-      maxHeight: '20vw',
       [theme.breakpoints.down('md')]: {
         maxHeight: '35vw',
       },
     },
     '& .swiper-wrapper': {
       alignItems: 'center',
-      maxHeight: '20vw',
+      maxHeight: '22vw',
       [theme.breakpoints.down('md')]: {
         maxHeight: '35vw',
       },

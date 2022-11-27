@@ -52,10 +52,10 @@ export default function UpcomingMovieList() {
         loop
         breakpoints={{
           640: {
-            slidesPerView: 8,
+            slidesPerView: 6,
           },
         }}
-        slidesPerView={4}>
+        slidesPerView={5}>
         {
           store.movies.upcomingMovieList.map((movie: any, index: number) => {
             return <SwiperSlide className={classes.movie} key={index}>
