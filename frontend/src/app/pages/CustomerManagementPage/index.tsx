@@ -33,7 +33,6 @@ export default function CustomerManagementPage() {
   
   const handlePageSizeChange = async (newPageSize: number) => {
     setPageSize(newPageSize);
-    
     updateRows();
 }
 
@@ -101,11 +100,9 @@ export default function CustomerManagementPage() {
         onPageSizeChange={(newPageSize) => handlePageSizeChange(newPageSize)}
         rowsPerPageOptions={[5, 10, 20]}
         rows={rows}
-        columns={columns}
-        // loading
+        columns={columns} 
         components={{
           Toolbar: GridToolbar,
-          LoadingOverlay: LinearProgress,
         }}
       />
     </Box>
