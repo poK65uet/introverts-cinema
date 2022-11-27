@@ -1,33 +1,36 @@
 import express from 'express';
 import bodyParser from 'body-parser';
-import routers from 'api';
-import * as dotenv from 'dotenv';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
-dotenv.config();
-const { xss } = require('express-xss-sanitizer');
 
-// require('dotenv').config()
-// rest of the code remains same
+import * as dotenv from 'dotenv';
+dotenv.config();
+
+import sequelize from 'databases';
+import 'databases/models';
+
+import router from 'api';
+
 const app = express();
 
-// cookie parser
-app.use(cookieParser());
-// configuring CORS
-// app.use(cors());
-app.use(cors({ credentials: true, origin: 'http://localhost:3000' }));
+const init = async () => {
+	await sequelize.sync();
+	console.log('Finish load database.');
 
-// parse application/x-www-form-urlencoded
-app.use(bodyParser.urlencoded({ extended: false }));
+	app.use(cookieParser());
 
-// parse application/json
-app.use(bodyParser.json());
+	app.use(cors());
 
-// import 'databases';
+	app.use(bodyParser.urlencoded({ extended: false }));
 
-app.use(xss());
+	app.use(bodyParser.json());
 
-// init route
-app.use(routers);
+	const { xss } = require('express-xss-sanitizer');
+	app.use(xss());
+
+	app.use(router);
+};
+
+init();
 
 export default app;

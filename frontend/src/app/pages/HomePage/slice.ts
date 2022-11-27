@@ -1,23 +1,32 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 export interface HomeState {
-  message: string;
+  isLoading: boolean
+  message: string
+  data: string
 }
 
 const initialState: HomeState = {
+  isLoading: false,
   message: '',
+  data: '',
 };
 
 export const homeSlice = createSlice({
   name: 'home',
   initialState: initialState,
   reducers: {
-    changeMessage: (state, action) => {
+    loadData: (state, action) => {
+      state.isLoading = true
+    },
+    receivedData: (state, action) => {
+        state.isLoading = false
+    },
+    changeMessage: (state, action) => { 
       state.message = action.payload;
     },
   },
 });
-
 
 export const homeActions = homeSlice.actions;
 
