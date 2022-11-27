@@ -264,6 +264,9 @@ export default function Register() {
         onChange={handleInputChange}
         inputProps={{ maxLength: '64' }}
         InputProps={{
+          startAdornment: (
+            <InputAdornment position='start'><Lock /></InputAdornment>
+          ),
           endAdornment: (
             <InputAdornment position='end'>
               <IconButton

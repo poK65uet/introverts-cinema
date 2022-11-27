@@ -17,6 +17,7 @@ export default function NewMovieList(this: any) {
   const store = useSelector<RootState, RootState>(state => state)
 
   const dispatch = useDispatch();
+
   useEffect(() => {
     if (!store.movies.getNewMovies) {
       dispatch(getNewMoviesThunk())
@@ -65,6 +66,7 @@ export default function NewMovieList(this: any) {
                 id={movie.id}
                 name={movie.title}
                 img={movie.imageUrl}
+                genre={movie.Categories}
                 duration={movie.duration + ' phút'} />
             </SwiperSlide>
           })}

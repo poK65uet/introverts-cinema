@@ -1,6 +1,7 @@
 import { configureStore } from '@reduxjs/toolkit';
 import homeReducer from 'app/pages/HomePage/slice';
 import moviesReducer from 'app/components/Movies/slice';
+import bannersReducer from 'app/components/Banner/slice';
 import loginReducer from 'app/components/LoginDialog/slice';
 import registerReducer from 'app/components/LoginDialog/Register/slice';
 import loadingReducer from 'app/components/LoadingLayer/slice';
@@ -8,6 +9,7 @@ import loadingReducer from 'app/components/LoadingLayer/slice';
 export const store = configureStore({
   reducer: {
     home: homeReducer,
+    banners: bannersReducer,
     movies: moviesReducer,
     login: loginReducer,
     register: registerReducer,

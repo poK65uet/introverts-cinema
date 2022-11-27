@@ -12,7 +12,7 @@ import useStyles from './styles';
 interface MovieCardProps {
 	id: number
 	name?: string
-	genre?: string
+	genre?: any
 	duration?: string
 	img?: string
 	hideContent?: boolean
@@ -32,6 +32,7 @@ export function MovieCard(props: MovieCardProps) {
 	const onNotHover = () => {
 		setHover(false);
 	};
+
 	return (
 		<Card classes={{ root: classes.container }}
 			sx={{ borderRadius: 'unset' }}
@@ -41,7 +42,17 @@ export function MovieCard(props: MovieCardProps) {
 				<CardContent sx={{ display: hover ? 'inline-block' : 'none' }} className={classes.information}>
 					Tên phim: <strong>{props.name}</strong>
 					<br />
-					Thể loại: {props.genre}
+					Thể loại: <strong>
+						{
+							props.genre != undefined ? props.genre.map((genre: any, index: number) => {
+								return <div key={index} style={{ display: 'inline' }}>
+									{genre.name + (index < props.genre.length - 1 ? `,` : '.')}
+									&nbsp;
+								</div>
+							}
+							) : null
+						}
+					</strong>
 					<br />
 					Thời lượng: {props.duration}
 				</CardContent> : null

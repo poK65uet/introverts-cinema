@@ -1,38 +1,26 @@
-import * as React from 'react';
+import React, { useEffect } from 'react';
 import { Box } from '@mui/material';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay, Navigation, Pagination } from 'swiper'
 import 'swiper/css'
 import 'swiper/css/navigation'
 import 'swiper/css/pagination'
-
 import useStyles from './styles';
-
-interface BannerProps {
-  id: string
-  img: string
-  link: string
-}
-
-const banners: BannerProps[] = [
-  {
-    id: '0',
-    img: require('./assets/banner1.png'),
-    link: '',
-  },
-  {
-    id: '1',
-    img: require('./assets/banner2.png'),
-    link: '',
-  },
-  {
-    id: '2',
-    img: require('./assets/banner3.png'),
-    link: '',
-  },
-]
+import { useSelector, useDispatch } from 'react-redux';
+import { RootState } from 'store';
+import { getBannersThunk } from './slice';
 
 export default function Banner() {
+
+  const store = useSelector<RootState, RootState>(state => state)
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (!store.banners.getBannerList) {
+      dispatch(getBannersThunk())
+    };
+  }, [store.banners.getBannerList])
 
   const classes = useStyles();
 
@@ -52,9 +40,9 @@ export default function Banner() {
       loop
       slidesPerView={1}>
       {
-        banners.map((banner: BannerProps, index: number) => {
+        store.banners.bannerList.map((banner: any, index: number) => {
           return <SwiperSlide key={index} className={classes.banner} >
-            <img src={banner.img} />
+            <img src={banner.imageUrl} />
             <div style={{ height: 0 }}>&nbsp;</div>
           </SwiperSlide>
         })}
