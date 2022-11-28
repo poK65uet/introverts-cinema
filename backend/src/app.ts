@@ -28,7 +28,7 @@ const init = async () => {
 	const { xss } = require('express-xss-sanitizer');
 	app.use(xss());
 
-	app.use(router);
+	app.use('/api', router);
 };
 
 init();
