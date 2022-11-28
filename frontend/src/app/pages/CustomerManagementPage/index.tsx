@@ -9,32 +9,40 @@ import { DataGrid, GridColDef, GridToolbar, GridValueGetterParams } from '@mui/x
 // import { Today } from '@mui/icons-material';
 import { usegetUsers } from '../../../queries/getUsers'
 import { useState } from 'react';
+import { getRowsStateFromCache } from '@mui/x-data-grid/hooks/features/rows/gridRowsUtils';
 
 export default function CustomerManagementPage() {
-  const [pageSize, setPageSize] = useState(5);
-  const [page, setPage] = useState(0);
+  const [pageSize, setPageSize] = useState<number>(5);
+  const [page, setPage] = useState<number>(0);
   const classes = useStyles();
-  const [rows, setRows] = useState([]);
+  const [data, setData] = useState({count : 0, rows: []});
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  
-  // let rows = [];
 
-  const updateRows = async () => {
-    const {data} = await usegetUsers(page, pageSize);
-    if(data !== undefined) 
-      setRows(data.rows);
+  const updateDataLiterally = (data: any) => {
+    setData(data);
   }
-  updateRows();
 
-  const handlePageChange = async (newPage: number) => {
-      setPage(newPage);
-      updateRows();
+  const updatePage = async (newPage: number) => {
+    setPage(newPage);
   }
-  
-  const handlePageSizeChange = async (newPageSize: number) => {
+
+  const updatePageSize = async (newPageSize: number) => {
     setPageSize(newPageSize);
-    updateRows();
-}
+  }
+
+  const updateLoading = async (status: boolean) => {
+    setIsLoading(status);
+  }
+  
+  const updateData = async () => {
+    let {data} = await usegetUsers(page, pageSize);
+    if(data !== undefined) {
+      updateDataLiterally(data);
+    }
+  }
+
+  updateData();
 
   const columns: GridColDef[] = [
     {
@@ -89,17 +97,24 @@ export default function CustomerManagementPage() {
     // },
   ];
 
-
-
   return (
     <Box className={classes.customerTable}>
       <DataGrid
         page={page}
         pageSize={pageSize}
-        onPageChange={(newPage) => handlePageChange(newPage)}
-        onPageSizeChange={(newPageSize) => handlePageSizeChange(newPageSize)}
+        loading={isLoading}
+        onPageChange={(newPage) => {
+          updatePage(newPage); 
+          // updateData();
+        }}
+        onPageSizeChange={(newPageSize) => {
+          updatePageSize(newPageSize); 
+          // updateData();
+        }}
         rowsPerPageOptions={[5, 10, 20]}
-        rows={rows}
+        rowCount={data.count}
+        rows={data.rows}
+        disableSelectionOnClick
         columns={columns} 
         components={{
           Toolbar: GridToolbar,
