@@ -4,47 +4,37 @@ import LinearProgress from '@mui/material/LinearProgress';
 import { DataGrid, GridColDef, GridToolbar, GridValueGetterParams } from '@mui/x-data-grid';
 // import DeleteIcon from '@mui/icons-material/Delete';
 // import EditIcon from '@mui/icons-material/Edit';
-// import Button from '@mui/material/Button/Button';
 // import { IconButton, Typography } from '@mui/material';
-// import { Today } from '@mui/icons-material';
+import { RootState } from 'store';
+import { useSelector } from 'react-redux';
+import { useParams } from 'react-router-dom';
 import { useGetUsers } from '../../../queries/getUsers'
 import { useState, useEffect } from 'react';
 import { UseQueryResult } from 'react-query';
 
 export default function CustomerManagementPage() {
-  const [pageSize, setPageSize] = useState<number>(5);
-  const [page, setPage] = useState<number>(0);
   const classes = useStyles();
-  const [data, setData] = useState({count : 0, rows: []});
-  const newData = useGetUsers(page, pageSize);
-
-  const updateDataLiterally = (newData: any) => {
-    setData(newData);
+  const [page, setPage] = useState<number>(0);
+  const [pageSize, setPageSize] = useState<number>(5);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  // const store = useSelector<RootState, RootState>(state => state)
+  
+  const updateIsLoading = (status: boolean) => {
+    setIsLoading(status);
   }
+  const updatePage = (newPage: number) => {
+    setPage(newPage);
+  }
+
+  const updatePageSize = (newPageSize: number) => {
+    setPageSize(newPageSize);
+  }
+
+
 
   useEffect(() => {
-    updateDataLiterally(newData.data);
-  }, [newData])
-
-  const updatePage = async (newPage: number) => {
-    await setPage(newPage);
-  }
-
-  const updatePageSize = async (newPageSize: number) => {
-    await setPageSize(newPageSize);
-  }
-
-  // const updateLoading = async (status: boolean) => {
-  //   await setIsLoading(status);
-  // }
-
-  // const updateData = async () => {
-  //   newData = await useGetUsers(page, pageSize);
-  //   if(newData.isSuccess) {
-  //     updateDataLiterally(newData.data);
-  //   }
-  // }
-  // updateData();
+    const {data: data} = useGetUsers(page, pageSize);
+  }, [page, pageSize])
 
   const columns: GridColDef[] = [
     {
@@ -104,16 +94,12 @@ export default function CustomerManagementPage() {
       <DataGrid
         page={page}
         pageSize={pageSize}
-        // loading={newData.isLoading}
-        onPageChange={(newPage) => {
-          updatePage(newPage); 
-        }}
-        onPageSizeChange={(newPageSize) => {
-          updatePageSize(newPageSize); 
-        }}
+        loading={data === undefined ? true : false}
+        onPageChange={(newPage) => setPage(newPage)}
+        onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
         rowsPerPageOptions={[5, 10, 20]}
-        rowCount={data.count}
-        rows={data.rows} 
+        rowCount={data === undefined ? data.data.count : 0}
+        rows={data === undefined ? data.data.rows : []} 
         disableSelectionOnClick
         columns={columns} 
         components={{
