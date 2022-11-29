@@ -7,42 +7,44 @@ import { DataGrid, GridColDef, GridToolbar, GridValueGetterParams } from '@mui/x
 // import Button from '@mui/material/Button/Button';
 // import { IconButton, Typography } from '@mui/material';
 // import { Today } from '@mui/icons-material';
-import { usegetUsers } from '../../../queries/getUsers'
-import { useState } from 'react';
-import { getRowsStateFromCache } from '@mui/x-data-grid/hooks/features/rows/gridRowsUtils';
+import { useGetUsers } from '../../../queries/getUsers'
+import { useState, useEffect } from 'react';
+import { UseQueryResult } from 'react-query';
 
 export default function CustomerManagementPage() {
   const [pageSize, setPageSize] = useState<number>(5);
   const [page, setPage] = useState<number>(0);
   const classes = useStyles();
   const [data, setData] = useState({count : 0, rows: []});
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const {newData : UseQueryResult<any,any>} = useGetUsers(page, pageSize);
 
-
-  const updateDataLiterally = (data: any) => {
-    setData(data);
+  const updateDataLiterally = (newData: any) => {
+    setData(newData);
   }
 
+  useEffect(() => {
+    updateDataLiterally(newData.data);
+  }, [newData])
+
   const updatePage = async (newPage: number) => {
-    setPage(newPage);
+    await setPage(newPage);
   }
 
   const updatePageSize = async (newPageSize: number) => {
-    setPageSize(newPageSize);
+    await setPageSize(newPageSize);
   }
 
-  const updateLoading = async (status: boolean) => {
-    setIsLoading(status);
-  }
-  
-  const updateData = async () => {
-    let {data} = await usegetUsers(page, pageSize);
-    if(data !== undefined) {
-      updateDataLiterally(data);
-    }
-  }
+  // const updateLoading = async (status: boolean) => {
+  //   await setIsLoading(status);
+  // }
 
-  updateData();
+  // const updateData = async () => {
+  //   newData = await useGetUsers(page, pageSize);
+  //   if(newData.isSuccess) {
+  //     updateDataLiterally(newData.data);
+  //   }
+  // }
+  // updateData();
 
   const columns: GridColDef[] = [
     {
@@ -105,15 +107,13 @@ export default function CustomerManagementPage() {
         loading={isLoading}
         onPageChange={(newPage) => {
           updatePage(newPage); 
-          // updateData();
         }}
         onPageSizeChange={(newPageSize) => {
           updatePageSize(newPageSize); 
-          // updateData();
         }}
         rowsPerPageOptions={[5, 10, 20]}
         rowCount={data.count}
-        rows={data.rows}
+        rows={data.rows} 
         disableSelectionOnClick
         columns={columns} 
         components={{
