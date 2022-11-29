@@ -16,12 +16,16 @@ export default function CustomerManagementPage() {
   const classes = useStyles();
   const [page, setPage] = useState<number>(0);
   const [pageSize, setPageSize] = useState<number>(5);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  let isLoading = true;  
+  // let count = 0;
+  // let rows = [];
   // const store = useSelector<RootState, RootState>(state => state)
+
+  console.log(page, pageSize);
   
-  const updateIsLoading = (status: boolean) => {
-    setIsLoading(status);
-  }
+  // const updateIsLoading = (status: boolean) => {
+  //   setIsLoading(status);
+  // }
   const updatePage = (newPage: number) => {
     setPage(newPage);
   }
@@ -30,11 +34,7 @@ export default function CustomerManagementPage() {
     setPageSize(newPageSize);
   }
 
-
-
-  useEffect(() => {
-    const {data: data} = useGetUsers(page, pageSize);
-  }, [page, pageSize])
+  const {data: data} = useGetUsers(page, pageSize);
 
   const columns: GridColDef[] = [
     {
@@ -71,22 +71,6 @@ export default function CustomerManagementPage() {
       type: 'date',
       width: 200,
     },
-    // {
-    //   field: 'customerOption',
-    //   type: 'any',
-    //   headerName: 'Tùy chọn',
-    //   width: 200,
-    //   renderCell: () => (
-    //     <Box>
-    //       <IconButton aria-label="edit">
-    //         <EditIcon />
-    //       </IconButton>
-    //       <IconButton aria-label="delete">
-    //         <DeleteIcon />
-    //       </IconButton>
-    //     </Box>
-    //   ),
-    // },
   ];
 
   return (
@@ -94,12 +78,12 @@ export default function CustomerManagementPage() {
       <DataGrid
         page={page}
         pageSize={pageSize}
-        loading={data === undefined ? true : false}
+        loading={isLoading ? true : false}
         onPageChange={(newPage) => setPage(newPage)}
         onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
         rowsPerPageOptions={[5, 10, 20]}
-        rowCount={data === undefined ? data.data.count : 0}
-        rows={data === undefined ? data.data.rows : []} 
+        rowCount={isLoading ? data.data.count : 0}
+        rows={isLoading ? data.data.rows : []} 
         disableSelectionOnClick
         columns={columns} 
         components={{
