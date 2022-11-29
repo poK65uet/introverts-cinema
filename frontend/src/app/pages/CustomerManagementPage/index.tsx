@@ -16,7 +16,7 @@ export default function CustomerManagementPage() {
   const [page, setPage] = useState<number>(0);
   const classes = useStyles();
   const [data, setData] = useState({count : 0, rows: []});
-  const {newData : UseQueryResult<any,any>} = useGetUsers(page, pageSize);
+  const newData = useGetUsers(page, pageSize);
 
   const updateDataLiterally = (newData: any) => {
     setData(newData);
@@ -104,7 +104,7 @@ export default function CustomerManagementPage() {
       <DataGrid
         page={page}
         pageSize={pageSize}
-        loading={isLoading}
+        // loading={newData.isLoading}
         onPageChange={(newPage) => {
           updatePage(newPage); 
         }}
