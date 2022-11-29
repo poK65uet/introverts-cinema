@@ -25,6 +25,8 @@ const init = async () => {
 
 	app.use(bodyParser.json());
 
+	app.use('/', express.static('build'));
+
 	const { xss } = require('express-xss-sanitizer');
 	app.use(xss());
 
