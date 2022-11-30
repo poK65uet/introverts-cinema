@@ -23,7 +23,7 @@ const getDirector = async (req: Request, res: Response) => {
 	}
 };
 
-const addDirector = async (req: Request, res: Response, next: NextFunction) => {
+const addDirector = async (req: Request, res: Response) => {
 	try {
 		const result = await service.addDirector(req);
 		const { data, message, status } = result;
