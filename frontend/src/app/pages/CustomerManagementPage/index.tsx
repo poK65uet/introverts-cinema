@@ -25,23 +25,32 @@ export default function CustomerManagementPage(){
 
   // console.log(page, pageSize);
   
-  const updatePage = (newPage: number) => {
+  const updatePage = async (newPage: number) => {
+    // const {data} = 
+    // console.log(data);
+    
     setPage(newPage);
+    await refetch();
   }
 
   const updatePageSize = (newPageSize: number) => {
     setPageSize(newPageSize);
   }
-
-  const {data, isLoading} = useGetUsers(page, pageSize);
+  
+  const asdf = useGetUsers(page, pageSize);
+  // console.log(asdf);
+  
+  const {data, isLoading, refetch} = useGetUsers(page, pageSize);
 
   useEffect(() => {
-    console.log(data);
+    // console.log(data);
+    console.log(isLoading);
+    
     if(data !== undefined) {
       setCount(data.count);
       setRows(data.rows);
     }
-  }, [isLoading, rows]);
+  }, [isLoading, page]);
 
   const columns: GridColDef[] = [
     {
@@ -85,8 +94,8 @@ export default function CustomerManagementPage(){
       page={page}
       pageSize={pageSize}
       // loading={isLoading ? true : false}
-      onPageChange={async (newPage) => await updatePage(newPage)}
-      onPageSizeChange={async (newPageSize) => await updatePageSize(newPageSize)}
+      onPageChange={(newPage) => updatePage(newPage)}
+      onPageSizeChange={(newPageSize) => updatePageSize(newPageSize)}
       rowsPerPageOptions={[5, 10, 20]}
       rowCount={count}
       rows={rows} 
