@@ -23,7 +23,7 @@ const getCategory = async (req: Request, res: Response) => {
 	}
 };
 
-const addCategory = async (req: Request, res: Response, next: NextFunction) => {
+const addCategory = async (req: Request, res: Response) => {
 	try {
 		const result = await service.addCategory(req);
 		const { data, message, status } = result;
