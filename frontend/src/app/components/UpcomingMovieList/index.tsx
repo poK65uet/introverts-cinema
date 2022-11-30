@@ -64,6 +64,7 @@ export default function UpcomingMovieList() {
                 name={movie.title}
                 img={movie.imageUrl}
                 genre={movie.Categories}
+                rated={movie.rated}
                 duration={movie.duration + ' phút'} />
             </SwiperSlide>
           })}

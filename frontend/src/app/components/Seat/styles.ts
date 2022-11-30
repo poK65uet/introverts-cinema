@@ -10,10 +10,10 @@ const useStyles = makeStyles(() => ({
   },
 
   vacant: {
-    color: '#07BC0C',
-    transition: '0.35s !important',
+    color: '#3498DB',
+    transition: '0.2s !important',
     '&:hover': {
-      color: '#2E7D32',
+      color: '#095587',
     },
   },
 
@@ -23,8 +23,16 @@ const useStyles = makeStyles(() => ({
   },
 
   selected: {
+    color: '#07BC0C',
+    transition: '0.2s !important',
+    '&:hover': {
+      color: '#2E7D32',
+    },
+  },
+
+  waiting: {
     color: '#F1C40F',
-    transition: '0.35s !important',
+    transition: '0.1s !important',
     '&:hover': {
       color: '#cfa80e',
     },

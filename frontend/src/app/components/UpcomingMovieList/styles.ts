@@ -7,24 +7,12 @@ const useStyles = makeStyles((theme: Theme) => ({
     padding: '0 !important',
     alignSelf: 'center',
     minWidth: '90%',
-    [theme.breakpoints.down('md')]: {
-      maxHeight: '45vw',
-    },
+    [theme.breakpoints.down('md')]: {},
     '& .swiper-button-next, .swiper-button-prev': {
       color: '#FFD6A5',
     },
-    '& .swiper': {
-      height: '22.5rem ',
-      [theme.breakpoints.down('md')]: {
-        maxHeight: '35vw',
-      },
-    },
     '& .swiper-wrapper': {
       alignItems: 'center',
-      maxHeight: '22vw',
-      [theme.breakpoints.down('md')]: {
-        maxHeight: '35vw',
-      },
     },
   },
 
