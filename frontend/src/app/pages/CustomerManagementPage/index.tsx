@@ -37,7 +37,7 @@ export default function CustomerManagementPage(){
     setPageSize(newPageSize);
   }
   
-  const asdf = useGetUsers(page, pageSize);
+  // const asdf = useGetUsers(page, pageSize);
   // console.log(asdf);
   
   const {data, isLoading, refetch} = useGetUsers(page, pageSize);
