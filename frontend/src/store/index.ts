@@ -1,9 +1,11 @@
 import { configureStore } from '@reduxjs/toolkit';
 import homeReducer from 'app/pages/HomePage/slice';
+import customerReducer from 'app/pages/CustomerManagementPage/slice'
 
 export const store = configureStore({
   reducer: {
     home: homeReducer,
+    customer: customerReducer,
   },
 });
 // Infer the `RootState` and `AppDispatch` types from the store itself

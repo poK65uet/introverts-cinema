@@ -9,23 +9,22 @@ import { RootState } from 'store';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { useGetUsers } from '../../../queries/getUsers'
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Component, useLayoutEffect } from 'react';
 import { UseQueryResult } from 'react-query';
+import { resolve } from 'path';
+import { ArrowRightAlt } from '@mui/icons-material';
 
-export default function CustomerManagementPage() {
+export default function CustomerManagementPage(){
   const classes = useStyles();
   const [page, setPage] = useState<number>(0);
   const [pageSize, setPageSize] = useState<number>(5);
-  let isLoading = true;  
-  // let count = 0;
-  // let rows = [];
-  // const store = useSelector<RootState, RootState>(state => state)
+  // const store = useSelector<RootState
+  const [count, setCount] = useState<number>(0);
+  const [rows, setRows] = useState<readonly any[]>([]);
+  // let rows: readonly any[] = [];
 
-  console.log(page, pageSize);
+  // console.log(page, pageSize);
   
-  // const updateIsLoading = (status: boolean) => {
-  //   setIsLoading(status);
-  // }
   const updatePage = (newPage: number) => {
     setPage(newPage);
   }
@@ -34,13 +33,21 @@ export default function CustomerManagementPage() {
     setPageSize(newPageSize);
   }
 
-  const {data: data} = useGetUsers(page, pageSize);
+  const {data, isLoading} = useGetUsers(page, pageSize);
+
+  useEffect(() => {
+    console.log(data);
+    if(data !== undefined) {
+      setCount(data.count);
+      setRows(data.rows);
+    }
+  }, [isLoading, rows]);
 
   const columns: GridColDef[] = [
     {
       field: 'id',
       headerName: 'ID',
-      type: 'number',
+      type: 'number', 
       width: 70,
     },
     {
@@ -72,24 +79,24 @@ export default function CustomerManagementPage() {
       width: 200,
     },
   ];
-
   return (
     <Box className={classes.customerTable}>
-      <DataGrid
-        page={page}
-        pageSize={pageSize}
-        loading={isLoading ? true : false}
-        onPageChange={(newPage) => setPage(newPage)}
-        onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
-        rowsPerPageOptions={[5, 10, 20]}
-        rowCount={isLoading ? data.data.count : 0}
-        rows={isLoading ? data.data.rows : []} 
-        disableSelectionOnClick
-        columns={columns} 
-        components={{
-          Toolbar: GridToolbar,
-        }}
-      />
-    </Box>
+    <DataGrid
+      page={page}
+      pageSize={pageSize}
+      // loading={isLoading ? true : false}
+      onPageChange={async (newPage) => await updatePage(newPage)}
+      onPageSizeChange={async (newPageSize) => await updatePageSize(newPageSize)}
+      rowsPerPageOptions={[5, 10, 20]}
+      rowCount={count}
+      rows={rows} 
+      disableSelectionOnClick
+      columns={columns} 
+      components={{
+        Toolbar: GridToolbar,
+      }}
+    />
+  </Box>
+    
   );
 }
