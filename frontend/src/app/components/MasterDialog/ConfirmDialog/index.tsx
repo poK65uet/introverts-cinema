@@ -39,13 +39,13 @@ export default function ConfirmDialog(props: ConfirmDialogProps) {
 			</DialogContent>
 			<DialogActions>
 				<Button
-					disableRipple
+					disableFocusRipple
 					className={classes.action}
 					onClick={props.handleClose}>
 					Xác nhận
 				</Button>
 				<Button
-					disableRipple
+					disableFocusRipple
 					className={classes.button}
 					onClick={props.handleClose}>
 					Hủy

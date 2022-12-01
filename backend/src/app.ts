@@ -25,10 +25,18 @@ const init = async () => {
 
 	app.use(bodyParser.json());
 
+	app.use('/', express.static('build'));
+
 	const { xss } = require('express-xss-sanitizer');
 	app.use(xss());
 
-	app.use(router);
+	app.use('/api', router);
+	
+// 	app.use(express.static('build'));
+    
+//     	app.get('/*', function (req, res) {
+//        	    res.sendFile('build/index.html', {root: '.'});
+//      	});
 };
 
 init();

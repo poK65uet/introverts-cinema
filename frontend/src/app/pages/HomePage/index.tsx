@@ -9,13 +9,15 @@ import MasterDialog from 'app/components/MasterDialog';
 import { notify } from 'app/components/MasterDialog';
 import ConfirmDialog from 'app/components/MasterDialog/ConfirmDialog';
 import Footer from 'app/containers/Footer/index';
-import LoginDialog from 'app/components/LoginDialog';
+import { useDispatch } from 'react-redux';
 
 export function HomePage() {
 
   const classes = useStyles();
 
   const [open, setOpen] = useState(false);
+
+  const dispatch = useDispatch();
 
   const handleOpen = () => {
     setOpen(true);
@@ -30,15 +32,7 @@ export function HomePage() {
       <Banner />
       <NewMovieList />
       <UpcomingMovieList />
-      {/*<button onClick={() => notify(
-        {
-          type: 'error',
-          content: 'Thông báo',
-        })}>
-        Bật Notify
-      </button>
-      <MasterDialog />
-      <button onClick={handleOpen}>
+      {/*<button onClick={handleOpen}>
         Bật
       </button>
       <ConfirmDialog
@@ -46,7 +40,6 @@ export function HomePage() {
         handleClose={handleClose}
         title="Xác nhận"
         content="Xác nhận đặt vé xem phim" />*/}
-      <Footer />
     </div>
   );
 }

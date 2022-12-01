@@ -14,6 +14,7 @@ import { PriceModel } from './Price';
 import { ShowtimeModel } from './Showtime';
 import { SeatModel } from './Seat';
 import { TicketModel } from './Ticket';
+import { BannerModel } from './Banner';
 
 export {
 	UserModel,
@@ -22,6 +23,7 @@ export {
 	FilmModel,
 	CategoryModel,
 	FilmCategoryModel,
+	BannerModel,
 	NationalityModel,
 	ActorModel,
 	DirectorModel,

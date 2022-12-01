@@ -1,13 +1,13 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 export interface HomeState {
-  loading: 'idle' | 'pending' | 'succeeded' | 'failed'
+  isLoading: boolean
   message: string
   data: string
 }
 
 const initialState: HomeState = {
-  loading: 'idle',
+  isLoading: false,
   message: '',
   data: '',
 };
@@ -17,15 +17,10 @@ export const homeSlice = createSlice({
   initialState: initialState,
   reducers: {
     loadData: (state, action) => {
-      if(state.loading === 'idle') {
-        state.loading = 'pending'
-      }
+      state.isLoading = true
     },
     receivedData: (state, action) => {
-      if(state.loading === 'pending'){
-        state.loading = 'idle'
-        state.data = action.payload
-      }
+        state.isLoading = false
     },
     changeMessage: (state, action) => { 
       state.message = action.payload;

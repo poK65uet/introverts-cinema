@@ -7,6 +7,8 @@ import actorRouter from './actor';
 import directorRouter from './director';
 import categoryRouter from './category';
 import filmRouter from './film';
+import bannerRouter from './banner';
+import roomRouter from './room';
 
 const router = Router();
 
@@ -18,5 +20,7 @@ router.use('/actors', actorRouter);
 router.use('/directors', directorRouter);
 router.use('/categories', categoryRouter);
 router.use('/films', filmRouter);
+router.use('/banners', bannerRouter);
+router.use('/rooms', roomRouter);
 
 export default router;

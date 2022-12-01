@@ -1,5 +1,5 @@
 import { Request } from 'express';
-import { Actor } from 'databases/models';
+import { Actor, Nationality } from 'databases/models';
 import ResponeCodes from 'utils/constant/ResponeCode';
 import ActorPayload from './ActorPayload';
 
@@ -36,7 +36,9 @@ const getActorById = async (req: Request) => {
 			message = 'Invalid identifier.';
 			status = ResponeCodes.BAD_REQUEST;
 		} else {
-			const actor = await Actor.findByPk(id);
+			const actor = await Actor.findByPk(id, {
+				include: Nationality
+			});
 			if (!actor) {
 				data = null;
 				message = 'Not found.';
@@ -65,6 +67,7 @@ const addActor = async (req: Request) => {
 		let status: number;
 
 		const newActor: ActorPayload = req.body;
+		const { Nationality } = newActor;
 
 		if (!newActor.fullName) {
 			data = null;
@@ -72,6 +75,8 @@ const addActor = async (req: Request) => {
 			status = ResponeCodes.BAD_REQUEST;
 		} else {
 			const actor = await Actor.create(newActor);
+			if (Nationality) await actor.setNationality(Nationality);
+
 			data = actor;
 			message = 'Add successfully!';
 			status = ResponeCodes.CREATED;
@@ -100,12 +105,13 @@ const updateActor = async (req: Request) => {
 			message = 'Invalid identifier';
 			status = ResponeCodes.BAD_REQUEST;
 		} else {
-			const updateActor = req.body;
-			data = await Actor.update(updateActor, {
-				where: {
-					id
-				}
-			});
+			const updateActor: ActorPayload = req.body;
+			const { Nationality } = updateActor;
+
+			const actor = await Actor.findByPk(id);
+			data = await actor.update(updateActor);
+			if (Nationality) await actor.setNationality(Nationality);
+
 			message = 'Updated successfully!';
 			status = ResponeCodes.OK;
 		}

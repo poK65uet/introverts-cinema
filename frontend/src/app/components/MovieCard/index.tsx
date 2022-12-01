@@ -6,14 +6,16 @@ import {
 	CardContent,
 	CardMedia
 } from '@mui/material';
+import { Link } from 'react-router-dom';
 import useStyles from './styles';
 
 interface MovieCardProps {
 	id: number
-	name: string
-	genre?: string
+	name?: string
+	genre?: any
 	duration?: string
-	img: string
+	img?: string
+	hideContent?: boolean
 }
 
 
@@ -36,16 +38,56 @@ export function MovieCard(props: MovieCardProps) {
 			sx={{ borderRadius: 'unset' }}
 			onMouseOver={onHover} onMouseLeave={onNotHover} >
 			<CardMedia component='img' image={props.img} />
-			<CardContent sx={{ display: hover ? 'inline-block' : 'none' }} className={classes.information}>
-				Tên phim: <strong>{props.name}</strong>
-				<br />
-				Thể loại: {props.genre}
-				<br />
-				Thời lượng: {props.duration}
-			</CardContent>
-			<CardActions sx={{ display: hover ? 'flex' : 'none' }} className={classes.actions}>
-				<Button classes={{ root: classes.button }} size='small'>Chi tiết</Button>
-				<Button classes={{ root: classes.button }} size='small'>Đặt vé</Button>
+			{!props.hideContent ?
+				<CardContent sx={{ display: hover ? 'inline-block' : 'none' }} className={classes.information}>
+					Tên phim: <strong>{props.name}</strong>
+					<br />
+					Thể loại: <strong>
+						{
+							props.genre != undefined ? props.genre.map((genre: any, index: number) => {
+								return <div key={index} style={{ display: 'inline' }}>
+									{genre.name + (index < props.genre.length - 1 ? `,` : '.')}
+									&nbsp;
+								</div>
+							}
+							) : null
+						}
+					</strong>
+					<br />
+					Thời lượng: {props.duration}
+				</CardContent> : null
+			}
+			<CardActions
+				className={classes.actions}
+				sx={{
+					display: hover ? 'flex' : 'none',
+					bottom: props.hideContent ? '5%' : ''
+				}}>
+				<Button variant={'outlined'}
+					sx={{
+						bgcolor: props.hideContent ? 'none' : '#FF884B',
+						'&:hover': {
+							bgcolor: props.hideContent ? '#FF884B' : ''
+						}
+					}}
+					classes={{ root: classes.button }}
+					disableFocusRipple
+					size='small'
+					href={`/movie-detail/${props.id}`}>
+					Chi tiết
+				</Button>
+				<Button variant={'outlined'}
+					sx={{
+						bgcolor: props.hideContent ? 'none' : '#FF884B',
+						'&:hover': {
+							bgcolor: props.hideContent ? '#FF884B' : ''
+						}
+					}}
+					disableFocusRipple
+					classes={{ root: classes.button }}
+					size='small'>
+					Đặt vé
+				</Button>
 			</CardActions>
 		</Card >
 	);

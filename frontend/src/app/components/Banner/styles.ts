@@ -1,14 +1,14 @@
 import { makeStyles } from '@mui/styles';
 import { Theme } from '@mui/material';
 
-const useStyles = makeStyles((theme : Theme) => ({
+const useStyles = makeStyles((theme: Theme) => ({
   swiper: {
     maxWidth: '100%',
     height: 'fit-content',
-    marginBottom:'1rem',
-    '& .swiper-wrapper':{
+    marginBottom: '1rem',
+    '& .swiper-wrapper': {
       height: 'fit-content',
-		},
+    },
     '& .swiper-button-next, .swiper-button-prev': {
       color: '#FFD6A5',
       [theme.breakpoints.down('sm')]: {
@@ -28,7 +28,7 @@ const useStyles = makeStyles((theme : Theme) => ({
     backgroundColor: 'transperant',
     color: '#fff',
     fontSize: '1em',
-    '& .swiper-slide' : {
+    '& .swiper-slide': {
       height: 'fit-content !important',
     },
     '& img': {
@@ -36,7 +36,6 @@ const useStyles = makeStyles((theme : Theme) => ({
       objectFit: 'cover',
     },
   },
-
 }));
-  
+
 export default useStyles;

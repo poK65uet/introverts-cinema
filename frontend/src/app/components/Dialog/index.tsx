@@ -54,13 +54,13 @@ export default function Dialog(props: DialogProps) {
 			</DialogContent>
 			<DialogActions className={classes.action}>
 				<Button
-					disableRipple
+					disableFocusRipple
 					className={classes.button}
 					onClick={props.handleClose}>
 					Đồng ý
 				</Button>
 				<Button
-					disableRipple
+					disableFocusRipple
 					className={classes.button}
 					onClick={props.handleClose}>
 					Hủy

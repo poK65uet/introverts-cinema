@@ -73,7 +73,7 @@ const sendCode = async (req: Request) => {
 				code,
 				expires
 			});
-			await sendEmail(email, 'Verify your email address', code);
+			sendEmail(email, 'Verify your email address', code);
 			message = 'Send code successfully!';
 			status = ResponeCodes.CREATED;
 		}
