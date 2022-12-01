@@ -105,9 +105,6 @@ export default function FilmManagementPage() {
         Quản lý phim trong hệ thống
       </Typography>;
       <DataGrid
-        // loading={isLoading ? true : false}
-        // onPageChange={async (newPage) => await updatePage(newPage)}
-        // onPageSizeChange={async (newPageSize) => await updatePageSize(newPageSize)}
         rowsPerPageOptions={[5, 10, 20]}
         rows={rows}
         disableSelectionOnClick
