@@ -28,6 +28,9 @@ export default function CustomerManagementPage() {
       setRows(newRows);
       return;
     }
+    if (rows.length === count) {
+      return;
+    }
     let run = newRows.length - 1;
     let largestId = rows.slice(-1)[0].id;
     while (run > 0 && newRows[run].id > largestId) {
@@ -37,7 +40,6 @@ export default function CustomerManagementPage() {
       return;
     }
     setRows(rows.concat(newRows.slice(run - newRows.length)));
-
   }
 
   const { data, isLoading } = useGetUsers(page, pageSize);
@@ -48,7 +50,6 @@ export default function CustomerManagementPage() {
       setCount(data.count);
       updateRows(data.rows);
       console.log(rows);
-      console.log(data.rows);
     }
   }, [isLoading]);
 

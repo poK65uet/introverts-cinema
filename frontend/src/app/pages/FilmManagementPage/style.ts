@@ -7,6 +7,9 @@ filmTable: {
     height: 400, 
     width: '95%',
 },
+collumnHeader: {
+    fontWeight: 'bold',
+}
 }));
 
 export default useStyles;
