@@ -1,18 +1,11 @@
 import Box from '@mui/material/Box';
 import useStyles from './style';
-import LinearProgress from '@mui/material/LinearProgress';
 import { DataGrid, GridColDef, GridToolbar, GridValueGetterParams } from '@mui/x-data-grid';
 // import DeleteIcon from '@mui/icons-material/Delete';
 // import EditIcon from '@mui/icons-material/Edit';
 // import { IconButton, Typography } from '@mui/material';
-import { RootState } from 'store';
-import { useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom';
 import { useGetUsers } from '../../../queries/getUsers'
 import { useState, useEffect, Component, useLayoutEffect } from 'react';
-import { UseQueryResult } from 'react-query';
-import { resolve } from 'path';
-import { ArrowRightAlt } from '@mui/icons-material';
 
 export default function CustomerManagementPage(){
   const classes = useStyles();
