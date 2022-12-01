@@ -1,6 +1,7 @@
 import { makeStyles } from '@mui/styles';
-import { AppBar as MuiAppBar, Hidden, Theme } from '@mui/material';
+import { Button, AppBar as MuiAppBar, Hidden, Theme } from '@mui/material';
 import useStyles from './styles';
+import { Link } from 'react-router-dom';
 
 export default function AdminAppBar() {
     const classes = useStyles();
@@ -12,5 +13,17 @@ export default function AdminAppBar() {
             sx={{
                 fontSize: { xs: '10px !important', sm: '1em !important' }
             }}
-        ></MuiAppBar>);
+        >
+            <Link to='/' style={{ zIndex: 'inherit' }}>
+                <Button disableRipple
+                    className={classes.logoButton}
+                    sx={{
+                        position: 'absolute'
+                    }}
+                    color='secondary'
+                >
+                    <img className={classes.logo} src={require('app/assets/images/logo.webp')} />
+                </Button>
+            </Link>
+        </MuiAppBar>);
 }
