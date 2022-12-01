@@ -91,7 +91,7 @@ const addFilm = async (req: Request) => {
 		let status: number;
 
 		const newFilm: FilmPayload = req.body;
-		const { Nationality, Categories, Actors, Directors } = newFilm;
+		const { nationality, categories, actors, directors } = newFilm;
 
 		if (!newFilm.title) {
 			data = null;
@@ -100,10 +100,10 @@ const addFilm = async (req: Request) => {
 		} else {
 			const film = await Film.create(newFilm);
 
-			if (Nationality) await film.setNationality(Nationality);
-			if (Categories) await film.setCategories(Categories);
-			if (Actors) await film.setActors(Actors);
-			if (Directors) await film.setDirectors(Directors);
+			if (nationality) await film.setNationality(nationality);
+			if (categories) await film.setCategories(categories);
+			if (actors) await film.setActors(actors);
+			if (directors) await film.setDirectors(directors);
 
 			data = film;
 			message = 'Add successfully!';
@@ -134,15 +134,15 @@ const updateFilm = async (req: Request) => {
 			status = ResponeCodes.BAD_REQUEST;
 		} else {
 			const updateFilm: FilmPayload = req.body;
-			const { Nationality, Categories, Actors, Directors } = updateFilm;
+			const { nationality, categories, actors, directors } = updateFilm;
 
 			const film = await Film.findByPk(id);
 			data = await film.update(updateFilm);
 
-			if (Nationality) await film.setNationality(Nationality);
-			if (Categories) await film.setCategories(Categories);
-			if (Actors) await film.setActors(Actors);
-			if (Directors) await film.setDirectors(Directors);
+			if (Nationality) await film.setNationality(nationality);
+			if (categories) await film.setCategories(categories);
+			if (actors) await film.setActors(actors);
+			if (directors) await film.setDirectors(directors);
 
 			message = 'Updated successfully!';
 			status = ResponeCodes.OK;

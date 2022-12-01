@@ -67,7 +67,7 @@ const addDirector = async (req: Request) => {
 		let status: number;
 
 		const newDirector: DirectorPayload = req.body;
-		const { Nationality } = newDirector;
+		const { nationality } = newDirector;
 
 		if (!newDirector.fullName) {
 			data = null;
@@ -75,7 +75,7 @@ const addDirector = async (req: Request) => {
 			status = ResponeCodes.BAD_REQUEST;
 		} else {
 			const director = await Director.create(newDirector);
-			if (Nationality) await director.setNationality(Nationality);
+			if (nationality) await director.setNationality(nationality);
 
 			data = director;
 			message = 'Add successfully!';
@@ -106,11 +106,11 @@ const updateDirector = async (req: Request) => {
 			status = ResponeCodes.BAD_REQUEST;
 		} else {
 			const updateDirector: DirectorPayload = req.body;
-			const { Nationality } = updateDirector;
+			const { nationality } = updateDirector;
 
 			const director = await Director.findByPk(id);
 			data = await director.update(updateDirector);
-			if (Nationality) await director.setNationality(Nationality);
+			if (Nationality) await director.setNationality(nationality);
 
 			message = 'Updated successfully!';
 			status = ResponeCodes.OK;
