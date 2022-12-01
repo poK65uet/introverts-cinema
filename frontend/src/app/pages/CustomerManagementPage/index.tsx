@@ -105,7 +105,7 @@ export default function CustomerManagementPage() {
     <Box className={classes.customerTable}>
       <Typography variant="h4" component="h4">
         Quản lý khách hàng
-      </Typography>;
+      </Typography>
       <DataGrid
         page={page}
         pageSize={pageSize}

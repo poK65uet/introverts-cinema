@@ -73,8 +73,22 @@ export default function FilmManagementPage() {
       field: 'opening_day',
       headerName: 'Ngày khởi chiếu',
       type: 'date',
-      width: 200,
+      width: 150,
       align: 'center',
+      headerAlign: 'center',
+    },
+    {
+      field: 'directors',
+      headerName: 'Đạo diễn',
+      type: 'array',
+      width: 150,
+      headerAlign: 'center',
+    },
+    {
+      field: 'actors',
+      headerName: 'Diễn viên',
+      type: 'array',
+      width: 240,
       headerAlign: 'center',
     },
     {
@@ -103,7 +117,7 @@ export default function FilmManagementPage() {
     <Box className={classes.filmTable}>
       <Typography variant="h4" component="h4">
         Quản lý phim trong hệ thống
-      </Typography>;
+      </Typography>
       <DataGrid
         rowsPerPageOptions={[5, 10, 20]}
         rows={rows}
