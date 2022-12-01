@@ -67,7 +67,7 @@ const addActor = async (req: Request) => {
 		let status: number;
 
 		const newActor: ActorPayload = req.body;
-		const { Nationality } = newActor;
+		const { nationality } = newActor;
 
 		if (!newActor.fullName) {
 			data = null;
@@ -75,7 +75,7 @@ const addActor = async (req: Request) => {
 			status = ResponeCodes.BAD_REQUEST;
 		} else {
 			const actor = await Actor.create(newActor);
-			if (Nationality) await actor.setNationality(Nationality);
+			if (Nationality) await actor.setNationality(nationality);
 
 			data = actor;
 			message = 'Add successfully!';
@@ -106,11 +106,11 @@ const updateActor = async (req: Request) => {
 			status = ResponeCodes.BAD_REQUEST;
 		} else {
 			const updateActor: ActorPayload = req.body;
-			const { Nationality } = updateActor;
+			const { nationality } = updateActor;
 
 			const actor = await Actor.findByPk(id);
 			data = await actor.update(updateActor);
-			if (Nationality) await actor.setNationality(Nationality);
+			if (Nationality) await actor.setNationality(nationality);
 
 			message = 'Updated successfully!';
 			status = ResponeCodes.OK;
