@@ -9,6 +9,10 @@ filmTable: {
 },
 collumnHeader: {
     fontWeight: 'bold',
+},
+addButton: {
+    variant: 'outlined',
+    align: 'left !important',
 }
 }));
 

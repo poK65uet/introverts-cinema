@@ -7,6 +7,7 @@ import CustomerManagementPage from '../CustomerManagementPage';
 import RoomManagementPage from '../RoomManagementPage';
 import TicketManagementPage from '../TicketManagementPage';
 import AdminAppBar from 'app/components/AdminAppBar';
+import Footer from 'app/containers/Footer';
 import paths from 'paths';
 
 export default function AdminPage() {
@@ -42,6 +43,7 @@ export default function AdminPage() {
         </Switch>
       </div>
       </>
+      {/* <Footer/> */}
     </div>
   );
 }

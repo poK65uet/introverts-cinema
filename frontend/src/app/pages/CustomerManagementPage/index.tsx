@@ -6,7 +6,7 @@ import { DataGrid, GridColDef, GridToolbar } from '@mui/x-data-grid';
 // import { IconButton, Typography } from '@mui/material';
 import { useGetUsers } from '../../../queries/getUsers'
 import { useState, useEffect } from 'react';
-import { Typography } from '@mui/material';
+import { Button, Typography } from '@mui/material';
 
 export default function CustomerManagementPage() {
   const classes = useStyles();
@@ -28,9 +28,9 @@ export default function CustomerManagementPage() {
       setRows(newRows);
       return;
     }
-    if (rows.length === count) {
-      return;
-    }
+    // if (rows.length === count) {
+    //   return;
+    // }
     let run = newRows.length - 1;
     let largestId = rows.slice(-1)[0].id;
     while (run > 0 && newRows[run].id > largestId) {

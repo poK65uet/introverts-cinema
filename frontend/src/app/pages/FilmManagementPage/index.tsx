@@ -6,7 +6,7 @@ import { DataGrid, GridColDef, GridToolbar, GridValueGetterParams, GridRenderCel
 // import EditIcon from '@mui/icons-material/Edit';
 // import { IconButton, Typography } from '@mui/material';
 import { useState, useEffect, Component, useLayoutEffect } from 'react';
-import { Typography } from '@mui/material';
+import { Button, Typography } from '@mui/material';
 import { Link } from 'react-router-dom';
 import { getValue } from '@mui/system';
 
@@ -118,6 +118,7 @@ export default function FilmManagementPage() {
       <Typography variant="h4" component="h4">
         Quản lý phim trong hệ thống
       </Typography>
+      <Button className={classes.addButton}>Thêm phim mới</Button>
       <DataGrid
         rowsPerPageOptions={[5, 10, 20]}
         rows={rows}
