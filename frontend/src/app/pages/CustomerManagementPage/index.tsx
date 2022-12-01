@@ -18,39 +18,46 @@ export default function CustomerManagementPage(){
   const classes = useStyles();
   const [page, setPage] = useState<number>(0);
   const [pageSize, setPageSize] = useState<number>(5);
-  // const store = useSelector<RootState
   const [count, setCount] = useState<number>(0);
   const [rows, setRows] = useState<readonly any[]>([]);
-  // let rows: readonly any[] = [];
-
-  // console.log(page, pageSize);
   
   const updatePage = async (newPage: number) => {
-    // const {data} = 
-    // console.log(data);
-    
     setPage(newPage);
-    await refetch();
   }
 
   const updatePageSize = (newPageSize: number) => {
     setPageSize(newPageSize);
   }
+
+  const updateRows = (newRows: readonly any[]) => {
+    // setRows(rows.concat(newRows));
+    if(rows.length === 0) {
+      setRows(newRows);
+      return;
+    }
+    let run = newRows.length - 1;
+    let largestId = rows.slice(-1)[0].id;
+    while(run > 0 && newRows[run].id > largestId) {
+      run--;
+    }
+    if(run == newRows.length - 1) {
+      return; 
+    }
+    setRows(rows.concat(newRows.slice(run-newRows.length)));
+    
+  }
   
-  // const asdf = useGetUsers(page, pageSize);
-  // console.log(asdf);
+  const {data, isLoading} = useGetUsers(page, pageSize);
   
-  const {data, isLoading, refetch} = useGetUsers(page, pageSize);
 
   useEffect(() => {
-    // console.log(data);
-    console.log(isLoading);
-    
     if(data !== undefined) {
       setCount(data.count);
-      setRows(data.rows);
+      updateRows(data.rows);
+      console.log(rows);
+      console.log(data.rows);
     }
-  }, [isLoading, page]);
+  }, [isLoading]);
 
   const columns: GridColDef[] = [
     {
@@ -93,7 +100,7 @@ export default function CustomerManagementPage(){
     <DataGrid
       page={page}
       pageSize={pageSize}
-      // loading={isLoading ? true : false}
+      loading={isLoading ? true : false}
       onPageChange={(newPage) => updatePage(newPage)}
       onPageSizeChange={(newPageSize) => updatePageSize(newPageSize)}
       rowsPerPageOptions={[5, 10, 20]}

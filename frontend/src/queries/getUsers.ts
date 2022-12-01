@@ -16,4 +16,4 @@ export const getUsers = async (
 };
 
 export const useGetUsers = (page: number, size: number) =>
-  useQuery(['getUsers'], () => getUsers(page, size));
+  useQuery(['getUsers', page, size], () => getUsers(page, size));
