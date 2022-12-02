@@ -12,13 +12,22 @@ import AddFilmDialog from '../../components/AddFilmDialog'
 export default function FilmManagementPage() {
   const classes = useStyles();
   const [open, setOpen] = useState(false);
+  const [editedRowData, setEditedRowData] = useState([]);
 
   const handleClickOpen = () => {
     setOpen(true);
   }
 
   const handleClose = () => {
+    setEditedRowData([]);
     setOpen(false);
+  }
+
+  const handleClickOpenEditPage = (params : any) => {
+    setEditedRowData(params);
+    setOpen(true);
+    console.log(editedRowData);
+    
   }
 
   const rows: readonly any[] = [
@@ -123,7 +132,7 @@ export default function FilmManagementPage() {
 
   return (
     <Box className={classes.filmTable}>
-      <AddFilmDialog open={open} onClose={handleClose}></AddFilmDialog>
+      <AddFilmDialog open={open} onClose={handleClose} data={editedRowData}></AddFilmDialog>
       <Typography variant="h4" component="h4">
         Quản lý phim trong hệ thống
       </Typography>
@@ -133,6 +142,7 @@ export default function FilmManagementPage() {
         rows={rows}
         disableSelectionOnClick
         columns={columns}
+        onRowDoubleClick={(GridCellParams) => handleClickOpenEditPage(GridCellParams)}
         components={{
           Toolbar: GridToolbar,
         }}
