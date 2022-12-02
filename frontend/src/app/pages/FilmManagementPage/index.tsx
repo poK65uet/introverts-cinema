@@ -1,13 +1,19 @@
 import { useGetMessage } from 'queries/message';
 import Box from '@mui/material/Box';
 import useStyles from './style';
-import { DataGrid, GridColDef, GridToolbar, GridValueGetterParams, GridRenderCellParams } from '@mui/x-data-grid';
+import {
+  DataGrid,
+  GridColDef,
+  GridToolbar,
+  GridValueGetterParams,
+  GridRenderCellParams,
+} from '@mui/x-data-grid';
 // import DeleteIcon from '@mui/icons-material/Delete';
 // import EditIcon from '@mui/icons-material/Edit';
 // import { IconButton, Typography } from '@mui/material';
 import { useState, useEffect, Component, useLayoutEffect } from 'react';
 import { Button, Typography } from '@mui/material';
-import AddFilmDialog from '../../components/AddFilmDialog'
+import AddFilmDialog from '../../components/AddFilmDialog';
 
 export default function FilmManagementPage() {
   const classes = useStyles();
@@ -16,24 +22,24 @@ export default function FilmManagementPage() {
 
   const handleClickOpen = () => {
     setOpen(true);
-  }
+  };
 
   const handleClose = () => {
     setEditedRowData([]);
     setOpen(false);
-  }
+  };
 
-  const handleClickOpenEditPage = (params : any) => {
+  const handleClickOpenEditPage = (params: any) => {
     setEditedRowData(params);
     setOpen(true);
     console.log(editedRowData);
-    
-  }
+  };
 
   const rows: readonly any[] = [
     {
       id: 1,
-      image_url: 'https://innovavietnam.vn/wp-content/uploads/poster-561x800.jpg',
+      image_url:
+        'https://innovavietnam.vn/wp-content/uploads/poster-561x800.jpg',
       title: 'Mắt biếc',
       duration: 150,
       nationality_id: 1,
@@ -41,7 +47,8 @@ export default function FilmManagementPage() {
     },
     {
       id: 2,
-      image_url: 'https://innovavietnam.vn/wp-content/uploads/poster-561x800.jpg',
+      image_url:
+        'https://innovavietnam.vn/wp-content/uploads/poster-561x800.jpg',
       title: 'Mắt biếc 2',
       duration: 150,
       nationality_id: 1,
@@ -49,7 +56,8 @@ export default function FilmManagementPage() {
     },
     {
       id: 3,
-      image_url: 'https://innovavietnam.vn/wp-content/uploads/poster-561x800.jpg',
+      image_url:
+        'https://innovavietnam.vn/wp-content/uploads/poster-561x800.jpg',
       title: 'Mắt biếc 3',
       duration: 150,
       nationality_id: 1,
@@ -66,9 +74,7 @@ export default function FilmManagementPage() {
       align: 'center',
       headerClassName: 'collumnHeader',
       renderCell: (params: GridRenderCellParams<string>) => {
-        return (
-          <a href={params.value}>Poster</a>
-        );
+        return <a href={params.value}>Poster</a>;
       },
     },
     {
@@ -123,26 +129,32 @@ export default function FilmManagementPage() {
       headerAlign: 'center',
       align: 'center',
       renderCell: (params: GridRenderCellParams<string>) => {
-        return (
-          <a href={params.value}>Trailer</a>
-        );
+        return <a href={params.value}>Trailer</a>;
       },
     },
   ];
 
   return (
     <Box className={classes.filmTable}>
-      <AddFilmDialog open={open} onClose={handleClose} data={editedRowData}></AddFilmDialog>
-      <Typography variant="h4" component="h4">
+      <AddFilmDialog
+        open={open}
+        onClose={handleClose}
+        data={editedRowData}
+      ></AddFilmDialog>
+      <Typography variant="h4" component="h4" fontWeight="bold">
         Quản lý phim trong hệ thống
       </Typography>
-      <Button className={classes.addButton} onClick={handleClickOpen}>Thêm phim mới</Button>
+      <Button className={classes.addButton} onClick={handleClickOpen}>
+        Thêm phim mới
+      </Button>
       <DataGrid
-        rowsPerPageOptions={[5, 10, 20]}
+        // rowsPerPageOptions={[5, 10, 20]}
         rows={rows}
         disableSelectionOnClick
         columns={columns}
-        onRowDoubleClick={(GridCellParams) => handleClickOpenEditPage(GridCellParams.row)}
+        onRowDoubleClick={GridCellParams =>
+          handleClickOpenEditPage(GridCellParams.row)
+        }
         components={{
           Toolbar: GridToolbar,
         }}

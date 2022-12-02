@@ -55,8 +55,8 @@ export default function AddFilmDialog(props: any) {
             value={props.data.image_url}
             inputProps={{ maxLength: '64' }}
           />
-          <Grid xs={12} container columnSpacing={2} sx={{alignContent:'center'}}>
-            <Grid xs={5}>
+          <Grid xs={12} container columnSpacing={2} sx={{alignContent:'center'}} item={true}>
+            <Grid xs={5} item={true}>
               <CustomInput.TextField
                 label="Thời lượng"
                 name="duration"
@@ -67,7 +67,7 @@ export default function AddFilmDialog(props: any) {
             </Grid>
 
             <Divider orientation="vertical" flexItem />
-            <Grid xs={5}>
+            <Grid xs={5} item={true}>
               <CustomInput.DatePicker
                 label="Ngày khởi chiếu"
                 name="opening_day"
@@ -135,8 +135,8 @@ export default function AddFilmDialog(props: any) {
             name="image_url"
             inputProps={{ maxLength: '64' }}
           />
-          <Grid xs={12} container columnSpacing={2}>
-            <Grid xs={6}>
+          <Grid xs={12} container columnSpacing={2} item={true}>
+            <Grid xs={6} item={true}>
               <CustomInput.TextField
                 label="Thời lượng"
                 name="duration"
@@ -144,7 +144,7 @@ export default function AddFilmDialog(props: any) {
                 inputProps={{ maxLength: '32' }}
               />
             </Grid>
-            <Grid xs={6}>
+            <Grid xs={6} item={true}>
               <CustomInput.DatePicker
                 label="Ngày khởi chiếu"
                 name="opening_day"
