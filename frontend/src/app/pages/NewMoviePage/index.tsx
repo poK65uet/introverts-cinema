@@ -10,6 +10,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { getNewMoviesThunk } from 'app/components/Movies/slice';
 import { RootState } from 'store';
 import { Link } from 'react-router-dom';
+import paths from 'paths';
 
 export default function NewMoviePage() {
 
@@ -21,7 +22,7 @@ export default function NewMoviePage() {
       dispatch(getNewMoviesThunk())
     };
 
-  }, [store.movies.getNewMovies])
+  }, [])
 
   const classes = useStyles()
 
@@ -47,10 +48,11 @@ export default function NewMoviePage() {
             <MovieCard
               id={movie.id}
               img={movie.imageUrl}
+              rated={movie.rated}
               hideContent
             />
-            <Typography variant='body1' fontWeight='bold' className={classes.movieTittle} noWrap >
-              <Link to={`movie-detail/${movie.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
+            <Typography variant='body1' fontWeight='bold' className={classes.movieTitle} noWrap >
+              <Link to={`${paths.MovieDetailPage}/${movie.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
                 {movie.title}
               </Link>
             </Typography>
