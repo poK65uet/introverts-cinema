@@ -142,7 +142,7 @@ export default function FilmManagementPage() {
         rows={rows}
         disableSelectionOnClick
         columns={columns}
-        onRowDoubleClick={(GridCellParams) => handleClickOpenEditPage(GridCellParams)}
+        onRowDoubleClick={(GridCellParams) => handleClickOpenEditPage(GridCellParams.row)}
         components={{
           Toolbar: GridToolbar,
         }}
