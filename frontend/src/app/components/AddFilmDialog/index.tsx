@@ -12,15 +12,41 @@ import {
   Link as LinkMUI,
   Typography,
 } from '@mui/material';
-import { Lock, Person, Visibility, VisibilityOff } from '@mui/icons-material';
 import { CustomInput } from 'app/components/CustomInput';
 import useStyles from './styles';
 import { useForm } from 'hooks/useForm';
-import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from 'store';
 
 export default function AddFilmDialog(props: any) {
   const classes = useStyles();
+
+
+  const validate = (fieldValues = values) => {
+    const tmp = { ...errors };
+    if ('opening_day' in fieldValues) {
+      tmp.opening_day = '';
+      const today = new Date();
+      if (fieldValues.opening_day > today) tmp.opening_day = 'Ngày sinh không hợp lệ'
+    }
+    setErrors({ ...tmp });
+    if (fieldValues == values) {
+      return Object.values(tmp).every((x) => x == '');
+    }
+  }
+
+  
+  const { values, setValues, errors, setErrors } = useForm(
+    {
+      title: '',
+      duration: 0,
+      directors: '',
+      actors: '',
+      opening_day: null,
+      nationality_id: 0,
+      trailer_url: '',
+    },
+    true,
+    validate
+  );
 
   const handleCloseDialog = () => {
     props.onClose();
@@ -73,6 +99,14 @@ export default function AddFilmDialog(props: any) {
                 name="opening_day"
                 margin="dense"
                 value={props.data.opening_day}
+                onChange={(opening_day: any) => {
+                  if (opening_day === null) return;
+                  validate({ opening_day: opening_day });
+                  setValues({
+                    ...values,
+                    opening_day: opening_day,
+                  });
+                }}
                 inputProps={{ maxLength: '32' }}
               />
             </Grid>

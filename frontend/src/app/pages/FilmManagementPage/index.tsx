@@ -8,10 +8,7 @@ import {
   GridValueGetterParams,
   GridRenderCellParams,
 } from '@mui/x-data-grid';
-// import DeleteIcon from '@mui/icons-material/Delete';
-// import EditIcon from '@mui/icons-material/Edit';
-// import { IconButton, Typography } from '@mui/material';
-import { useState, useEffect, Component, useLayoutEffect } from 'react';
+import { useState, useEffect} from 'react';
 import { Button, Typography } from '@mui/material';
 import AddFilmDialog from '../../components/AddFilmDialog';
 
@@ -44,6 +41,7 @@ export default function FilmManagementPage() {
       duration: 150,
       nationality_id: 1,
       trailer_url: 'https://www.youtube.com/watch?v=xuakxSnFUxc',
+      open_day: new Date(),
     },
     {
       id: 2,
@@ -53,6 +51,7 @@ export default function FilmManagementPage() {
       duration: 150,
       nationality_id: 1,
       trailer_url: 'https://www.youtube.com/watch?v=xuakxSnFUxc',
+      open_day: new Date(),
     },
     {
       id: 3,
@@ -62,6 +61,7 @@ export default function FilmManagementPage() {
       duration: 150,
       nationality_id: 1,
       trailer_url: 'https://www.youtube.com/watch?v=xuakxSnFUxc',
+      open_day: new Date(),
     },
   ];
 
@@ -87,7 +87,7 @@ export default function FilmManagementPage() {
     {
       field: 'duration',
       headerName: 'Thời lượng',
-      type: 'int',
+      type: 'number',
       width: 100,
       align: 'center',
       headerAlign: 'center',
@@ -103,21 +103,19 @@ export default function FilmManagementPage() {
     {
       field: 'directors',
       headerName: 'Đạo diễn',
-      type: 'array',
       width: 150,
       headerAlign: 'center',
     },
     {
       field: 'actors',
       headerName: 'Diễn viên',
-      type: 'array',
       width: 240,
       headerAlign: 'center',
     },
     {
       field: 'nationality_id',
       headerName: 'Mã quốc gia',
-      type: 'int',
+      type: 'number',
       width: 140,
       align: 'center',
       headerAlign: 'center',
