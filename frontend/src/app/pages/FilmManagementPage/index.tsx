@@ -21,10 +21,6 @@ export default function FilmManagementPage() {
     setOpen(false);
   }
 
-  const showAddFilmDialog = (props: any) => {
-    return (<AddFilmDialog></AddFilmDialog>);
-  }
-
   const rows: readonly any[] = [
     {
       id: 1,

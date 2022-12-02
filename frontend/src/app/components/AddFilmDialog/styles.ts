@@ -1,14 +1,14 @@
 import { makeStyles } from '@mui/styles';
 
 const useStyles = makeStyles(() => ({
-  // loginBox: {
-  //   display: 'flex',
-  //   flexDirection: 'column',
-  //   backgroundColor: 'white',
-  //   borderRadius: '15px',
-  //   overflow: 'hidden',
-  //   padding: '2em',
-  // },
+  AddFilmBox: {
+    display: 'flex',
+    flexDirection: 'column',
+    backgroundColor: 'white',
+    borderRadius: '15px',
+    overflow: 'hidden',
+    padding: '2em',
+  },
 
   // loginButton: {
   //   borderRadius: '15px !important',
