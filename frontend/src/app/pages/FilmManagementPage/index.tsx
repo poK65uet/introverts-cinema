@@ -7,11 +7,23 @@ import { DataGrid, GridColDef, GridToolbar, GridValueGetterParams, GridRenderCel
 // import { IconButton, Typography } from '@mui/material';
 import { useState, useEffect, Component, useLayoutEffect } from 'react';
 import { Button, Typography } from '@mui/material';
-import { Link } from 'react-router-dom';
-import { getValue } from '@mui/system';
+import AddFilmDialog from '../../components/AddFilmDialog'
 
 export default function FilmManagementPage() {
   const classes = useStyles();
+  const [open, setOpen] = useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  }
+
+  const handleClose = () => {
+    setOpen(false);
+  }
+
+  const showAddFilmDialog = (props: any) => {
+    return (<AddFilmDialog></AddFilmDialog>);
+  }
 
   const rows: readonly any[] = [
     {
@@ -115,10 +127,11 @@ export default function FilmManagementPage() {
 
   return (
     <Box className={classes.filmTable}>
+      <AddFilmDialog open={open} onClose={handleClose}></AddFilmDialog>
       <Typography variant="h4" component="h4">
         Quản lý phim trong hệ thống
       </Typography>
-      <Button className={classes.addButton}>Thêm phim mới</Button>
+      <Button className={classes.addButton} onClick={handleClickOpen}>Thêm phim mới</Button>
       <DataGrid
         rowsPerPageOptions={[5, 10, 20]}
         rows={rows}
