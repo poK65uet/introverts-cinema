@@ -89,6 +89,10 @@ export default function AppBar() {
           sx={{
             position: 'absolute'
           }}
+          onClick={() => window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+          })}
           color='secondary'
         >
           <img className={classes.logo} src={require('app/assets/images/logo.webp')} />
@@ -221,6 +225,9 @@ export default function AppBar() {
           placement="bottom-start"
           transition
           disablePortal
+          onResize={undefined}
+          onResizeCapture={undefined}
+          nonce
         >
           {({ TransitionProps, placement }) => (
             <Grow

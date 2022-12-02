@@ -17,17 +17,17 @@ const useStyles = makeStyles(() => ({
     },
   },
 
-  booked: {
-    color: '#888888',
-    cursor: 'not-allowed',
-  },
-
   selected: {
     color: '#07BC0C',
     transition: '0.2s !important',
     '&:hover': {
       color: '#2E7D32',
     },
+  },
+
+  booked: {
+    color: '#888888',
+    cursor: 'not-allowed',
   },
 
   waiting: {

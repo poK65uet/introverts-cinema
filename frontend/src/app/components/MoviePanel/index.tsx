@@ -5,77 +5,85 @@ import useStyles from './styles';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from 'store';
 import { getNewMoviesThunk, getUpcomingMoviesThunk } from 'app/components/Movies/slice';
-import { bookTicketActions } from '../../pages/BookTicketPage/slice';
 import { formatDate } from 'utils/date';
 import Grid from '@mui/material/Unstable_Grid2';
 import RatedTag from 'app/components/RatedTag';
+import { notify } from 'app/components/MasterDialog';
+import { bookTicketActions } from '../../pages/BookTicketPage/slice';
 
 export default function MoviePanel() {
 
   const store = useSelector<RootState, RootState>(state => state)
 
-  const [selectedMovie, setSelectedMovie] = useState(store.bookTicket.selectedMovie)
   const selectedTabRef = useRef<HTMLInputElement>(null)
-
-  const handleChangeMovie = (event: React.SyntheticEvent, newMovie: string) => {
-    setSelectedMovie(newMovie)
-    window.scrollTo({
-      top: 0,
-      behavior: 'smooth'
-    })
-  }
-
-  const handleSelectShowtime = () => {
-
-  }
 
   const dispatch = useDispatch()
 
   useLayoutEffect(() => {
     if (selectedTabRef.current != null) {
-      window.scrollTo({
-        top: selectedTabRef.current.offsetTop,
-      })
+      if (!store.bookTicket.stepBack)
+        window.scrollTo({
+          top: selectedTabRef.current.offsetTop,
+        })
       window.scrollTo({
         top: 0,
         behavior: 'smooth'
       })
     }
-    dispatch(bookTicketActions.reset())
   }, [])
 
   useEffect(() => {
     if (!store.movies.getNewMovies) {
       dispatch(getNewMoviesThunk())
     };
-  }, [store.movies.getNewMovies])
+  }, [])
 
   useEffect(() => {
     if (!store.movies.getUpcomingMovies) {
       dispatch(getUpcomingMoviesThunk())
     };
-  }, [store.movies.getUpcomingMovies])
+  }, [])
+
+  const handleSelectMovie = (event: React.SyntheticEvent, newMovie: string) => {
+    dispatch(bookTicketActions.selectMovie(newMovie))
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    })
+  }
+
+  const handleSelectShowtime = (showtime: number) => {
+    if (!store.login.isLoggedin) {
+      notify({
+        type: 'error',
+        content: 'Cần đăng nhập để tiếp tục',
+        autocloseDelay: 2000
+      })
+    } else {
+      dispatch(bookTicketActions.selectShowtime(showtime))
+    }
+  }
 
   const classes = useStyles()
 
   return (
-    <TabContext value={selectedMovie}>
+    <TabContext value={store.bookTicket.selectedMovie}>
       <Box className={classes.wrapper}>
         <Box className={classes.container}>
           <div className={classes.title} >CHỌN PHIM</div>
           <TabList
             className={classes.tabContainer}
             orientation='vertical'
-            onChange={(event, newMovie) => handleChangeMovie(event, newMovie)}
+            onChange={(event, newMovie) => handleSelectMovie(event, newMovie)}
           >
             <Tab value={'0'} sx={{ all: 'unset' }}
-              ref={selectedMovie == '0' ? selectedTabRef : null} />
+              ref={store.bookTicket.selectedMovie == '0' ? selectedTabRef : null} />
             {(store.movies.newMovieList.concat(store.movies.upcomingMovieList)).map(
               (movie: any, index: number) => {
                 return <Tab
                   className={classes.movieTab}
                   key={index}
-                  ref={movie.id == selectedMovie ? selectedTabRef : null}
+                  ref={movie.id == store.bookTicket.selectedMovie ? selectedTabRef : null}
                   label={
                     <>
                       <img src={movie.imageUrl}
@@ -103,7 +111,7 @@ export default function MoviePanel() {
           {store.movies.newMovieList.concat(store.movies.upcomingMovieList).map((movie: any) => {
             {
               return (
-                [1, 2].map((showtime: any, index: number) => {
+                [1, 2].map((showtimeDate: any, index: number) => {
                   return <TabPanel
                     className={classes.showtimeList}
                     key={index}
@@ -114,14 +122,13 @@ export default function MoviePanel() {
                       </Grid>
                       <Grid xs={3} />
                       <Grid container xs={9} >
-                        {[1, 2, 3, 4, 5].map((showtimeTime: any, index: number) => {
+                        {[1, 2, 3, 4, 5].map((showtime: any, index: number) => {
                           return (
                             <Grid xs={4} key={index}>
                               <Button
                                 className={classes.timeButton}
-
                                 disableRipple
-                                onClick={handleSelectShowtime}>
+                                onClick={() => handleSelectShowtime(showtime)}>
                                 10:10
                               </Button>
                             </Grid>)

@@ -22,7 +22,7 @@ export default function NewMovieList(this: any) {
     if (!store.movies.getNewMovies) {
       dispatch(getNewMoviesThunk())
     };
-  }, [store.movies.getNewMovies])
+  }, [])
 
   const classes = useStyles();
 

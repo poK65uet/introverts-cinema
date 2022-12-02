@@ -22,7 +22,7 @@ export default function UpcomingMovieList() {
     if (!store.movies.getUpcomingMovies) {
       dispatch(getUpcomingMoviesThunk())
     };
-  }, [store.movies.getUpcomingMovies])
+  }, [])
 
   const classes = useStyles();
 

@@ -22,7 +22,7 @@ export default function NewMoviePage() {
       dispatch(getNewMoviesThunk())
     };
 
-  }, [store.movies.getNewMovies])
+  }, [])
 
   const classes = useStyles()
 

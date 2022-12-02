@@ -9,23 +9,23 @@ const useStyles = makeStyles((theme: Theme) => ({
     justifyContent: 'space-between',
     minWidth: '80%',
     maxWidth: '80%',
-    margin: '1.5rem',
+    margin: '2.5em',
   },
 
   container: {
-    width: '45% ',
+    width: '40% ',
     display: 'inline',
-    fontSize: '1.25rem',
+    fontSize: '1em',
   },
 
   title: {
     backgroundColor: theme.palette.primary.dark,
     color: 'white',
-    fontSize: '1.375rem',
+    fontSize: '1.125rem',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    height: '4rem',
+    height: '3rem',
   },
 
   tabContainer: {},
@@ -37,7 +37,7 @@ const useStyles = makeStyles((theme: Theme) => ({
       justifyContent: 'left',
       textAlign: 'left',
       border: '1px solid #C1C1C1',
-      fontSize: '1.25rem',
+      fontSize: '1rem',
       fontWeight: 'bold',
     },
     '&.Mui-selected': {
@@ -62,7 +62,7 @@ const useStyles = makeStyles((theme: Theme) => ({
   timeButton: {
     '&.MuiButton-root': {
       color: theme.palette.secondary.main,
-      fontSize: '1.25rem',
+      fontSize: '1rem',
       border: '1px solid #C1C1C1',
       margin: '1rem',
       '&:hover': {

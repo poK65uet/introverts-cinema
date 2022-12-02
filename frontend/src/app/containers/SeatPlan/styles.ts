@@ -28,6 +28,50 @@ const useStyles = makeStyles(() => ({
     fontSize: '1em',
     fontWeight: 900,
   },
+
+  seatVacantExplain: {
+    '&::before': {
+      backgroundColor: '#3498DB',
+      content: '""',
+      display: 'inline-block',
+      width: 10,
+      height: 10,
+      marginRight: '0.5em',
+    },
+  },
+
+  seatSelectedExplain: {
+    '&::before': {
+      backgroundColor: '#07BC0C',
+      content: '""',
+      display: 'inline-block',
+      width: 10,
+      height: 10,
+      marginRight: '0.5em',
+    },
+  },
+
+  seatBookedExplain: {
+    '&::before': {
+      backgroundColor: '#888888',
+      content: '""',
+      display: 'inline-block',
+      width: 10,
+      height: 10,
+      marginRight: '0.5em',
+    },
+  },
+
+  seatWaitingExplain: {
+    '&::before': {
+      backgroundColor: '#F1C40F',
+      content: '""',
+      display: 'inline-block',
+      width: 10,
+      height: 10,
+      marginRight: '0.5em',
+    },
+  },
 }));
 
 export default useStyles;

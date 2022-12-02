@@ -11,6 +11,7 @@ import { Update as DurationIcon } from '@mui/icons-material';
 import NotFoundPage from 'app/pages/NotFoundPage/index';
 import { bookTicketActions } from '../BookTicketPage/slice';
 import paths from 'paths';
+import { formatDate } from 'utils/date';
 
 export default function MovieDetailPage() {
   const store = useSelector<RootState, RootState>(state => state)
@@ -144,6 +145,17 @@ export default function MovieDetailPage() {
                   Quốc gia:
                 </Typography>
                 {movie?.Nationality?.name}
+              </Grid>
+              <Grid xs={12} display='inline-flex' alignItems='center'>
+                <Typography
+                  className={classes.movieDetail}
+                  color='#777777'
+                  fontSize='1em'
+                  pr={1}
+                >
+                  Khởi chiếu
+                </Typography>
+                {formatDate(new Date(movie?.openingDay))}
               </Grid>
             </Grid>
           </Grid>

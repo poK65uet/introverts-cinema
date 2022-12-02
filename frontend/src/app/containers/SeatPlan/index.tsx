@@ -1,7 +1,9 @@
-import React, { useMemo } from 'react';
+import React, { useLayoutEffect, useMemo } from 'react';
 import { Seat } from 'app/components/Seat';
 import useStyles from './styles';
 import Grid from '@mui/material/Unstable_Grid2';
+import { useDispatch } from 'react-redux';
+import { bookTicketActions } from 'app/pages/BookTicketPage/slice';
 
 interface SeatPlanProps {
   seatCols: number
@@ -9,6 +11,13 @@ interface SeatPlanProps {
   emptyCols?: number[] | string
   emptyRows?: number[] | string
 }
+
+const seatExplain = [
+  { state: 'vacant', explain: 'Ghế trống' },
+  { state: 'selected', explain: 'Ghế đang chọn' },
+  { state: 'booked', explain: 'Ghế đã bán' },
+  { state: 'waiting', explain: 'Ghế chờ bán' }
+]
 
 export function SeatPlan(props: SeatPlanProps) {
 
@@ -22,7 +31,7 @@ export function SeatPlan(props: SeatPlanProps) {
         splitString(props.emptyCols) :
         props.emptyCols
       : []
-  ).filter(col => col <= Number(props?.seatCols))
+  ).filter(col => col <= Number(props?.seatCols) && col > 0)
 
   emptyCols.sort()
 
@@ -30,7 +39,7 @@ export function SeatPlan(props: SeatPlanProps) {
     typeof (props.emptyRows) == 'string' ?
       splitString(props.emptyRows) :
       props.emptyRows :
-    []).filter(row => row <= Number(props?.seatRows))
+    []).filter(row => row <= Number(props?.seatRows) && row > 0)
 
   emptyRows.sort()
 
@@ -60,7 +69,8 @@ export function SeatPlan(props: SeatPlanProps) {
       colGap++
       for (let i = 0; i <= props.seatRows; i++) {
         seats.splice(
-          (emptyCol + colGap - 1) + i * (props.seatCols + colGap + 1),
+          (emptyCol + colGap - 1) + i * (props.seatCols + colGap + 1) - emptyCols.filter(col =>
+            (col.toString().length - emptyCol.toString().length) > 0).length,
           0,
           { index: 'empty_seat' }
         )
@@ -69,15 +79,20 @@ export function SeatPlan(props: SeatPlanProps) {
 
     emptyRows.map((emptyRow) => {
       seats.splice(
-        (emptyRow + rowGap) * (props.seatCols + colGap + 1),
+        (emptyRow + rowGap - emptyRows.filter(row =>
+          (row.toString().length - emptyRow.toString().length) > 0).length)
+        * (props.seatCols + colGap + 1)
+        ,
         0,
         { index: 'empty_label' })
       for (let i = 0; i < props.seatCols + colGap; i++) {
         seats.splice(
-          (emptyRow + rowGap) * (props.seatCols + colGap + 1),
+          (emptyRow + rowGap - emptyRows.filter(row =>
+            (row.toString().length - emptyRow.toString().length) > 0).length)
+          * (props.seatCols + colGap + 1)
+          ,
           0,
-          { index: 'empty_seat' }
-        )
+          { index: 'empty_seat' })
       }
       rowGap++
     })
@@ -92,15 +107,15 @@ export function SeatPlan(props: SeatPlanProps) {
       container
       className={classes.seatPlan}
       width={{
-        xs: `calc(1rem * ${props.seatCols + emptyCols.length + 1})`,
-        sm: `calc(1.625rem * ${props.seatCols + emptyCols.length + 1} )`,
-        md: `calc(2.125rem * ${props.seatCols + emptyCols.length + 1} )`,
-        lg: `calc(2.5rem * ${props.seatCols + emptyCols.length + 1})`
+        xs: `calc(1em * ${props.seatCols + emptyCols.length + 1})`,
+        sm: `calc(1.625em * ${props.seatCols + emptyCols.length + 1} )`,
+        md: `calc(2.125em * ${props.seatCols + emptyCols.length + 1} )`,
+        lg: `calc(2.5em * ${props.seatCols + emptyCols.length + 1})`
       }}
     >
       <Grid xs={12 - 12 / (props.seatCols + emptyCols.length + 1)}
         className={classes.screen}
-        fontSize={{ xs: '0.625rem', sm: '1rem', md: '1.375rem', lg: '1.5rem' }}
+        fontSize={{ xs: '0.625em', sm: '1em', md: '1.375em', lg: '1.5em' }}
       >
         Màn hình
       </Grid>
@@ -111,16 +126,32 @@ export function SeatPlan(props: SeatPlanProps) {
           return <Grid xs={12 / (props.seatCols + emptyCols.length + 1)}
             key={index}
             className={classes.seat}
-            fontSize={{ xs: '0.75em', sm: '1.25rem', md: '1.75rem', lg: '2em' }}
+            fontSize={{ xs: '0.75em', sm: '1.25em', md: '1.75em', lg: '2em' }}
           >
-            {seat.index == 'empty_seat' ? null :
-              seat.index == 'empty_label' ? <div style={{ height: '1em' }} /> :
-                seat.seatRow == props.seatRows + 1 ? <div className={classes.colNum}>{seat.index}</div> :
-                  seat.seatCol == props.seatCols + 1 ? <div className={classes.rowCharacter}>{seat.index}</div> :
-                    <Seat seatIndex={seat.index} status='vacant' onClick={() => { }} />}
+            {seat.index == 'empty_seat' ?
+              null
+              : seat.index == 'empty_label' ? <div style={{ height: '1em' }} />
+                : seat.seatRow == props.seatRows + 1 ?
+                  <div className={classes.colNum}>{seat.index}</div>
+                  : seat.seatCol == props.seatCols + 1 ?
+                    <div className={classes.rowCharacter}>{seat.index}</div>
+                    : <Seat id={index} seatIndex={seat.index} status='vacant' onClick={() => { }} />}
           </Grid>
         })
       }
+      <Grid xs={12} container fontSize='1.25em' mt={6} mb={2}>
+        {seatExplain.map((seat) => {
+          return <Grid xs={3} key={seat.state}>
+            <div className={
+              seat.state == 'vacant' ? classes.seatVacantExplain :
+                seat.state == 'selected' ? classes.seatSelectedExplain :
+                  seat.state == 'booked' ? classes.seatBookedExplain : classes.seatWaitingExplain
+            }>
+              {seat.explain}
+            </div>
+          </Grid>
+        })}
+      </Grid>
     </Grid >
   );
 }

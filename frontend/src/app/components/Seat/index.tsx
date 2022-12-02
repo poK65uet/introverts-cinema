@@ -3,7 +3,10 @@ import useStyles from './styles';
 import { ButtonBase } from '@mui/material';
 import { Chair as SeatIcon } from '@mui/icons-material';
 import { notify } from 'app/components/MasterDialog';
+import { useDispatch } from 'react-redux';
+import { bookTicketActions } from '../../pages/BookTicketPage/slice';
 interface SeatProps {
+  id: number
   seatRow?: string
   seatCol?: number
   seatIndex?: string
@@ -15,8 +18,12 @@ export function Seat(props: SeatProps) {
 
   const [select, setSelect] = useState(false);
 
+  const dispatch = useDispatch()
+
   const handleClick = (event: React.MouseEvent) => {
     props.onClick()
+    !select ? dispatch(bookTicketActions.selectSeat({ id: props.id, name: props.seatIndex })) :
+      dispatch(bookTicketActions.unselectSeat({ id: props.id, name: props.seatIndex }))
     setSelect(!select)
     notify({
       type: !select ? 'success' : 'warning',
@@ -31,7 +38,7 @@ export function Seat(props: SeatProps) {
     <ButtonBase
       className={classes.seat}
       disableRipple
-      onClick={(e) => handleClick(e)}>
+      onClick={(event) => handleClick(event)}>
       <SeatIcon className={
         props.status == 'booked' ? classes.booked
           : props.status == 'vacant' ? !select ? classes.vacant : classes.selected
