@@ -24,7 +24,7 @@ export function HomePage() {
   }
 
   const handleClose = () => {
-    setOpen(false);   
+    setOpen(false);
   }
 
   return (
