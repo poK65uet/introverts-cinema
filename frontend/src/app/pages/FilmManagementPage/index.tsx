@@ -9,8 +9,8 @@ import {
   GridRenderCellParams,
 } from '@mui/x-data-grid';
 import { useState, useEffect } from 'react';
-import { Button, Typography } from '@mui/material';
-import AddFilmDialog from '../../components/AddFilmDialog';
+import { Button, Chip, Typography } from '@mui/material';
+import AddFilmDialog from '../../components/FilmDialog';
 import { useGetMovies } from 'queries/movies';
 
 export default function FilmManagementPage() {
@@ -30,7 +30,7 @@ export default function FilmManagementPage() {
   const handleClickOpenEditPage = (params: any) => {
     setEditedRowData(params);
     setOpen(true);
-    };
+  };
 
   const { isLoading, data } = useGetMovies();
   console.log(data);
@@ -44,7 +44,7 @@ export default function FilmManagementPage() {
       align: 'center',
       headerClassName: 'collumnHeader',
       renderCell: (params: GridRenderCellParams<string>) => {
-        return (params.value && <a href={params.value}>Poster</a>);
+        return params.value && <a href={params.value}>Poster</a>;
       },
     },
     {
@@ -63,12 +63,31 @@ export default function FilmManagementPage() {
       headerAlign: 'center',
     },
     {
-      field: 'opening_day',
-      headerName: 'Ngày khởi chiếu',
-      type: 'date',
-      width: 150,
+      field: 'status',
+      headerName: 'Trạng thái',
+      width: 100,
       align: 'center',
       headerAlign: 'center',
+      renderCell: (params: GridRenderCellParams<string>) => {
+        return params.value === 'active' ? (
+          <Chip label="active" variant="outlined" color="success" />
+        ) : (
+          <Chip label="inactive" variant="outlined" color="error" />
+        );
+      },
+    },
+    {
+      field: 'openingDay',
+      headerName: 'Ngày khởi chiếu',
+      width: 150,
+      type: 'date',
+      align: 'center',
+      headerAlign: 'center',
+      renderCell: (params: GridRenderCellParams<string>) => {
+        if(params.value === undefined) return null;
+        const openingDay = new Date(params.value);
+        return openingDay.getDate() + '/' + openingDay.getMonth() + '/' + openingDay.getFullYear();
+      },
     },
     {
       field: 'directors',
@@ -83,7 +102,7 @@ export default function FilmManagementPage() {
       headerAlign: 'center',
     },
     {
-      field: 'nationality_id',
+      field: 'NationalityId',
       headerName: 'Mã quốc gia',
       type: 'number',
       width: 140,

@@ -41,7 +41,7 @@ export default function AddFilmDialog(props: any) {
       directors: '',
       actors: '',
       openingDay: null,
-      nationalityId: 0,
+      NationalityId: 0,
       trailerUrl: '',
     },
     true,
@@ -124,8 +124,8 @@ export default function AddFilmDialog(props: any) {
           />
           <CustomInput.TextField
             label="Mã quốc gia"
-            name="nationalityId"
-            value={props.data.nationalityId}
+            name="NationalityId"
+            value={props.data.NationalityId}
             inputProps={{ maxLength: '64' }}
           />
           <CustomInput.TextField
@@ -198,7 +198,7 @@ export default function AddFilmDialog(props: any) {
           />
           <CustomInput.TextField
             label="Mã quốc gia"
-            name="nationalityId"
+            name="NationalityId"
             inputProps={{ maxLength: '64' }}
           />
           <CustomInput.TextField
