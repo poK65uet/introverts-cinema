@@ -37,7 +37,6 @@ const getRoomById = async (req: Request) => {
 			status = ResponeCodes.BAD_REQUEST;
 		} else {
 			const room = await Room.findByPk(id);
-            console.log(typeof room.colNumber);
 			if (!room) {
 				data = null;
 				message = 'Not found.';
