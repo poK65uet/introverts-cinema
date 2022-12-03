@@ -1,16 +1,12 @@
-interface FilmPayload {
-	title: string;
-	imageUrl?: string;
-	trailerUrl?: string;
-	duration?: number;
-	openingDay?: Date;
-	description?: string;
-	rated?: string;
-	status?: string;
-	Nationality: number;
-	Categories?: number[];
-	Actors?: number[];
-	Directors?: number[];
+interface BillPayload {
+	userId: number;
+	showtimeId: number;
+	positions: Position[];
 }
 
-export default FilmPayload;
+export interface Position {
+	row: number;
+	column: number;
+}
+
+export default BillPayload;

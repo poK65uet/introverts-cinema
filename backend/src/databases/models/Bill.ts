@@ -1,15 +1,28 @@
-import { CreationOptional, DataTypes, InferAttributes, InferCreationAttributes, Model, NonAttribute } from 'sequelize';
+import {
+	CreationOptional,
+	DataTypes,
+	InferAttributes,
+	InferCreationAttributes,
+	Model,
+	NonAttribute,
+	BelongsToSetAssociationMixin,
+	HasManyAddAssociationMixin
+} from 'sequelize';
 import sequelize from 'databases';
 import User, { UserModel } from './User';
 import Seat, { SeatModel } from './Seat';
+import Showtime, { ShowtimeModel } from './Showtime';
 
 export interface BillModel extends Model<InferAttributes<BillModel>, InferCreationAttributes<BillModel>> {
 	id: CreationOptional<number>;
-    totalPrice: number;
-    paymentStatus: string;
+	totalPrice: number;
+	paymentStatus: string;
 	User?: NonAttribute<UserModel>;
-    Seat?: NonAttribute<SeatModel[]>;
-    
+	Showtime?: NonAttribute<ShowtimeModel>;
+	Seats?: NonAttribute<SeatModel[]>;
+	setUser: BelongsToSetAssociationMixin<UserModel, UserModel['id']>;
+	setShowtime: BelongsToSetAssociationMixin<ShowtimeModel, ShowtimeModel['id']>;
+	addSeat: HasManyAddAssociationMixin<SeatModel, SeatModel['id']>;
 }
 
 const Bill = sequelize.define<BillModel>(
@@ -23,10 +36,10 @@ const Bill = sequelize.define<BillModel>(
 		},
 		totalPrice: {
 			type: DataTypes.BIGINT
-        },
-        paymentStatus: {
-            type: DataTypes.STRING
-        }
+		},
+		paymentStatus: {
+			type: DataTypes.STRING
+		}
 	},
 	{
 		tableName: 'bill',
@@ -36,5 +49,8 @@ const Bill = sequelize.define<BillModel>(
 
 User.hasOne(Bill);
 Bill.belongsTo(User);
+
+Showtime.hasOne(Bill);
+Bill.belongsTo(Showtime);
 
 export default Bill;
