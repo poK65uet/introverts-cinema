@@ -8,25 +8,29 @@ const useStyles = makeStyles(() => ({
     minHeight: '100%',
   },
 
+  seatSelectWrapper: {
+    minWidth: '85%',
+    display: 'flex !important',
+    alignSelf: 'center',
+    fontSize: '0.875rem',
+  },
+
+  seatPlanWrapper: {
+    display: 'flex !important',
+    justifyContent: 'center',
+  },
+
   actions: {
     width: '100%',
     display: 'flex',
-    justifyContent: 'space-between',
-    marginTop: '2.5em',
+    justifyContent: 'flex-start',
   },
 
   button: {
     '&.MuiButtonBase-root': {
+      margin: 20,
       color: '#FFFFFF',
     },
-  },
-
-  seatSelectWrapper: {
-    minWidth: '80%',
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignSelf: 'center',
-    fontSize: '0.75em',
   },
 }));
 

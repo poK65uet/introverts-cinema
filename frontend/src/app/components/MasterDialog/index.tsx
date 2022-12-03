@@ -44,6 +44,10 @@ export const notify = (props: MasterDialogProps) => {
 export default function MasterDialog(props?: ToastContainerProps) {
 
 	return (
-		<ToastContainer position='bottom-left' {...props} pauseOnHover={false} />
+		<ToastContainer {...props}
+			position='bottom-left'
+			newestOnTop
+			pauseOnHover={false}
+			pauseOnFocusLoss={false} />
 	);
 }

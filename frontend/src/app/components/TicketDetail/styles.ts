@@ -10,6 +10,9 @@ const useStyles = makeStyles((theme: Theme) => ({
     fontSize: '1.25rem',
     height: 'fit-content',
     transition: '0.5s',
+    '&.MuiPaper-root': {
+      backgroundColor: '#EEEEEE',
+    },
     '& .MuiCardMedia-root': {
       width: 'unset',
     },

@@ -13,6 +13,7 @@ export interface BookTicketState {
   activeStep: BookingStep;
   completedSteps: { [index: number]: boolean };
   stepBack: boolean;
+  timeStartPayment: number;
 }
 
 const initialState: BookTicketState = {
@@ -22,6 +23,7 @@ const initialState: BookTicketState = {
   activeStep: BookingStep.SELECT_MOVIE,
   completedSteps: {},
   stepBack: false,
+  timeStartPayment: 0,
 };
 
 export const bookTicketSlice = createSlice({
@@ -70,6 +72,25 @@ export const bookTicketSlice = createSlice({
     },
     resetSeat: state => {
       state.selectedSeats = [];
+      state.completedSteps[BookingStep.SELECT_SEATS] = false;
+      state.activeStep = BookingStep.SELECT_SHOWTIME;
+      state.stepBack = true;
+    },
+    selectSeatsDone: state => {
+      state.completedSteps[BookingStep.SELECT_SEATS] = true;
+      state.activeStep = BookingStep.MAKE_PAYMENT;
+      state.stepBack = false;
+    },
+    reSelectSeats: state => {
+      state.completedSteps[BookingStep.SELECT_SEATS] = false;
+      state.activeStep = BookingStep.SELECT_SEATS;
+      state.stepBack = true;
+    },
+    startPayment: (state, action) => {
+      if (state.timeStartPayment == 0) state.timeStartPayment = action.payload;
+    },
+    paymentTimeOut: state => {
+      state.timeStartPayment = 0;
     },
   },
 });

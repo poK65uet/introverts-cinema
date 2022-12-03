@@ -5,6 +5,7 @@ interface RatedTagProps {
   rated: string
   size?: 'medium' | 'small'
   styles?: any
+  placement?: any
 }
 
 export default function RatedTag(props: RatedTagProps) {
@@ -14,7 +15,11 @@ export default function RatedTag(props: RatedTagProps) {
         props.rated == 'C13' ? 'Cấm người dưới 13 tuổi' :
           props.rated == 'C16' ? 'Cấm người dưới 16 tuổi' :
             props.rated == 'C18' ? 'Cấm người dưới 18 tuổi' : ''
-    }>
+    }
+      placement={props.placement}
+      disableInteractive
+      arrow
+    >
       <Chip
         label={props.rated}
         style={props.styles}

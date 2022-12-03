@@ -22,22 +22,6 @@ export default function BookingStepper(props: BookingStepperProps) {
 
   const classes = useStyles()
 
-  const CustomizedStepIcons = (props: StepIconProps) => {
-    const classes = useStyles()
-    const { active, completed, className } = props;
-
-    const stepIcons: { [index: string]: React.ReactElement } = {
-      1: <MovieFilter />,
-      2: <CalendarMonth />,
-      3: <LocalActivity />,
-      4: <Payment />
-    };
-    return (
-      <div className={className}>
-        {stepIcons[String(props.icon)]}
-      </div>
-    );
-  }
   return (
     <Container sx={{ my: 5 }}>
       <Stepper activeStep={store.bookTicket.activeStep} connector={<CustomizedConnector />}>

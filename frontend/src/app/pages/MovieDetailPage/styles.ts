@@ -6,6 +6,7 @@ const useStyles = makeStyles(() => ({
     display: 'flex',
     flexDirection: 'column',
     minHeight: '100%',
+    fontSize: '0.875rem',
   },
   movieTitle: {
     textTransform: 'uppercase',

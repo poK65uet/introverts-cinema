@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { styled } from '@mui/material/styles';
-import { CalendarMonth, LocalActivity, MovieFilter, Payment } from '@mui/icons-material';
+import { CalendarMonth, Done, LocalActivity, MovieFilter, Payment } from '@mui/icons-material';
 import StepConnector, { stepConnectorClasses } from '@mui/material/StepConnector';
 import { StepIconProps } from '@mui/material/StepIcon';
 
@@ -43,10 +43,10 @@ const CustomizedStepIconRoot = styled('div')<{
 	alignItems: 'center',
 	transition: '0.25s',
 	...(ownerState.active && {
-
 		backgroundImage:
 			'linear-gradient(90deg, rgba(255,47,0,1) 15%, rgba(255,102,0,1) 30%, rgba(255,136,75,1) 40%, rgba(255,190,75,0.8797268907563025) 80%)',
 		boxShadow: '0 4px 10px 0 rgba(0,0,0,.25)',
+		scale: '1.2',
 	}),
 	...(ownerState.completed && {
 		backgroundImage:
@@ -66,7 +66,8 @@ export function CustomizedStepIcon(props: StepIconProps) {
 
 	return (
 		<CustomizedStepIconRoot ownerState={{ completed, active }} className={className}>
-			{icons[String(props.icon)]}
+			{completed ? <Done fontSize='large' />
+				: icons[String(props.icon)]}
 		</CustomizedStepIconRoot>
 	);
 }

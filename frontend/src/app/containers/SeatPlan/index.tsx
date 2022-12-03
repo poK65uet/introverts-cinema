@@ -2,8 +2,9 @@ import React, { useLayoutEffect, useMemo } from 'react';
 import { Seat } from 'app/components/Seat';
 import useStyles from './styles';
 import Grid from '@mui/material/Unstable_Grid2';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { bookTicketActions } from 'app/pages/BookTicketPage/slice';
+import { RootState } from 'store';
 
 interface SeatPlanProps {
   seatCols: number
@@ -14,7 +15,7 @@ interface SeatPlanProps {
 
 const seatExplain = [
   { state: 'vacant', explain: 'Ghế trống' },
-  { state: 'selected', explain: 'Ghế đang chọn' },
+  { state: 'selected', explain: 'Ghế đã chọn' },
   { state: 'booked', explain: 'Ghế đã bán' },
   { state: 'waiting', explain: 'Ghế chờ bán' }
 ]
@@ -43,7 +44,7 @@ export function SeatPlan(props: SeatPlanProps) {
 
   emptyRows.sort()
 
-  const seatPlan = () => {
+  const seatPlan = useMemo(() => {
     let seats: { index: string, seatCol?: number, seatRow?: number }[] = []
 
     for (let i = 0; i < props.seatRows; i++)
@@ -98,7 +99,9 @@ export function SeatPlan(props: SeatPlanProps) {
     })
 
     return seats;
-  }
+  }, [])
+
+  const store = useSelector<RootState, RootState>(state => state)
 
   const classes = useStyles();
 
@@ -115,13 +118,13 @@ export function SeatPlan(props: SeatPlanProps) {
     >
       <Grid xs={12 - 12 / (props.seatCols + emptyCols.length + 1)}
         className={classes.screen}
-        fontSize={{ xs: '0.625em', sm: '1em', md: '1.375em', lg: '1.5em' }}
+        fontSize={{ xs: '0.625em', sm: '1em', md: '1.2em', lg: '1.375em' }}
       >
-        Màn hình
+        MÀN HÌNH
       </Grid>
       <Grid xs={12 / (props.seatCols + emptyCols.length + 1)} />
       {
-        seatPlan().map((
+        seatPlan.map((
           seat: { index: string, seatRow?: number, seatCol?: number }, index: number) => {
           return <Grid xs={12 / (props.seatCols + emptyCols.length + 1)}
             key={index}
@@ -135,11 +138,14 @@ export function SeatPlan(props: SeatPlanProps) {
                   <div className={classes.colNum}>{seat.index}</div>
                   : seat.seatCol == props.seatCols + 1 ?
                     <div className={classes.rowCharacter}>{seat.index}</div>
-                    : <Seat id={index} seatIndex={seat.index} status='vacant' onClick={() => { }} />}
+                    : <Seat id={index} seatIndex={seat.index}
+                      onClick={() => { }}
+                      status={store.bookTicket.selectedSeats.filter(selectedSeat => seat.index == selectedSeat.name).length != 0
+                        ? 'selected' : 'vacant'} />}
           </Grid>
         })
       }
-      <Grid xs={12} container fontSize='1.25em' mt={6} mb={2}>
+      <Grid xs={12} container fontSize='1.125em' fontWeight='bold' mt={3} mb={2}>
         {seatExplain.map((seat) => {
           return <Grid xs={3} key={seat.state}>
             <div className={

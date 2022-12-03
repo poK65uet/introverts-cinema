@@ -1,12 +1,11 @@
 import React, { useEffect, useLayoutEffect, useRef, useState } from 'react'
-import { Box, Button, Tab } from '@mui/material';
+import { Box, Button, Tab, Container } from '@mui/material';
 import { TabContext, TabList, TabPanel } from '@mui/lab';
 import useStyles from './styles';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from 'store';
 import { getNewMoviesThunk, getUpcomingMoviesThunk } from 'app/components/Movies/slice';
-import { formatDate } from 'utils/date';
-import Grid from '@mui/material/Unstable_Grid2';
+import ShowtimeList from '../ShowtimeList/index';
 import RatedTag from 'app/components/RatedTag';
 import { notify } from 'app/components/MasterDialog';
 import { bookTicketActions } from '../../pages/BookTicketPage/slice';
@@ -61,14 +60,19 @@ export default function MoviePanel() {
       })
     } else {
       dispatch(bookTicketActions.selectShowtime(showtime))
+      window.scrollTo({
+        top: 0,
+      })
     }
   }
 
   const classes = useStyles()
 
+  const showtimeListByMovie = [1, 2, 3]
+
   return (
     <TabContext value={store.bookTicket.selectedMovie}>
-      <Box className={classes.wrapper}>
+      <Container className={classes.wrapper}>
         <Box className={classes.container}>
           <div className={classes.title} >CHỌN PHIM</div>
           <TabList
@@ -76,7 +80,7 @@ export default function MoviePanel() {
             orientation='vertical'
             onChange={(event, newMovie) => handleSelectMovie(event, newMovie)}
           >
-            <Tab value={'0'} sx={{ all: 'unset' }}
+            <Tab value={'0'} sx={{ all: 'unset', bgcolor: '#FFFFFF' }}
               ref={store.bookTicket.selectedMovie == '0' ? selectedTabRef : null} />
             {(store.movies.newMovieList.concat(store.movies.upcomingMovieList)).map(
               (movie: any, index: number) => {
@@ -108,39 +112,22 @@ export default function MoviePanel() {
           <TabPanel className={classes.showtimeList} value='0'>
             Vui lòng chọn phim
           </TabPanel>
-          {store.movies.newMovieList.concat(store.movies.upcomingMovieList).map((movie: any) => {
-            {
-              return (
-                [1, 2].map((showtimeDate: any, index: number) => {
-                  return <TabPanel
-                    className={classes.showtimeList}
-                    key={index}
-                    value={movie.id != undefined ? movie?.id?.toString() : ''}>
-                    <Grid container xs={12} >
-                      <Grid xs={12}>
-                        {formatDate(new Date)}
-                      </Grid>
-                      <Grid xs={3} />
-                      <Grid container xs={9} >
-                        {[1, 2, 3, 4, 5].map((showtime: any, index: number) => {
-                          return (
-                            <Grid xs={4} key={index}>
-                              <Button
-                                className={classes.timeButton}
-                                disableRipple
-                                onClick={() => handleSelectShowtime(showtime)}>
-                                10:10
-                              </Button>
-                            </Grid>)
-                        })}
-                      </Grid>
-                    </Grid>
-                  </TabPanel>
-                }))
-            }
+          {store.movies.newMovieList.concat(store.movies.upcomingMovieList).map((movie: any, index: number) => {
+            return showtimeListByMovie.map((showtimeByDate: any, index: number) => {
+              return <TabPanel
+                className={classes.showtimeList}
+                key={index}
+                value={movie.id != undefined ? movie?.id?.toString() : ''}>
+                <ShowtimeList
+                  key={index}
+                  movie={movie}
+                  showtimeList={showtimeByDate}
+                  onSelectShowtime={(showtime) => handleSelectShowtime(showtime)} />
+              </TabPanel>
+            })
           })}
         </Box>
-      </Box>
+      </Container>
     </TabContext >
   )
 }

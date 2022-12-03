@@ -11,27 +11,32 @@ const useStyles = makeStyles(() => ({
   },
   colNum: {
     color: '#696969',
-    marginTop: '1.25em',
-    fontSize: '0.675em',
+    marginTop: '0.5em',
+    fontSize: '0.75em',
     fontWeight: 'bold',
   },
   rowCharacter: {
-    color: '#696969',
-    paddingLeft: '1em',
+    backgroundColor: '#696969',
+    color: '#FFFFFF',
+    marginLeft: '0.4em',
+    marginTop: '0.25em',
+    padding: 1,
     fontSize: '0.675em',
     fontWeight: 'bold',
   },
 
   screen: {
-    backgroundColor: '#888888',
-    marginBottom: '2em',
+    backgroundColor: '#B6B6B3',
     fontSize: '1em',
-    fontWeight: 900,
+    fontFamily: 'Cerebri Sans,sans-serif',
+    fontWeight: 'bold',
+    padding: '0.125em !important',
+    marginBottom: '1em',
   },
 
   seatVacantExplain: {
     '&::before': {
-      backgroundColor: '#3498DB',
+      backgroundColor: '#ABABAB',
       content: '""',
       display: 'inline-block',
       width: 10,
@@ -53,7 +58,7 @@ const useStyles = makeStyles(() => ({
 
   seatBookedExplain: {
     '&::before': {
-      backgroundColor: '#888888',
+      backgroundColor: '#E74C3C',
       content: '""',
       display: 'inline-block',
       width: 10,
