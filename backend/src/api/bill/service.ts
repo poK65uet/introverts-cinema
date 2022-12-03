@@ -37,7 +37,8 @@ const createBill = async (req: Request) => {
 			if (verifySeat(seat, user)) {
 				seat.update({
 					owner: user.email
-				});
+                });
+                bill.addSeat(seat);
 			}
 		}
 	} catch (error) {
@@ -53,3 +54,8 @@ const verifySeat = (seat: SeatModel, user: UserModel) => {
 		return false;
 	return true;
 };
+
+const calculatePrice = async (showtime: ShowtimeModel) {
+    
+}
+
