@@ -4,7 +4,7 @@ import { DataGrid, GridColDef, GridToolbar } from '@mui/x-data-grid';
 // import DeleteIcon from '@mui/icons-material/Delete';
 // import EditIcon from '@mui/icons-material/Edit';
 // import { IconButton, Typography } from '@mui/material';
-import { useGetUsers } from '../../../queries/getUsers';
+import { useGetUsers } from '../../../queries/user';
 import { useState, useEffect } from 'react';
 import { Button, Typography } from '@mui/material';
 

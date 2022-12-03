@@ -36,3 +36,18 @@ export const getMovieById = async (id: string | undefined): Promise<any> => {
 
 export const useGetMovieById = (id: string | undefined) =>
   useQuery(['movies/getMovieById'], () => getMovieById(id));
+
+export const getMovies = async (): Promise<any> => {
+  let response: AxiosResponse<any>;
+  try {
+    response = await axios.get(
+      `${config.apiEndpoint}/films/pagination`,
+    );
+  } catch (e) {
+    return [];
+  }
+  return response.data.data;
+};
+
+export const useGetMovies = () =>
+  useQuery(['getMovies'], () => getMovies());

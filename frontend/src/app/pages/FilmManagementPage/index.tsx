@@ -8,9 +8,10 @@ import {
   GridValueGetterParams,
   GridRenderCellParams,
 } from '@mui/x-data-grid';
-import { useState, useEffect} from 'react';
+import { useState, useEffect } from 'react';
 import { Button, Typography } from '@mui/material';
 import AddFilmDialog from '../../components/AddFilmDialog';
+import { useGetMovies } from 'queries/movies';
 
 export default function FilmManagementPage() {
   const classes = useStyles();
@@ -29,52 +30,21 @@ export default function FilmManagementPage() {
   const handleClickOpenEditPage = (params: any) => {
     setEditedRowData(params);
     setOpen(true);
-    console.log(editedRowData);
-  };
+    };
 
-  const rows: readonly any[] = [
-    {
-      id: 1,
-      image_url:
-        'https://innovavietnam.vn/wp-content/uploads/poster-561x800.jpg',
-      title: 'Mắt biếc',
-      duration: 150,
-      nationality_id: 1,
-      trailer_url: 'https://www.youtube.com/watch?v=xuakxSnFUxc',
-      open_day: new Date(),
-    },
-    {
-      id: 2,
-      image_url:
-        'https://innovavietnam.vn/wp-content/uploads/poster-561x800.jpg',
-      title: 'Mắt biếc 2',
-      duration: 150,
-      nationality_id: 1,
-      trailer_url: 'https://www.youtube.com/watch?v=xuakxSnFUxc',
-      open_day: new Date(),
-    },
-    {
-      id: 3,
-      image_url:
-        'https://innovavietnam.vn/wp-content/uploads/poster-561x800.jpg',
-      title: 'Mắt biếc 3',
-      duration: 150,
-      nationality_id: 1,
-      trailer_url: 'https://www.youtube.com/watch?v=xuakxSnFUxc',
-      open_day: new Date(),
-    },
-  ];
+  const { isLoading, data } = useGetMovies();
+  console.log(data);
 
   const columns: GridColDef[] = [
     {
-      field: 'image_url',
+      field: 'imageUrl',
       headerName: 'Poster',
       width: 80,
       headerAlign: 'center',
       align: 'center',
       headerClassName: 'collumnHeader',
       renderCell: (params: GridRenderCellParams<string>) => {
-        return <a href={params.value}>Poster</a>;
+        return (params.value && <a href={params.value}>Poster</a>);
       },
     },
     {
@@ -121,7 +91,7 @@ export default function FilmManagementPage() {
       headerAlign: 'center',
     },
     {
-      field: 'trailer_url',
+      field: 'trailerUrl',
       headerName: 'Trailer',
       width: 90,
       headerAlign: 'center',
@@ -146,8 +116,9 @@ export default function FilmManagementPage() {
         Thêm phim mới
       </Button>
       <DataGrid
-        // rowsPerPageOptions={[5, 10, 20]}
-        rows={rows}
+        loading={isLoading}
+        rowsPerPageOptions={[5, 10, 20]}
+        rows={isLoading ? [] : data}
         disableSelectionOnClick
         columns={columns}
         onRowDoubleClick={GridCellParams =>

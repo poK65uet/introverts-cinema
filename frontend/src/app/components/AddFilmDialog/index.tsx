@@ -22,10 +22,10 @@ export default function AddFilmDialog(props: any) {
 
   const validate = (fieldValues = values) => {
     const tmp = { ...errors };
-    if ('opening_day' in fieldValues) {
-      tmp.opening_day = '';
+    if ('openingDay' in fieldValues) {
+      tmp.openingDay = '';
       const today = new Date();
-      if (fieldValues.opening_day > today) tmp.opening_day = 'Ngày sinh không hợp lệ'
+      if (fieldValues.openingDay > today) tmp.openingDay = 'Ngày sinh không hợp lệ'
     }
     setErrors({ ...tmp });
     if (fieldValues == values) {
@@ -40,9 +40,9 @@ export default function AddFilmDialog(props: any) {
       duration: 0,
       directors: '',
       actors: '',
-      opening_day: null,
-      nationality_id: 0,
-      trailer_url: '',
+      openingDay: null,
+      nationalityId: 0,
+      trailerUrl: '',
     },
     true,
     validate
@@ -51,8 +51,6 @@ export default function AddFilmDialog(props: any) {
   const handleCloseDialog = () => {
     props.onClose();
   };
-
-  console.log(props);
 
   return (
     <Dialog open={props.open} onClose={handleCloseDialog}>
@@ -77,8 +75,8 @@ export default function AddFilmDialog(props: any) {
           />
           <CustomInput.TextField
             label="Poster"
-            name="image_url"
-            value={props.data.image_url}
+            name="imageUrl"
+            value={props.data.imageUrl}
             inputProps={{ maxLength: '64' }}
           />
           <Grid xs={12} container columnSpacing={2} sx={{alignContent:'center'}} item={true}>
@@ -96,15 +94,15 @@ export default function AddFilmDialog(props: any) {
             <Grid xs={5} item={true}>
               <CustomInput.DatePicker
                 label="Ngày khởi chiếu"
-                name="opening_day"
+                name="openingDay"
                 margin="dense"
-                value={props.data.opening_day}
-                onChange={(opening_day: any) => {
-                  if (opening_day === null) return;
-                  validate({ opening_day: opening_day });
+                value={props.data.openingDay}
+                onChange={(openingDay: any) => {
+                  if (openingDay === null) return;
+                  validate({ openingDay: openingDay });
                   setValues({
                     ...values,
-                    opening_day: opening_day,
+                    openingDay: openingDay,
                   });
                 }}
                 inputProps={{ maxLength: '32' }}
@@ -126,14 +124,14 @@ export default function AddFilmDialog(props: any) {
           />
           <CustomInput.TextField
             label="Mã quốc gia"
-            name="nationality_id"
-            value={props.data.nationality_id}
+            name="nationalityId"
+            value={props.data.nationalityId}
             inputProps={{ maxLength: '64' }}
           />
           <CustomInput.TextField
             label="Trailer"
-            name="trailer_url"
-            value={props.data.trailer_url}
+            name="trailerUrl"
+            value={props.data.trailerUrl}
             inputProps={{ maxLength: '64' }}
           />
           <Button
@@ -166,7 +164,7 @@ export default function AddFilmDialog(props: any) {
           />
           <CustomInput.TextField
             label="Poster"
-            name="image_url"
+            name="imageUrl"
             inputProps={{ maxLength: '64' }}
           />
           <Grid xs={12} container columnSpacing={2} item={true}>
@@ -181,7 +179,7 @@ export default function AddFilmDialog(props: any) {
             <Grid xs={6} item={true}>
               <CustomInput.DatePicker
                 label="Ngày khởi chiếu"
-                name="opening_day"
+                name="openingDay"
                 margin="dense"
                 inputProps={{ maxLength: '32' }}
               />
@@ -200,12 +198,12 @@ export default function AddFilmDialog(props: any) {
           />
           <CustomInput.TextField
             label="Mã quốc gia"
-            name="nationality_id"
+            name="nationalityId"
             inputProps={{ maxLength: '64' }}
           />
           <CustomInput.TextField
             label="Trailer"
-            name="trailer_url"
+            name="trailerUrl"
             inputProps={{ maxLength: '64' }}
           />
           <Button
