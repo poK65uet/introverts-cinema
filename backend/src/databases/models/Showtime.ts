@@ -34,7 +34,7 @@ const Showtime = sequelize.define<ShowtimeModel>(
 		},
 		startTime: {
 			allowNull: false,
-			type: DataTypes.DATE,
+			type: DataTypes.DATE
 		},
 		createdAt: {
 			type: DataTypes.DATE
