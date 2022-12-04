@@ -2,6 +2,8 @@ import { Request } from 'express';
 import { Showtime, Room, Film, Seat } from 'databases/models';
 import ResponeCodes from 'utils/constant/ResponeCode';
 import ShowtimePayload from './ShowtimePayload';
+import { ShowtimeModel } from 'databases/models/Showtime';
+import { Op } from 'sequelize';
 
 const getShowtimes = async (req: Request) => {
 	try {
@@ -50,8 +52,14 @@ const getShowtimesByFilm = async (filmId: number) => {
 		let data;
 		let message: string;
 		let status: number;
+		const now = new Date(Date.now());
 
 		const showtime = await Showtime.findAll({
+			where: {
+				startTime: {
+					[Op.gt]: now
+				}
+			},
 			include: [
 				{
 					model: Film,
@@ -60,10 +68,11 @@ const getShowtimesByFilm = async (filmId: number) => {
 						id: filmId
 					}
 				}
-			]
+			],
+			order: [['start_time', 'ASC']]
 		});
 
-		data = showtime;
+		data = groupShowtimeByDate(showtime);
 		message = 'Get successfully!';
 		status = ResponeCodes.OK;
 
@@ -128,8 +137,9 @@ const addShowtime = async (req: Request) => {
 
 		const newShowtime: ShowtimePayload = req.body;
 		const { film, room } = newShowtime;
+		const now = new Date(Date.now());
 
-		if (!newShowtime.startTime || !film || !room) {
+		if (!newShowtime.startTime || newShowtime.startTime.getTime() < now.getTime() || !film || !room) {
 			data = null;
 			message = 'Null.';
 			status = ResponeCodes.BAD_REQUEST;
@@ -139,6 +149,11 @@ const addShowtime = async (req: Request) => {
 			const curRoom = room;
 
 			const checkShowtimes = await Showtime.findAll({
+				where: {
+					startTime: {
+						[Op.gt]: new Date(Date.now())
+					}
+				},
 				include: [
 					{
 						model: Room,
@@ -252,6 +267,30 @@ const deleteShowtime = async (req: Request) => {
 	} catch (error) {
 		throw error;
 	}
+};
+
+const isInOneDay = (d1: Date, d2: Date) => {
+	return d1.getFullYear() === d2.getFullYear() && d1.getMonth() === d2.getMonth() && d1.getDate() === d2.getDate();
+};
+
+const groupShowtimeByDate = (showtimes: ShowtimeModel[]) => {
+	var newShowtimes = [];
+	for (let i = 0; i < showtimes.length; i++) {
+		const originDate = showtimes[i].startTime;
+		var listShowtime: ShowtimeModel[] = [];
+		listShowtime.push(showtimes[i]);
+		while (i + 1 < showtimes.length && isInOneDay(showtimes[i].startTime, showtimes[i + 1].startTime)) {
+			i++;
+			listShowtime.push(showtimes[i]);
+		}
+
+		const group = {
+			date: originDate,
+			showtimes: listShowtime
+		};
+		newShowtimes.push(group);
+	}
+	return newShowtimes;
 };
 
 export {
