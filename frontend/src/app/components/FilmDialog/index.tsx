@@ -9,7 +9,10 @@ import {
   Grid,
   IconButton,
   InputAdornment,
+  InputLabel,
   Link as LinkMUI,
+  MenuItem,
+  Select,
   Typography,
 } from '@mui/material';
 import { CustomInput } from 'app/components/CustomInput';
@@ -17,23 +20,26 @@ import useStyles from './styles';
 import { useForm } from 'hooks/useForm';
 
 export default function AddFilmDialog(props: any) {
+  console.log(props.data.status);
   const classes = useStyles();
+  const [status, setStatus] = useState(props.data.status);
 
+  console.log(status);
 
   const validate = (fieldValues = values) => {
     const tmp = { ...errors };
     if ('openingDay' in fieldValues) {
       tmp.openingDay = '';
       const today = new Date();
-      if (fieldValues.openingDay > today) tmp.openingDay = 'Ngày sinh không hợp lệ'
+      if (fieldValues.openingDay > today)
+        tmp.openingDay = 'Ngày sinh không hợp lệ';
     }
     setErrors({ ...tmp });
     if (fieldValues == values) {
-      return Object.values(tmp).every((x) => x == '');
+      return Object.values(tmp).every(x => x == '');
     }
-  }
+  };
 
-  
   const { values, setValues, errors, setErrors } = useForm(
     {
       title: '',
@@ -45,7 +51,7 @@ export default function AddFilmDialog(props: any) {
       trailerUrl: '',
     },
     true,
-    validate
+    validate,
   );
 
   const handleCloseDialog = () => {
@@ -66,21 +72,46 @@ export default function AddFilmDialog(props: any) {
           >
             Sửa thông tin phim
           </Typography>
-          <CustomInput.TextField
-            label="Tên phim"
-            name="title"
-            value={props.data.title}
-            autoFocus
-            inputProps={{ maxLength: '64' }}
-          />
-          <CustomInput.TextField
-            label="Poster"
-            name="imageUrl"
-            value={props.data.imageUrl}
-            inputProps={{ maxLength: '64' }}
-          />
-          <Grid xs={12} container columnSpacing={2} sx={{alignContent:'center'}} item={true}>
-            <Grid xs={5} item={true}>
+          <Grid
+            xs={12}
+            container
+            columnSpacing={2}
+            sx={{ alignContent: 'center' }}
+            item={true}
+          >
+            <Grid xs={8} item={true}>
+              <CustomInput.TextField
+                label="Tên phim"
+                name="title"
+                value={props.data.title}
+                autoFocus
+                inputProps={{ maxLength: '64' }}
+              />
+            </Grid>
+            <Grid xs={1} />
+            <Grid xs={3} item={true}>
+              <InputLabel>
+                Trạng thái
+              </InputLabel>
+              <Select
+                value={status}
+                onChange={(event) => setStatus(event.target.value)}
+                autoWidth
+                label="Trạng thái"
+              >
+                <MenuItem value={'active'}>active</MenuItem>
+                <MenuItem value={'inactive'}>inactive</MenuItem>
+              </Select>
+            </Grid>
+          </Grid>
+          <Grid
+            xs={12}
+            container
+            columnSpacing={2}
+            sx={{ alignContent: 'center' }}
+            item={true}
+          >
+            <Grid xs={3} item={true}>
               <CustomInput.TextField
                 label="Thời lượng"
                 name="duration"
@@ -89,8 +120,10 @@ export default function AddFilmDialog(props: any) {
                 inputProps={{ maxLength: '32' }}
               />
             </Grid>
+            <Grid xs={2} />
 
             <Divider orientation="vertical" flexItem />
+            <Grid xs={1} />
             <Grid xs={5} item={true}>
               <CustomInput.DatePicker
                 label="Ngày khởi chiếu"
@@ -126,6 +159,12 @@ export default function AddFilmDialog(props: any) {
             label="Mã quốc gia"
             name="NationalityId"
             value={props.data.NationalityId}
+            inputProps={{ maxLength: '64' }}
+          />
+          <CustomInput.TextField
+            label="Poster"
+            name="imageUrl"
+            value={props.data.imageUrl}
             inputProps={{ maxLength: '64' }}
           />
           <CustomInput.TextField

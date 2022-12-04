@@ -17,6 +17,8 @@ export default function FilmManagementPage() {
   const classes = useStyles();
   const [open, setOpen] = useState(false);
   const [editedRowData, setEditedRowData] = useState([]);
+  const [page, setPage] = useState<number>(0);
+  const [pageSize, setPageSize] = useState<number>(5);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -135,7 +137,11 @@ export default function FilmManagementPage() {
         Thêm phim mới
       </Button>
       <DataGrid
+        page={page}
+        pageSize={pageSize}
         loading={isLoading}
+        onPageChange={newPage => setPage(newPage)}
+        onPageSizeChange={newPageSize => setPageSize(newPageSize)}
         rowsPerPageOptions={[5, 10, 20]}
         rows={isLoading ? [] : data}
         disableSelectionOnClick
