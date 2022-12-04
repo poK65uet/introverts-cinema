@@ -14,7 +14,7 @@ const getAllSeat = async (req: Request, res: Response) => {
 		const { data, message, status } = result;
 		return new ApiResponse(data, message, status).send(res);
 	} catch (error) {
-		return new ApiResponse(error.message, "Couldn't get showtime.", ResponeCodes.ERROR).send(res);
+		return new ApiResponse(error.message, "Couldn't get seats.", ResponeCodes.ERROR).send(res);
 	}
 };
 

@@ -1,15 +1,27 @@
-import { CreationOptional, DataTypes, InferAttributes, InferCreationAttributes, Model } from 'sequelize';
+import {
+	BelongsToSetAssociationMixin,
+	CreationOptional,
+	DataTypes,
+	InferAttributes,
+	InferCreationAttributes,
+	Model,
+	NonAttribute
+} from 'sequelize';
 import sequelize from 'databases';
-import Showtime from './Showtime';
+import Showtime, { ShowtimeModel } from './Showtime';
 
 export interface SeatModel extends Model<InferAttributes<SeatModel>, InferCreationAttributes<SeatModel>> {
 	id: CreationOptional<number>;
-	row: string;
-	column: string;
+	row: number;
+	column: number;
+	code: string;
 	owner: string;
 	status: string;
 	createdAt: CreationOptional<Date>;
 	updatedAt: CreationOptional<Date>;
+
+	Showtime?: NonAttribute<ShowtimeModel>;
+	setShowtime: BelongsToSetAssociationMixin<ShowtimeModel, ShowtimeModel['id']>;
 }
 
 const Seat = sequelize.define<SeatModel>(
@@ -23,11 +35,15 @@ const Seat = sequelize.define<SeatModel>(
 		},
 		row: {
 			allowNull: false,
-			type: DataTypes.STRING
+			type: DataTypes.INTEGER
 		},
 		column: {
 			allowNull: false,
-			type: DataTypes.STRING
+			type: DataTypes.INTEGER
+		},
+		code: {
+			allowNull: false,
+			type: DataTypes.INTEGER
 		},
 		owner: {
 			type: DataTypes.STRING

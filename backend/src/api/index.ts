@@ -12,6 +12,7 @@ import roomRouter from './room';
 import showtimeRouter from './showtime';
 import seatRouter from './seat';
 import priceRouter from './price';
+import billRouter from './bill';
 
 const router = Router();
 
@@ -28,5 +29,6 @@ router.use('/rooms', roomRouter);
 router.use('/showtimes', showtimeRouter);
 router.use('/seats', seatRouter);
 router.use('/prices', priceRouter);
+router.use('/bills', billRouter);
 
 export default router;

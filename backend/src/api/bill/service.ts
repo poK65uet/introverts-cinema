@@ -1,69 +1,110 @@
-// import { Request } from 'express';
-// import { Bill, Film, Seat } from 'databases/models';
-// import { SeatModel } from 'databases/models/Seat';
-// import BillPayload, { Position } from './BillPayload';
-// import sequelize from 'databases';
-// import User, { UserModel } from 'databases/models/User';
-// import Showtime, { ShowtimeModel } from 'databases/models/Showtime';
-// import SeatStatus from 'utils/constant/SeatStatus';
-// import Minute from 'utils/constant/Minute';
-// import Price, { PriceModel } from 'databases/models/Price';
+import { Request } from 'express';
+import { Bill, Film, Room, Seat } from 'databases/models';
+import { SeatModel } from 'databases/models/Seat';
+import BillPayload from './BillPayload';
+import sequelize from 'databases';
+import User, { UserModel } from 'databases/models/User';
+import Showtime, { ShowtimeModel } from 'databases/models/Showtime';
+import SeatStatus from 'utils/constant/SeatStatus';
+import Price, { PriceModel } from 'databases/models/Price';
+import { timeDiffToMinute } from 'utils/timeService';
+import ResponeCodes from 'utils/constant/ResponeCode';
+import { getPrice } from 'api/price/service';
+import PaymentStatus from 'utils/constant/PaymentStatus';
 
-// const createBill = async (req: Request) => {
-// 	const payload: BillPayload = req.body;
-// 	const t = await sequelize.transaction();
-// 	try {
-// 		const user: UserModel = await User.findByPk(payload.userId);
-// 		const showtime: ShowtimeModel = await Showtime.findByPk(payload.showtimeId);
-// 		const bill = await Bill.create();
-// 		bill.setUser(user);
-// 		bill.setShowtime(showtime);
-// 		var totalPrice = 0;
-// 		for (let pos of payload.positions) {
-// 			const seat = await Seat.findOne({
-// 				include: [
-// 					{
-// 						model: Film,
-// 						attributes: [],
-// 						where: {
-// 							id: showtime.id
-// 						}
-// 					}
-// 				],
-// 				where: {
-// 					row: pos.row,
-// 					column: pos.column
-// 				}
-// 			});
-// 			if (!seat) throw new Error('Seat invalid!');
-// 			if (verifySeat(seat, user)) {
-// 				seat.update({
-// 					owner: user.email
-// 				});
-// 				bill.addSeat(seat);
-// 				totalPrice += v;
-// 			}
-// 		}
-// 	} catch (error) {
-// 		t.rollback();
-// 		throw error;
-// 	}
-// };
+const MAX_SEAT = 10;
 
-// const verifySeat = (seat: SeatModel, user: UserModel) => {
-// 	if (!seat) return false;
-// 	if (seat.status == SeatStatus.BOOKED) return false;
-// 	if (seat.owner != null && seat.owner != user.email && Date.now() - seat.updatedAt.getTime() <= Minute.FIFTEENT)
-// 		return false;
-// 	return true;
-// };
+const createBill = async (req: Request) => {
+	const payload: BillPayload = req.body;
+	const t = await sequelize.transaction();
+	try {
+		const user: UserModel = await User.findByPk(payload.userId);
+		const showtime: ShowtimeModel = await Showtime.findByPk(payload.showtimeId, {
+			include: {
+				model: Room
+			}
+		});
+		if (!user || !showtime) {
+			return {
+				message: 'user or showtime invalid',
+				status: ResponeCodes.BAD_REQUEST
+			};
+		}
+		var totalPrice = 0;
+		if (payload.seats.length > MAX_SEAT) {
+			return {
+				message: 'Number of seats invalid',
+				status: ResponeCodes.BAD_REQUEST
+			};
+		}
+		let seatList = [];
+		for (let pos of payload.seats) {
+			let seat = await Seat.findOne({
+				include: [
+					{
+						model: Film,
+						attributes: [],
+						where: {
+							id: showtime.id
+						}
+					}
+				],
+				where: {
+					code: pos.code
+				}
+			});
+			if (!seat) {
+				seat = await Seat.create({
+					row: pos.row,
+					column: pos.column,
+					code: pos.code,
+					owner: user.email,
+					status: SeatStatus.BOOKING
+				});
+				await seat.setShowtime(showtime);
+			} else {
+				if (verifySeat(seat, user)) {
+					seat.update({
+						owner: user.email
+					});
+				} else {
+					return {
+						message: '1 seat invalid!',
+						status: ResponeCodes.BAD_REQUEST
+					};
+				}
+			}
+			seatList.push(seat);
+			const price = await getPrice(showtime.Room.visionType, showtime.startTime.getDay());
+			totalPrice += price.value;
+		}
+		const bill = await Bill.create({
+			totalPrice,
+			paymentStatus: PaymentStatus.UNPAID
+		});
+		await bill.setShowtime(showtime);
+		await bill.setUser(user);
+		for (let seat of seatList) {
+			await bill.addSeat(seat);
+		}
+		await t.commit();
+		return {
+			data: bill,
+			message: 'Succesfully',
+			status: ResponeCodes.OK
+		};
+	} catch (error) {
+		t.rollback();
+		throw error;
+	}
+};
 
-// const calculatePrice = async (showtime: ShowtimeModel) => {
-// 	// const price: PriceModel = Price.findOne({
-// 	//     where: {
-// 	//         dayCode: showtime.startTime.getDay(),
-// 	//         visionType: showtime.Room.visionType
-// 	//     }
-// 	// })
-// 	return 10;
-// };
+const verifySeat = (seat: SeatModel, user: UserModel) => {
+	if (!seat) return false;
+	if (seat.status === SeatStatus.BOOKED) return false;
+	if (seat.owner != null && seat.owner != user.email && timeDiffToMinute(new Date(Date.now()), seat.updatedAt) < 15)
+		return false;
+	return true;
+};
+
+export { createBill };
