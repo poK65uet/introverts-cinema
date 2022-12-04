@@ -1,4 +1,4 @@
-import React, { useEffect, useLayoutEffect, useMemo } from 'react';
+import React, { useEffect, useLayoutEffect, useMemo, useState } from 'react';
 import { Seat } from 'app/components/Seat';
 import useStyles from './styles';
 import Grid from '@mui/material/Unstable_Grid2';
@@ -28,7 +28,19 @@ export function SeatPlan(props: SeatPlanProps) {
 
   const store = useSelector<RootState, RootState>(state => state)
 
+  const [mappingDone, setMappingDone] = useState(false);
+
+  const handleMappingDone = () => {
+    setMappingDone(true)
+  }
+
   const dispatch = useDispatch()
+
+  useEffect(() => {
+    if (mappingDone) {
+      dispatch(bookTicketActions.loadingDone())
+    }
+  }, [mappingDone])
 
   const emptyCols = () => (props.emptyCols ?
     typeof (props.emptyCols) == 'string' ?
@@ -120,7 +132,7 @@ export function SeatPlan(props: SeatPlanProps) {
       <Grid xs={12 / (props.seatCols + emptyCols().length + 1)} />
       {
         seatPlan.map((seat: { index: string, seatRow?: number, seatCol?: number }, index: number) => {
-          seatPlan.indexOf(seat) == seatPlan.length - 1 ? dispatch(bookTicketActions.loadingDone()) : null
+          { !mappingDone && seat.index == props.seatCols.toString() ? handleMappingDone() : null }
           return <Grid xs={12 / (props.seatCols + emptyCols().length + 1)}
             key={index}
             className={classes.seat}

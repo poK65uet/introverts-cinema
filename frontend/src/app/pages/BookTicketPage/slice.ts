@@ -68,6 +68,11 @@ export const bookTicketSlice = createSlice({
         id: action.payload.id,
         name: action.payload.name,
       });
+      state.selectedSeats = current(state.selectedSeats).sort(
+        (seat1, seat2) => {
+          return seat1.id - seat2.id;
+        },
+      );
     },
     unselectSeat: (state, action) => {
       let seat = {

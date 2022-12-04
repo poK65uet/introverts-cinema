@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { Container, Dialog } from '@mui/material';
 import MoviePanel from 'app/containers/MoviePanel';
-import SelectSeats from 'app/containers/SelectSeats';
+import SeatSelector from 'app/containers/SeatSelector';
 import BookingStepper from 'app/components/BookingStepper';
 import PaymentForm from 'app/components/PaymentForm';
 import useStyles from './styles';
@@ -65,7 +65,7 @@ export default function BookTicketPage() {
       {store.bookTicket.selectedShowtime == undefined ?
         < MoviePanel />
         : <React.Fragment>
-          <SelectSeats />
+          <SeatSelector />
           <Dialog open={store.bookTicket.activeStep == BookingStep.MAKE_PAYMENT}>
             <PaymentForm
               timeStartPayment={store.bookTicket.timeStartPayment}
