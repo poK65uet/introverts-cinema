@@ -1,19 +1,21 @@
-import React, { useEffect, useLayoutEffect, useRef, useState } from 'react'
-import { Box, Button, Tab } from '@mui/material';
+import React, { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
+import { Box, Button, Tab, Container } from '@mui/material';
 import { TabContext, TabList, TabPanel } from '@mui/lab';
 import useStyles from './styles';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from 'store';
 import { getNewMoviesThunk, getUpcomingMoviesThunk } from 'app/components/Movies/slice';
-import { formatDate } from 'utils/date';
-import Grid from '@mui/material/Unstable_Grid2';
+import ShowtimeList from 'app/components/ShowtimeList/index';
 import RatedTag from 'app/components/RatedTag';
 import { notify } from 'app/components/MasterDialog';
-import { bookTicketActions } from '../../pages/BookTicketPage/slice';
+import { bookTicketActions } from 'app/pages/BookTicketPage/slice';
+import { useGetShowtimesByMovie } from 'queries/showtimes';
 
 export default function MoviePanel() {
 
   const store = useSelector<RootState, RootState>(state => state)
+
+  const showtimesByMovie = useGetShowtimesByMovie(store.bookTicket.selectedMovie).data
 
   const selectedTabRef = useRef<HTMLInputElement>(null)
 
@@ -30,15 +32,10 @@ export default function MoviePanel() {
         behavior: 'smooth'
       })
     }
-  }, [])
-
-  useEffect(() => {
     if (!store.movies.getNewMovies) {
       dispatch(getNewMoviesThunk())
     };
-  }, [])
 
-  useEffect(() => {
     if (!store.movies.getUpcomingMovies) {
       dispatch(getUpcomingMoviesThunk())
     };
@@ -61,6 +58,9 @@ export default function MoviePanel() {
       })
     } else {
       dispatch(bookTicketActions.selectShowtime(showtime))
+      window.scrollTo({
+        top: 0,
+      })
     }
   }
 
@@ -68,7 +68,7 @@ export default function MoviePanel() {
 
   return (
     <TabContext value={store.bookTicket.selectedMovie}>
-      <Box className={classes.wrapper}>
+      <Container className={classes.wrapper}>
         <Box className={classes.container}>
           <div className={classes.title} >CHỌN PHIM</div>
           <TabList
@@ -76,8 +76,9 @@ export default function MoviePanel() {
             orientation='vertical'
             onChange={(event, newMovie) => handleSelectMovie(event, newMovie)}
           >
-            <Tab value={'0'} sx={{ all: 'unset' }}
-              ref={store.bookTicket.selectedMovie == '0' ? selectedTabRef : null} />
+            <Tab value={'0'} sx={{ all: 'unset', bgcolor: '#FFFFFF' }}
+              ref={store.bookTicket.selectedMovie == '0' ? selectedTabRef : null}
+            />
             {(store.movies.newMovieList.concat(store.movies.upcomingMovieList)).map(
               (movie: any, index: number) => {
                 return <Tab
@@ -108,39 +109,19 @@ export default function MoviePanel() {
           <TabPanel className={classes.showtimeList} value='0'>
             Vui lòng chọn phim
           </TabPanel>
-          {store.movies.newMovieList.concat(store.movies.upcomingMovieList).map((movie: any) => {
-            {
-              return (
-                [1, 2].map((showtimeDate: any, index: number) => {
-                  return <TabPanel
-                    className={classes.showtimeList}
-                    key={index}
-                    value={movie.id != undefined ? movie?.id?.toString() : ''}>
-                    <Grid container xs={12} >
-                      <Grid xs={12}>
-                        {formatDate(new Date)}
-                      </Grid>
-                      <Grid xs={3} />
-                      <Grid container xs={9} >
-                        {[1, 2, 3, 4, 5].map((showtime: any, index: number) => {
-                          return (
-                            <Grid xs={4} key={index}>
-                              <Button
-                                className={classes.timeButton}
-                                disableRipple
-                                onClick={() => handleSelectShowtime(showtime)}>
-                                10:10
-                              </Button>
-                            </Grid>)
-                        })}
-                      </Grid>
-                    </Grid>
-                  </TabPanel>
-                }))
-            }
+          {showtimesByMovie?.map((showtimesByDate: any, index: number) => {
+            return <TabPanel
+              className={classes.showtimeList}
+              key={index}
+              value={store.bookTicket.selectedMovie != '0' ? store.bookTicket.selectedMovie : ''}>
+              <ShowtimeList
+                key={index}
+                showtimesByDate={showtimesByDate}
+                onSelectShowtime={(showtime) => handleSelectShowtime(showtime)} />
+            </TabPanel>
           })}
         </Box>
-      </Box>
+      </Container>
     </TabContext >
   )
 }

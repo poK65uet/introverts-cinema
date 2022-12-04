@@ -1,5 +1,5 @@
-import React from 'react'
-import { Button, CardMedia, Typography } from '@mui/material';
+import React, { useEffect } from 'react'
+import { Button, CardMedia, Container, Typography } from '@mui/material';
 import RatedTag from 'app/components/RatedTag/index';
 import Grid from '@mui/material/Unstable_Grid2';
 import { RootState } from 'store';
@@ -12,19 +12,26 @@ import NotFoundPage from 'app/pages/NotFoundPage/index';
 import { bookTicketActions } from '../BookTicketPage/slice';
 import paths from 'paths';
 import { formatDate } from 'utils/date';
+import { moviesActions } from '../../components/Movies/slice';
 
 export default function MovieDetailPage() {
-  const store = useSelector<RootState, RootState>(state => state)
 
   let { movieId } = useParams<{ movieId: string | undefined }>()
 
-  const { data: movie } = useGetMovieById(movieId)
+  const { data: movie, isLoading } = useGetMovieById(movieId)
 
-  window.scrollTo({
-    top: 0
-  })
+  useEffect(() => {
+    window.scrollTo({
+      top: 0
+    })
+  }, [])
 
   const dispatch = useDispatch()
+
+  useEffect(() => {
+    isLoading ? dispatch(moviesActions.loading()) : dispatch(moviesActions.loadingDone())
+  }, [isLoading])
+
 
   const handleClickBookTicket = () => {
     dispatch(bookTicketActions.selectMovie(movieId))
@@ -32,30 +39,35 @@ export default function MovieDetailPage() {
 
   const classes = useStyles()
 
+  const PageSekeleton: React.FunctionComponent =
+    () => <div style={{ height: '100vh' }} />
+
   return (
-    <div className={classes.movieDetailPage} >
+    <div className={classes.movieDetailPage}>
       {movie !== undefined ?
         <Grid xs={12}
           container
           columnSpacing={{ xs: 0, md: 2 }}
-          p={{ xs: 4, sm: 8, md: 4 }}
-        >
-
-          <Grid xs={12} md={2.5} px={{ xs: 4, sm: 8, md: 2 }}>
-            <CardMedia component='img' image={movie?.imageUrl} />
+          fontSize={{ xs: '0.75em', sm: '0.875em  ', md: '1em' }}
+          my={4} px={{ xs: 4, sm: 8, md: 10 }}>
+          <Grid xs={12} md={3} lg={2.25}
+            px={{ xs: 8, sm: 20, md: 0, lg: 0 }}
+            pb={{ xs: 4, md: 0 }}
+            display='flex' justifyContent='center'>
+            <Container sx={{ px: '0 !important' }}>
+              <CardMedia component='img' image={movie?.imageUrl} />
+            </Container>
           </Grid>
-          <Grid xs={12} md={9.5}
+          <Grid xs={12} md={8} lg={9.75}
             container
             fontSize={{ xs: '1.25em', lg: '1.5em' }}
             fontWeight='bold'
-            fontFamily=''
-          >
+            fontFamily=''>
             <Grid xs={12} mb='auto'>
               <Typography
                 className={classes.movieTitle}
                 fontSize='1.25em'
-                fontWeight='bolder'
-              >
+                fontWeight='bolder'>
                 {movie?.title}
               </Typography>
             </Grid>
@@ -74,7 +86,11 @@ export default function MovieDetailPage() {
                   <RatedTag rated={movie.rated}
                     styles={{
                       color: '#FFFFFF',
-                      fontSize: '0.875em'
+                      height: 'fit-content',
+                      width: 'fit-content',
+                      paddingTop: '0.4em',
+                      paddingBottom: '0.4em',
+                      fontSize: '0.875em !important'
                     }} /> : null}
                 <DurationIcon sx={{ mx: 1 }} />
                 {movie?.duration + ' phút'}
@@ -85,8 +101,7 @@ export default function MovieDetailPage() {
                   color='#777777'
                   fontSize='1em'
                   pr={1}
-                  whiteSpace='nowrap'
-                >
+                  whiteSpace='nowrap'>
                   Thể loại:
                 </Typography>
                 <div>
@@ -104,8 +119,7 @@ export default function MovieDetailPage() {
                   color='#777777'
                   fontSize='1em'
                   pr={1}
-                  whiteSpace='nowrap'
-                >
+                  whiteSpace='nowrap'>
                   Diễn viên:
                 </Typography>
                 <span>
@@ -122,8 +136,7 @@ export default function MovieDetailPage() {
                   className={classes.movieDetail}
                   color='#777777'
                   fontSize='1em'
-                  pr={1}
-                >
+                  pr={1}>
                   Đạo diễn:
                 </Typography>
                 <span>
@@ -140,8 +153,7 @@ export default function MovieDetailPage() {
                   className={classes.movieDetail}
                   color='#777777'
                   fontSize='1em'
-                  pr={1}
-                >
+                  pr={1}>
                   Quốc gia:
                 </Typography>
                 {movie?.Nationality?.name}
@@ -151,8 +163,7 @@ export default function MovieDetailPage() {
                   className={classes.movieDetail}
                   color='#777777'
                   fontSize='1em'
-                  pr={1}
-                >
+                  pr={1}>
                   Khởi chiếu
                 </Typography>
                 {formatDate(new Date(movie?.openingDay))}
@@ -164,19 +175,18 @@ export default function MovieDetailPage() {
             fontWeight='bold'
             fontFamily=''
             mt={4}
-            borderBottom={2}
-          >
+            borderBottom={2}>
             MÔ TẢ PHIM
           </Grid>
           <Grid xs={12}
-            fontSize={{ xs: '1em', lg: '1.5em' }}
+            fontSize={{ xs: '1.25em', lg: '1.625em' }}
             fontFamily=''
-            mt={4}
-          >
+            mt={4}>
             {movie?.description}
           </Grid>
         </Grid>
-        : <NotFoundPage />}
+        : isLoading ? <PageSekeleton />
+          : <NotFoundPage />}
     </div >
   )
 }

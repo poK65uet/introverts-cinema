@@ -1,72 +1,77 @@
-import React, { useEffect } from 'react'
-import { Button, Container } from '@mui/material';
-import MoviePanel from 'app/components/MoviePanel';
-import { SeatPlan } from 'app/containers/SeatPlan';
+import React, { useEffect, useState } from 'react'
+import { Container, Dialog } from '@mui/material';
+import MoviePanel from 'app/containers/MoviePanel';
+import SelectSeats from 'app/containers/SelectSeats';
+import BookingStepper from 'app/components/BookingStepper';
+import PaymentForm from 'app/components/PaymentForm';
 import useStyles from './styles';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from 'store';
-import { bookTicketActions } from './slice';
-import BookingStepper from 'app/components/BookingStepper';
-import TicketDetail from '../../components/TicketDetail/index';
-import { East, West } from '@mui/icons-material';
+import { bookTicketActions, BookingStep } from './slice';
+import { notify } from 'app/components/MasterDialog';
 
 export default function BookTicketPage() {
 
   const store = useSelector<RootState, RootState>(state => state)
+
+  const dispatch = useDispatch()
+
+  const handleReselectSeats = () => {
+    dispatch(bookTicketActions.reSelectSeats())
+    setTimeout(() => {
+      dispatch(bookTicketActions.paymentTimeOut())
+      notify({
+        type: 'warning',
+        content: 'Đã hủy thanh toán',
+        autocloseDelay: 3000,
+      })
+      dispatch(bookTicketActions.paymentTimeOut())
+    }, 100);
+  }
 
   useEffect(() => {
     return () => {
       dispatch(bookTicketActions.resetSeat())
       dispatch(bookTicketActions.resetShowtime())
       dispatch(bookTicketActions.resetMovie())
+      dispatch(bookTicketActions.paymentTimeOut())
+      notify({
+        type: 'warning',
+        content: 'Đã hủy đặt vé',
+        autocloseDelay: 1000,
+      })
     }
   }, [])
 
-  const dispatch = useDispatch()
-
-  const handleClickBack = () => {
-    dispatch(bookTicketActions.resetShowtime())
-  }
-
-  const handleClickForward = () => {
-
-  }
-
-  const selectedMovie = () => {
-    let moviesList = store.movies.newMovieList.concat(store.movies.upcomingMovieList)
-    return moviesList.find((movie: any) => movie.id == store.bookTicket.selectedMovie)
-  }
+  useEffect(() => {
+    if (!store.login.isLoggedin && store.bookTicket.activeStep > BookingStep.SELECT_SHOWTIME) {
+      dispatch(bookTicketActions.resetSeat())
+      dispatch(bookTicketActions.resetShowtime())
+      dispatch(bookTicketActions.resetMovie())
+      dispatch(bookTicketActions.paymentTimeOut())
+      notify({
+        type: 'error',
+        content: 'Lỗi đăng nhập, hãy thử lại',
+        autocloseDelay: 1000,
+      })
+    }
+  }, [store.login.isLoggedin])
 
   const classes = useStyles()
 
   return (
     <div className={classes.bookTicketPage}>
       <BookingStepper />
-      {store.bookTicket.selectedShowtime == 0 ?
-        < MoviePanel /> :
-        <div className={classes.seatSelectWrapper}>
-          <SeatPlan seatCols={10} seatRows={12} emptyCols={'4'} emptyRows={[]} />
-          <Container sx={{ all: 'unset' }}>
-            <TicketDetail
-              movie={selectedMovie()}
-              showtime={{ startTime: new Date }}
-              price={70000 * store.bookTicket.selectedSeats.length}
-              handleStepBack={handleClickBack} />
-            <div className={classes.actions}>
-              <Button variant='contained' className={classes.button}
-                disableRipple startIcon={<West />}
-                onClick={handleClickBack}>
-                Quay lại
-              </Button>
-              <Button variant='contained' className={classes.button}
-                disabled={store.bookTicket.selectedSeats.length <= 0}
-                disableRipple endIcon={<East />}
-                onClick={handleClickForward}>
-                Tiếp tục
-              </Button>
-            </div>
-          </Container>
-        </div>}
-    </div >
-  )
+      {store.bookTicket.selectedShowtime == undefined ?
+        < MoviePanel />
+        : <React.Fragment>
+          <SelectSeats />
+          <Dialog open={store.bookTicket.activeStep == BookingStep.MAKE_PAYMENT}>
+            <PaymentForm
+              timeStartPayment={store.bookTicket.timeStartPayment}
+              reselectSeats={() => handleReselectSeats()} />
+          </Dialog>
+        </React.Fragment>
+      }
+    </div >)
 }

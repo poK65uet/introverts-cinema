@@ -3,13 +3,10 @@ import { Theme } from '@mui/material';
 
 const useStyles = makeStyles((theme: Theme) => ({
   wrapper: {
-    display: 'flex',
+    display: 'flex !important',
     flexDirection: 'row',
     alignSelf: 'center',
     justifyContent: 'space-between',
-    minWidth: '80%',
-    maxWidth: '80%',
-    margin: '2.5em',
   },
 
   container: {
@@ -32,16 +29,17 @@ const useStyles = makeStyles((theme: Theme) => ({
 
   movieTab: {
     '&.MuiTab-root': {
+      backgroundColor: '#EEEEEE',
       maxWidth: 'unset',
       flexDirection: 'row',
       justifyContent: 'left',
       textAlign: 'left',
       border: '1px solid #C1C1C1',
-      fontSize: '1rem',
+      fontSize: '1.2rem',
       fontWeight: 'bold',
     },
     '&.Mui-selected': {
-      backgroundColor: '#DBDBDB',
+      backgroundColor: '#DEDEDE',
     },
   },
 
@@ -55,21 +53,9 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
 
   showtimeList: {
+    backgroundColor: '#EEEEEE',
     border: '1px solid #C1C1C1',
     fontFamily: '"Roboto","Helvetica","Arial",sans-serif',
-  },
-
-  timeButton: {
-    '&.MuiButton-root': {
-      color: theme.palette.secondary.main,
-      fontSize: '1rem',
-      border: '1px solid #C1C1C1',
-      margin: '1rem',
-      '&:hover': {
-        color: theme.palette.primary.main,
-        border: `1px solid ${theme.palette.primary.main}`,
-      },
-    },
   },
 }));
 

@@ -12,12 +12,10 @@ interface TicketDetailProps {
   movie: any
   showtime: any
   price: number
-  handleStepBack(): any
+  seats: any[]
 }
 
 export default function TicketDetail(props: TicketDetailProps) {
-
-  const store = useSelector<RootState, RootState>(state => state)
 
   const classes = useStyles()
 
@@ -25,7 +23,7 @@ export default function TicketDetail(props: TicketDetailProps) {
     <Card className={classes.ticket}>
       <CardMedia
         component="img"
-        height={225}
+        height={240}
         image={props.movie.imageUrl} />
       <CardContent sx={{ display: 'flex', flexDirection: 'column' }}>
         <Typography fontSize='inherit' fontWeight='bold'>
@@ -34,7 +32,7 @@ export default function TicketDetail(props: TicketDetailProps) {
         {props.movie.rated ?
           <RatedTag rated={props.movie.rated}
             styles={{ color: '#FFFFFF', margin: '4px 0px', maxWidth: 'min-content' }}
-            size='small'
+            placement='right' size='small'
           /> : null}
         <Typography my={0.5}>
           <strong> Suất chiếu: </strong>
@@ -43,13 +41,17 @@ export default function TicketDetail(props: TicketDetailProps) {
           {formatDate(props.showtime.startTime)}
         </Typography>
         <Typography my={0.5}>
+          <strong> Phòng chiếu: </strong>
+          {props.showtime.name}
+        </Typography>
+        <Typography my={0.5}>
           <strong> Ghế: </strong>
-          {store.bookTicket.selectedSeats.map((seat, index) => {
+          {props.seats.map((seat, index) => {
             return (seat.name + (
-              store.bookTicket.selectedSeats.length == 1 ||
-                store.bookTicket.selectedSeats.length == index + 1 ? ''
+              props.seats.length == 1 ||
+                props.seats.length == index + 1 ? ''
                 : ', '))
-          })}{store.bookTicket.selectedSeats.length > 0 ? '.' : ''}
+          })}{props.seats.length > 0 ? '.' : ''}
         </Typography>
         <Typography mt='auto' mb={2} fontSize='1.075em' fontWeight='bold' >
           Tổng giá: <strong className={classes.price}>{props.price.toLocaleString()} VNĐ</strong>

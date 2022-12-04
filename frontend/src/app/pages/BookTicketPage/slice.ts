@@ -7,27 +7,37 @@ export enum BookingStep {
   MAKE_PAYMENT = 3,
 }
 export interface BookTicketState {
+  isLoading: boolean;
   selectedMovie: string;
-  selectedShowtime: number;
+  selectedShowtime: any;
   selectedSeats: { id: number; name: string }[];
   activeStep: BookingStep;
   completedSteps: { [index: number]: boolean };
   stepBack: boolean;
+  timeStartPayment: number;
 }
 
 const initialState: BookTicketState = {
+  isLoading: false,
   selectedMovie: '0',
-  selectedShowtime: 0,
+  selectedShowtime: undefined,
   selectedSeats: <{ id: number; name: string }[]>[],
   activeStep: BookingStep.SELECT_MOVIE,
   completedSteps: {},
   stepBack: false,
+  timeStartPayment: 0,
 };
 
 export const bookTicketSlice = createSlice({
   name: 'bookTicket',
   initialState: initialState,
   reducers: {
+    loading: state => {
+      state.isLoading = true;
+    },
+    loadingDone: state => {
+      state.isLoading = false;
+    },
     selectMovie: (state, action) => {
       state.selectedMovie = action.payload;
       state.completedSteps[BookingStep.SELECT_MOVIE] =
@@ -41,13 +51,14 @@ export const bookTicketSlice = createSlice({
       state.activeStep = BookingStep.SELECT_MOVIE;
     },
     selectShowtime: (state, action) => {
+      state.isLoading = true;
       state.selectedShowtime = action.payload;
       state.completedSteps[BookingStep.SELECT_SHOWTIME] = true;
       state.activeStep = BookingStep.SELECT_SEATS;
       state.stepBack = false;
     },
     resetShowtime: state => {
-      state.selectedShowtime = 0;
+      state.selectedShowtime = undefined;
       state.completedSteps[BookingStep.SELECT_SHOWTIME] = false;
       state.activeStep = BookingStep.SELECT_SHOWTIME;
       state.stepBack = true;
@@ -70,6 +81,25 @@ export const bookTicketSlice = createSlice({
     },
     resetSeat: state => {
       state.selectedSeats = [];
+      state.completedSteps[BookingStep.SELECT_SEATS] = false;
+      state.activeStep = BookingStep.SELECT_SHOWTIME;
+      state.stepBack = true;
+    },
+    selectSeatsDone: state => {
+      state.completedSteps[BookingStep.SELECT_SEATS] = true;
+      state.activeStep = BookingStep.MAKE_PAYMENT;
+      state.stepBack = false;
+    },
+    reSelectSeats: state => {
+      state.completedSteps[BookingStep.SELECT_SEATS] = false;
+      state.activeStep = BookingStep.SELECT_SEATS;
+      state.stepBack = true;
+    },
+    startPayment: (state, action) => {
+      if (state.timeStartPayment == 0) state.timeStartPayment = action.payload;
+    },
+    paymentTimeOut: state => {
+      state.timeStartPayment = 0;
     },
   },
 });
