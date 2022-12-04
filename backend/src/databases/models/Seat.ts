@@ -6,6 +6,7 @@ export interface SeatModel extends Model<InferAttributes<SeatModel>, InferCreati
 	id: CreationOptional<number>;
 	row: string;
 	column: string;
+	owner: string;
 	status: string;
 	createdAt: CreationOptional<Date>;
 	updatedAt: CreationOptional<Date>;
@@ -26,6 +27,9 @@ const Seat = sequelize.define<SeatModel>(
 		},
 		column: {
 			allowNull: false,
+			type: DataTypes.STRING
+		},
+		owner: {
 			type: DataTypes.STRING
 		},
 		status: {
