@@ -1,9 +1,9 @@
 import { Showtime } from 'databases/models';
 import Seat, { SeatModel } from 'databases/models/Seat';
 import { Request } from 'express';
-import ResponeCodes from 'utils/constant/ResponeCode';
-import SeatStatus from 'utils/constant/SeatStatus';
-import { timeDiffToMinute } from 'utils/timeService';
+import ResponeCodes from 'utils/constants/ResponeCode';
+import SeatStatus from 'utils/constants/SeatStatus';
+import { timeDiffToMinute } from 'utils/helpers/timeService';
 import { PositionPayload } from './PositionPayload';
 
 const upsertSeatByBooking = async (listPos: PositionPayload[]) => {};

@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import ResponeCodes from 'utils/constant/ResponeCode';
+import ResponeCodes from 'utils/constants/ResponeCode';
 import { ApiResponse } from 'utils/rest/ApiResponse';
 import * as service from './service';
 

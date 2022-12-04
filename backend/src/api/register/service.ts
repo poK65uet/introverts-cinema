@@ -3,9 +3,9 @@ import config from 'config';
 import { Request } from 'express';
 import RegisterPayLoad from './RegisterPayLoad';
 import { User, UserCode } from 'databases/models';
-import RoleCodes from 'utils/constant/RoleCode';
-import ResponeCodes from 'utils/constant/ResponeCode';
-import { sendEmail } from 'utils/email';
+import RoleCodes from 'utils/constants/RoleCode';
+import ResponeCodes from 'utils/constants/ResponeCode';
+import { sendEmail } from 'utils/helpers/email';
 
 const generateCode = () => {
 	const code = `${Math.floor(100000 + Math.random() * 900000)}`;

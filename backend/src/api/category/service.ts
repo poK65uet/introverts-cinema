@@ -1,6 +1,6 @@
 import { Request } from 'express';
 import { Category } from 'databases/models';
-import ResponeCodes from 'utils/constant/ResponeCode';
+import ResponeCodes from 'utils/constants/ResponeCode';
 import CategoryPayload from './CategoryPayload';
 
 const getCategories = async (req: Request) => {

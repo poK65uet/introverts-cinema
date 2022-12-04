@@ -1,54 +1,36 @@
 import bcrypt from 'bcrypt';
 import { Request } from 'express';
-import { Role, User } from 'databases/models';
+import { User } from 'databases/models';
 import { UserModel } from 'databases/models/IModel';
-import ResponeCodes from 'utils/constant/ResponeCode';
+import ResponeCodes from 'utils/constants/ResponeCode';
 import UserPayload from './UserPayload';
-import RoleCodes from 'utils/constant/RoleCode';
+import RoleCodes from 'utils/constants/RoleCode';
 import UserInfo from './UserInfo';
+import paginate from 'utils/helpers/pagination';
 import { Op } from 'sequelize';
-
-const getPagination = (page: string, size: string) => {
-	const pageNumber = Number.parseInt(page);
-	const sizeNumber = Number.parseInt(size);
-	let limit = 10;
-	let offset = 0;
-
-	if (!Number.isNaN(sizeNumber) && sizeNumber > 0 && sizeNumber < 20) {
-		limit = sizeNumber;
-	}
-
-	if (!Number.isNaN(pageNumber) && pageNumber > 0) {
-		offset = pageNumber * limit;
-	}
-
-	return { limit, offset };
-};
 
 const getUsers = async (req: Request) => {
 	try {
-		const page = req.query.page as string;
-		const size = req.query.size as string;
-		let query = req.query.query || '';
-		query = `%${query}%`;
-		const { limit, offset } = getPagination(page, size);
+		const { limit, offset, order, query } = paginate(req);
+
 		const users = await User.findAndCountAll({
 			where: {
 				[Op.or]: [
 					{
 						email: {
-							[Op.like]: query
+							[Op.like]: `%${query}%`
 						}
-					},
+					}, 
 					{
 						fullName: {
-							[Op.like]: query
+							[Op.like]: `%${query}%`
 						}
 					}
 				]
 			},
 			limit,
-			offset
+			offset,
+			order: [order]
 		});
 		return users;
 	} catch (error) {

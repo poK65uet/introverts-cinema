@@ -1,6 +1,6 @@
 import { Request } from 'express';
 import { Room } from 'databases/models';
-import ResponeCodes from 'utils/constant/ResponeCode';
+import ResponeCodes from 'utils/constants/ResponeCode';
 import RoomPayload from './RoomPayload';
 
 const getRooms = async (req: Request) => {

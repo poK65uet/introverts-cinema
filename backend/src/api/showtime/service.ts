@@ -1,6 +1,6 @@
 import { Request } from 'express';
 import { Showtime, Room, Film, Seat } from 'databases/models';
-import ResponeCodes from 'utils/constant/ResponeCode';
+import ResponeCodes from 'utils/constants/ResponeCode';
 import ShowtimePayload from './ShowtimePayload';
 import { ShowtimeModel } from 'databases/models/Showtime';
 import { Op } from 'sequelize';

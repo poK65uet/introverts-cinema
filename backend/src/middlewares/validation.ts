@@ -2,8 +2,8 @@ import { Request, Response, NextFunction } from 'express';
 import { ApiResponse } from 'utils/rest/ApiResponse';
 import jwt from 'jsonwebtoken';
 import config from '../config';
-import RoleCodes from 'utils/constant/RoleCode';
-import ResponeCodes from 'utils/constant/ResponeCode';
+import RoleCodes from 'utils/constants/RoleCode';
+import ResponeCodes from 'utils/constants/ResponeCode';
 
 interface IToken {
 	userId: number;
