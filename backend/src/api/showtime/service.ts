@@ -4,6 +4,7 @@ import ResponeCodes from 'utils/constant/ResponeCode';
 import ShowtimePayload from './ShowtimePayload';
 import { ShowtimeModel } from 'databases/models/Showtime';
 import { Op } from 'sequelize';
+import { getPrice } from 'api/price/service';
 
 const getShowtimes = async (req: Request) => {
 	try {
@@ -114,7 +115,11 @@ const getShowtimeById = async (req: Request) => {
 				message = 'Not found.';
 				status = ResponeCodes.NOT_FOUND;
 			} else {
-				data = showtime;
+				const price = await getPrice(showtime.Room.visionType, showtime.startTime.getDay());
+				data = {
+					showtime,
+					price: price.value
+				};
 				message = 'Get successfully!';
 				status = ResponeCodes.OK;
 			}
