@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import * as service from './service';
 import { ApiResponse } from 'utils/rest/ApiResponse';
-import ResponeCodes from 'utils/constant/ResponeCode';
+import ResponeCodes from 'utils/constants/ResponeCode';
 
 // GET: /users/pagination
 const getUsers = async (req: Request, res: Response) => {

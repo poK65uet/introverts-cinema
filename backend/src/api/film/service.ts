@@ -1,9 +1,9 @@
 import { Request } from 'express';
 import { Actor, Category, Director, Film, Nationality } from 'databases/models';
-import ResponeCodes from 'utils/constant/ResponeCode';
+import ResponeCodes from 'utils/constants/ResponeCode';
 import FilmPayload from './FilmPayload';
 import { Op } from 'sequelize';
-import Status from '../../utils/constant/Status';
+import Status from '../../utils/constants/Status';
 
 const getFilms = async (req: Request) => {
 	try {

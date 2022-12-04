@@ -1,6 +1,6 @@
 import { Request } from 'express';
 import { Nationality } from 'databases/models';
-import ResponeCodes from 'utils/constant/ResponeCode';
+import ResponeCodes from 'utils/constants/ResponeCode';
 import NationalityPayload from './NationalityPayload';
 
 const getNationalities = async (req: Request) => {

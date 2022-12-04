@@ -1,6 +1,6 @@
 import { Request } from 'express';
 import { Actor, Nationality } from 'databases/models';
-import ResponeCodes from 'utils/constant/ResponeCode';
+import ResponeCodes from 'utils/constants/ResponeCode';
 import ActorPayload from './ActorPayload';
 
 const getActors = async (req: Request) => {

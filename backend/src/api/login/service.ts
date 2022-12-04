@@ -3,7 +3,7 @@ import jwt from 'jsonwebtoken';
 import config from 'config';
 import LoginPayLoad from './LoginPayload';
 import { Role, User } from 'databases/models';
-import ResponeCodes from 'utils/constant/ResponeCode';
+import ResponeCodes from 'utils/constants/ResponeCode';
 
 const verifyEmail = async (email: string) => {
 	const user = await User.findOne({

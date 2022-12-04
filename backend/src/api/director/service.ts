@@ -1,6 +1,6 @@
 import { Request } from 'express';
 import { Director, Nationality } from 'databases/models';
-import ResponeCodes from 'utils/constant/ResponeCode';
+import ResponeCodes from 'utils/constants/ResponeCode';
 import DirectorPayload from './DirectorPayload';
 
 const getDirectors = async (req: Request) => {
