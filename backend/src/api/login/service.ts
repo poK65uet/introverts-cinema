@@ -23,7 +23,7 @@ const login = async (loginData: LoginPayLoad) => {
 	try {
 		const { email, password } = loginData;
 
-		if(!email || !password) {
+		if (!email || !password) {
 			data = null;
 			message = 'Invalid email or password';
 			status = ResponeCodes.BAD_REQUEST;
@@ -38,13 +38,13 @@ const login = async (loginData: LoginPayLoad) => {
 					status = ResponeCodes.OK;
 				} else {
 					const roles = user.Roles;
-	
+
 					const roleIds = roles.map(role => role.id);
-	
-					const token = jwt.sign({ userId: user.id, roleIds }, config.secret_key, {
+
+					const token = jwt.sign({ userId: user.id, roleIds, userEmail: user.email }, config.secret_key, {
 						expiresIn: config.expires_in
 					});
-	
+
 					data = {
 						user,
 						token
@@ -52,13 +52,12 @@ const login = async (loginData: LoginPayLoad) => {
 					message = 'Login successfully!';
 					status = ResponeCodes.OK;
 				}
-			}
-			else {
+			} else {
 				data = null;
 				message = 'Failed login!';
 				status = ResponeCodes.NOT_FOUND;
 			}
-		} 
+		}
 
 		return {
 			data,
