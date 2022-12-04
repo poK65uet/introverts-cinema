@@ -1,12 +1,13 @@
 interface BillPayload {
 	userId: number;
 	showtimeId: number;
-	positions: Position[];
+	seats: SeatPayload[];
 }
 
-export interface Position {
+export interface SeatPayload {
 	row: number;
 	column: number;
+	code: string;
 }
 
 export default BillPayload;

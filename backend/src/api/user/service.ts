@@ -6,6 +6,7 @@ import ResponeCodes from 'utils/constant/ResponeCode';
 import UserPayload from './UserPayload';
 import RoleCodes from 'utils/constant/RoleCode';
 import UserInfo from './UserInfo';
+import { Op } from 'sequelize';
 
 const getPagination = (page: string, size: string) => {
 	const pageNumber = Number.parseInt(page);
@@ -28,8 +29,24 @@ const getUsers = async (req: Request) => {
 	try {
 		const page = req.query.page as string;
 		const size = req.query.size as string;
+		let query = req.query.query || '';
+		query = `%${query}%`;
 		const { limit, offset } = getPagination(page, size);
 		const users = await User.findAndCountAll({
+			where: {
+				[Op.or]: [
+					{
+						email: {
+							[Op.like]: query
+						}
+					},
+					{
+						fullName: {
+							[Op.like]: query
+						}
+					}
+				]
+			},
 			limit,
 			offset
 		});
