@@ -149,7 +149,7 @@ const addShowtime = async (req: Request) => {
 		const { film, room } = newShowtime;
 		const now = new Date(Date.now());
 
-		if (!newShowtime.startTime || newShowtime.startTime.getTime() < now.getTime() || !film || !room) {
+		if (!newShowtime.startTime || new Date(newShowtime.startTime).getTime() < now.getTime() || !film || !room) {
 			data = null;
 			message = 'Null.';
 			status = ResponeCodes.BAD_REQUEST;
