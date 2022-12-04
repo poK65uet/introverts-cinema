@@ -1,5 +1,4 @@
 interface BillPayload {
-	userId: number;
 	showtimeId: number;
 	seats: SeatPayload[];
 }
