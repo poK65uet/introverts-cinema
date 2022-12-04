@@ -4,8 +4,8 @@ import { User } from 'databases/models';
 import { UserModel } from 'databases/models/IModel';
 import ResponeCodes from 'utils/constants/ResponeCode';
 import UserPayload from './UserPayload';
-import RoleCodes from 'utils/constants/RoleCode';
 import UserInfo from './UserInfo';
+import RoleCodes from 'utils/constants/RoleCode';
 import paginate from 'utils/helpers/pagination';
 import { Op } from 'sequelize';
 
@@ -20,7 +20,7 @@ const getUsers = async (req: Request) => {
 						email: {
 							[Op.like]: `%${query}%`
 						}
-					}, 
+					},
 					{
 						fullName: {
 							[Op.like]: `%${query}%`
@@ -118,7 +118,7 @@ const addUser = async (req: Request) => {
 	}
 };
 
-const updateUser = async (req: Request) => {
+const changeInfo = async (req: Request) => {
 	try {
 		let data;
 		let message: string;
@@ -132,11 +132,18 @@ const updateUser = async (req: Request) => {
 			status = ResponeCodes.BAD_REQUEST;
 		} else {
 			const info: UserInfo = req.body;
-			data = await User.update(info, {
-				where: {
-					id
+			data = await User.update(
+				{
+					fullName: info.fullName,
+					phone: info.phone,
+					birthDay: info.birthDay
+				},
+				{
+					where: {
+						id
+					}
 				}
-			});
+			);
 			message = 'Update user successfully!';
 			status = ResponeCodes.OK;
 		}
@@ -146,6 +153,37 @@ const updateUser = async (req: Request) => {
 			message,
 			status
 		};
+	} catch (error) {
+		throw error;
+	}
+};
+
+const checkPassword = async (req: Request) => {
+	try {
+		let data;
+		let message: string;
+		let status: number;
+		const id = parseInt(req.params.id);
+		const newPassword = req.body.password;
+
+		if (isNaN(id)) {
+			data = null;
+			message = 'Invalid user identifier.';
+			status = ResponeCodes.BAD_REQUEST;
+		} else {
+			const user = await User.findByPk(id);
+			const duplicate = bcrypt.compareSync(newPassword, user.password);
+			console.log(!duplicate);
+			data = !duplicate;
+			message = duplicate ? 'Duplicate password' : 'OK';
+			status = ResponeCodes.OK;
+
+			return {
+				data,
+				message,
+				status
+			};
+		}
 	} catch (error) {
 		throw error;
 	}
@@ -221,4 +259,4 @@ const deleteUser = async (req: Request) => {
 	}
 };
 
-export { getUsers, getUserById, addUser, updateUser, deleteUser, changePassword };
+export { getUsers, getUserById, addUser, deleteUser, changeInfo, changePassword, checkPassword };
