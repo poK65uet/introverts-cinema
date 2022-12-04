@@ -20,7 +20,14 @@ const initialState: MoviesState = {
 export const moviesSlice = createSlice({
   name: 'movies',
   initialState: initialState,
-  reducers: {},
+  reducers: {
+    loading: state => {
+      state.isLoading = true;
+    },
+    loadingDone: state => {
+      state.isLoading = false;
+    },
+  },
   extraReducers: builder => {
     builder.addCase(getNewMoviesThunk.pending, state => {
       state.isLoading = true;

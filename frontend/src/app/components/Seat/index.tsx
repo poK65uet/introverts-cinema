@@ -42,7 +42,7 @@ export function Seat(props: SeatProps) {
       notify({
         type: !select ? 'success' : 'warning',
         content: `Đã ${select ? 'bỏ' : ''} chọn ghế ${props.seatIndex}`,
-        autocloseDelay: 3000
+        autocloseDelay: 1000
       })
     }
   }

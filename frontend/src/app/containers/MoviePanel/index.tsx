@@ -1,18 +1,21 @@
-import React, { useEffect, useLayoutEffect, useRef, useState } from 'react'
+import React, { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import { Box, Button, Tab, Container } from '@mui/material';
 import { TabContext, TabList, TabPanel } from '@mui/lab';
 import useStyles from './styles';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from 'store';
 import { getNewMoviesThunk, getUpcomingMoviesThunk } from 'app/components/Movies/slice';
-import ShowtimeList from '../ShowtimeList/index';
+import ShowtimeList from 'app/components/ShowtimeList/index';
 import RatedTag from 'app/components/RatedTag';
 import { notify } from 'app/components/MasterDialog';
-import { bookTicketActions } from '../../pages/BookTicketPage/slice';
+import { bookTicketActions } from 'app/pages/BookTicketPage/slice';
+import { useGetShowtimesByMovie } from 'queries/showtimes';
 
 export default function MoviePanel() {
 
   const store = useSelector<RootState, RootState>(state => state)
+
+  const showtimesByMovie = useGetShowtimesByMovie(store.bookTicket.selectedMovie).data
 
   const selectedTabRef = useRef<HTMLInputElement>(null)
 
@@ -29,15 +32,10 @@ export default function MoviePanel() {
         behavior: 'smooth'
       })
     }
-  }, [])
-
-  useEffect(() => {
     if (!store.movies.getNewMovies) {
       dispatch(getNewMoviesThunk())
     };
-  }, [])
 
-  useEffect(() => {
     if (!store.movies.getUpcomingMovies) {
       dispatch(getUpcomingMoviesThunk())
     };
@@ -68,8 +66,6 @@ export default function MoviePanel() {
 
   const classes = useStyles()
 
-  const showtimeListByMovie = [1, 2, 3]
-
   return (
     <TabContext value={store.bookTicket.selectedMovie}>
       <Container className={classes.wrapper}>
@@ -81,7 +77,8 @@ export default function MoviePanel() {
             onChange={(event, newMovie) => handleSelectMovie(event, newMovie)}
           >
             <Tab value={'0'} sx={{ all: 'unset', bgcolor: '#FFFFFF' }}
-              ref={store.bookTicket.selectedMovie == '0' ? selectedTabRef : null} />
+              ref={store.bookTicket.selectedMovie == '0' ? selectedTabRef : null}
+            />
             {(store.movies.newMovieList.concat(store.movies.upcomingMovieList)).map(
               (movie: any, index: number) => {
                 return <Tab
@@ -112,19 +109,16 @@ export default function MoviePanel() {
           <TabPanel className={classes.showtimeList} value='0'>
             Vui lòng chọn phim
           </TabPanel>
-          {store.movies.newMovieList.concat(store.movies.upcomingMovieList).map((movie: any, index: number) => {
-            return showtimeListByMovie.map((showtimeByDate: any, index: number) => {
-              return <TabPanel
-                className={classes.showtimeList}
+          {showtimesByMovie?.map((showtimesByDate: any, index: number) => {
+            return <TabPanel
+              className={classes.showtimeList}
+              key={index}
+              value={store.bookTicket.selectedMovie != '0' ? store.bookTicket.selectedMovie : ''}>
+              <ShowtimeList
                 key={index}
-                value={movie.id != undefined ? movie?.id?.toString() : ''}>
-                <ShowtimeList
-                  key={index}
-                  movie={movie}
-                  showtimeList={showtimeByDate}
-                  onSelectShowtime={(showtime) => handleSelectShowtime(showtime)} />
-              </TabPanel>
-            })
+                showtimesByDate={showtimesByDate}
+                onSelectShowtime={(showtime) => handleSelectShowtime(showtime)} />
+            </TabPanel>
           })}
         </Box>
       </Container>

@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useMemo } from 'react';
+import React, { useEffect, useLayoutEffect, useMemo } from 'react';
 import { Seat } from 'app/components/Seat';
 import useStyles from './styles';
 import Grid from '@mui/material/Unstable_Grid2';
@@ -17,34 +17,31 @@ const seatExplain = [
   { state: 'vacant', explain: 'Ghế trống' },
   { state: 'selected', explain: 'Ghế đã chọn' },
   { state: 'booked', explain: 'Ghế đã bán' },
-  { state: 'waiting', explain: 'Ghế chờ bán' }
+  { state: 'waiting', explain: 'Ghế đang chờ' }
 ]
+
+const splitString = (string: string) => {
+  return string.split(',').map(Number)
+}
 
 export function SeatPlan(props: SeatPlanProps) {
 
-  const splitString = (string: string) => {
-    return string.split(',').map(Number)
-  }
+  const store = useSelector<RootState, RootState>(state => state)
 
-  const emptyCols = (
-    props.emptyCols ?
-      typeof (props.emptyCols) == 'string' ?
-        splitString(props.emptyCols) :
-        props.emptyCols
-      : []
-  ).filter(col => col <= Number(props?.seatCols) && col > 0)
+  const dispatch = useDispatch()
 
-  emptyCols.sort()
+  const emptyCols = () => (props.emptyCols ?
+    typeof (props.emptyCols) == 'string' ?
+      splitString(props.emptyCols) :
+      props.emptyCols : []).filter(col => col <= Number(props?.seatCols) && col > 0).sort()
 
-  const emptyRows = (props.emptyRows ?
+  const emptyRows = () => (props.emptyRows ?
     typeof (props.emptyRows) == 'string' ?
       splitString(props.emptyRows) :
-      props.emptyRows :
-    []).filter(row => row <= Number(props?.seatRows) && row > 0)
-
-  emptyRows.sort()
+      props.emptyRows : []).filter(row => row <= Number(props?.seatRows) && row > 0).sort()
 
   const seatPlan = useMemo(() => {
+
     let seats: { index: string, seatCol?: number, seatRow?: number }[] = []
 
     for (let i = 0; i < props.seatRows; i++)
@@ -66,11 +63,11 @@ export function SeatPlan(props: SeatPlanProps) {
     let colGap = 0;
     let rowGap = 0
 
-    emptyCols.map((emptyCol) => {
+    emptyCols().map((emptyCol) => {
       colGap++
       for (let i = 0; i <= props.seatRows; i++) {
         seats.splice(
-          (emptyCol + colGap - 1) + i * (props.seatCols + colGap + 1) - emptyCols.filter(col =>
+          (emptyCol + colGap - 1) + i * (props.seatCols + colGap + 1) - emptyCols().filter(col =>
             (col.toString().length - emptyCol.toString().length) > 0).length,
           0,
           { index: 'empty_seat' }
@@ -78,9 +75,9 @@ export function SeatPlan(props: SeatPlanProps) {
       }
     })
 
-    emptyRows.map((emptyRow) => {
+    emptyRows().map((emptyRow) => {
       seats.splice(
-        (emptyRow + rowGap - emptyRows.filter(row =>
+        (emptyRow + rowGap - emptyRows().filter(row =>
           (row.toString().length - emptyRow.toString().length) > 0).length)
         * (props.seatCols + colGap + 1)
         ,
@@ -88,7 +85,7 @@ export function SeatPlan(props: SeatPlanProps) {
         { index: 'empty_label' })
       for (let i = 0; i < props.seatCols + colGap; i++) {
         seats.splice(
-          (emptyRow + rowGap - emptyRows.filter(row =>
+          (emptyRow + rowGap - emptyRows().filter(row =>
             (row.toString().length - emptyRow.toString().length) > 0).length)
           * (props.seatCols + colGap + 1)
           ,
@@ -97,11 +94,9 @@ export function SeatPlan(props: SeatPlanProps) {
       }
       rowGap++
     })
-
     return seats;
-  }, [])
+  }, [props])
 
-  const store = useSelector<RootState, RootState>(state => state)
 
   const classes = useStyles();
 
@@ -110,34 +105,31 @@ export function SeatPlan(props: SeatPlanProps) {
       container
       className={classes.seatPlan}
       width={{
-        xs: `calc(1em * ${props.seatCols + emptyCols.length + 1})`,
-        sm: `calc(1.625em * ${props.seatCols + emptyCols.length + 1} )`,
-        md: `calc(2.125em * ${props.seatCols + emptyCols.length + 1} )`,
-        lg: `calc(2.5em * ${props.seatCols + emptyCols.length + 1})`
+        xs: `calc(1em * ${props.seatCols + emptyCols().length + 1})`,
+        sm: `calc(1.625em * ${props.seatCols + emptyCols().length + 1} )`,
+        md: `calc(2.125em * ${props.seatCols + emptyCols().length + 1} )`,
+        lg: `calc(2.5em * ${props.seatCols + emptyCols().length + 1})`
       }}
     >
-      <Grid xs={12 - 12 / (props.seatCols + emptyCols.length + 1)}
+      <Grid xs={12 - 12 / (props.seatCols + emptyCols().length + 1)}
         className={classes.screen}
         fontSize={{ xs: '0.625em', sm: '1em', md: '1.2em', lg: '1.375em' }}
       >
         MÀN HÌNH
       </Grid>
-      <Grid xs={12 / (props.seatCols + emptyCols.length + 1)} />
+      <Grid xs={12 / (props.seatCols + emptyCols().length + 1)} />
       {
-        seatPlan.map((
-          seat: { index: string, seatRow?: number, seatCol?: number }, index: number) => {
-          return <Grid xs={12 / (props.seatCols + emptyCols.length + 1)}
+        seatPlan.map((seat: { index: string, seatRow?: number, seatCol?: number }, index: number) => {
+          seatPlan.indexOf(seat) == seatPlan.length - 1 ? dispatch(bookTicketActions.loadingDone()) : null
+          return <Grid xs={12 / (props.seatCols + emptyCols().length + 1)}
             key={index}
             className={classes.seat}
             fontSize={{ xs: '0.75em', sm: '1.25em', md: '1.75em', lg: '2em' }}
           >
-            {seat.index == 'empty_seat' ?
-              null
+            {seat.index == 'empty_seat' ? null
               : seat.index == 'empty_label' ? <div style={{ height: '1em' }} />
-                : seat.seatRow == props.seatRows + 1 ?
-                  <div className={classes.colNum}>{seat.index}</div>
-                  : seat.seatCol == props.seatCols + 1 ?
-                    <div className={classes.rowCharacter}>{seat.index}</div>
+                : seat.seatRow == props.seatRows + 1 ? <div className={classes.colNum}>{seat.index}</div>
+                  : seat.seatCol == props.seatCols + 1 ? <div className={classes.rowCharacter}>{seat.index}</div>
                     : <Seat id={index} seatIndex={seat.index}
                       onClick={() => { }}
                       status={store.bookTicket.selectedSeats.filter(selectedSeat => seat.index == selectedSeat.name).length != 0

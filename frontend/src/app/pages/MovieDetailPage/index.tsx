@@ -12,13 +12,13 @@ import NotFoundPage from 'app/pages/NotFoundPage/index';
 import { bookTicketActions } from '../BookTicketPage/slice';
 import paths from 'paths';
 import { formatDate } from 'utils/date';
+import { moviesActions } from '../../components/Movies/slice';
 
 export default function MovieDetailPage() {
-  const store = useSelector<RootState, RootState>(state => state)
 
   let { movieId } = useParams<{ movieId: string | undefined }>()
 
-  const { data: movie } = useGetMovieById(movieId)
+  const { data: movie, isLoading } = useGetMovieById(movieId)
 
   useEffect(() => {
     window.scrollTo({
@@ -28,11 +28,19 @@ export default function MovieDetailPage() {
 
   const dispatch = useDispatch()
 
+  useEffect(() => {
+    isLoading ? dispatch(moviesActions.loading()) : dispatch(moviesActions.loadingDone())
+  }, [isLoading])
+
+
   const handleClickBookTicket = () => {
     dispatch(bookTicketActions.selectMovie(movieId))
   }
 
   const classes = useStyles()
+
+  const PageSekeleton: React.FunctionComponent =
+    () => <div style={{ height: '100vh' }} />
 
   return (
     <div className={classes.movieDetailPage}>
@@ -177,7 +185,8 @@ export default function MovieDetailPage() {
             {movie?.description}
           </Grid>
         </Grid>
-        : <NotFoundPage />}
+        : isLoading ? <PageSekeleton />
+          : <NotFoundPage />}
     </div >
   )
 }

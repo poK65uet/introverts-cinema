@@ -7,8 +7,9 @@ export enum BookingStep {
   MAKE_PAYMENT = 3,
 }
 export interface BookTicketState {
+  isLoading: boolean;
   selectedMovie: string;
-  selectedShowtime: number;
+  selectedShowtime: any;
   selectedSeats: { id: number; name: string }[];
   activeStep: BookingStep;
   completedSteps: { [index: number]: boolean };
@@ -17,8 +18,9 @@ export interface BookTicketState {
 }
 
 const initialState: BookTicketState = {
+  isLoading: false,
   selectedMovie: '0',
-  selectedShowtime: 0,
+  selectedShowtime: undefined,
   selectedSeats: <{ id: number; name: string }[]>[],
   activeStep: BookingStep.SELECT_MOVIE,
   completedSteps: {},
@@ -30,6 +32,12 @@ export const bookTicketSlice = createSlice({
   name: 'bookTicket',
   initialState: initialState,
   reducers: {
+    loading: state => {
+      state.isLoading = true;
+    },
+    loadingDone: state => {
+      state.isLoading = false;
+    },
     selectMovie: (state, action) => {
       state.selectedMovie = action.payload;
       state.completedSteps[BookingStep.SELECT_MOVIE] =
@@ -43,13 +51,14 @@ export const bookTicketSlice = createSlice({
       state.activeStep = BookingStep.SELECT_MOVIE;
     },
     selectShowtime: (state, action) => {
+      state.isLoading = true;
       state.selectedShowtime = action.payload;
       state.completedSteps[BookingStep.SELECT_SHOWTIME] = true;
       state.activeStep = BookingStep.SELECT_SEATS;
       state.stepBack = false;
     },
     resetShowtime: state => {
-      state.selectedShowtime = 0;
+      state.selectedShowtime = undefined;
       state.completedSteps[BookingStep.SELECT_SHOWTIME] = false;
       state.activeStep = BookingStep.SELECT_SHOWTIME;
       state.stepBack = true;
