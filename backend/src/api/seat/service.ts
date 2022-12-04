@@ -44,6 +44,7 @@ const statusMapping = (seatList: SeatModel[]) => {
 		if (seat.status === SeatStatus.BOOKING && timeDiffToMinute(seat.updatedAt, new Date(Date.now())) > 30) {
 			seat.status = SeatStatus.UN_BOOKED;
 		}
+		return seat;
 	});
 };
 
