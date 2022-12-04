@@ -3,7 +3,7 @@ import { Bill, Film, Room, Seat } from 'databases/models';
 import { SeatModel } from 'databases/models/Seat';
 import BillPayload from './BillPayload';
 import sequelize from 'databases';
-import User, { UserModel } from 'databases/models/User';
+import User, { UserModel, UserRequestInfo } from 'databases/models/User';
 import Showtime, { ShowtimeModel } from 'databases/models/Showtime';
 import SeatStatus from 'utils/constants/SeatStatus';
 import Price, { PriceModel } from 'databases/models/Price';
@@ -19,8 +19,8 @@ const MAX_SEAT = 10;
 const createBill = async (req: Request) => {
 	const payload: BillPayload = req.body;
 	const t = await sequelize.transaction();
+	const user: UserRequestInfo = req.user;
 	try {
-		const user: UserModel = await User.findByPk(payload.userId);
 		const showtime: ShowtimeModel = await Showtime.findByPk(payload.showtimeId, {
 			include: {
 				model: Room
@@ -85,7 +85,8 @@ const createBill = async (req: Request) => {
 			paymentStatus: PaymentStatus.UNPAID
 		});
 		await bill.setShowtime(showtime);
-		await bill.setUser(user);
+		const user_: UserModel = await User.findByPk(user.id);
+		await bill.setUser(user_);
 		for (let seat of seatList) {
 			await bill.addSeat(seat);
 		}
@@ -105,7 +106,7 @@ const createBill = async (req: Request) => {
 	}
 };
 
-const verifySeat = (seat: SeatModel, user: UserModel) => {
+const verifySeat = (seat: SeatModel, user: UserRequestInfo) => {
 	if (!seat) return false;
 	if (seat.status === SeatStatus.BOOKED) return false;
 	if (seat.owner != null && seat.owner != user.email && timeDiffToMinute(new Date(Date.now()), seat.updatedAt) < 15)
