@@ -12,8 +12,8 @@ const generateCode = () => {
 	return code;
 };
 
-function generateToken(userId: number, roleIds: number[]) {
-	const token = jwt.sign({ userId, roleIds }, config.secret_key, {
+function generateToken(userId: number, roleIds: number[], userEmail: string) {
+	const token = jwt.sign({ userId, roleIds, userEmail }, config.secret_key, {
 		expiresIn: config.expires_in
 	});
 	return token;
@@ -149,7 +149,7 @@ const register = async (req: Request) => {
 			// const roles = await user.getRoles();
 			const roleIds = [RoleCodes.CUSTOMER];
 
-			const token = generateToken(user.id, roleIds);
+			const token = generateToken(user.id, roleIds, user.email);
 
 			data = {
 				user,

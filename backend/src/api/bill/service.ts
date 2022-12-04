@@ -11,6 +11,8 @@ import { timeDiffToMinute } from 'utils/timeService';
 import ResponeCodes from 'utils/constant/ResponeCode';
 import { getPrice } from 'api/price/service';
 import PaymentStatus from 'utils/constant/PaymentStatus';
+import { BillModel } from 'databases/models/Bill';
+import config from 'config';
 
 const MAX_SEAT = 10;
 
@@ -42,7 +44,7 @@ const createBill = async (req: Request) => {
 			let seat = await Seat.findOne({
 				include: [
 					{
-						model: Film,
+						model: Showtime,
 						attributes: [],
 						where: {
 							id: showtime.id
@@ -88,8 +90,12 @@ const createBill = async (req: Request) => {
 			await bill.addSeat(seat);
 		}
 		await t.commit();
+
 		return {
-			data: bill,
+			data: {
+				bill,
+				qrCode: createQrCode(bill)
+			},
 			message: 'Succesfully',
 			status: ResponeCodes.OK
 		};
@@ -105,6 +111,10 @@ const verifySeat = (seat: SeatModel, user: UserModel) => {
 	if (seat.owner != null && seat.owner != user.email && timeDiffToMinute(new Date(Date.now()), seat.updatedAt) < 15)
 		return false;
 	return true;
+};
+
+const createQrCode = (bill: BillModel) => {
+	return `${config.qr_code_base_url}?amount=${bill.totalPrice}&addInfo=${bill.id}`;
 };
 
 export { createBill };
