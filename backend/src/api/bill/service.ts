@@ -5,12 +5,12 @@ import BillPayload from './BillPayload';
 import sequelize from 'databases';
 import User, { UserModel } from 'databases/models/User';
 import Showtime, { ShowtimeModel } from 'databases/models/Showtime';
-import SeatStatus from 'utils/constant/SeatStatus';
+import SeatStatus from 'utils/constants/SeatStatus';
 import Price, { PriceModel } from 'databases/models/Price';
-import { timeDiffToMinute } from 'utils/timeService';
-import ResponeCodes from 'utils/constant/ResponeCode';
+import { timeDiffToMinute } from 'utils/helpers/timeService';
+import ResponeCodes from 'utils/constants/ResponeCode';
 import { getPrice } from 'api/price/service';
-import PaymentStatus from 'utils/constant/PaymentStatus';
+import PaymentStatus from 'utils/constants/PaymentStatus';
 import { BillModel } from 'databases/models/Bill';
 import config from 'config';
 
