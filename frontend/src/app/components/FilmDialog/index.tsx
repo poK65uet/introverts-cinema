@@ -20,11 +20,8 @@ import useStyles from './styles';
 import { useForm } from 'hooks/useForm';
 
 export default function AddFilmDialog(props: any) {
-  console.log(props.data.status);
   const classes = useStyles();
-  const [status, setStatus] = useState(props.data.status);
-
-  console.log(status);
+  const [status, setStatus] = useState('active');
 
   const validate = (fieldValues = values) => {
     const tmp = { ...errors };
@@ -108,10 +105,9 @@ export default function AddFilmDialog(props: any) {
             xs={12}
             container
             columnSpacing={2}
-            sx={{ alignContent: 'center' }}
             item={true}
           >
-            <Grid xs={3} item={true}>
+            <Grid xs={6} item={true}>
               <CustomInput.TextField
                 label="Thời lượng"
                 name="duration"
@@ -120,11 +116,11 @@ export default function AddFilmDialog(props: any) {
                 inputProps={{ maxLength: '32' }}
               />
             </Grid>
-            <Grid xs={2} />
+            {/* <Grid xs={2} />
 
             <Divider orientation="vertical" flexItem />
-            <Grid xs={1} />
-            <Grid xs={5} item={true}>
+            <Grid xs={1} /> */}
+            <Grid xs={6} item={true}>
               <CustomInput.DatePicker
                 label="Ngày khởi chiếu"
                 name="openingDay"
@@ -195,12 +191,38 @@ export default function AddFilmDialog(props: any) {
           >
             Thêm phim mới
           </Typography>
-          <CustomInput.TextField
-            label="Tên phim"
-            name="title"
-            autoFocus
-            inputProps={{ maxLength: '64' }}
-          />
+          <Grid
+            xs={12}
+            container
+            columnSpacing={2}
+            sx={{ alignContent: 'center' }}
+            item={true}
+          >
+            <Grid xs={8} item={true}>
+              <CustomInput.TextField
+                label="Tên phim"
+                name="title"
+                value={props.data.title}
+                autoFocus
+                inputProps={{ maxLength: '64' }}
+              />
+            </Grid>
+            <Grid xs={1} />
+            <Grid xs={3} item={true}>
+              <InputLabel>
+                Trạng thái
+              </InputLabel>
+              <Select
+                value={status}
+                onChange={(event) => setStatus(event.target.value)}
+                autoWidth
+                label="Trạng thái"
+              >
+                <MenuItem value={'active'}>active</MenuItem>
+                <MenuItem value={'inactive'}>inactive</MenuItem>
+              </Select>
+            </Grid>
+          </Grid>
           <CustomInput.TextField
             label="Poster"
             name="imageUrl"

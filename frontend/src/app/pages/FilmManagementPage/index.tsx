@@ -86,16 +86,16 @@ export default function FilmManagementPage() {
       align: 'center',
       headerAlign: 'center',
       renderCell: (params: GridRenderCellParams<string>) => {
-        if(params.value === undefined) return null;
+        if (params.value === undefined) return null;
         const openingDay = new Date(params.value);
-        return openingDay.getDate() + '/' + openingDay.getMonth() + '/' + openingDay.getFullYear();
+        return (
+          openingDay.getDate() +
+          '/' +
+          openingDay.getMonth() +
+          '/' +
+          openingDay.getFullYear()
+        );
       },
-    },
-    {
-      field: 'directors',
-      headerName: 'Đạo diễn',
-      width: 150,
-      headerAlign: 'center',
     },
     {
       field: 'actors',
