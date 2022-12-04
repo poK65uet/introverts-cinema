@@ -11,7 +11,8 @@ import { bookTicketActions } from 'app/pages/BookTicketPage/slice';
 import { useGetShowtimeDetail } from 'queries/showtimes';
 
 
-export default function SelectSeats() {
+export default function SeatsSelector() {
+
   const store = useSelector<RootState, RootState>(state => state);
 
   const data = useGetShowtimeDetail(store.bookTicket.selectedShowtime.id).data
