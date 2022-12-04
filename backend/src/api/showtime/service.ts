@@ -100,9 +100,14 @@ const getShowtimeById = async (req: Request) => {
 			status = ResponeCodes.BAD_REQUEST;
 		} else {
 			const showtime = await Showtime.findByPk(id, {
-				include: {
-					model: Seat
-				}
+				include: [
+					{
+						model: Film
+					},
+					{
+						model: Room
+					}
+				]
 			});
 			if (!showtime) {
 				data = null;
