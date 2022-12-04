@@ -7,6 +7,7 @@ import User, { UserModel } from 'databases/models/User';
 import Showtime, { ShowtimeModel } from 'databases/models/Showtime';
 import SeatStatus from 'utils/constant/SeatStatus';
 import Minute from 'utils/constant/Minute';
+import Price, { PriceModel } from 'databases/models/Price';
 
 const createBill = async (req: Request) => {
 	const payload: BillPayload = req.body;
@@ -17,7 +18,8 @@ const createBill = async (req: Request) => {
 		const bill = await Bill.create();
 		bill.setUser(user);
 		bill.setShowtime(showtime);
-		for (let pos: Position of payload.positions) {
+		var totalPrice = 0;
+		for (let pos of payload.positions) {
 			const seat = await Seat.findOne({
 				include: [
 					{
@@ -37,8 +39,9 @@ const createBill = async (req: Request) => {
 			if (verifySeat(seat, user)) {
 				seat.update({
 					owner: user.email
-                });
-                bill.addSeat(seat);
+				});
+				bill.addSeat(seat);
+				totalPrice += v;
 			}
 		}
 	} catch (error) {
@@ -55,7 +58,12 @@ const verifySeat = (seat: SeatModel, user: UserModel) => {
 	return true;
 };
 
-const calculatePrice = async (showtime: ShowtimeModel) {
-    
-}
-
+const calculatePrice = async (showtime: ShowtimeModel) => {
+	// const price: PriceModel = Price.findOne({
+	//     where: {
+	//         dayCode: showtime.startTime.getDay(),
+	//         visionType: showtime.Room.visionType
+	//     }
+	// })
+	return 10;
+};
