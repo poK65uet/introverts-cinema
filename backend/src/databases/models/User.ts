@@ -57,7 +57,7 @@ const User = sequelize.define<UserModel>(
 			type: DataTypes.STRING
 		},
 		birthDay: {
-			type: DataTypes.DATE
+			type: DataTypes.DATEONLY
 		},
 		createdAt: {
 			type: DataTypes.DATE
