@@ -16,7 +16,6 @@ export interface ShowtimeModel extends Model<InferAttributes<ShowtimeModel>, Inf
 	startTime: Date;
 	createdAt: CreationOptional<Date>;
 	updatedAt: CreationOptional<Date>;
-
 	Film?: NonAttribute<FilmModel>;
 	Room?: NonAttribute<RoomModel>;
 	setFilm: BelongsToSetAssociationMixin<FilmModel, FilmModel['id']>;
