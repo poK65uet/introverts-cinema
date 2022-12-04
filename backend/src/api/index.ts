@@ -10,6 +10,7 @@ import filmRouter from './film';
 import bannerRouter from './banner';
 import roomRouter from './room';
 import showtimeRouter from './showtime';
+import seatRouter from './seat';
 
 const router = Router();
 
@@ -24,5 +25,6 @@ router.use('/films', filmRouter);
 router.use('/banners', bannerRouter);
 router.use('/rooms', roomRouter);
 router.use('/showtimes', showtimeRouter);
+router.use('/seats', seatRouter);
 
 export default router;

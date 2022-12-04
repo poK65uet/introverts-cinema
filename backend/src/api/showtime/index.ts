@@ -1,5 +1,5 @@
 import Router from 'express';
-import { addShowtime, deleteShowtime, getAllShowtimes, getShowtime, getShowtimes, updateShowtime } from './cotroller';
+import { addShowtime, deleteShowtime, getAllShowtimes, getShowtime, getShowtimes, updateShowtime } from './controller';
 
 const router = Router();
 
