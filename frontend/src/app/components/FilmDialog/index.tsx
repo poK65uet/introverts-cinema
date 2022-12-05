@@ -39,7 +39,7 @@ export default function FilmDialog(props: any) {
     }
   };
 
-  const { data: allActors } = usegetActors();
+  const { isLoading: loadingActors, data: allActors } = usegetActors();
 
   const { values, setValues, errors, setErrors, handleInputChange } = useForm(
     {
@@ -145,8 +145,9 @@ export default function FilmDialog(props: any) {
           <Autocomplete
             multiple
             id="tags-standard"
-            options={allActors}
-            getOptionLabel={(option: any) => option.fulName}
+            options={loadingActors ? [] : allActors}
+            loading={loadingActors}
+            getOptionLabel={(option: any) => option.fullName}
             renderInput={params => (
               <TextField
                 {...params}
