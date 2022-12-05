@@ -20,7 +20,7 @@ import {
 import { CustomInput } from 'app/components/CustomInput';
 import useStyles from './styles';
 import { useForm } from 'hooks/useForm';
-import { useGetMovieById } from 'queries/movies';
+import { addMovie, useGetMovieById } from 'queries/movies';
 import { usegetActors } from 'queries/actor';
 
 export default function FilmDialog(props: any) {
@@ -58,6 +58,23 @@ export default function FilmDialog(props: any) {
   const handleCloseDialog = () => {
     props.onClose();
   };
+
+  const handleAddFilm = () => {
+    if (validate(values)) {
+        addMovie(
+          values.title,
+          values.Actors,
+          values.imageUrl,
+          values.trailerUrl,
+          values.duration,
+          values.openingDay,
+          values.description,
+          values.NationalityId,
+          values.Categories,
+          values.status,
+        )
+    }
+  }
 
   if (props.data === 0) {
     return (
@@ -148,6 +165,7 @@ export default function FilmDialog(props: any) {
             options={loadingActors ? [] : allActors}
             loading={loadingActors}
             getOptionLabel={(option: any) => option.fullName}
+            onChange={(value) => setValues({...values, Actors: value})}
             renderInput={params => (
               <TextField
                 {...params}
@@ -175,6 +193,7 @@ export default function FilmDialog(props: any) {
             sx={{ mt: 2, p: 1, fontWeight: 'bold', color: 'white' }}
             disableFocusRipple
             className={classes.AddFilmButton}
+            onClick={handleAddFilm}
           >
             Thêm phim
           </Button>

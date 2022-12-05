@@ -118,5 +118,6 @@ export const updateMovie = async (
   } catch (e) {
     return [];
   }
+  console.log('ADD FILM');
   return response.data.data;
 };
