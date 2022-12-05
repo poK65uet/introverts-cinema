@@ -4,22 +4,24 @@ import ResponeCodes from 'utils/constants/ResponeCode';
 import FilmPayload from './FilmPayload';
 import { Op } from 'sequelize';
 import Status from '../../utils/constants/Status';
+import paginate from 'utils/helpers/pagination';
 
 const getFilms = async (req: Request) => {
 	try {
-		let data;
-		let message: string;
-		let status: number;
+		const { limit, offset, order, query } = paginate(req);
 
-		data = await Film.findAll();
-		message = 'Get all successfully!';
-		status = ResponeCodes.OK;
+		const films = await Film.findAndCountAll({
+			where: {
+				title: {
+					[Op.like]: `%${query}%`
+				}
+			},
+			limit,
+			offset,
+			order: [order]
+		});
 
-		return {
-			data,
-			message,
-			status
-		};
+		return films;
 	} catch (error) {
 		throw error;
 	}

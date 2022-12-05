@@ -43,8 +43,6 @@ const verifyAdmin = async (req: Request, res: Response, next: NextFunction) => {
 
 const verifyCustomer = async (req: Request, res: Response, next: NextFunction) => {
 	const user: UserRequestInfo = req.user;
-	console.log(user.roleIds);
-
 	if (!user || !user.roleIds.includes(RoleCodes.CUSTOMER)) {
 		return new ApiResponse(null, 'Not permission!', ResponeCodes.UNAUTHORIZED).send(res);
 	}

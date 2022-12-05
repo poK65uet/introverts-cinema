@@ -2,22 +2,25 @@ import { Request } from 'express';
 import { Actor, Nationality } from 'databases/models';
 import ResponeCodes from 'utils/constants/ResponeCode';
 import ActorPayload from './ActorPayload';
+import paginate from 'utils/helpers/pagination';
+import { Op } from 'sequelize';
 
 const getActors = async (req: Request) => {
 	try {
-		let data;
-		let message: string;
-		let status: number;
+		const { limit, offset, order, query } = paginate(req);
 
-		data = await Actor.findAll();
-		message = 'Get all successfully!';
-		status = ResponeCodes.OK;
+		const actors = await Actor.findAndCountAll({
+			where: {
+				fullName: {
+					[Op.like]: `%${query}%`
+				}
+			},
+			limit,
+			offset,
+			order: [order]
+		});
 
-		return {
-			data,
-			message,
-			status
-		};
+		return actors;
 	} catch (error) {
 		throw error;
 	}

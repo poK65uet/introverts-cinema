@@ -2,22 +2,25 @@ import { Request } from 'express';
 import { Director, Nationality } from 'databases/models';
 import ResponeCodes from 'utils/constants/ResponeCode';
 import DirectorPayload from './DirectorPayload';
+import paginate from 'utils/helpers/pagination';
+import { Op } from 'sequelize';
 
 const getDirectors = async (req: Request) => {
 	try {
-		let data;
-		let message: string;
-		let status: number;
+		const { limit, offset, order, query } = paginate(req);
 
-		data = await Director.findAll();
-		message = 'Get all successfully!';
-		status = ResponeCodes.OK;
+		const directors = await Director.findAndCountAll({
+			where: {
+				fullName: {
+					[Op.like]: `%${query}%`
+				}
+			},
+			limit,
+			offset,
+			order: [order]
+		});
 
-		return {
-			data,
-			message,
-			status
-		};
+		return directors;
 	} catch (error) {
 		throw error;
 	}
