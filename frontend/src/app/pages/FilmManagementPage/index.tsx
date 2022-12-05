@@ -16,26 +16,26 @@ import { useGetMovies } from 'queries/movies';
 export default function FilmManagementPage() {
   const classes = useStyles();
   const [open, setOpen] = useState(false);
-  const [editedRowData, setEditedRowData] = useState([]);
+  const [editRowId, setEditRowId] = useState(0);
   const [page, setPage] = useState<number>(0);
   const [pageSize, setPageSize] = useState<number>(5);
 
-  const handleClickOpen = () => {
+  const handleClickOpenAddPage = () => {
+    setEditRowId(0);
     setOpen(true);
   };
 
   const handleClose = () => {
-    setEditedRowData([]);
     setOpen(false);
   };
 
   const handleClickOpenEditPage = (params: any) => {
-    setEditedRowData(params);
+    setEditRowId(params);
     setOpen(true);
   };
 
+  
   const { isLoading, data } = useGetMovies();
-  console.log(data);
 
   const columns: GridColDef[] = [
     {
@@ -98,12 +98,6 @@ export default function FilmManagementPage() {
       },
     },
     {
-      field: 'actors',
-      headerName: 'Diễn viên',
-      width: 240,
-      headerAlign: 'center',
-    },
-    {
       field: 'NationalityId',
       headerName: 'Mã quốc gia',
       type: 'number',
@@ -126,14 +120,14 @@ export default function FilmManagementPage() {
   return (
     <Box className={classes.filmTable}>
       <AddFilmDialog
+        data={editRowId}
         open={open}
         onClose={handleClose}
-        data={editedRowData}
       ></AddFilmDialog>
       <Typography variant="h4" component="h4" fontWeight="bold">
         Quản lý phim trong hệ thống
       </Typography>
-      <Button className={classes.addButton} onClick={handleClickOpen}>
+      <Button className={classes.addButton} onClick={handleClickOpenAddPage}>
         Thêm phim mới
       </Button>
       <DataGrid
@@ -147,7 +141,7 @@ export default function FilmManagementPage() {
         disableSelectionOnClick
         columns={columns}
         onRowDoubleClick={GridCellParams =>
-          handleClickOpenEditPage(GridCellParams.row)
+          handleClickOpenEditPage(GridCellParams.id)
         }
         components={{
           Toolbar: GridToolbar,
