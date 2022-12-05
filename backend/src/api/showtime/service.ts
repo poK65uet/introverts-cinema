@@ -5,22 +5,19 @@ import ShowtimePayload from './ShowtimePayload';
 import { ShowtimeModel } from 'databases/models/Showtime';
 import { Op } from 'sequelize';
 import { getPrice } from 'api/price/service';
+import paginate from 'utils/helpers/pagination';
 
 const getShowtimes = async (req: Request) => {
 	try {
-		let data;
-		let message: string;
-		let status: number;
+		const { limit, offset, order, query } = paginate(req);
 
-		data = await Showtime.findAll();
-		message = 'Get all successfully!';
-		status = ResponeCodes.OK;
+		const showtimes = await Showtime.findAndCountAll({
+			limit,
+			offset,
+			order: [order]
+		});
 
-		return {
-			data,
-			message,
-			status
-		};
+		return showtimes;
 	} catch (error) {
 		throw error;
 	}

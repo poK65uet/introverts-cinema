@@ -35,7 +35,18 @@ const addUser = async (req: Request, res: Response) => {
 	}
 };
 
-// PATCH: /users/:id
+// GET: /users/me
+const getMe = async (req: Request, res: Response) => {
+	try {
+		const result = await service.getMe(req);
+		const { data, message, status } = result;
+		return new ApiResponse(data, message, status).send(res);
+	} catch (error) {
+		return new ApiResponse(error.message, "Couldn't get info.", ResponeCodes.ERROR).send(res);
+	}
+};
+
+// PATCH: /users/changeInfo
 const changeInfo = async (req: Request, res: Response) => {
 	try {
 		const result = await service.changeInfo(req);
@@ -46,7 +57,7 @@ const changeInfo = async (req: Request, res: Response) => {
 	}
 };
 
-// POST: /users/:id/checkPassword
+// POST: /users/checkPassword
 const checkPassword = async (req: Request, res: Response) => {
 	try {
 		const result = await service.checkPassword(req);
@@ -57,7 +68,7 @@ const checkPassword = async (req: Request, res: Response) => {
 	}
 };
 
-// PATCH: /users/:id/changePassword
+// PATCH: /users/changePassword
 const changePassword = async (req: Request, res: Response) => {
 	try {
 		const checkResult = await service.checkPassword(req);
@@ -84,4 +95,4 @@ const deleteUser = async (req: Request, res: Response) => {
 	}
 };
 
-export { getUsers, getUser, addUser, deleteUser, changeInfo, changePassword, checkPassword };
+export { getUsers, getUser, addUser, deleteUser, changeInfo, changePassword, checkPassword, getMe };

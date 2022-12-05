@@ -118,35 +118,58 @@ const addUser = async (req: Request) => {
 	}
 };
 
+const getMe = async (req: Request) => {
+	try {
+		let data;
+		let message: string;
+		let status: number;
+
+		const id = req.user.id;
+
+		const user = await User.findByPk(id);
+		if (!user) {
+			data = null;
+			message = 'User not found.';
+			status = ResponeCodes.NOT_FOUND;
+		} else {
+			data = user;
+			message = 'Get successfully!';
+			status = ResponeCodes.OK;
+		}
+
+		return {
+			data,
+			message,
+			status
+		};
+	} catch (error) {
+		throw error;
+	}
+};
+
 const changeInfo = async (req: Request) => {
 	try {
 		let data;
 		let message: string;
 		let status: number;
 
-		const id = parseInt(req.params.id);
+		const id = req.user.id;
 
-		if (isNaN(id)) {
-			data = null;
-			message = 'Invalid user identifier.';
-			status = ResponeCodes.BAD_REQUEST;
-		} else {
-			const info: UserInfo = req.body;
-			data = await User.update(
-				{
-					fullName: info.fullName,
-					phone: info.phone,
-					birthDay: info.birthDay
-				},
-				{
-					where: {
-						id
-					}
+		const info: UserInfo = req.body;
+		data = await User.update(
+			{
+				fullName: info.fullName,
+				phone: info.phone,
+				birthDay: info.birthDay
+			},
+			{
+				where: {
+					id
 				}
-			);
-			message = 'Update user successfully!';
-			status = ResponeCodes.OK;
-		}
+			}
+		);
+		message = 'Update user successfully!';
+		status = ResponeCodes.OK;
 
 		return {
 			data,
@@ -163,27 +186,21 @@ const checkPassword = async (req: Request) => {
 		let data;
 		let message: string;
 		let status: number;
-		const id = parseInt(req.params.id);
+		const id = req.user.id;
 		const newPassword = req.body.password;
 
-		if (isNaN(id)) {
-			data = null;
-			message = 'Invalid user identifier.';
-			status = ResponeCodes.BAD_REQUEST;
-		} else {
-			const user = await User.findByPk(id);
-			const duplicate = bcrypt.compareSync(newPassword, user.password);
-			console.log(!duplicate);
-			data = !duplicate;
-			message = duplicate ? 'Duplicate password' : 'OK';
-			status = ResponeCodes.OK;
+		const user = await User.findByPk(id);
+		const duplicate = bcrypt.compareSync(newPassword, user.password);
 
-			return {
-				data,
-				message,
-				status
-			};
-		}
+		data = !duplicate;
+		message = duplicate ? 'Duplicate password' : 'OK';
+		status = ResponeCodes.OK;
+
+		return {
+			data,
+			message,
+			status
+		};
 	} catch (error) {
 		throw error;
 	}
@@ -195,27 +212,21 @@ const changePassword = async (req: Request) => {
 		let message: string;
 		let status: number;
 
-		const id = parseInt(req.params.id);
+		const id = req.user.id;
 
-		if (isNaN(id)) {
-			data = null;
-			message = 'Invalid user identifier.';
-			status = ResponeCodes.BAD_REQUEST;
-		} else {
-			const password = bcrypt.hashSync(req.body.password, 10);
-			data = await User.update(
-				{
-					password
-				},
-				{
-					where: {
-						id
-					}
+		const password = bcrypt.hashSync(req.body.password, 10);
+		data = await User.update(
+			{
+				password
+			},
+			{
+				where: {
+					id
 				}
-			);
-			message = 'Change password successfully!';
-			status = ResponeCodes.OK;
-		}
+			}
+		);
+		message = 'Change password successfully!';
+		status = ResponeCodes.OK;
 
 		return {
 			data,
@@ -259,4 +270,4 @@ const deleteUser = async (req: Request) => {
 	}
 };
 
-export { getUsers, getUserById, addUser, deleteUser, changeInfo, changePassword, checkPassword };
+export { getUsers, getUserById, addUser, deleteUser, changeInfo, changePassword, checkPassword, getMe };
