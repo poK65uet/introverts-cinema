@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import {
+  Autocomplete,
   Box,
   Button,
   Checkbox,
@@ -13,12 +14,14 @@ import {
   Link as LinkMUI,
   MenuItem,
   Select,
+  TextField,
   Typography,
 } from '@mui/material';
 import { CustomInput } from 'app/components/CustomInput';
 import useStyles from './styles';
 import { useForm } from 'hooks/useForm';
 import { useGetMovieById } from 'queries/movies';
+import { usegetActors } from 'queries/actor';
 
 export default function FilmDialog(props: any) {
   const classes = useStyles();
@@ -35,6 +38,8 @@ export default function FilmDialog(props: any) {
       return Object.values(tmp).every(x => x == '');
     }
   };
+
+  const { data: allActors } = usegetActors();
 
   const { values, setValues, errors, setErrors, handleInputChange } = useForm(
     {
@@ -54,7 +59,6 @@ export default function FilmDialog(props: any) {
     props.onClose();
   };
 
-  console.log(values);
   if (props.data === 0) {
     return (
       <Dialog open={props.open} onClose={handleCloseDialog}>
@@ -93,7 +97,9 @@ export default function FilmDialog(props: any) {
                 value={values.status}
                 autoWidth
                 label="Trạng thái"
-                onChange={(event : any) => {handleInputChange(event)}}
+                onChange={(event: any) => {
+                  setValues({ ...values, status: event.target.value });
+                }}
               >
                 <MenuItem value={'active'}>active</MenuItem>
                 <MenuItem value={'inactive'}>inactive</MenuItem>
@@ -125,7 +131,6 @@ export default function FilmDialog(props: any) {
                 margin="dense"
                 inputProps={{ maxLength: '32' }}
                 onChange={(openingDay: any) => {
-                  console.log(openingDay);
                   if (openingDay === null) return;
                   validate({ openingDay: openingDay });
                   setValues({
@@ -137,11 +142,19 @@ export default function FilmDialog(props: any) {
             </Grid>
           </Grid>
 
-          <CustomInput.TextField
-            label="Diễn viên"
-            name="Actors"
-            onChange={handleInputChange}
-            inputProps={{ maxLength: '64' }}
+          <Autocomplete
+            multiple
+            id="tags-standard"
+            options={allActors}
+            getOptionLabel={(option: any) => option.fulName}
+            renderInput={params => (
+              <TextField
+                {...params}
+                variant="standard"
+                label="Diễn viên"
+                placeholder="Thêm"
+              />
+            )}
           />
           <CustomInput.TextField
             label="Mã quốc gia"
@@ -171,7 +184,6 @@ export default function FilmDialog(props: any) {
   const [actors, setActors] = useState([]);
 
   const { data } = useGetMovieById(props.data.toString());
-  console.log(data);
   let curActors = 0;
   // if(data !== undefined) curActors = data.Actors.length;
   // for(let i = 0; i < curActors; ++i) {
