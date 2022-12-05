@@ -106,6 +106,38 @@ const createBill = async (req: Request) => {
 	}
 };
 
+const cancelBill = async (req: Request) => {
+	const billId: number = req.body.bill;
+	const bill: BillModel = await Bill.findByPk(billId, {
+		include: [
+			{
+				model: Seat
+			}
+		]
+	});
+
+	if (!bill) {
+		return {
+			message: 'Bill invalid',
+			status: ResponeCodes.BAD_REQUEST
+		};
+	}
+
+	for (let seat of bill.Seats) {
+		await seat.update({
+			status: SeatStatus.UN_BOOKED
+		});
+	}
+
+	return {
+		data: 0,
+		message: 'Succesfully',
+		status: ResponeCodes.OK
+	};
+};
+
+const confirmPayment = async (req: Request) => {};
+
 const verifySeat = (seat: SeatModel, user: UserRequestInfo) => {
 	if (!seat) return false;
 	if (seat.status === SeatStatus.BOOKED) return false;
@@ -118,4 +150,4 @@ const createQrCode = (bill: BillModel) => {
 	return `${config.qr_code_base_url}?amount=${bill.totalPrice}&addInfo=${bill.id}`;
 };
 
-export { createBill };
+export { createBill, cancelBill };

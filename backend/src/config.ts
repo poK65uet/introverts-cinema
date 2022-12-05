@@ -14,5 +14,7 @@ export default {
 			pass: process.env.MAIL_PASSWORD
 		}
 	},
-	qr_code_base_url: process.env.QR_CODE_BASE_URL
+	qr_code_base_url: process.env.QR_CODE_BASE_URL,
+	casso_base_url: process.env.CASSO_BASE_URL,
+	casso_api_key: process.env.CASSO_API_KEY
 };
