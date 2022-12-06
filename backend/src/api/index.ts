@@ -13,6 +13,7 @@ import showtimeRouter from './showtime';
 import seatRouter from './seat';
 import priceRouter from './price';
 import billRouter from './bill';
+import ticketRouter from './ticket'
 
 const router = Router();
 
@@ -30,5 +31,7 @@ router.use('/showtimes', showtimeRouter);
 router.use('/seats', seatRouter);
 router.use('/prices', priceRouter);
 router.use('/bills', billRouter);
+router.use('/bills', billRouter);
+router.use('/tickets', ticketRouter);
 
 export default router;
