@@ -25,13 +25,14 @@ import { usegetActors } from 'queries/actor';
 
 export default function FilmDialog(props: any) {
   const classes = useStyles();
+
   const validate = (fieldValues = values) => {
     const tmp = { ...errors };
     if ('openingDay' in fieldValues) {
       tmp.openingDay = '';
       const today = new Date();
       if (fieldValues.openingDay > today)
-        tmp.openingDay = 'Ngày sinh không hợp lệ';
+        tmp.openingDay = '';
     }
     setErrors({ ...tmp });
     if (fieldValues == values) {
@@ -44,12 +45,17 @@ export default function FilmDialog(props: any) {
   const { values, setValues, errors, setErrors, handleInputChange } = useForm(
     {
       title: '',
-      duration: 0,
-      Actors: [],
-      status: '',
-      openingDay: null,
-      NationalityId: 0,
+      imageUrl: '',
       trailerUrl: '',
+      duration: 0,
+      openingDay: null,
+      description: '',
+      rated: '',
+      status: '',
+      NationalityId: 0,
+      Actors: [],
+      Categories: [],
+      Directors: [],
     },
     true,
     validate,
@@ -61,20 +67,23 @@ export default function FilmDialog(props: any) {
 
   const handleAddFilm = () => {
     if (validate(values)) {
-        addMovie(
-          values.title,
-          values.Actors,
-          values.imageUrl,
-          values.trailerUrl,
-          values.duration,
-          values.openingDay,
-          values.description,
-          values.NationalityId,
-          values.Categories,
-          values.status,
-        )
+      const data = addMovie(
+        values.title,
+        values.imageUrl,
+        values.trailerUrl,
+        values.duration,
+        values.openingxDay,
+        values.description,
+        values.rated,
+        values.status,
+        values.NationalityId,
+        values.Categories,
+        values.Actors,
+        values.Directors,
+      );
+      console.log(data);
     }
-  }
+  };
 
   if (props.data === 0) {
     return (
@@ -146,6 +155,7 @@ export default function FilmDialog(props: any) {
                 label="Ngày khởi chiếu"
                 name="openingDay"
                 margin="dense"
+                value={values.openingDay}
                 inputProps={{ maxLength: '32' }}
                 onChange={(openingDay: any) => {
                   if (openingDay === null) return;
@@ -165,7 +175,7 @@ export default function FilmDialog(props: any) {
             options={loadingActors ? [] : allActors}
             loading={loadingActors}
             getOptionLabel={(option: any) => option.fullName}
-            onChange={(value) => setValues({...values, Actors: value})}
+            onChange={value => setValues({ ...values, Actors: value })}
             renderInput={params => (
               <TextField
                 {...params}
@@ -279,6 +289,8 @@ export default function FilmDialog(props: any) {
                   ...values,
                   openingDay: openingDay,
                 });
+                console.log(values);
+                
               }}
               inputProps={{ maxLength: '32' }}
             />

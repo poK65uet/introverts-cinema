@@ -80,8 +80,10 @@ export const addMovie = async (
       Directors: Directors,
     });
   } catch (e) {
+    console.log(e);
     return [];
   }
+  console.log('ADD OK');
   return response.data.data;
 };
 
@@ -101,7 +103,7 @@ export const updateMovie = async (
 ): Promise<any> => {
   let response: AxiosResponse<any>;
   try {
-    response = await axios.patch(`${config.apiEndpoint}/actors`, {
+    response = await axios.patch(`${config.apiEndpoint}/films`, {
       title: title,
       imageUrl: imageUrl,
       trailerUrl: trailerUrl,
@@ -110,7 +112,7 @@ export const updateMovie = async (
       description: description,
       rated: rated,
       status: status,
-      NationalityId: NationalityId,
+      Nationality: NationalityId,
       Categories: Categories,
       Actors: Actors,
       Directors: Directors,
@@ -118,6 +120,6 @@ export const updateMovie = async (
   } catch (e) {
     return [];
   }
-  console.log('ADD FILM');
+  console.log('ADD FILM2');
   return response.data.data;
 };
