@@ -107,7 +107,7 @@ export default function FilmDialog(props: any) {
 
   
 
-  if (props.data === '0') {
+  if (props.data === 0) {
     return (
       <Dialog open={props.open} onClose={handleCloseDialog}>
         <Box className={classes.AddFilmBox}>
