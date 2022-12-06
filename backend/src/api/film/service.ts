@@ -5,6 +5,7 @@ import FilmPayload from './FilmPayload';
 import { Op } from 'sequelize';
 import Status from '../../utils/constants/Status';
 import paginate from 'utils/helpers/pagination';
+import sequelize from 'databases';
 
 const getFilms = async (req: Request) => {
 	try {
@@ -100,16 +101,26 @@ const addFilm = async (req: Request) => {
 			message = 'Title null.';
 			status = ResponeCodes.BAD_REQUEST;
 		} else {
-			const film = await Film.create(newFilm);
-
-			if (nationality) await film.setNationality(nationality);
-			if (categories) await film.setCategories(categories);
-			if (actors) await film.setActors(actors);
-			if (directors) await film.setDirectors(directors);
-
-			data = film;
-			message = 'Add successfully!';
-			status = ResponeCodes.CREATED;
+			const transaction = await sequelize.transaction(async t => {
+				const film = await Film.create(newFilm, {
+					transaction: t
+				});
+				await film.setNationality(nationality, {
+					transaction: t
+				});
+				await film.setCategories(categories, {
+					transaction: t
+				});
+				await film.setActors(actors, {
+					transaction: t
+				});
+				await film.setDirectors(directors, {
+					transaction: t
+				});
+				data = film;
+				message = 'Add successfully!';
+				status = ResponeCodes.CREATED;
+			});
 		}
 
 		return {
@@ -138,16 +149,19 @@ const updateFilm = async (req: Request) => {
 			const updateFilm: FilmPayload = req.body;
 			const { nationality, categories, actors, directors } = updateFilm;
 
-			const film = await Film.findByPk(id);
-			data = await film.update(updateFilm);
+			const transaction = await sequelize.transaction(async t => {
+				const film = await Film.findByPk(id, { transaction: t });
+				film.set(updateFilm);
+				await film.save({ transaction: t });
+				await film.setNationality(nationality, { transaction: t });
+				await film.setCategories(categories, { transaction: t });
+				await film.setActors(actors, { transaction: t });
+				await film.setDirectors(directors, { transaction: t });
 
-			if (Nationality) await film.setNationality(nationality);
-			if (categories) await film.setCategories(categories);
-			if (actors) await film.setActors(actors);
-			if (directors) await film.setDirectors(directors);
-
-			message = 'Updated successfully!';
-			status = ResponeCodes.OK;
+				data = film;
+				message = 'Updated successfully!';
+				status = ResponeCodes.OK;
+			});
 		}
 
 		return {

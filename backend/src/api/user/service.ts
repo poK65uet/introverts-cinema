@@ -5,9 +5,9 @@ import { UserModel } from 'databases/models/IModel';
 import ResponeCodes from 'utils/constants/ResponeCode';
 import UserPayload from './UserPayload';
 import UserInfo from './UserInfo';
-import RoleCodes from 'utils/constants/RoleCode';
 import paginate from 'utils/helpers/pagination';
 import { Op } from 'sequelize';
+import sequelize from 'databases';
 
 const getUsers = async (req: Request) => {
 	try {
@@ -81,31 +81,34 @@ const addUser = async (req: Request) => {
 
 		const newUser: UserPayload = req.body;
 
-		const { email, password } = newUser;
+		const { email, password, roles } = newUser;
 		if (!email || !password) {
 			data = null;
 			message = 'Email or password null.';
 			status = ResponeCodes.BAD_REQUEST;
 		} else {
-			const [user, created] = await User.findOrCreate({
-				where: {
-					email
-				},
-				defaults: {
-					...newUser
+			const transaction = await sequelize.transaction(async t => {
+				const [user, created] = await User.findOrCreate({
+					where: {
+						email
+					},
+					defaults: {
+						...newUser
+					},
+					transaction: t
+				});
+
+				if (created) {
+					await user.setRoles(roles, { transaction: t });
+					data = user;
+					message = 'Add user successfully!';
+					status = ResponeCodes.CREATED;
+				} else {
+					data = null;
+					message = 'Email exists.';
+					status = ResponeCodes.OK;
 				}
 			});
-
-			if (created) {
-				await user.addRole(RoleCodes.CUSTOMER);
-				data = user;
-				message = 'Add user successfully!';
-				status = ResponeCodes.CREATED;
-			} else {
-				data = null;
-				message = 'Email exists.';
-				status = ResponeCodes.OK;
-			}
 		}
 
 		return {

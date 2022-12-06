@@ -38,9 +38,7 @@ const login = async (loginData: LoginPayLoad) => {
 					status = ResponeCodes.OK;
 				} else {
 					const roles = user.Roles;
-
 					const roleIds = roles.map(role => role.id);
-
 					const token = jwt.sign({ userId: user.id, roleIds, userEmail: user.email }, config.secret_key, {
 						expiresIn: config.expires_in
 					});

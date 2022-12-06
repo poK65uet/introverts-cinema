@@ -10,7 +10,8 @@ import {
 	HasManyAddAssociationsMixin,
 	HasManyRemoveAssociationMixin,
 	HasManyRemoveAssociationsMixin,
-	NonAttribute
+	NonAttribute,
+	HasManySetAssociationsMixin
 } from 'sequelize';
 import sequelize from 'databases';
 import { RoleModel } from './Role';
@@ -25,11 +26,8 @@ export interface UserModel extends Model<InferAttributes<UserModel>, InferCreati
 	createdAt: CreationOptional<Date>;
 	updatedAt: CreationOptional<Date>;
 	Roles?: NonAttribute<RoleModel[]>;
-	getRoles: HasManyGetAssociationsMixin<RoleModel>;
-	addRole: HasManyAddAssociationMixin<RoleModel, RoleModel['id']>;
-	addRoles: HasManyAddAssociationsMixin<RoleModel, RoleModel['id']>;
-	removeRole: HasManyRemoveAssociationMixin<RoleModel, RoleModel['id']>;
-	removeRoles: HasManyRemoveAssociationsMixin<RoleModel, RoleModel['id']>;
+
+	setRoles: HasManySetAssociationsMixin<RoleModel, RoleModel['id']>;
 }
 
 const User = sequelize.define<UserModel>(
