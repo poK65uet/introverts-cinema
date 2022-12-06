@@ -16,12 +16,12 @@ import { useGetMovies } from 'queries/movies';
 export default function FilmManagementPage() {
   const classes = useStyles();
   const [open, setOpen] = useState(false);
-  const [editRowId, setEditRowId] = useState(0);
+  const [editRowId, setEditRowId] = useState('0');
   const [page, setPage] = useState<number>(0);
   const [pageSize, setPageSize] = useState<number>(5);
 
   const handleClickOpenAddPage = () => {
-    setEditRowId(0);
+    setEditRowId('0');
     setOpen(true);
   };
 
@@ -30,7 +30,7 @@ export default function FilmManagementPage() {
   };
 
   const handleClickOpenEditPage = (params: any) => {
-    setEditRowId(params);
+    setEditRowId(params.toString);
     setOpen(true);
   };
 

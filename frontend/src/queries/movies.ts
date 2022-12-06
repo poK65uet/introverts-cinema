@@ -23,7 +23,7 @@ export const getUpcomingMovies = async (): Promise<string[]> => {
 
   return response.data.data;
 };
-
+// BUG?
 export const getMovieById = async (id: string | undefined): Promise<any> => {
   let response: AxiosResponse<any>;
   try {
@@ -35,7 +35,7 @@ export const getMovieById = async (id: string | undefined): Promise<any> => {
 };
 
 export const useGetMovieById = (id: string | undefined) =>
-  useQuery(['movies/getMovieById'], () => getMovieById(id));
+  useQuery(['getMovieById'], () => getMovieById(id));
 
 export const getMovies = async (): Promise<any> => {
   let response: AxiosResponse<any>;
@@ -120,6 +120,6 @@ export const updateMovie = async (
   } catch (e) {
     return [];
   }
-  console.log('ADD FILM2');
+  console.log('EDIT OK');
   return response.data.data;
 };
