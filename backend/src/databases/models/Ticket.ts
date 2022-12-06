@@ -5,8 +5,9 @@ import User from './User';
 export interface TicketModel extends Model<InferAttributes<TicketModel>, InferCreationAttributes<TicketModel>> {
 	id: CreationOptional<number>;
 	room: string;
-	seatRow: string;
-	seatColumn: string;
+	seatRow: number;
+	seatColumn: number;
+	seatCode: string;
 	time: Date;
 	price: number;
 	createdAt: CreationOptional<Date>;
@@ -28,15 +29,19 @@ const Ticket = sequelize.define<TicketModel>(
 		},
 		seatRow: {
 			allowNull: false,
-			type: DataTypes.STRING
+			type: DataTypes.INTEGER
 		},
 		seatColumn: {
+			allowNull: false,
+			type: DataTypes.INTEGER
+		},
+		seatCode: {
 			allowNull: false,
 			type: DataTypes.STRING
 		},
 		time: {
 			allowNull: false,
-			type: DataTypes.TIME
+			type: DataTypes.DATE
 		},
 		price: {
 			allowNull: false,
