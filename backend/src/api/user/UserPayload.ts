@@ -4,6 +4,7 @@ interface UserPayload {
 	fullName?: string;
 	phone?: string;
 	birthDay?: Date;
+	roles?: number[];
 }
 
 export default UserPayload;

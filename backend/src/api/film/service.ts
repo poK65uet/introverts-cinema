@@ -1,25 +1,28 @@
 import { Request } from 'express';
 import { Actor, Category, Director, Film, Nationality } from 'databases/models';
-import ResponeCodes from 'utils/constant/ResponeCode';
+import ResponeCodes from 'utils/constants/ResponeCode';
 import FilmPayload from './FilmPayload';
 import { Op } from 'sequelize';
-import Status from '../../utils/constant/Status';
+import Status from '../../utils/constants/Status';
+import paginate from 'utils/helpers/pagination';
+import sequelize from 'databases';
 
 const getFilms = async (req: Request) => {
 	try {
-		let data;
-		let message: string;
-		let status: number;
+		const { limit, offset, order, query } = paginate(req);
 
-		data = await Film.findAll();
-		message = 'Get all successfully!';
-		status = ResponeCodes.OK;
+		const films = await Film.findAndCountAll({
+			where: {
+				title: {
+					[Op.like]: `%${query}%`
+				}
+			},
+			limit,
+			offset,
+			order: [order]
+		});
 
-		return {
-			data,
-			message,
-			status
-		};
+		return films;
 	} catch (error) {
 		throw error;
 	}
@@ -91,23 +94,33 @@ const addFilm = async (req: Request) => {
 		let status: number;
 
 		const newFilm: FilmPayload = req.body;
-		const { Nationality, Categories, Actors, Directors } = newFilm;
+		const { nationality, categories, actors, directors } = newFilm;
 
 		if (!newFilm.title) {
 			data = null;
 			message = 'Title null.';
 			status = ResponeCodes.BAD_REQUEST;
 		} else {
-			const film = await Film.create(newFilm);
-
-			if (Nationality) await film.setNationality(Nationality);
-			if (Categories) await film.setCategories(Categories);
-			if (Actors) await film.setActors(Actors);
-			if (Directors) await film.setDirectors(Directors);
-
-			data = film;
-			message = 'Add successfully!';
-			status = ResponeCodes.CREATED;
+			const transaction = await sequelize.transaction(async t => {
+				const film = await Film.create(newFilm, {
+					transaction: t
+				});
+				await film.setNationality(nationality, {
+					transaction: t
+				});
+				await film.setCategories(categories, {
+					transaction: t
+				});
+				await film.setActors(actors, {
+					transaction: t
+				});
+				await film.setDirectors(directors, {
+					transaction: t
+				});
+				data = film;
+				message = 'Add successfully!';
+				status = ResponeCodes.CREATED;
+			});
 		}
 
 		return {
@@ -134,18 +147,21 @@ const updateFilm = async (req: Request) => {
 			status = ResponeCodes.BAD_REQUEST;
 		} else {
 			const updateFilm: FilmPayload = req.body;
-			const { Nationality, Categories, Actors, Directors } = updateFilm;
+			const { nationality, categories, actors, directors } = updateFilm;
 
-			const film = await Film.findByPk(id);
-			data = await film.update(updateFilm);
+			const transaction = await sequelize.transaction(async t => {
+				const film = await Film.findByPk(id, { transaction: t });
+				film.set(updateFilm);
+				await film.save({ transaction: t });
+				await film.setNationality(nationality, { transaction: t });
+				await film.setCategories(categories, { transaction: t });
+				await film.setActors(actors, { transaction: t });
+				await film.setDirectors(directors, { transaction: t });
 
-			if (Nationality) await film.setNationality(Nationality);
-			if (Categories) await film.setCategories(Categories);
-			if (Actors) await film.setActors(Actors);
-			if (Directors) await film.setDirectors(Directors);
-
-			message = 'Updated successfully!';
-			status = ResponeCodes.OK;
+				data = film;
+				message = 'Updated successfully!';
+				status = ResponeCodes.OK;
+			});
 		}
 
 		return {

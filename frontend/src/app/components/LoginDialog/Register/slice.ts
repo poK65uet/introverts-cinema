@@ -102,7 +102,7 @@ export const registerSlice = createSlice({
           console.log('REGISTER FAILED - CODE EXPIRED/INCORRECT');
           notify({
             type: 'error',
-            content: 'Kiểm tra lại mã OTP',
+            content: 'Kiểm tra lại mã OTP và thử lại',
           });
         } else {
           console.log('REGISTER FAILED');

@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import * as service from './service';
 import { ApiResponse } from 'utils/rest/ApiResponse';
-import ResponeCodes from 'utils/constant/ResponeCode';
+import ResponeCodes from 'utils/constants/ResponeCode';
 
 // GET: /users/pagination
 const getUsers = async (req: Request, res: Response) => {
@@ -35,23 +35,50 @@ const addUser = async (req: Request, res: Response) => {
 	}
 };
 
-// PATCH: /users/:id
-const updateUser = async (req: Request, res: Response) => {
+// GET: /users/me
+const getMe = async (req: Request, res: Response) => {
 	try {
-		const result = await service.updateUser(req);
+		const result = await service.getMe(req);
 		const { data, message, status } = result;
 		return new ApiResponse(data, message, status).send(res);
 	} catch (error) {
-		return new ApiResponse(error.message, "Couldn't update user.", ResponeCodes.ERROR).send(res);
+		return new ApiResponse(error.message, "Couldn't get info.", ResponeCodes.ERROR).send(res);
 	}
 };
 
-// PATCH: /users/:id/changePassword
-const changePassword = async (req: Request, res: Response) => {
+// PATCH: /users/changeInfo
+const changeInfo = async (req: Request, res: Response) => {
 	try {
-		const result = await service.changePassword(req);
+		const result = await service.changeInfo(req);
 		const { data, message, status } = result;
 		return new ApiResponse(data, message, status).send(res);
+	} catch (error) {
+		return new ApiResponse(error.message, "Couldn't update info.", ResponeCodes.ERROR).send(res);
+	}
+};
+
+// POST: /users/checkPassword
+const checkPassword = async (req: Request, res: Response) => {
+	try {
+		const result = await service.checkPassword(req);
+		const { data, message, status } = result;
+		return new ApiResponse(data, message, status).send(res);
+	} catch (error) {
+		return new ApiResponse(error.message, "Couldn't check password.", ResponeCodes.ERROR).send(res);
+	}
+};
+
+// PATCH: /users/changePassword
+const changePassword = async (req: Request, res: Response) => {
+	try {
+		const checkResult = await service.checkPassword(req);
+		if (checkResult.data === true) {
+			const result = await service.changePassword(req);
+			const { data, message, status } = result;
+			return new ApiResponse(data, message, status).send(res);
+		} else {
+			return new ApiResponse(checkResult.data, checkResult.message, checkResult.status).send(res);
+		}
 	} catch (error) {
 		return new ApiResponse(error.message, "Couldn't change password.", ResponeCodes.ERROR).send(res);
 	}
@@ -68,4 +95,4 @@ const deleteUser = async (req: Request, res: Response) => {
 	}
 };
 
-export { getUsers, getUser, addUser, updateUser, deleteUser, changePassword };
+export { getUsers, getUser, addUser, deleteUser, changeInfo, changePassword, checkPassword, getMe };

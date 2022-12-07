@@ -15,6 +15,7 @@ export default function LoadingLayer() {
 			|| loading.movies.isLoading
 			|| loading.login.isLoading
 			|| loading.register.isLoading
+			|| loading.bookTicket.isLoading
 		)
 	}, [loading])
 
@@ -22,7 +23,7 @@ export default function LoadingLayer() {
 		<Backdrop open={isLoading} sx={{ fontSize: '1rem', zIndex: 1500, width: '100vw' }}>
 			<ThreeCircles
 				wrapperStyle={{ fontSize: '0.5em' }}
-				height='10em'	
+				height='10em'
 				width='10em'
 				color='#FF884B'
 				outerCircleColor='#FF884B'

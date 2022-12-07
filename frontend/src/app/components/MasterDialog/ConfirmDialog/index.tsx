@@ -16,7 +16,7 @@ interface ConfirmDialogProps {
 	handleConfirm?: (event: React.MouseEvent) => void
 	handleCancel?: (event: React.MouseEvent) => void
 	title: string
-	content?: string
+	content: string
 }
 
 export default function ConfirmDialog(props: ConfirmDialogProps) {
@@ -27,7 +27,7 @@ export default function ConfirmDialog(props: ConfirmDialogProps) {
 			open={props.open} onClose={props.handleClose}
 			classes={{ paper: classes.dialog }} >
 			<DialogTitle className={classes.title}>
-				<Typography variant='h6' fontWeight={900} margin='auto'>
+				<Typography fontSize={20} fontWeight={900} margin='auto'>
 					{props.title}
 				</Typography>
 			</DialogTitle>
@@ -41,13 +41,13 @@ export default function ConfirmDialog(props: ConfirmDialogProps) {
 				<Button
 					disableFocusRipple
 					className={classes.action}
-					onClick={props.handleClose}>
+					onClick={props.handleConfirm}>
 					Xác nhận
 				</Button>
 				<Button
 					disableFocusRipple
 					className={classes.button}
-					onClick={props.handleClose}>
+					onClick={props.handleCancel}>
 					Hủy
 				</Button>
 			</DialogActions>

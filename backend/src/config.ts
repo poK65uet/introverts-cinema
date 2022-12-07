@@ -13,5 +13,6 @@ export default {
 			user: process.env.MAIL_EMAIL,
 			pass: process.env.MAIL_PASSWORD
 		}
-	}
+	},
+	qr_code_base_url: process.env.QR_CODE_BASE_URL
 };

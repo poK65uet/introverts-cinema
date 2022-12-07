@@ -43,12 +43,19 @@ const useStyles = makeStyles((theme: Theme) => ({
   button: {
     maxWidth: '18vw',
     minWidth: 'min(14rem, 18vw) !important',
+    minHeight: '100%',
     fontSize: '1em !important',
+    margin: '0 2rem !important',
     transition: '0.5s',
     '&:hover': {
       color: theme.palette.primary.main,
     },
-    margin: '0 2rem !important',
+  },
+
+  buttonLink: {
+    textDecoration: 'none',
+    color: 'inherit !important',
+    height: 'auto',
   },
 
   listButton: {

@@ -1,23 +1,35 @@
 import { Request } from 'express';
 import { Room } from 'databases/models';
-import ResponeCodes from 'utils/constant/ResponeCode';
+import ResponeCodes from 'utils/constants/ResponeCode';
 import RoomPayload from './RoomPayload';
+import paginate from 'utils/helpers/pagination';
+import { Op } from 'sequelize';
 
 const getRooms = async (req: Request) => {
 	try {
-		let data;
-		let message: string;
-		let status: number;
+		const { limit, offset, order, query } = paginate(req);
 
-		data = await Room.findAll();
-		message = 'Get all successfully!';
-		status = ResponeCodes.OK;
+		const rooms = await Room.findAndCountAll({
+			where: {
+				[Op.or]: [
+					{
+						name: {
+							[Op.like]: `%${query}%`
+						}
+					},
+					{
+						visionType: {
+							[Op.like]: `%${query}%`
+						}
+					}
+				]
+			},
+			limit,
+			offset,
+			order: [order]
+		});
 
-		return {
-			data,
-			message,
-			status
-		};
+		return rooms;
 	} catch (error) {
 		throw error;
 	}
@@ -37,7 +49,6 @@ const getRoomById = async (req: Request) => {
 			status = ResponeCodes.BAD_REQUEST;
 		} else {
 			const room = await Room.findByPk(id);
-            console.log(typeof room.colNumber);
 			if (!room) {
 				data = null;
 				message = 'Not found.';

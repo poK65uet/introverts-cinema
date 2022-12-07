@@ -35,7 +35,7 @@ const Director = sequelize.define<DirectorModel>(
 			type: DataTypes.STRING
 		},
 		birthDay: {
-			type: DataTypes.DATE
+			type: DataTypes.DATEONLY
 		},
 		createdAt: {
 			type: DataTypes.DATE

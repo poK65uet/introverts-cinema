@@ -22,7 +22,7 @@ export default function NewMovieList(this: any) {
     if (!store.movies.getNewMovies) {
       dispatch(getNewMoviesThunk())
     };
-  }, [store.movies.getNewMovies])
+  }, [])
 
   const classes = useStyles();
 
@@ -67,6 +67,7 @@ export default function NewMovieList(this: any) {
                 name={movie.title}
                 img={movie.imageUrl}
                 genre={movie.Categories}
+                rated={movie.rated}
                 duration={movie.duration + ' phút'} />
             </SwiperSlide>
           })}

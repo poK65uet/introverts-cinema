@@ -9,6 +9,7 @@ import 'react-toastify/dist/ReactToastify.css';
 interface MasterDialogProps {
 	type?: 'info' | 'success' | 'warning' | 'error' | 'promise' | undefined
 	content: string
+	autocloseDelay?: number
 	promiseTimeout?: number
 	promisePending?: string
 	promiseSuccess?: string
@@ -16,10 +17,19 @@ interface MasterDialogProps {
 }
 
 export const notify = (props: MasterDialogProps) => {
-	props.type == 'info' ? toast.info(props.content) :
-		props.type == 'success' ? toast.success(props.content) :
-			props.type == 'warning' ? toast.warning(props.content) :
-				props.type == 'error' ? toast.error(props.content) :
+
+	props.type == 'info' ? toast.info(props.content, {
+		autoClose: props.autocloseDelay ? props.autocloseDelay : undefined
+	}) :
+		props.type == 'success' ? toast.success(props.content, {
+			autoClose: props.autocloseDelay ? props.autocloseDelay : undefined
+		}) :
+			props.type == 'warning' ? toast.warning(props.content, {
+				autoClose: props.autocloseDelay ? props.autocloseDelay : undefined
+			}) :
+				props.type == 'error' ? toast.error(props.content, {
+					autoClose: props.autocloseDelay ? props.autocloseDelay : undefined
+				}) :
 					props.type == 'promise' ? toast.promise(
 						new Promise(resolve => setTimeout(resolve, props.promiseTimeout)),
 						{
@@ -34,6 +44,10 @@ export const notify = (props: MasterDialogProps) => {
 export default function MasterDialog(props?: ToastContainerProps) {
 
 	return (
-		<ToastContainer position='bottom-left' {...props} />
+		<ToastContainer {...props}
+			position='bottom-left'
+			newestOnTop
+			pauseOnHover={false}
+			pauseOnFocusLoss={false} />
 	);
 }

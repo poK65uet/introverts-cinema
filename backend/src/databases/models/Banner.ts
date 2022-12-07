@@ -1,6 +1,6 @@
 import { CreationOptional, DataTypes, InferAttributes, InferCreationAttributes, Model } from 'sequelize';
 import sequelize from 'databases';
-import Status from 'utils/constant/Status';
+import Status from 'utils/constants/Status';
 
 export interface BannerModel extends Model<InferAttributes<BannerModel>, InferCreationAttributes<BannerModel>> {
 	id: CreationOptional<number>;

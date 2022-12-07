@@ -1,23 +1,26 @@
 import { Request } from 'express';
 import { Category } from 'databases/models';
-import ResponeCodes from 'utils/constant/ResponeCode';
+import ResponeCodes from 'utils/constants/ResponeCode';
 import CategoryPayload from './CategoryPayload';
+import paginate from 'utils/helpers/pagination';
+import { Op } from 'sequelize';
 
 const getCategories = async (req: Request) => {
 	try {
-		let data;
-		let message: string;
-		let status: number;
+		const { limit, offset, order, query } = paginate(req);
 
-		data = await Category.findAll();
-		message = 'Get all successfully!';
-		status = ResponeCodes.OK;
+		const categories = await Category.findAndCountAll({
+			where: {
+				name: {
+					[Op.like]: `%${query}%`
+				}
+			},
+			limit,
+			offset,
+			order: [order]
+		});
 
-		return {
-			data,
-			message,
-			status
-		};
+		return categories;
 	} catch (error) {
 		throw error;
 	}

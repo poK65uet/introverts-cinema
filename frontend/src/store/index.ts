@@ -5,6 +5,7 @@ import bannersReducer from 'app/components/Banner/slice';
 import loginReducer from 'app/components/LoginDialog/slice';
 import registerReducer from 'app/components/LoginDialog/Register/slice';
 import loadingReducer from 'app/components/LoadingLayer/slice';
+import bookTicketReducer from 'app/pages/BookTicketPage/slice';
 
 export const store = configureStore({
   reducer: {
@@ -14,6 +15,7 @@ export const store = configureStore({
     login: loginReducer,
     register: registerReducer,
     loading: loadingReducer,
+    bookTicket: bookTicketReducer,
   },
 });
 // Infer the `RootState` and `AppDispatch` types from the store itself

@@ -10,6 +10,8 @@ import Footer from "app/containers/Footer";
 import MasterDialog, { notify } from "app/components/MasterDialog";
 import { useSelector } from 'react-redux';
 import { RootState } from 'store';
+import BookTicketPage from '../pages/BookTicketPage/index';
+import paths from "paths";
 
 
 const HomeLayout = () => {
@@ -21,9 +23,10 @@ const HomeLayout = () => {
 			<Header />
 			<Switch>
 				<Route path='/' exact component={HomePage} />
-				<Route path='/new-movies' component={NewMoviePage} />
-				<Route path='/upcoming-movies' component={UpcomingMoviePage} />
-				<Route path='/movie-detail/:movieId' component={MovieDetailPage} />
+				<Route path={`${paths.NewMoviePage}`} component={NewMoviePage} />
+				<Route path={`${paths.UpcomingMoviePage}`} component={UpcomingMoviePage} />
+				<Route path={`${paths.MovieDetailPage}/:movieId`} component={MovieDetailPage} />
+				<Route path={`${paths.BookTicketPage}`} component={BookTicketPage} />
 				<Route path='/*' component={NotFoundPage} />
 			</Switch>
 			<MasterDialog />

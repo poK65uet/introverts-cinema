@@ -2,11 +2,13 @@ import { Request, Response, NextFunction } from 'express';
 import { ApiResponse } from 'utils/rest/ApiResponse';
 import jwt from 'jsonwebtoken';
 import config from '../config';
-import RoleCodes from 'utils/constant/RoleCode';
-import ResponeCodes from 'utils/constant/ResponeCode';
+import RoleCodes from 'utils/constants/RoleCode';
+import ResponeCodes from 'utils/constants/ResponeCode';
+import { UserRequestInfo } from 'databases/models/User';
 
 interface IToken {
 	userId: number;
+	userEmail: string;
 	roleIds: number[];
 }
 
@@ -22,22 +24,26 @@ const verifyToken = (req: Request, res: Response, next: NextFunction) => {
 		if (err) {
 			return new ApiResponse(err, 'Unauthorized!', ResponeCodes.UNAUTHORIZED).send(res);
 		}
-		res.locals = decoded;
+		req.user = {
+			id: decoded.userId,
+			email: decoded.userEmail,
+			roleIds: decoded.roleIds
+		};
 		next();
 	});
 };
 
 const verifyAdmin = async (req: Request, res: Response, next: NextFunction) => {
-	const token = res.locals;
-	if (!token || !token.roleIds.includes(RoleCodes.ADMIN)) {
+	const user: UserRequestInfo = req.user;
+	if (!user || !user.roleIds.includes(RoleCodes.ADMIN)) {
 		return new ApiResponse(null, 'Not permission!', ResponeCodes.UNAUTHORIZED).send(res);
 	}
 	next();
 };
 
 const verifyCustomer = async (req: Request, res: Response, next: NextFunction) => {
-	const token = res.locals;
-	if (!token || !token.roleIds.includes(RoleCodes.CUSTOMER)) {
+	const user: UserRequestInfo = req.user;
+	if (!user || !user.roleIds.includes(RoleCodes.CUSTOMER)) {
 		return new ApiResponse(null, 'Not permission!', ResponeCodes.UNAUTHORIZED).send(res);
 	}
 	next();

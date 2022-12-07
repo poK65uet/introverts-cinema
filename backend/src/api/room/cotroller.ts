@@ -1,13 +1,12 @@
 import { NextFunction, Request, Response } from 'express';
 import * as service from './service';
 import { ApiResponse } from 'utils/rest/ApiResponse';
-import ResponeCodes from 'utils/constant/ResponeCode';
+import ResponeCodes from 'utils/constants/ResponeCode';
 
 const getRooms = async (req: Request, res: Response) => {
 	try {
 		const result = await service.getRooms(req);
-		const { data, message, status } = result;
-		return new ApiResponse(data, message, status).send(res);
+		return new ApiResponse(result).send(res);
 	} catch (error) {
 		return new ApiResponse(error.message, "Couldn't get rooms.", ResponeCodes.ERROR).send(res);
 	}
