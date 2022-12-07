@@ -15,6 +15,7 @@ import { BillModel } from 'databases/models/Bill';
 import config from 'config';
 
 const MAX_SEAT = 10;
+const MAX_PAY_TIME = 15; //minutes
 
 const createBill = async (req: Request) => {
 	const payload: BillPayload = req.body;
@@ -26,6 +27,8 @@ const createBill = async (req: Request) => {
 				model: Room
 			}
 		});
+		console.log();
+
 		if (!user || !showtime) {
 			return {
 				message: 'user or showtime invalid',
@@ -42,6 +45,9 @@ const createBill = async (req: Request) => {
 		let seatList = [];
 		for (let pos of payload.seats) {
 			let seat = await Seat.findOne({
+				where: {
+					code: pos.code
+				},
 				include: [
 					{
 						model: Showtime,
@@ -50,10 +56,7 @@ const createBill = async (req: Request) => {
 							id: showtime.id
 						}
 					}
-				],
-				where: {
-					code: pos.code
-				}
+				]
 			});
 			if (!seat) {
 				seat = await Seat.create({
@@ -70,12 +73,15 @@ const createBill = async (req: Request) => {
 						owner: user.email
 					});
 				} else {
+					t.rollback();
 					return {
 						message: '1 seat invalid!',
 						status: ResponeCodes.BAD_REQUEST
 					};
 				}
 			}
+			console.log(1);
+
 			seatList.push(seat);
 			const price = await getPrice(showtime.Room.visionType, showtime.startTime.getDay());
 			totalPrice += price.value;
@@ -141,7 +147,11 @@ const confirmPayment = async (req: Request) => {};
 const verifySeat = (seat: SeatModel, user: UserRequestInfo) => {
 	if (!seat) return false;
 	if (seat.status === SeatStatus.BOOKED) return false;
-	if (seat.owner != null && seat.owner != user.email && timeDiffToMinute(new Date(Date.now()), seat.updatedAt) < 15)
+	if (
+		seat.owner != null &&
+		seat.owner != user.email &&
+		timeDiffToMinute(new Date(Date.now()), seat.updatedAt) < MAX_PAY_TIME
+	)
 		return false;
 	return true;
 };
