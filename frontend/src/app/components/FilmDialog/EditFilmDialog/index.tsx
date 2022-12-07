@@ -66,8 +66,10 @@ export default function EditFilmDialog(props: any) {
   };
 
   const handleEditFilm = () => {
+    setValues({...values, Actors: values.Actors.map(({ id } : { id : any}) => id)});
     if (validate(values)) {
       const data = updateMovie(
+        values.id.toString(),
         values.title,
         values.imageUrl,
         values.trailerUrl,
@@ -81,6 +83,7 @@ export default function EditFilmDialog(props: any) {
         values.Actors,
         values.Directors,
       );
+      console.log(data);
     }
   };
 
@@ -94,7 +97,6 @@ export default function EditFilmDialog(props: any) {
     }
   }, [isLoading]);
 
-  
   return (
     <Dialog open={props.open} onClose={handleCloseDialog}>
       <Box className={classes.AddFilmBox}>
@@ -203,12 +205,8 @@ export default function EditFilmDialog(props: any) {
           options={loadingActors ? [] : allActors}
           loading={loadingActors}
           getOptionLabel={(option: any) => option.fullName}
-          onChange={(event, value) =>
-            setValues({ ...values, Actors: value })
-          }
-          isOptionEqualToValue={(option, value) => 
-            option.id === value.id
-          }
+          onChange={(event, value) => setValues({ ...values, Actors: value })}
+          isOptionEqualToValue={(option, value) => option.id === value.id}
           renderInput={params => (
             <TextField
               {...params}

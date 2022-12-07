@@ -51,6 +51,7 @@ export const getMovies = async (): Promise<any> => {
 export const useGetMovies = () => useQuery(['getMovies'], () => getMovies());
 
 export const addMovie = async (
+  id: string,
   title: string,
   imageUrl?: string,
   trailerUrl?: string,
@@ -66,7 +67,7 @@ export const addMovie = async (
 ): Promise<any> => {
   let response: AxiosResponse<any>;
   try {
-    response = await axios.post(`${config.apiEndpoint}/films`, {
+    response = await axios.post(`${config.apiEndpoint}/films/${id}`, {
       title: title,
       imageUrl: imageUrl,
       trailerUrl: trailerUrl,
@@ -89,6 +90,7 @@ export const addMovie = async (
 };
 
 export const updateMovie = async (
+  id: string,
   title: string,
   imageUrl?: string,
   trailerUrl?: string,
@@ -104,7 +106,7 @@ export const updateMovie = async (
 ): Promise<any> => {
   let response: AxiosResponse<any>;
   try {
-    response = await axios.patch(`${config.apiEndpoint}/films`, {
+    response = await axios.patch(`${config.apiEndpoint}/films/${id}`, {
       title: title,
       imageUrl: imageUrl,
       trailerUrl: trailerUrl,
