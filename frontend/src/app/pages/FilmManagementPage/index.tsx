@@ -12,26 +12,30 @@ import { useState, useEffect } from 'react';
 import { Button, Chip, Typography } from '@mui/material';
 import AddFilmDialog from '../../components/FilmDialog';
 import { useGetMovies } from 'queries/movies';
+import EditFilmDialog from 'app/components/FilmDialog/EditFilmDialog';
 
 export default function FilmManagementPage() {
   const classes = useStyles();
   const [open, setOpen] = useState(false);
+  const [openEdit, setOpenEdit] = useState(false);
   const [editRowId, setEditRowId] = useState('0');
   const [page, setPage] = useState<number>(0);
   const [pageSize, setPageSize] = useState<number>(5);
 
   const handleClickOpenAddPage = () => {
-    setEditRowId('0');
     setOpen(true);
   };
 
   const handleClose = () => {
     setOpen(false);
   };
+  const handleCloseEdit = () => {
+    setOpenEdit(false);
+  };
 
   const handleClickOpenEditPage = (params: any) => {
-    setEditRowId(params.toString);
-    setOpen(true);
+    setEditRowId(params.toString());
+    setOpenEdit(true);
   };
 
   
@@ -120,10 +124,13 @@ export default function FilmManagementPage() {
   return (
     <Box className={classes.filmTable}>
       <AddFilmDialog
-        data={editRowId}
         open={open}
         onClose={handleClose}
-      ></AddFilmDialog>
+      />
+      <EditFilmDialog
+        data={editRowId}
+        open={openEdit}
+        onClose={handleCloseEdit} />
       <Typography variant="h4" component="h4" fontWeight="bold">
         Quản lý phim trong hệ thống
       </Typography>

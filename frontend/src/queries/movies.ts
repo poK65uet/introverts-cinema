@@ -25,6 +25,7 @@ export const getUpcomingMovies = async (): Promise<string[]> => {
 };
 // BUG?
 export const getMovieById = async (id: string | undefined): Promise<any> => {
+  if(id === '0') return undefined;
   let response: AxiosResponse<any>;
   try {
     response = await axios.get(`${config.apiEndpoint}/films/${id}`);
