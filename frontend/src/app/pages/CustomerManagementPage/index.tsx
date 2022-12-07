@@ -4,9 +4,9 @@ import { DataGrid, GridColDef, GridToolbar } from '@mui/x-data-grid';
 // import DeleteIcon from '@mui/icons-material/Delete';
 // import EditIcon from '@mui/icons-material/Edit';
 // import { IconButton, Typography } from '@mui/material';
-import { useGetUsers } from '../../../queries/getUsers'
+import { useGetUsers } from '../../../queries/user';
 import { useState, useEffect } from 'react';
-import { Typography } from '@mui/material';
+import { Button, Typography } from '@mui/material';
 
 export default function CustomerManagementPage() {
   const classes = useStyles();
@@ -17,11 +17,11 @@ export default function CustomerManagementPage() {
 
   const updatePage = async (newPage: number) => {
     setPage(newPage);
-  }
+  };
 
   const updatePageSize = (newPageSize: number) => {
     setPageSize(newPageSize);
-  }
+  };
 
   const updateRows = (newRows: readonly any[]) => {
     if (rows.length === 0) {
@@ -40,10 +40,9 @@ export default function CustomerManagementPage() {
       return;
     }
     setRows(rows.concat(newRows.slice(run - newRows.length)));
-  }
+  };
 
   const { data, isLoading } = useGetUsers(page, pageSize);
-
 
   useEffect(() => {
     if (data !== undefined) {
@@ -103,15 +102,15 @@ export default function CustomerManagementPage() {
   ];
   return (
     <Box className={classes.customerTable}>
-      <Typography variant="h4" component="h4">
+      <Typography variant="h4" component="h4" fontWeight="bold">
         Quản lý khách hàng
       </Typography>
       <DataGrid
         page={page}
         pageSize={pageSize}
         loading={isLoading ? true : false}
-        onPageChange={(newPage) => updatePage(newPage)}
-        onPageSizeChange={(newPageSize) => updatePageSize(newPageSize)}
+        onPageChange={newPage => updatePage(newPage)}
+        onPageSizeChange={newPageSize => updatePageSize(newPageSize)}
         rowsPerPageOptions={[5, 10, 20]}
         rowCount={count}
         rows={rows}
@@ -122,6 +121,5 @@ export default function CustomerManagementPage() {
         }}
       />
     </Box>
-
   );
 }

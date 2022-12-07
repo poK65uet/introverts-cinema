@@ -8,7 +8,7 @@ export default function AdminAppBar() {
     return (
         <MuiAppBar
             className={classes.appBar}
-            color='primary'
+            color='secondary'
             position='sticky'
             sx={{
                 fontSize: { xs: '10px !important', sm: '1em !important' }
