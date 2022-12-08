@@ -13,4 +13,14 @@ const createBill = async (req: Request, res: Response) => {
 	}
 };
 
-export { createBill };
+const cancelBill = async (req: Request, res: Response) => {
+	try {
+		const result = await service.cancelBill(req);
+		const { data, message, status } = result;
+		return new ApiResponse(data, message, status).send(res);
+	} catch (error) {
+		return new ApiResponse(error.message, "Couldn't create bill.", ResponeCodes.ERROR).send(res);
+	}
+};
+
+export { createBill, cancelBill };

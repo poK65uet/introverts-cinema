@@ -43,13 +43,14 @@ const Seat = sequelize.define<SeatModel>(
 		},
 		code: {
 			allowNull: false,
-			type: DataTypes.INTEGER
+			unique: true,
+			type: DataTypes.STRING
 		},
 		owner: {
 			type: DataTypes.STRING
 		},
 		status: {
-			type: DataTypes.TINYINT
+			type: DataTypes.STRING
 		},
 		createdAt: {
 			type: DataTypes.DATE

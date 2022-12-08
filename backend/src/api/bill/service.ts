@@ -3,7 +3,7 @@ import { Bill, Film, Room, Seat } from 'databases/models';
 import { SeatModel } from 'databases/models/Seat';
 import BillPayload from './BillPayload';
 import sequelize from 'databases';
-import User, { UserModel, UserRequestInfo } from 'databases/models/User';
+import User, { UserModel } from 'databases/models/User';
 import Showtime, { ShowtimeModel } from 'databases/models/Showtime';
 import SeatStatus from 'utils/constants/SeatStatus';
 import Price, { PriceModel } from 'databases/models/Price';
@@ -15,20 +15,23 @@ import { BillModel } from 'databases/models/Bill';
 import config from 'config';
 
 const MAX_SEAT = 10;
+const MAX_PAY_TIME = 15; //minutes
 
 const createBill = async (req: Request) => {
 	const payload: BillPayload = req.body;
 	const t = await sequelize.transaction();
-	const user: UserRequestInfo = req.user;
+	const user: UserModel = req.user;
 	try {
 		const showtime: ShowtimeModel = await Showtime.findByPk(payload.showtimeId, {
 			include: {
 				model: Room
 			}
 		});
-		if (!user || !showtime) {
+		console.log();
+
+		if (!showtime) {
 			return {
-				message: 'user or showtime invalid',
+				message: 'Showtime invalid',
 				status: ResponeCodes.BAD_REQUEST
 			};
 		}
@@ -42,6 +45,9 @@ const createBill = async (req: Request) => {
 		let seatList = [];
 		for (let pos of payload.seats) {
 			let seat = await Seat.findOne({
+				where: {
+					code: pos.code
+				},
 				include: [
 					{
 						model: Showtime,
@@ -50,10 +56,7 @@ const createBill = async (req: Request) => {
 							id: showtime.id
 						}
 					}
-				],
-				where: {
-					code: pos.code
-				}
+				]
 			});
 			if (!seat) {
 				seat = await Seat.create({
@@ -70,12 +73,15 @@ const createBill = async (req: Request) => {
 						owner: user.email
 					});
 				} else {
+					t.rollback();
 					return {
 						message: '1 seat invalid!',
 						status: ResponeCodes.BAD_REQUEST
 					};
 				}
 			}
+			console.log(1);
+
 			seatList.push(seat);
 			const price = await getPrice(showtime.Room.visionType, showtime.startTime.getDay());
 			totalPrice += price.value;
@@ -85,8 +91,8 @@ const createBill = async (req: Request) => {
 			paymentStatus: PaymentStatus.UNPAID
 		});
 		await bill.setShowtime(showtime);
-		const user_: UserModel = await User.findByPk(user.id);
-		await bill.setUser(user_);
+
+		await bill.setUser(user);
 		for (let seat of seatList) {
 			await bill.addSeat(seat);
 		}
@@ -106,10 +112,56 @@ const createBill = async (req: Request) => {
 	}
 };
 
-const verifySeat = (seat: SeatModel, user: UserRequestInfo) => {
+const cancelBill = async (req: Request) => {
+	const billId: number = req.body.bill;
+	const bill: BillModel = await Bill.findByPk(billId, {
+		include: [
+			{
+				model: Seat
+			},
+			{
+				model: User
+			}
+		]
+	});
+
+	if (!bill) {
+		return {
+			message: 'Bill invalid',
+			status: ResponeCodes.BAD_REQUEST
+		};
+	}
+	if (bill.User.id !== req.user.id) {
+		return {
+			message: 'Error Authorization',
+			status: ResponeCodes.BAD_REQUEST
+		};
+	}
+
+	for (let seat of bill.Seats) {
+		await seat.update({
+			status: SeatStatus.UN_BOOKED
+		});
+	}
+
+	return {
+		data: 0,
+		message: 'Succesfully',
+		status: ResponeCodes.OK
+	};
+};
+
+const confirmPayment = async (req: Request) => {};
+
+const verifySeat = (seat: SeatModel, user: UserModel) => {
 	if (!seat) return false;
 	if (seat.status === SeatStatus.BOOKED) return false;
-	if (seat.owner != null && seat.owner != user.email && timeDiffToMinute(new Date(Date.now()), seat.updatedAt) < 15)
+	if (
+		seat.status === SeatStatus.BOOKING &&
+		seat.owner != null &&
+		seat.owner != user.email &&
+		timeDiffToMinute(new Date(Date.now()), seat.updatedAt) < MAX_PAY_TIME
+	)
 		return false;
 	return true;
 };
@@ -118,4 +170,4 @@ const createQrCode = (bill: BillModel) => {
 	return `${config.qr_code_base_url}?amount=${bill.totalPrice}&addInfo=${bill.id}`;
 };
 
-export { createBill };
+export { createBill, cancelBill };
