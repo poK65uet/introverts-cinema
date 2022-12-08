@@ -13,22 +13,21 @@ import paths from 'paths';
 export default function AdminPage() {
   const classes = useStyles();
   return (
-    <div>
+		<React.Fragment> 
       <AdminAppBar />
-      <>
       <AdminMenu className={classes.adminMenu} />
-
       <div className={classes.adminContent}>
         <Switch>
           <Route
-            path={paths.FilmManagement}
+            path={`${paths.FilmManagement}`}
             component={FilmManagementPage}
             exact={true}
           />
           <Route
-            path={paths.CustomerManagement}
+            path = {`/customers`}
+            // path={`${paths.CustomerManagement}`}
             component={CustomerManagementPage}
-            exact={true}
+            // exact={true}
           />
           <Route
             path={paths.RoomManagement}
@@ -42,8 +41,7 @@ export default function AdminPage() {
           />
         </Switch>
       </div>
-      </>
       {/* <Footer/> */}
-    </div>
+      </React.Fragment>
   );
 }
