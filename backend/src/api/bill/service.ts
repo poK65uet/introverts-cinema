@@ -13,6 +13,7 @@ import { getPrice } from 'api/price/service';
 import PaymentStatus from 'utils/constants/PaymentStatus';
 import { BillModel } from 'databases/models/Bill';
 import config from 'config';
+import { getAllTransactionThisWeek } from 'api/transaction/service';
 
 const MAX_SEAT = 10;
 const MAX_PAY_TIME = 15; //minutes
@@ -27,7 +28,6 @@ const createBill = async (req: Request) => {
 				model: Room
 			}
 		});
-		console.log();
 
 		if (!showtime) {
 			return {
@@ -80,7 +80,6 @@ const createBill = async (req: Request) => {
 					};
 				}
 			}
-			console.log(1);
 
 			seatList.push(seat);
 			const price = await getPrice(showtime.Room.visionType, showtime.startTime.getDay());
@@ -151,7 +150,14 @@ const cancelBill = async (req: Request) => {
 	};
 };
 
-const confirmPayment = async (req: Request) => {};
+const verifyBillPayment = async (req: Request) => {
+	await getAllTransactionThisWeek();
+	return {
+		data: 0,
+		message: 'Successfully',
+		status: ResponeCodes.OK
+	};
+};
 
 const verifySeat = (seat: SeatModel, user: UserModel) => {
 	if (!seat) return false;
@@ -170,4 +176,4 @@ const createQrCode = (bill: BillModel) => {
 	return `${config.qr_code_base_url}?amount=${bill.totalPrice}&addInfo=${bill.id}`;
 };
 
-export { createBill, cancelBill };
+export { createBill, cancelBill, verifyBillPayment };
