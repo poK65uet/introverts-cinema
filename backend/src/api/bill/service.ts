@@ -3,7 +3,7 @@ import { Bill, Film, Room, Seat } from 'databases/models';
 import { SeatModel } from 'databases/models/Seat';
 import BillPayload from './BillPayload';
 import sequelize from 'databases';
-import User, { UserModel, UserRequestInfo } from 'databases/models/User';
+import User, { UserModel } from 'databases/models/User';
 import Showtime, { ShowtimeModel } from 'databases/models/Showtime';
 import SeatStatus from 'utils/constants/SeatStatus';
 import Price, { PriceModel } from 'databases/models/Price';
@@ -20,7 +20,7 @@ const MAX_PAY_TIME = 15; //minutes
 const createBill = async (req: Request) => {
 	const payload: BillPayload = req.body;
 	const t = await sequelize.transaction();
-	const user: UserRequestInfo = req.user;
+	const user: UserModel = req.user;
 	try {
 		const showtime: ShowtimeModel = await Showtime.findByPk(payload.showtimeId, {
 			include: {
@@ -29,9 +29,9 @@ const createBill = async (req: Request) => {
 		});
 		console.log();
 
-		if (!user || !showtime) {
+		if (!showtime) {
 			return {
-				message: 'user or showtime invalid',
+				message: 'Showtime invalid',
 				status: ResponeCodes.BAD_REQUEST
 			};
 		}
@@ -91,8 +91,8 @@ const createBill = async (req: Request) => {
 			paymentStatus: PaymentStatus.UNPAID
 		});
 		await bill.setShowtime(showtime);
-		const user_: UserModel = await User.findByPk(user.id);
-		await bill.setUser(user_);
+
+		await bill.setUser(user);
 		for (let seat of seatList) {
 			await bill.addSeat(seat);
 		}
@@ -118,6 +118,9 @@ const cancelBill = async (req: Request) => {
 		include: [
 			{
 				model: Seat
+			},
+			{
+				model: User
 			}
 		]
 	});
@@ -125,6 +128,12 @@ const cancelBill = async (req: Request) => {
 	if (!bill) {
 		return {
 			message: 'Bill invalid',
+			status: ResponeCodes.BAD_REQUEST
+		};
+	}
+	if (bill.User.id !== req.user.id) {
+		return {
+			message: 'Error Authorization',
 			status: ResponeCodes.BAD_REQUEST
 		};
 	}
@@ -144,10 +153,11 @@ const cancelBill = async (req: Request) => {
 
 const confirmPayment = async (req: Request) => {};
 
-const verifySeat = (seat: SeatModel, user: UserRequestInfo) => {
+const verifySeat = (seat: SeatModel, user: UserModel) => {
 	if (!seat) return false;
 	if (seat.status === SeatStatus.BOOKED) return false;
 	if (
+		seat.status === SeatStatus.BOOKING &&
 		seat.owner != null &&
 		seat.owner != user.email &&
 		timeDiffToMinute(new Date(Date.now()), seat.updatedAt) < MAX_PAY_TIME
