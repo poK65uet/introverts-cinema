@@ -2,22 +2,25 @@ import { Request } from 'express';
 import { Nationality } from 'databases/models';
 import ResponeCodes from 'utils/constants/ResponeCode';
 import NationalityPayload from './NationalityPayload';
+import paginate from 'utils/helpers/pagination';
+import { Op } from 'sequelize';
 
 const getNationalities = async (req: Request) => {
 	try {
-		let data;
-		let message: string;
-		let status: number;
+		const { limit, offset, order, query } = paginate(req);
 
-		data = await Nationality.findAll();
-		message = 'Get all successfully!';
-		status = ResponeCodes.OK;
+		const nationalities= await Nationality.findAndCountAll({
+			where: {
+				name: {
+					[Op.like]: `%${query}%`
+				}
+			},
+			limit,
+			offset,
+			order: [order]
+		});
 
-		return {
-			data,
-			message,
-			status
-		};
+		return nationalities;
 	} catch (error) {
 		throw error;
 	}

@@ -5,22 +5,20 @@ import ShowtimePayload from './ShowtimePayload';
 import { ShowtimeModel } from 'databases/models/Showtime';
 import { Op } from 'sequelize';
 import { getPrice } from 'api/price/service';
+import paginate from 'utils/helpers/pagination';
+import sequelize from 'databases';
 
 const getShowtimes = async (req: Request) => {
 	try {
-		let data;
-		let message: string;
-		let status: number;
+		const { limit, offset, order, query } = paginate(req);
 
-		data = await Showtime.findAll();
-		message = 'Get all successfully!';
-		status = ResponeCodes.OK;
+		const showtimes = await Showtime.findAndCountAll({
+			limit,
+			offset,
+			order: [order]
+		});
 
-		return {
-			data,
-			message,
-			status
-		};
+		return showtimes;
 	} catch (error) {
 		throw error;
 	}
@@ -189,13 +187,15 @@ const addShowtime = async (req: Request) => {
 			});
 
 			if (checkResult.length === 0) {
-				const showtime = await Showtime.create(newShowtime);
-				if (film) await showtime.setFilm(film);
-				if (room) await showtime.setRoom(room);
+				const transaction = await sequelize.transaction(async t => {
+					const showtime = await Showtime.create(newShowtime, { transaction: t });
+					await showtime.setFilm(film, { transaction: t });
+					await showtime.setRoom(room, { transaction: t });
 
-				data = showtime;
-				message = 'Add successfully!';
-				status = ResponeCodes.CREATED;
+					data = showtime;
+					message = 'Add successfully!';
+					status = ResponeCodes.CREATED;
+				});
 			} else {
 				data = null;
 				message = 'Conflict showtime';

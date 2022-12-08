@@ -35,7 +35,7 @@ const Actor = sequelize.define<ActorModel>(
 			type: DataTypes.STRING
 		},
 		birthDay: {
-			type: DataTypes.DATE
+			type: DataTypes.DATEONLY
 		},
 		createdAt: {
 			type: DataTypes.DATE

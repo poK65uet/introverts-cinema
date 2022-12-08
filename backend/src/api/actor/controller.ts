@@ -6,8 +6,7 @@ import ResponeCodes from 'utils/constants/ResponeCode';
 const getActors = async (req: Request, res: Response) => {
 	try {
 		const result = await service.getActors(req);
-		const { data, message, status } = result;
-		return new ApiResponse(data, message, status).send(res);
+		return new ApiResponse(result).send(res);
 	} catch (error) {
 		return new ApiResponse(error.message, "Couldn't get actors.", ResponeCodes.ERROR).send(res);
 	}

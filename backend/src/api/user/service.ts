@@ -4,10 +4,10 @@ import { User } from 'databases/models';
 import { UserModel } from 'databases/models/IModel';
 import ResponeCodes from 'utils/constants/ResponeCode';
 import UserPayload from './UserPayload';
-import RoleCodes from 'utils/constants/RoleCode';
 import UserInfo from './UserInfo';
 import paginate from 'utils/helpers/pagination';
 import { Op } from 'sequelize';
+import sequelize from 'databases';
 
 const getUsers = async (req: Request) => {
 	try {
@@ -20,7 +20,7 @@ const getUsers = async (req: Request) => {
 						email: {
 							[Op.like]: `%${query}%`
 						}
-					}, 
+					},
 					{
 						fullName: {
 							[Op.like]: `%${query}%`
@@ -81,31 +81,34 @@ const addUser = async (req: Request) => {
 
 		const newUser: UserPayload = req.body;
 
-		const { email, password } = newUser;
+		const { email, password, roles } = newUser;
 		if (!email || !password) {
 			data = null;
 			message = 'Email or password null.';
 			status = ResponeCodes.BAD_REQUEST;
 		} else {
-			const [user, created] = await User.findOrCreate({
-				where: {
-					email
-				},
-				defaults: {
-					...newUser
+			const transaction = await sequelize.transaction(async t => {
+				const [user, created] = await User.findOrCreate({
+					where: {
+						email
+					},
+					defaults: {
+						...newUser
+					},
+					transaction: t
+				});
+
+				if (created) {
+					await user.setRoles(roles, { transaction: t });
+					data = user;
+					message = 'Add user successfully!';
+					status = ResponeCodes.CREATED;
+				} else {
+					data = null;
+					message = 'Email exists.';
+					status = ResponeCodes.OK;
 				}
 			});
-
-			if (created) {
-				await user.addRole(RoleCodes.CUSTOMER);
-				data = user;
-				message = 'Add user successfully!';
-				status = ResponeCodes.CREATED;
-			} else {
-				data = null;
-				message = 'Email exists.';
-				status = ResponeCodes.OK;
-			}
 		}
 
 		return {
@@ -118,28 +121,83 @@ const addUser = async (req: Request) => {
 	}
 };
 
-const updateUser = async (req: Request) => {
+const getMe = async (req: Request) => {
 	try {
 		let data;
 		let message: string;
 		let status: number;
 
-		const id = parseInt(req.params.id);
+		const id = req.user.id;
 
-		if (isNaN(id)) {
+		const user = await User.findByPk(id);
+		if (!user) {
 			data = null;
-			message = 'Invalid user identifier.';
-			status = ResponeCodes.BAD_REQUEST;
+			message = 'User not found.';
+			status = ResponeCodes.NOT_FOUND;
 		} else {
-			const info: UserInfo = req.body;
-			data = await User.update(info, {
+			data = user;
+			message = 'Get successfully!';
+			status = ResponeCodes.OK;
+		}
+
+		return {
+			data,
+			message,
+			status
+		};
+	} catch (error) {
+		throw error;
+	}
+};
+
+const changeInfo = async (req: Request) => {
+	try {
+		let data;
+		let message: string;
+		let status: number;
+
+		const id = req.user.id;
+
+		const info: UserInfo = req.body;
+		data = await User.update(
+			{
+				fullName: info.fullName,
+				phone: info.phone,
+				birthDay: info.birthDay
+			},
+			{
 				where: {
 					id
 				}
-			});
-			message = 'Update user successfully!';
-			status = ResponeCodes.OK;
-		}
+			}
+		);
+		message = 'Update user successfully!';
+		status = ResponeCodes.OK;
+
+		return {
+			data,
+			message,
+			status
+		};
+	} catch (error) {
+		throw error;
+	}
+};
+
+const checkPassword = async (req: Request) => {
+	try {
+		let data;
+		let message: string;
+		let status: number;
+		const id = req.user.id;
+		const newPassword = req.body.password;
+
+		const user = await User.findByPk(id);
+		const duplicate = bcrypt.compareSync(newPassword, user.password);
+
+		data = !duplicate;
+		message = duplicate ? 'Duplicate password' : 'OK';
+		status = ResponeCodes.OK;
 
 		return {
 			data,
@@ -157,27 +215,21 @@ const changePassword = async (req: Request) => {
 		let message: string;
 		let status: number;
 
-		const id = parseInt(req.params.id);
+		const id = req.user.id;
 
-		if (isNaN(id)) {
-			data = null;
-			message = 'Invalid user identifier.';
-			status = ResponeCodes.BAD_REQUEST;
-		} else {
-			const password = bcrypt.hashSync(req.body.password, 10);
-			data = await User.update(
-				{
-					password
-				},
-				{
-					where: {
-						id
-					}
+		const password = bcrypt.hashSync(req.body.password, 10);
+		data = await User.update(
+			{
+				password
+			},
+			{
+				where: {
+					id
 				}
-			);
-			message = 'Change password successfully!';
-			status = ResponeCodes.OK;
-		}
+			}
+		);
+		message = 'Change password successfully!';
+		status = ResponeCodes.OK;
 
 		return {
 			data,
@@ -221,4 +273,4 @@ const deleteUser = async (req: Request) => {
 	}
 };
 
-export { getUsers, getUserById, addUser, updateUser, deleteUser, changePassword };
+export { getUsers, getUserById, addUser, deleteUser, changeInfo, changePassword, checkPassword, getMe };

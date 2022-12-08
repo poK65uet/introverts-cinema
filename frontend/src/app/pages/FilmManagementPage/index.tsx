@@ -1,57 +1,56 @@
 import { useGetMessage } from 'queries/message';
 import Box from '@mui/material/Box';
 import useStyles from './style';
-import { DataGrid, GridColDef, GridToolbar, GridValueGetterParams, GridRenderCellParams } from '@mui/x-data-grid';
-// import DeleteIcon from '@mui/icons-material/Delete';
-// import EditIcon from '@mui/icons-material/Edit';
-// import { IconButton, Typography } from '@mui/material';
-import { useState, useEffect, Component, useLayoutEffect } from 'react';
-import { Typography } from '@mui/material';
-import { Link } from 'react-router-dom';
-import { getValue } from '@mui/system';
+import {
+  DataGrid,
+  GridColDef,
+  GridToolbar,
+  GridValueGetterParams,
+  GridRenderCellParams,
+} from '@mui/x-data-grid';
+import { useState, useEffect } from 'react';
+import { Button, Chip, Typography } from '@mui/material';
+import AddFilmDialog from '../../components/FilmDialog';
+import { useGetMovies } from 'queries/movies';
+import EditFilmDialog from 'app/components/FilmDialog/EditFilmDialog';
 
 export default function FilmManagementPage() {
   const classes = useStyles();
+  const [open, setOpen] = useState(false);
+  const [openEdit, setOpenEdit] = useState(false);
+  const [editRowId, setEditRowId] = useState('0');
+  const [page, setPage] = useState<number>(0);
+  const [pageSize, setPageSize] = useState<number>(5);
 
-  const rows: readonly any[] = [
-    {
-      id: 1,
-      image_url: 'https://innovavietnam.vn/wp-content/uploads/poster-561x800.jpg',
-      title: 'Mắt biếc',
-      duration: 150,
-      nationality_id: 1,
-      trailer_url: 'https://www.youtube.com/watch?v=xuakxSnFUxc',
-    },
-    {
-      id: 2,
-      image_url: 'https://innovavietnam.vn/wp-content/uploads/poster-561x800.jpg',
-      title: 'Mắt biếc 2',
-      duration: 150,
-      nationality_id: 1,
-      trailer_url: 'https://www.youtube.com/watch?v=xuakxSnFUxc',
-    },
-    {
-      id: 3,
-      image_url: 'https://innovavietnam.vn/wp-content/uploads/poster-561x800.jpg',
-      title: 'Mắt biếc 3',
-      duration: 150,
-      nationality_id: 1,
-      trailer_url: 'https://www.youtube.com/watch?v=xuakxSnFUxc',
-    },
-  ];
+  const handleClickOpenAddPage = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+  const handleCloseEdit = () => {
+    setOpenEdit(false);
+  };
+
+  const handleClickOpenEditPage = (params: any) => {
+    setEditRowId(params.toString());
+    setOpenEdit(true);
+  };
+
+  
+  const { isLoading, data } = useGetMovies();
 
   const columns: GridColDef[] = [
     {
-      field: 'image_url',
+      field: 'imageUrl',
       headerName: 'Poster',
       width: 80,
       headerAlign: 'center',
       align: 'center',
       headerClassName: 'collumnHeader',
       renderCell: (params: GridRenderCellParams<string>) => {
-        return (
-          <a href={params.value}>Poster</a>
-        );
+        return params.value && <a href={params.value}>Poster</a>;
       },
     },
     {
@@ -64,65 +63,93 @@ export default function FilmManagementPage() {
     {
       field: 'duration',
       headerName: 'Thời lượng',
-      type: 'int',
+      type: 'number',
       width: 100,
       align: 'center',
       headerAlign: 'center',
     },
     {
-      field: 'opening_day',
-      headerName: 'Ngày khởi chiếu',
-      type: 'date',
-      width: 150,
+      field: 'status',
+      headerName: 'Trạng thái',
+      width: 100,
       align: 'center',
       headerAlign: 'center',
+      renderCell: (params: GridRenderCellParams<string>) => {
+        return params.value === 'active' ? (
+          <Chip label="active" variant="outlined" color="success" />
+        ) : (
+          <Chip label="inactive" variant="outlined" color="error" />
+        );
+      },
     },
     {
-      field: 'directors',
-      headerName: 'Đạo diễn',
-      type: 'array',
+      field: 'openingDay',
+      headerName: 'Ngày khởi chiếu',
       width: 150,
+      type: 'date',
+      align: 'center',
       headerAlign: 'center',
+      renderCell: (params: GridRenderCellParams<string>) => {
+        if (params.value === undefined) return null;
+        const openingDay = new Date(params.value);
+        return (
+          openingDay.getDate() +
+          '/' +
+          openingDay.getMonth() +
+          '/' +
+          openingDay.getFullYear()
+        );
+      },
     },
     {
-      field: 'actors',
-      headerName: 'Diễn viên',
-      type: 'array',
-      width: 240,
-      headerAlign: 'center',
-    },
-    {
-      field: 'nationality_id',
+      field: 'NationalityId',
       headerName: 'Mã quốc gia',
-      type: 'int',
+      type: 'number',
       width: 140,
       align: 'center',
       headerAlign: 'center',
     },
     {
-      field: 'trailer_url',
+      field: 'trailerUrl',
       headerName: 'Trailer',
       width: 90,
       headerAlign: 'center',
       align: 'center',
       renderCell: (params: GridRenderCellParams<string>) => {
-        return (
-          <a href={params.value}>Trailer</a>
-        );
+        return <a href={params.value}>Trailer</a>;
       },
     },
   ];
 
   return (
     <Box className={classes.filmTable}>
-      <Typography variant="h4" component="h4">
+      <AddFilmDialog
+        open={open}
+        onClose={handleClose}
+      />
+      <EditFilmDialog
+        data={editRowId}
+        open={openEdit}
+        onClose={handleCloseEdit} />
+      <Typography variant="h4" component="h4" fontWeight="bold">
         Quản lý phim trong hệ thống
       </Typography>
+      <Button className={classes.addButton} onClick={handleClickOpenAddPage}>
+        Thêm phim mới
+      </Button>
       <DataGrid
+        page={page}
+        pageSize={pageSize}
+        loading={isLoading}
+        onPageChange={newPage => setPage(newPage)}
+        onPageSizeChange={newPageSize => setPageSize(newPageSize)}
         rowsPerPageOptions={[5, 10, 20]}
-        rows={rows}
+        rows={isLoading ? [] : data}
         disableSelectionOnClick
         columns={columns}
+        onRowDoubleClick={GridCellParams =>
+          handleClickOpenEditPage(GridCellParams.id)
+        }
         components={{
           Toolbar: GridToolbar,
         }}

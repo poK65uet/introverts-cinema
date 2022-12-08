@@ -2,22 +2,26 @@ import { Request } from 'express';
 import { Director, Nationality } from 'databases/models';
 import ResponeCodes from 'utils/constants/ResponeCode';
 import DirectorPayload from './DirectorPayload';
+import paginate from 'utils/helpers/pagination';
+import { Op } from 'sequelize';
+import sequelize from 'databases';
 
 const getDirectors = async (req: Request) => {
 	try {
-		let data;
-		let message: string;
-		let status: number;
+		const { limit, offset, order, query } = paginate(req);
 
-		data = await Director.findAll();
-		message = 'Get all successfully!';
-		status = ResponeCodes.OK;
+		const directors = await Director.findAndCountAll({
+			where: {
+				fullName: {
+					[Op.like]: `%${query}%`
+				}
+			},
+			limit,
+			offset,
+			order: [order]
+		});
 
-		return {
-			data,
-			message,
-			status
-		};
+		return directors;
 	} catch (error) {
 		throw error;
 	}
@@ -74,12 +78,18 @@ const addDirector = async (req: Request) => {
 			message = 'Name null.';
 			status = ResponeCodes.BAD_REQUEST;
 		} else {
-			const director = await Director.create(newDirector);
-			if (nationality) await director.setNationality(nationality);
+			const transaction = await sequelize.transaction(async t => {
+				const director = await Director.create(newDirector, {
+					transaction: t
+				});
+				await director.setNationality(nationality, {
+					transaction: t
+				});
 
-			data = director;
-			message = 'Add successfully!';
-			status = ResponeCodes.CREATED;
+				data = director;
+				message = 'Add successfully!';
+				status = ResponeCodes.CREATED;
+			});
 		}
 
 		return {
@@ -108,12 +118,16 @@ const updateDirector = async (req: Request) => {
 			const updateDirector: DirectorPayload = req.body;
 			const { nationality } = updateDirector;
 
-			const director = await Director.findByPk(id);
-			data = await director.update(updateDirector);
-			if (Nationality) await director.setNationality(nationality);
+			const transaction = await sequelize.transaction(async t => {
+				const director = await Director.findByPk(id, { transaction: t });
+				director.set(updateDirector);
+				await director.save({ transaction: t });
+				await director.setNationality(nationality, { transaction: t });
 
-			message = 'Updated successfully!';
-			status = ResponeCodes.OK;
+				data = director;
+				message = 'Updated successfully!';
+				status = ResponeCodes.OK;
+			});
 		}
 
 		return {

@@ -2,10 +2,11 @@ import jwt from 'jsonwebtoken';
 import config from 'config';
 import { Request } from 'express';
 import RegisterPayLoad from './RegisterPayLoad';
-import { User, UserCode } from 'databases/models';
+import { Role, User, UserCode } from 'databases/models';
 import RoleCodes from 'utils/constants/RoleCode';
 import ResponeCodes from 'utils/constants/ResponeCode';
 import { sendEmail } from 'utils/helpers/email';
+import sequelize from 'databases';
 
 const generateCode = () => {
 	const code = `${Math.floor(100000 + Math.random() * 900000)}`;
@@ -143,20 +144,19 @@ const register = async (req: Request) => {
 			message = 'Invalid email or password';
 			status = ResponeCodes.BAD_REQUEST;
 		} else {
-			const user = await User.create(newUser);
+			const transaction = await sequelize.transaction(async t => {
+				const user = await User.create(newUser, { transaction: t });
+				await user.setRoles([RoleCodes.CUSTOMER], { transaction: t });
+				const roleIds = [RoleCodes.CUSTOMER];
+				const token = generateToken(user.id, roleIds, user.email);
 
-			await user.addRole(RoleCodes.CUSTOMER);
-			// const roles = await user.getRoles();
-			const roleIds = [RoleCodes.CUSTOMER];
-
-			const token = generateToken(user.id, roleIds, user.email);
-
-			data = {
-				user,
-				token
-			};
-			message = 'Register successfully!';
-			status = ResponeCodes.CREATED;
+				data = {
+					user,
+					token
+				};
+				message = 'Register successfully!';
+				status = ResponeCodes.CREATED;
+			});
 		}
 
 		return {

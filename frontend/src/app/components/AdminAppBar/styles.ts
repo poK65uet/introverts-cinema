@@ -4,8 +4,8 @@ import { Hidden, Theme } from '@mui/material';
 const useStyles = makeStyles((theme: Theme) => ({
     appBar: {
         color: 'white !important',
-        maxHeight: '4rem',
-        minHeight: '3rem',
+        maxHeight: '6rem',
+        minHeight: '5rem',
         zIndexL: 11,
         [theme.breakpoints.down('sm')]: {
             display: 'flex',

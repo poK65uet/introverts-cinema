@@ -2,22 +2,26 @@ import { Request } from 'express';
 import { Actor, Nationality } from 'databases/models';
 import ResponeCodes from 'utils/constants/ResponeCode';
 import ActorPayload from './ActorPayload';
+import paginate from 'utils/helpers/pagination';
+import { Op } from 'sequelize';
+import sequelize from 'databases';
 
 const getActors = async (req: Request) => {
 	try {
-		let data;
-		let message: string;
-		let status: number;
+		const { limit, offset, order, query } = paginate(req);
 
-		data = await Actor.findAll();
-		message = 'Get all successfully!';
-		status = ResponeCodes.OK;
+		const actors = await Actor.findAndCountAll({
+			where: {
+				fullName: {
+					[Op.like]: `%${query}%`
+				}
+			},
+			limit,
+			offset,
+			order: [order]
+		});
 
-		return {
-			data,
-			message,
-			status
-		};
+		return actors;
 	} catch (error) {
 		throw error;
 	}
@@ -74,12 +78,18 @@ const addActor = async (req: Request) => {
 			message = 'Name null.';
 			status = ResponeCodes.BAD_REQUEST;
 		} else {
-			const actor = await Actor.create(newActor);
-			if (Nationality) await actor.setNationality(nationality);
+			const transaction = await sequelize.transaction(async t => {
+				const actor = await Actor.create(newActor, {
+					transaction: t
+				});
+				await actor.setNationality(nationality, {
+					transaction: t
+				});
 
-			data = actor;
-			message = 'Add successfully!';
-			status = ResponeCodes.CREATED;
+				data = actor;
+				message = 'Add successfully!';
+				status = ResponeCodes.CREATED;
+			});
 		}
 
 		return {
@@ -108,12 +118,20 @@ const updateActor = async (req: Request) => {
 			const updateActor: ActorPayload = req.body;
 			const { nationality } = updateActor;
 
-			const actor = await Actor.findByPk(id);
-			data = await actor.update(updateActor);
-			if (Nationality) await actor.setNationality(nationality);
+			const transaction = await sequelize.transaction(async t => {
+				const actor = await Actor.findByPk(id, {
+					transaction: t
+				});
+				actor.set(updateActor);
+				await actor.save({ transaction: t });
+				await actor.setNationality(nationality, {
+					transaction: t
+				});
 
-			message = 'Updated successfully!';
-			status = ResponeCodes.OK;
+				data = actor;
+				message = 'Updated successfully!';
+				status = ResponeCodes.OK;
+			});
 		}
 
 		return {
