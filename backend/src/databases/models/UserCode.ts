@@ -25,7 +25,6 @@ const UserCode = sequelize.define<UserCodeModel>(
 		},
 		code: {
 			allowNull: false,
-			unique: true,
 			type: DataTypes.STRING
 		},
 		expires: {
