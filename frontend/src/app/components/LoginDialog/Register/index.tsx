@@ -21,7 +21,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from 'store';
 import { useForm } from 'hooks/useForm';
 import { sendCodeThunk, validateEmailThunk, registerActions, registerThunk } from './slice';
-import { isValidEmail } from 'utils/validation';
+import { isValidEmail, isValidPhoneString } from 'utils/validation';
 import { notify } from 'app/components/MasterDialog/index';
 
 export default function Register() {
@@ -50,13 +50,20 @@ export default function Register() {
     if ('repassword' in fieldValues) {
       tmp.repassword = '';
       if (fieldValues.repassword.length == 0) { tmp.repassword = 'Vui lòng nhập lại mật khẩu của bạn'; }
-      else { if (fieldValues.repassword !== values.password) { tmp.repassword = 'Mật khẩu nhập lại không đúng'; } }
+      else { if (fieldValues.repassword !== values.password) { tmp.repassword = 'Mật khẩu nhập lại không khớp'; } }
     }
 
     if ('birthDay' in fieldValues) {
       tmp.birthDay = '';
       const today = new Date();
       if (fieldValues.birthDay > today) tmp.birthDay = 'Ngày sinh không hợp lệ'
+    }
+
+    if ('phone' in fieldValues) {
+      tmp.phone = '';
+      console.log(fieldValues.phone);
+
+      if (!isValidPhoneString(fieldValues.phone) && fieldValues.phone) { tmp.phone = 'Số điện thoại không hợp lệ' }
     }
 
     setErrors({ ...tmp });
@@ -236,7 +243,7 @@ export default function Register() {
           inputProps={{ maxLength: '16' }}
           InputProps={{
             startAdornment: (
-              <InputAdornment position='start'><Phone />+84</InputAdornment>
+              <InputAdornment position='start'><Phone />(+84)</InputAdornment>
             ),
           }}
         />

@@ -23,7 +23,7 @@ export default function BookTicketPage() {
       notify({
         type: 'warning',
         content: 'Đã hủy thanh toán',
-        autocloseDelay: 3000,
+        autocloseDelay: 1500,
       })
       dispatch(bookTicketActions.paymentTimeOut())
     }, 100);
@@ -35,27 +35,8 @@ export default function BookTicketPage() {
       dispatch(bookTicketActions.resetShowtime())
       dispatch(bookTicketActions.resetMovie())
       dispatch(bookTicketActions.paymentTimeOut())
-      notify({
-        type: 'warning',
-        content: 'Đã hủy đặt vé',
-        autocloseDelay: 1000,
-      })
     }
   }, [])
-
-  useEffect(() => {
-    if (!store.login.isLoggedin && store.bookTicket.activeStep > BookingStep.SELECT_SHOWTIME) {
-      dispatch(bookTicketActions.resetSeat())
-      dispatch(bookTicketActions.resetShowtime())
-      dispatch(bookTicketActions.resetMovie())
-      dispatch(bookTicketActions.paymentTimeOut())
-      notify({
-        type: 'error',
-        content: 'Lỗi đăng nhập, hãy thử lại',
-        autocloseDelay: 1000,
-      })
-    }
-  }, [store.login.isLoggedin])
 
   const classes = useStyles()
 

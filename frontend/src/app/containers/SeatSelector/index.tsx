@@ -9,6 +9,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from 'store';
 import { bookTicketActions } from 'app/pages/BookTicketPage/slice';
 import { useGetShowtimeDetail } from 'queries/showtimes';
+import { notify } from 'app/components/MasterDialog';
 
 
 export default function SeatsSelector() {
@@ -31,8 +32,16 @@ export default function SeatsSelector() {
   };
 
   const handleSelectSeatsDone = () => {
-    setShowConfirmSelectSeats(true);
-  };
+    if (!store.login.isLoggedin) {
+      notify({
+        type: 'error',
+        content: 'Cần đăng nhập để tiếp tục',
+        autocloseDelay: 1000
+      })
+    } else {
+      setShowConfirmSelectSeats(true);
+    };
+  }
 
   const handleCloseConfirmSelectSeats = () => setShowConfirmSelectSeats(false);
 
