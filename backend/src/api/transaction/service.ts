@@ -1,9 +1,12 @@
 import axios from 'axios';
 import config from 'config';
+import { BillModel } from 'databases/models/Bill';
 import GetTransactionResponse, { GetTransactionData } from './GetTransactionResponse';
+import Transaction from './Transaction';
 
 const ASYNC_WALLET_PATH = '/sync';
 const GET_TRANSACTION_PATH = '/transactions';
+const DESCRIPTION_PREFIX = 'Introvert Cinema hoa don ';
 
 const syncWalletTransaction = async () => {
 	await axios.post(
@@ -33,7 +36,20 @@ const getAllTransactionThisWeek = async () => {
 		}
 	});
 	const result: GetTransactionResponse = response.data;
+
 	return result.data.records;
 };
 
-export { getAllTransactionThisWeek };
+const verifyBillTransaction = async (bill: BillModel) => {
+	await syncWalletTransaction();
+	const allTransactions: Transaction[] = await getAllTransactionThisWeek();
+	const billTransactions: Transaction[] = allTransactions.filter(transaction =>
+		transaction.description.includes(`${DESCRIPTION_PREFIX}${bill.id}`)
+	);
+
+	let totalAmount = 0;
+	billTransactions.forEach(transaction => (totalAmount += transaction.amount));
+	return totalAmount >= bill.totalPrice;
+};
+
+export { getAllTransactionThisWeek, verifyBillTransaction, DESCRIPTION_PREFIX };

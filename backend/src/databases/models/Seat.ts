@@ -43,7 +43,6 @@ const Seat = sequelize.define<SeatModel>(
 		},
 		code: {
 			allowNull: false,
-			unique: true,
 			type: DataTypes.STRING
 		},
 		owner: {
