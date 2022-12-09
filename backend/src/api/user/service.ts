@@ -127,18 +127,11 @@ const getMe = async (req: Request) => {
 		let message: string;
 		let status: number;
 
-		const id = req.user.id;
+		const user = req.user;
 
-		const user = await User.findByPk(id);
-		if (!user) {
-			data = null;
-			message = 'User not found.';
-			status = ResponeCodes.NOT_FOUND;
-		} else {
-			data = user;
-			message = 'Get successfully!';
-			status = ResponeCodes.OK;
-		}
+		data = user;
+		message = 'Get successfully!';
+		status = ResponeCodes.OK;
 
 		return {
 			data,
@@ -156,21 +149,14 @@ const changeInfo = async (req: Request) => {
 		let message: string;
 		let status: number;
 
-		const id = req.user.id;
-
+		const user = req.user;
 		const info: UserInfo = req.body;
-		data = await User.update(
-			{
-				fullName: info.fullName,
-				phone: info.phone,
-				birthDay: info.birthDay
-			},
-			{
-				where: {
-					id
-				}
-			}
-		);
+
+		data = await user.update({
+			fullName: info.fullName,
+			phone: info.phone,
+			birthDay: info.birthDay
+		});
 		message = 'Update user successfully!';
 		status = ResponeCodes.OK;
 
@@ -184,15 +170,42 @@ const changeInfo = async (req: Request) => {
 	}
 };
 
-const checkPassword = async (req: Request) => {
+const verifyPassword = async (req: Request) => {
+	try {
+		let data: boolean;
+		let message: string;
+		let status: number;
+		const user = req.user;
+		const password = req.body.password;
+		const verifyPassword = bcrypt.compareSync(password, user.password);
+
+		if (!verifyPassword) {
+			data = false;
+			message = 'Incorrect password.';
+			status = ResponeCodes.OK;
+		} else {
+			data = true;
+			message = 'Correct password.';
+			status = ResponeCodes.OK;
+		}
+
+		return {
+			data,
+			message,
+			status
+		};
+	} catch (error) {
+		throw error;
+	}
+};
+
+const checkNewPassword = async (req: Request) => {
 	try {
 		let data;
 		let message: string;
 		let status: number;
-		const id = req.user.id;
+		const user = req.user;
 		const newPassword = req.body.password;
-
-		const user = await User.findByPk(id);
 		const duplicate = bcrypt.compareSync(newPassword, user.password);
 
 		data = !duplicate;
@@ -215,19 +228,12 @@ const changePassword = async (req: Request) => {
 		let message: string;
 		let status: number;
 
-		const id = req.user.id;
+		const user = req.user;
+		const newPassword = bcrypt.hashSync(req.body.password, 10);
 
-		const password = bcrypt.hashSync(req.body.password, 10);
-		data = await User.update(
-			{
-				password
-			},
-			{
-				where: {
-					id
-				}
-			}
-		);
+		data = await user.update({
+			password: newPassword
+		});
 		message = 'Change password successfully!';
 		status = ResponeCodes.OK;
 
@@ -273,4 +279,14 @@ const deleteUser = async (req: Request) => {
 	}
 };
 
-export { getUsers, getUserById, addUser, deleteUser, changeInfo, changePassword, checkPassword, getMe };
+export {
+	getUsers,
+	getUserById,
+	addUser,
+	deleteUser,
+	changeInfo,
+	changePassword,
+	verifyPassword,
+	checkNewPassword,
+	getMe
+};

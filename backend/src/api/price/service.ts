@@ -1,4 +1,5 @@
 import { Price } from 'databases/models';
+import { ShowtimeModel } from 'databases/models/Showtime';
 import { Request } from 'express';
 
 const getAllPrices = async () => {
@@ -6,14 +7,15 @@ const getAllPrices = async () => {
 	return prices;
 };
 
-const getPrice = async (visionType: string, dayCode: number) => {
+const getPrice = async (showtime: ShowtimeModel) => {
 	const price = await Price.findOne({
 		where: {
-			visionType,
-			dayCode
+			visionType: showtime.Room.visionType,
+			dayCode: showtime.startTime.getDay()
 		}
 	});
-	return price;
+
+	return price.value;
 };
 
 const updatePriceById = async (req: Request) => {

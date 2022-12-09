@@ -16,5 +16,6 @@ export default {
 	},
 	qr_code_base_url: process.env.QR_CODE_BASE_URL,
 	casso_base_url: process.env.CASSO_BASE_URL,
-	casso_api_key: process.env.CASSO_API_KEY
+	casso_api_key: process.env.CASSO_API_KEY,
+	bank_acc_number: process.env.BANK_ACC_NUMBER
 };

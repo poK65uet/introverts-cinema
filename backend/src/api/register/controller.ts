@@ -32,7 +32,7 @@ const sendCode = async (req: Request, res: Response) => {
 const verifyAndRegister = async (req: Request, res: Response) => {
 	try {
 		const verifyResult = await service.verifyCode(req);
-		if (verifyResult.data !== null) {
+		if (verifyResult.data) {
 			const checkEmailResult = await service.checkEmail(req);
 			if (checkEmailResult.data) {
 				const registerResult = await service.register(req);

@@ -113,10 +113,10 @@ const getShowtimeById = async (req: Request) => {
 				message = 'Not found.';
 				status = ResponeCodes.NOT_FOUND;
 			} else {
-				const price = await getPrice(showtime.Room.visionType, showtime.startTime.getDay());
+				const price = await getPrice(showtime);
 				data = {
 					showtime,
-					price: price.value
+					price
 				};
 				message = 'Get successfully!';
 				status = ResponeCodes.OK;
