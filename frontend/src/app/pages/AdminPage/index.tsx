@@ -1,5 +1,5 @@
 import React, { memo } from 'react';
-import useStyles from './style';
+import useStyles from './styles';
 import AdminMenu from 'app/containers/AdminMenu';
 import { Route, Switch } from 'react-router-dom';
 import FilmManagementPage from '../FilmManagementPage';
@@ -15,7 +15,7 @@ export default function AdminPage() {
   return (
 		<React.Fragment> 
       <AdminAppBar />
-      <AdminMenu className={classes.adminMenu} />
+      <AdminMenu />
       <div className={classes.adminContent}>
         <Switch>
           <Route

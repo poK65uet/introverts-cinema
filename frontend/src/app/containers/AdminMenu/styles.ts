@@ -11,6 +11,18 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
 
   wrapper: {},
+
+  adminMenu: {
+    width: 'fit-content !important',
+    minWidth: '17%',
+    display: 'flex',
+    padding: '0 !important',
+    borderRight: '1px solid #ccc',
+    backgroundColor: '#fff',
+    height: '100vh',
+    float: 'left',
+    textAlign: 'center',
+  },
 }));
 
 export default useStyles;

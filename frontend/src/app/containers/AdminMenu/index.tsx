@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
 import { Container, Tab, Tabs } from '@mui/material';
 
-import useStyles from './style';
+import useStyles from './styles';
 import paths from 'paths';
 import path from 'path';
 import FilmManagementPage from '../../pages/FilmManagementPage/index';
@@ -14,7 +14,7 @@ import LocalActivityIcon from '@mui/icons-material/LocalActivity';
 import CameraIndoorIcon from '@mui/icons-material/CameraIndoor';
 import CameraRollIcon from '@mui/icons-material/CameraRoll';
 
-function AdminMenu(props: { className: string }) {
+function AdminMenu() {
   const classes = useStyles();
   const location = useLocation();
   const [pathname, setPathname] = useState(location.pathname);
@@ -37,7 +37,7 @@ function AdminMenu(props: { className: string }) {
   }, [location]);
 
   return (
-    <Container className={props.className}>
+    <Container className={classes.adminMenu}>
       <Tabs value={tab === -1 ? false : tab}
         orientation={'vertical'}
         textColor='inherit'

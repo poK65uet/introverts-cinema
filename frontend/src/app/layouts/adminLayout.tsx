@@ -19,7 +19,7 @@ const AdminLayout = () => {
   return (
     <React.Fragment>
       <AdminAppBar />
-      <AdminMenu className={''} />
+      <AdminMenu />
       <Switch>
         <Route
           path={paths.FilmManagement}
