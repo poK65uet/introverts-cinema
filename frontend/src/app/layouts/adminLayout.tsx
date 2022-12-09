@@ -9,36 +9,33 @@ import RoomManagementPage from 'app/pages/RoomManagementPage';
 import TicketManagementPage from 'app/pages/TicketManagementPage';
 import CustomerManagementPage from 'app/pages/CustomerManagementPage';
 import FilmManagementPage from 'app/pages/FilmManagementPage';
+import { RootState } from 'store';
+import { useSelector } from 'react-redux';
 
 const AdminLayout = () => {
+
+	const store = useSelector<RootState, RootState>(state => state)
 
   return (
     <React.Fragment>
       <AdminAppBar />
       <AdminMenu className={''} />
       <Switch>
-      {/* <Redirect from='/admin' exact to='/customers' /> */}
-				{/* <Route path='/'  exact component={CustomerManagementPage} /> */}
         <Route
-          path={`${paths.FilmManagement}`}
+          path={paths.FilmManagement}
           component={FilmManagementPage}
-        //   exact={true}
         />
         <Route
-          // path={`/admin/customers`}
-          path={`${paths.CustomerManagement}`}
+          path={paths.CustomerManagement}
           component={CustomerManagementPage}
-          // exact={true}
         />
         <Route
           path={paths.RoomManagement}
           component={RoomManagementPage}
-          exact={true}
         />
         <Route
           path={paths.TicketManagement}
           component={TicketManagementPage}
-          exact={true}
         />
       </Switch>
       {/* <Footer/> */}

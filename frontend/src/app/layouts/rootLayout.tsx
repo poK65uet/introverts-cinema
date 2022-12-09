@@ -4,6 +4,7 @@ import FilmManagementPage from 'app/pages/FilmManagementPage';
 import AdminPage from 'app/pages/AdminPage';
 import LoadingLayer from 'app/components/LoadingLayer';
 import HomeLayout from './homeLayout';
+import AdminLayout from './adminLayout';
 
 const RootLayout = () => {
 
@@ -16,8 +17,8 @@ const RootLayout = () => {
     <BrowserRouter>
       <Switch>
         <Redirect from='/admin' exact to='admin/customers' />
-        <Route path="/" component={HomeLayout} />
-        <Route path="/admin" component={AdminPage}>
+        <Route path="/" exact component={HomeLayout} />
+        <Route path="/admin" component={AdminLayout}>
         </Route>
       </Switch>
       <LoadingLayer />
