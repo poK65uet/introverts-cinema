@@ -54,6 +54,10 @@ export default function AppBar() {
   const handleOpenOpt = () => setOpenOpt(true)
   const handleCloseOpt = () => setOpenOpt(false)
 
+  // Atempting to fix warning bugs
+  const onResize = () => { }
+  const onResizeCapture = () => { }
+
   const anchorRef = useRef<HTMLButtonElement>(null);
   const prevOpen = useRef(openOpt);
 
@@ -225,9 +229,9 @@ export default function AppBar() {
           placement="bottom-start"
           transition
           disablePortal
-          onResize={undefined}
-          onResizeCapture={undefined}
-          nonce
+          onResize={onResize}
+          onResizeCapture={onResizeCapture}
+          nonce={''}
         >
           {({ TransitionProps, placement }) => (
             <Grow
@@ -244,13 +248,15 @@ export default function AppBar() {
               }}>
                 <ClickAwayListener onClickAway={handleCloseOpt}>
                   <MenuList>
-                    <MenuItem
-                      disableRipple
-                      className={classes.optItems}
-                      onClick={handleCloseOpt}>
-                      <ProfileIcon sx={{ pr: 1, mr: 'auto' }} />
-                      Thông tin
-                    </MenuItem>
+                    <Link to={`${paths.UserPage}`} style={{ all: 'unset' }}>
+                      <MenuItem
+                        disableRipple
+                        className={classes.optItems}
+                        onClick={handleCloseOpt}>
+                        <ProfileIcon sx={{ pr: 1, mr: 'auto' }} />
+                        Thông tin
+                      </MenuItem>
+                    </Link>
                     <MenuItem
                       disableRipple
                       className={classes.optItems}
