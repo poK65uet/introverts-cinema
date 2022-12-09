@@ -9,6 +9,7 @@ import { notify } from '../MasterDialog/index';
 import { isValidPhoneString } from 'utils/validation';
 import { useForm } from 'hooks/useForm';
 import { CustomInput } from '../CustomInput';
+import { useChangeProfile } from 'queries/user';
 
 interface UserProfileProps {
   user: any
@@ -20,6 +21,12 @@ export default function UserProfile(props: UserProfileProps) {
   const [userData, setUserData] = useState(props.user)
   const [isProfileChange, setIsProfileChange] = useState(false)
   const [showChangePassword, setShowChangePassword] = useState(false)
+  const { refetch: updateProfile } = useChangeProfile({
+
+    fullName: userData?.fullName != props.user?.fullName ? userData?.fullName : undefined,
+    phone: userData?.phone != props.user?.phone ? userData?.phone : undefined,
+    birthDay: userData?.birthDay != props.user?.birthDay ? userData?.birthDay : undefined
+  })
 
   const handleChangeProfile = (event: React.ChangeEvent<HTMLInputElement>) => {
     setUserData({ ...userData, [event.target.id]: event.target.value });
@@ -39,9 +46,17 @@ export default function UserProfile(props: UserProfileProps) {
           content: 'Ngày sinh không hợp lệ',
           autocloseDelay: 1250
         })
+      } else {
+        updateProfile()
       }
     }
   }
+
+  const handleClickSaveProfile = () => useChangeProfile({
+    fullName: userData.fullName != props.user.fullName ? userData.fullName : undefined,
+    phone: userData.phone != props.user.phone ? userData.phone : undefined,
+    birthDay: userData.birthDay != props.user.birthDay ? userData.birthDay : undefined
+  })
 
   const handleShowChangePassword = () => {
     setShowChangePassword(!showChangePassword)

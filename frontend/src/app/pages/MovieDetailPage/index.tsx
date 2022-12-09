@@ -13,12 +13,24 @@ import { bookTicketActions } from '../BookTicketPage/slice';
 import paths from 'paths';
 import { formatDate } from 'utils/date';
 import { moviesActions } from '../../components/Movies/slice';
+import { notify } from 'app/components/MasterDialog';
 
 export default function MovieDetailPage() {
 
   let { movieId } = useParams<{ movieId: string | undefined }>()
 
-  const { data: movie, isLoading } = useGetMovieById(movieId)
+  const { data: movie, isLoading, isError } = useGetMovieById(movieId)
+
+  useEffect(() => {
+    if (isError) {
+      notify({
+        type: 'error',
+        content: 'Đã gặp lỗi, hãy thử lại',
+        autocloseDelay: 1250
+      })
+      dispatch(bookTicketActions.loadingDone())
+    }
+  }, [isError])
 
   useEffect(() => {
     window.scrollTo({

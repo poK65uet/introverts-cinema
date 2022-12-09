@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, Container } from '@mui/material';
 import { East, West } from '@mui/icons-material';
 import { SeatPlan } from 'app/containers/SeatPlan';
@@ -16,7 +16,7 @@ export default function SeatsSelector() {
 
   const store = useSelector<RootState, RootState>(state => state);
 
-  const data = useGetShowtimeDetail(store.bookTicket.selectedShowtime.id).data
+  const { data, isError } = useGetShowtimeDetail(store.bookTicket.selectedShowtime.id)
 
   const showtime = data?.showtime
   const room = showtime?.Room
@@ -25,6 +25,17 @@ export default function SeatsSelector() {
   const [showConfirmSelectSeats, setShowConfirmSelectSeats] = useState(false);
 
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (isError) {
+      notify({
+        type: 'error',
+        content: 'Đã gặp lỗi, hãy thử lại',
+        autocloseDelay: 1250
+      })
+      dispatch(bookTicketActions.loadingDone())
+    }
+  }, [isError])
 
   const handleReselectShowtime = () => {
     dispatch(bookTicketActions.resetSeat());

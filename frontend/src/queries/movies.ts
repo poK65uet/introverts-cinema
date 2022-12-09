@@ -4,47 +4,35 @@ import { useQuery } from 'react-query';
 
 export const getNewMovies = async (): Promise<string[]> => {
   let response: AxiosResponse<any>;
-  try {
-    response = await axios.get(`${config.apiEndpoint}/films/opening`);
-  } catch (e) {
-    return [''];
-  }
+  response = await axios.get(`${config.apiEndpoint}/films/opening`);
 
   return response.data.data;
 };
 
 export const getUpcomingMovies = async (): Promise<string[]> => {
   let response: AxiosResponse<any>;
-  try {
-    response = await axios.get(`${config.apiEndpoint}/films/upcoming`);
-  } catch (e) {
-    return [''];
-  }
+  response = await axios.get(`${config.apiEndpoint}/films/upcoming`);
 
   return response.data.data;
 };
-// BUG?
+
 export const getMovieById = async (id: string | undefined): Promise<any> => {
-  if(id === '0') return undefined;
+  if (id === '0') return undefined;
   let response: AxiosResponse<any>;
-  try {
-    response = await axios.get(`${config.apiEndpoint}/films/${id}`);
-  } catch (e) {
-    return undefined;
-  }
+  response = await axios.get(`${config.apiEndpoint}/films/${id}`);
+
   return response.data.data;
 };
 
 export const useGetMovieById = (id: string | undefined) =>
-  useQuery(['getMovieById'], () => getMovieById(id));
+  useQuery(['getMovieById'], () => getMovieById(id), {
+    refetchOnWindowFocus: false,
+  });
 
 export const getMovies = async (): Promise<any> => {
   let response: AxiosResponse<any>;
-  try {
-    response = await axios.get(`${config.apiEndpoint}/films/pagination`);
-  } catch (e) {
-    return [];
-  }
+  response = await axios.get(`${config.apiEndpoint}/films/pagination`);
+
   return response.data.data;
 };
 

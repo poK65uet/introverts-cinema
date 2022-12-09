@@ -5,12 +5,9 @@ export const sendCode = async (
   email: string | undefined,
 ): Promise<string | boolean> => {
   let response: AxiosResponse<any>;
-  try {
-    response = await axios.post(`${config.apiEndpoint}/register/sendCode`, {
-      email: email,
-    });
-  } catch (e) {
-    return false;
-  }
+  response = await axios.post(`${config.apiEndpoint}/register/send-code`, {
+    email: email,
+  });
+
   return response.data.status;
 };

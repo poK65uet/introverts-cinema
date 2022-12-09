@@ -1,6 +1,12 @@
 import React from 'react'
 import { Chip, Tooltip } from '@mui/material'
 
+enum RatedType {
+  P = 'P',
+  C13 = 'C13',
+  C16 = 'C16',
+  C18 = 'C18'
+}
 interface RatedTagProps {
   rated: string
   size?: 'medium' | 'small'
@@ -11,10 +17,10 @@ interface RatedTagProps {
 export default function RatedTag(props: RatedTagProps) {
   return (
     <Tooltip title={
-      props.rated == 'P' ? 'Thích hợp mọi độ tuổi' :
-        props.rated == 'C13' ? 'Cấm người dưới 13 tuổi' :
-          props.rated == 'C16' ? 'Cấm người dưới 16 tuổi' :
-            props.rated == 'C18' ? 'Cấm người dưới 18 tuổi' : ''
+      props.rated == RatedType.P ? 'Thích hợp mọi độ tuổi' :
+        props.rated == RatedType.C13 ? 'Cấm người dưới 13 tuổi' :
+          props.rated == RatedType.C16 ? 'Cấm người dưới 16 tuổi' :
+            props.rated == RatedType.C18 ? 'Cấm người dưới 18 tuổi' : ''
     }
       placement={props.placement}
       disableInteractive

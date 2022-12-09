@@ -34,4 +34,41 @@ export const getUserProfile = async (): Promise<any> => {
 export const useGetUserProfile = () =>
   useQuery(['user/getUserProfile'], () => getUserProfile());
 
-//export const checkPassword
+export const changeProfile = async (newProfile: any): Promise<any> => {
+  let response: AxiosResponse<any>;
+  response = await axios.patch(`${config.apiEndpoint}/users/changeInfo`, {
+    data: {
+      fullName: newProfile.fullName,
+      phone: newProfile.phone,
+      birthDay: newProfile.birthDay,
+    },
+    headers: {
+      Authorization: `Bearer ${sessionStorage.getItem('token')}`,
+    },
+  });
+
+  return response.data.data;
+};
+
+export const useChangeProfile = (newProfile: any) =>
+  useQuery(['user/changeProfile'], () => changeProfile(newProfile), {
+    refetchOnWindowFocus: false,
+    enabled: false,
+  });
+
+export const checkNewPassword = async (password: string): Promise<any> => {
+  let response: AxiosResponse<any>;
+  response = await axios.get(`${config.apiEndpoint}/users/checkPassword`, {
+    data: {
+      password: password,
+    },
+    headers: {
+      Authorization: `Bearer ${sessionStorage.getItem('token')}`,
+    },
+  });
+
+  return response.data.data;
+};
+
+export const useCheckNewPassword = () =>
+  useQuery(['user/checkNewPassword'], () => getUserProfile());
