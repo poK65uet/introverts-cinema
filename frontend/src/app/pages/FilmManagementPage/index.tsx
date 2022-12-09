@@ -10,7 +10,7 @@ import {
 } from '@mui/x-data-grid';
 import { useState, useEffect } from 'react';
 import { Button, Chip, Typography } from '@mui/material';
-import AddFilmDialog from '../../components/FilmDialog';
+import AddFilmDialog from '../../components/FilmDialog/AddFilmDialog';
 import { useGetMovies } from 'queries/movies';
 import EditFilmDialog from 'app/components/FilmDialog/EditFilmDialog';
 
@@ -144,7 +144,7 @@ export default function FilmManagementPage() {
         onPageChange={newPage => setPage(newPage)}
         onPageSizeChange={newPageSize => setPageSize(newPageSize)}
         rowsPerPageOptions={[5, 10, 20]}
-        rows={isLoading ? [] : data}
+        rows={isLoading ? [] : data.rows}
         disableSelectionOnClick
         columns={columns}
         onRowDoubleClick={GridCellParams =>

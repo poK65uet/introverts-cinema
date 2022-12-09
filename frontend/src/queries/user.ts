@@ -7,8 +7,12 @@ export const getUsers = async (
   size: number, 
 ): Promise<any> => {
   let response: AxiosResponse<any>;
+  const token = sessionStorage.getItem('token');
+  const authenticationHeader = {
+      headers: {Authorization: `Bearer ${token}`}
+  }
   try {
-    response = await axios.get(`${config.apiEndpoint}/users/pagination?page=${page}&size=${size}`);
+    response = await axios.get(`${config.apiEndpoint}/users/pagination?page=${page}&size=${size}`, authenticationHeader);
   } catch (e) { 
     return [];
   }

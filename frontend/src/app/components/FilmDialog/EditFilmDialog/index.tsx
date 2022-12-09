@@ -83,7 +83,6 @@ export default function EditFilmDialog(props: any) {
         values.Actors,
         values.Directors,
       );
-      console.log(data);
     }
   };
 
@@ -202,7 +201,7 @@ export default function EditFilmDialog(props: any) {
           multiple
           id="tags-standard"
           value={values.Actors}
-          options={loadingActors ? [] : allActors}
+          options={loadingActors ? [] : allActors.rows}
           loading={loadingActors}
           getOptionLabel={(option: any) => option.fullName}
           onChange={(event, value) => setValues({ ...values, Actors: value })}

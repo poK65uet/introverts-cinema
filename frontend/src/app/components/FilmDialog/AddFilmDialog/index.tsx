@@ -81,7 +81,6 @@ export default function FilmDialog(props: any) {
         values.Actors,
         values.Directors,
       );
-      console.log(values);
     }
   };
 
@@ -189,7 +188,7 @@ export default function FilmDialog(props: any) {
         <Autocomplete
           multiple
           id="tags-standard"
-          options={loadingActors ? [] : allActors}
+          options={loadingActors ? [] : allActors.rows}
           loading={loadingActors}
           getOptionLabel={(option: any) => option.fullName}
           onChange={(event, value) =>

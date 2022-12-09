@@ -2,6 +2,7 @@ import axios, { AxiosResponse } from 'axios';
 import config from 'config';
 import { useQuery } from 'react-query';
 
+
 export const getNewMovies = async (): Promise<string[]> => {
   let response: AxiosResponse<any>;
   try {
@@ -27,8 +28,12 @@ export const getUpcomingMovies = async (): Promise<string[]> => {
 export const getMovieById = async (id: string | undefined): Promise<any> => {
   if(id === '0') return undefined;
   let response: AxiosResponse<any>;
+  const token = sessionStorage.getItem('token');
+  const authenticationHeader = {
+      headers: {Authorization: `Bearer ${token}`}
+  }
   try {
-    response = await axios.get(`${config.apiEndpoint}/films/${id}`);
+    response = await axios.get(`${config.apiEndpoint}/films/${id}`, authenticationHeader);
   } catch (e) {
     return undefined;
   }
@@ -40,9 +45,16 @@ export const useGetMovieById = (id: string | undefined) =>
 
 export const getMovies = async (): Promise<any> => {
   let response: AxiosResponse<any>;
+
+  const token = sessionStorage.getItem('token');
+  const authenticationHeader = {
+      headers: {Authorization: `Bearer ${token}`}
+  }
+  
   try {
-    response = await axios.get(`${config.apiEndpoint}/films/pagination`);
+    response = await axios.get(`${config.apiEndpoint}/films/pagination`, authenticationHeader);
   } catch (e) {
+    console.log(e);
     return [];
   }
   return response.data.data;
@@ -66,6 +78,10 @@ export const addMovie = async (
   Directors?: number[],
 ): Promise<any> => {
   let response: AxiosResponse<any>;
+  const token = sessionStorage.getItem('token');
+  const authenticationHeader = {
+      headers: {Authorization: `Bearer ${token}`}
+  }
   try {
     response = await axios.post(`${config.apiEndpoint}/films/${id}`, {
       title: title,
@@ -80,7 +96,7 @@ export const addMovie = async (
       Categories: Categories,
       Actors: Actors,
       Directors: Directors,
-    });
+    }, authenticationHeader);
   } catch (e) {
     console.log(e);
     return [];
@@ -105,6 +121,10 @@ export const updateMovie = async (
   Directors?: number[],
 ): Promise<any> => {
   let response: AxiosResponse<any>;
+  const token = sessionStorage.getItem('token');
+  const authenticationHeader = {
+      headers: {Authorization: `Bearer ${token}`}
+  }
   try {
     response = await axios.patch(`${config.apiEndpoint}/films/${id}`, {
       title: title,
@@ -119,7 +139,7 @@ export const updateMovie = async (
       Categories: Categories,
       Actors: Actors,
       Directors: Directors,
-    });
+    }, authenticationHeader);
   } catch (e) {
     return [];
   }
