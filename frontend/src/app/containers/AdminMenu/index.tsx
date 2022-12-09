@@ -20,6 +20,7 @@ function AdminMenu() {
   const [pathname, setPathname] = useState(location.pathname);
   const [tab, setTab] = useState(-1);
 
+  //TODO: style, make us less ugly 
   useLayoutEffect(() => {
     setPathname(location.pathname);
     switch (location.pathname) {

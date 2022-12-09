@@ -1,6 +1,6 @@
 import Box from '@mui/material/Box';
 import useStyles from './style';
-import { DataGrid, GridColDef, GridToolbar } from '@mui/x-data-grid';
+import { DataGrid, GridColDef, GridRenderCellParams, GridToolbar } from '@mui/x-data-grid';
 // import DeleteIcon from '@mui/icons-material/Delete';
 // import EditIcon from '@mui/icons-material/Edit';
 // import { IconButton, Typography } from '@mui/material';
@@ -82,6 +82,7 @@ export default function CustomerManagementPage() {
       width: 150,
       align: 'center',
       headerAlign: 'center',
+      
     },
     {
       field: 'createdAt',
@@ -90,6 +91,17 @@ export default function CustomerManagementPage() {
       width: 150,
       align: 'center',
       headerAlign: 'center',
+      renderCell: (params: GridRenderCellParams<string>) => {
+        if (params.value === undefined) return null;
+        const openingDay = new Date(params.value);
+        return (
+          openingDay.getDate() +
+          '/' +
+          openingDay.getMonth() +
+          '/' +
+          openingDay.getFullYear()
+        );
+      },
     },
     {
       field: 'updatedAt',
@@ -98,6 +110,17 @@ export default function CustomerManagementPage() {
       width: 200,
       align: 'center',
       headerAlign: 'center',
+      renderCell: (params: GridRenderCellParams<string>) => {
+        if (params.value === undefined) return null;
+        const openingDay = new Date(params.value);
+        return (
+          openingDay.getDate() +
+          '/' +
+          openingDay.getMonth() +
+          '/' +
+          openingDay.getFullYear()
+        );
+      },
     },
   ];
   return (

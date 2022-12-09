@@ -8,6 +8,7 @@ const useStyles = makeStyles((theme: Theme) => ({
 
   activeTab: {
     transition: '0.5s',
+    textColor:  'primary !important',
   },
 
   wrapper: {},

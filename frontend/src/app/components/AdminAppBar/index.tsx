@@ -5,7 +5,8 @@ import { Link } from 'react-router-dom';
 
 export default function AdminAppBar() {
     const classes = useStyles();
-    return (
+// TODO: Add logout button and style the icon
+return (
         <MuiAppBar
             className={classes.appBar}
             color='secondary'
