@@ -212,8 +212,12 @@ const verifyBillPayment = async (req: Request) => {
 		}
 
 		const startTime = new Date(Date.now());
-		while (timeDiffToMinute(new Date(Date.now()), startTime) <= 1) {
-			if (verifyBillTransaction(bill)) {
+		let isPaid = false;
+		while (timeDiffToMinute(new Date(Date.now()), startTime) <= 0.5) {
+			isPaid = await verifyBillTransaction(bill);
+			if (isPaid) {
+				console.log(isPaid);
+
 				await bill.update({
 					paymentStatus: PaymentStatus.PAID
 				});
@@ -223,11 +227,18 @@ const verifyBillPayment = async (req: Request) => {
 			}
 		}
 		t.commit();
-		return {
-			data: 0,
-			message: 'Successfully',
-			status: ResponeCodes.OK
-		};
+		if (isPaid) {
+			return {
+				data: 0,
+				message: 'Successfully',
+				status: ResponeCodes.OK
+			};
+		} else {
+			return {
+				message: `Not found payment`,
+				status: ResponeCodes.BAD_REQUEST
+			};
+		}
 	} catch (error) {
 		t.rollback();
 		throw error;
