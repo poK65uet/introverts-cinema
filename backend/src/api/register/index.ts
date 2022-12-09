@@ -3,7 +3,7 @@ import { checkEmail, sendCode, verifyAndRegister } from './controller';
 
 const router = Router();
 router.post('/', verifyAndRegister);
-router.post('/sendCode', sendCode);
-router.post('/checkEmail', checkEmail);
+router.post('/send-code', sendCode);
+router.post('/check-email', checkEmail);
 
 export default router;

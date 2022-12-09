@@ -1,9 +1,8 @@
 import bcrypt from 'bcrypt';
-import jwt from 'jsonwebtoken';
-import config from 'config';
 import LoginPayLoad from './LoginPayload';
 import { Role, User } from 'databases/models';
 import ResponeCodes from 'utils/constants/ResponeCode';
+import { generateToken } from 'utils/helpers/generate';
 
 const verifyEmail = async (email: string) => {
 	const user = await User.findOne({
@@ -39,9 +38,7 @@ const login = async (loginData: LoginPayLoad) => {
 				} else {
 					const roles = user.Roles;
 					const roleIds = roles.map(role => role.id);
-					const token = jwt.sign({ userId: user.id, roleIds, userEmail: user.email }, config.secret_key, {
-						expiresIn: config.expires_in
-					});
+					const token = generateToken(user.id, roleIds, user.email);
 
 					data = {
 						user,

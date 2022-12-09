@@ -1,4 +1,4 @@
-import { Request, Response } from 'express';
+import e, { Request, Response } from 'express';
 import * as service from './service';
 import { ApiResponse } from 'utils/rest/ApiResponse';
 import ResponeCodes from 'utils/constants/ResponeCode';
@@ -46,7 +46,7 @@ const getMe = async (req: Request, res: Response) => {
 	}
 };
 
-// PATCH: /users/changeInfo
+// PATCH: /users/change-info
 const changeInfo = async (req: Request, res: Response) => {
 	try {
 		const result = await service.changeInfo(req);
@@ -57,30 +57,29 @@ const changeInfo = async (req: Request, res: Response) => {
 	}
 };
 
-// POST: /users/checkPassword
-const checkPassword = async (req: Request, res: Response) => {
-	try {
-		const result = await service.checkPassword(req);
-		const { data, message, status } = result;
-		return new ApiResponse(data, message, status).send(res);
-	} catch (error) {
-		return new ApiResponse(error.message, "Couldn't check password.", ResponeCodes.ERROR).send(res);
-	}
-};
-
-// PATCH: /users/changePassword
+// PATCH: /users/change-password
 const changePassword = async (req: Request, res: Response) => {
 	try {
-		const checkResult = await service.checkPassword(req);
-		if (checkResult.data === true) {
-			const result = await service.changePassword(req);
-			const { data, message, status } = result;
-			return new ApiResponse(data, message, status).send(res);
+		const checkResult = await service.checkNewPassword(req);
+		if (checkResult.data) {
+			const changeResult = await service.changePassword(req);
+			return new ApiResponse(changeResult.data, changeResult.message, changeResult.status).send(res);
 		} else {
 			return new ApiResponse(checkResult.data, checkResult.message, checkResult.status).send(res);
 		}
 	} catch (error) {
 		return new ApiResponse(error.message, "Couldn't change password.", ResponeCodes.ERROR).send(res);
+	}
+};
+
+// POST: /users/verify-password
+const verifyPassword = async (req: Request, res: Response) => {
+	try {
+		const result = await service.verifyPassword(req);
+		const { data, message, status } = result;
+		return new ApiResponse(data, message, status).send(res);
+	} catch (error) {
+		return new ApiResponse(error.message, "Couldn't verify password.", ResponeCodes.ERROR).send(res);
 	}
 };
 
@@ -95,4 +94,4 @@ const deleteUser = async (req: Request, res: Response) => {
 	}
 };
 
-export { getUsers, getUser, addUser, deleteUser, changeInfo, changePassword, checkPassword, getMe };
+export { getUsers, getUser, addUser, deleteUser, changeInfo, changePassword, verifyPassword, getMe };
