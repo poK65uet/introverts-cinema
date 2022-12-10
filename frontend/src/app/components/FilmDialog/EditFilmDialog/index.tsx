@@ -23,6 +23,7 @@ import { useForm } from 'hooks/useForm';
 import { addMovie, updateMovie, useGetMovieById } from 'queries/movies';
 import { usegetActors } from 'queries/actor';
 
+//TODO: Add Column spacing, add close button
 export default function EditFilmDialog(props: any) {
   const classes = useStyles();
 

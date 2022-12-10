@@ -8,6 +8,7 @@ import { useGetUsers } from '../../../queries/user';
 import { useState, useEffect } from 'react';
 import { Button, Typography } from '@mui/material';
 
+//TODO: Add search button
 export default function CustomerManagementPage() {
   const classes = useStyles();
   const [page, setPage] = useState<number>(0);
@@ -43,6 +44,7 @@ export default function CustomerManagementPage() {
   };
 
   const { data, isLoading } = useGetUsers(page, pageSize);
+  console.log(data);
 
   useEffect(() => {
     if (data !== undefined) {
@@ -139,7 +141,7 @@ export default function CustomerManagementPage() {
       <DataGrid
         page={page}
         pageSize={pageSize}
-        loading={isLoading ? true : false}
+        loading={isLoading}
         onPageChange={newPage => updatePage(newPage)}
         onPageSizeChange={newPageSize => updatePageSize(newPageSize)}
         rowsPerPageOptions={[5, 10, 20]}

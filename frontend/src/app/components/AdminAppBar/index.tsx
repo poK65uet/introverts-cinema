@@ -1,10 +1,11 @@
 import { makeStyles } from '@mui/styles';
-import { Button, AppBar as MuiAppBar, Hidden, Theme } from '@mui/material';
+import { Button, AppBar as MuiAppBar, Hidden, Theme, Popper, MenuItem, ClickAwayListener, Paper } from '@mui/material';
 import useStyles from './styles';
 import { Link } from 'react-router-dom';
 
 export default function AdminAppBar() {
     const classes = useStyles();
+
 // TODO: Add logout button and style the icon
 return (
         <MuiAppBar

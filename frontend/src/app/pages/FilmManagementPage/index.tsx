@@ -14,6 +14,8 @@ import AddFilmDialog from '../../components/FilmDialog/AddFilmDialog';
 import { useGetMovies } from 'queries/movies';
 import EditFilmDialog from 'app/components/FilmDialog/EditFilmDialog';
 
+//TODO: Add search button
+//TODO: Add button to change film's status
 export default function FilmManagementPage() {
   const classes = useStyles();
   const [open, setOpen] = useState(false);
