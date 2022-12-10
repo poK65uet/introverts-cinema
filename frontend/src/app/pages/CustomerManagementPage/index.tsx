@@ -48,7 +48,6 @@ export default function CustomerManagementPage() {
     if (data !== undefined) {
       setCount(data.count);
       updateRows(data.rows);
-      console.log(rows);
     }
   }, [isLoading]);
 
@@ -65,14 +64,12 @@ export default function CustomerManagementPage() {
       field: 'fullName',
       headerName: 'Họ tên',
       width: 220,
-      align: 'center',
       headerAlign: 'center',
     },
     {
       field: 'email',
       headerName: 'Email',
       width: 220,
-      align: 'center',
       headerAlign: 'center',
     },
     {
@@ -82,6 +79,17 @@ export default function CustomerManagementPage() {
       width: 150,
       align: 'center',
       headerAlign: 'center',
+      renderCell: (params: GridRenderCellParams<string>) => {
+        if (params.value === undefined) return null;
+        const openingDay = new Date(params.value);
+        return (
+          openingDay.getDate() +
+          '/' +
+          openingDay.getMonth() +
+          '/' +
+          openingDay.getFullYear()
+        );
+      },
       
     },
     {

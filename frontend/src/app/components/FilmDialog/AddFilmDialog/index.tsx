@@ -82,10 +82,11 @@ export default function FilmDialog(props: any) {
         values.Directors,
       );
     }
+    handleCloseDialog();
   };
 
   return (
-    <Dialog open={props.open} onClose={handleCloseDialog}>
+    <Dialog open={props.open} onClose={handleCloseDialog} fullWidth={true} maxWidth="md">
       <Box className={classes.AddFilmBox}>
         <Typography
           sx={{
@@ -98,7 +99,7 @@ export default function FilmDialog(props: any) {
           Thêm phim mới
         </Typography>
         <Grid
-          xs={12}
+          xs={24}
           container
           columnSpacing={2}
           sx={{ alignContent: 'center' }}

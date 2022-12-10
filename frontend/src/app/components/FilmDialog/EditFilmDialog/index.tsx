@@ -84,6 +84,7 @@ export default function EditFilmDialog(props: any) {
         values.Directors,
       );
     }
+    handleCloseDialog();
   };
 
   const { isLoading, remove, data: editFilmData } = useGetMovieById(props.data);
