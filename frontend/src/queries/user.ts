@@ -19,15 +19,12 @@ export const useGetUsers = (page: number, size: number) =>
 
 export const getUserProfile = async (): Promise<any> => {
   let response: AxiosResponse<any>;
-  try {
-    response = await axios.get(`${config.apiEndpoint}/users/me`, {
-      headers: {
-        Authorization: `Bearer ${sessionStorage.getItem('token')}`,
-      },
-    });
-  } catch (e) {
-    return [];
-  }
+  response = await axios.get(`${config.apiEndpoint}/users/me`, {
+    headers: {
+      Authorization: `Bearer ${sessionStorage.getItem('token')}`,
+    },
+  });
+
   return response.data.data;
 };
 
@@ -36,7 +33,7 @@ export const useGetUserProfile = () =>
 
 export const changeProfile = async (newProfile: any): Promise<any> => {
   let response: AxiosResponse<any>;
-  response = await axios.patch(`${config.apiEndpoint}/users/changeInfo`, {
+  response = await axios.patch(`${config.apiEndpoint}/users/change-info`, {
     data: {
       fullName: newProfile.fullName,
       phone: newProfile.phone,
@@ -56,9 +53,11 @@ export const useChangeProfile = (newProfile: any) =>
     enabled: false,
   });
 
-export const checkNewPassword = async (password: string): Promise<any> => {
+export const verifyPassword = async (password: string): Promise<any> => {
   let response: AxiosResponse<any>;
-  response = await axios.get(`${config.apiEndpoint}/users/checkPassword`, {
+  console.log(sessionStorage.getItem('token'));
+
+  response = await axios.post(`${config.apiEndpoint}/users/verify-password`, {
     data: {
       password: password,
     },
@@ -66,9 +65,13 @@ export const checkNewPassword = async (password: string): Promise<any> => {
       Authorization: `Bearer ${sessionStorage.getItem('token')}`,
     },
   });
+  console.log(sessionStorage.getItem('token'));
 
   return response.data.data;
 };
 
-export const useCheckNewPassword = () =>
-  useQuery(['user/checkNewPassword'], () => getUserProfile());
+export const useVerifyPassword = (password: string) =>
+  useQuery(['user/verifyPassword'], () => verifyPassword(password), {
+    refetchOnWindowFocus: false,
+    enabled: false,
+  });

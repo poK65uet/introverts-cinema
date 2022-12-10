@@ -25,7 +25,7 @@ export const getMovieById = async (id: string | undefined): Promise<any> => {
 };
 
 export const useGetMovieById = (id: string | undefined) =>
-  useQuery(['getMovieById'], () => getMovieById(id), {
+  useQuery(['getMovieById'], () => getMovieById(id),   {
     refetchOnWindowFocus: false,
   });
 

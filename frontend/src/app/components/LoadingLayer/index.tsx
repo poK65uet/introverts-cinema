@@ -12,6 +12,7 @@ export default function LoadingLayer() {
 	useEffect(() => {
 		setIsLoading(
 			loading.loading.isLoading
+			|| loading.home.isLoading
 			|| loading.movies.isLoading
 			|| loading.login.isLoading
 			|| loading.register.isLoading

@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react'
-import { Box, Button, TextField } from '@mui/material';
+import { Box, Button, InputAdornment, TextField } from '@mui/material';
 import Grid from '@mui/material/Unstable_Grid2';
 import useStyles from './styles';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
@@ -8,8 +8,11 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { notify } from '../MasterDialog/index';
 import { isValidPhoneString } from 'utils/validation';
 import { useForm } from 'hooks/useForm';
-import { CustomInput } from '../CustomInput';
-import { useChangeProfile } from 'queries/user';
+import { CustomInput } from 'app/components/CustomInput';
+import { useChangeProfile, useVerifyPassword } from 'queries/user';
+import { Check } from '@mui/icons-material';
+import { useDispatch } from 'react-redux';
+import { loadingActions } from 'app/components/LoadingLayer/slice';
 
 interface UserProfileProps {
   user: any
@@ -21,12 +24,14 @@ export default function UserProfile(props: UserProfileProps) {
   const [userData, setUserData] = useState(props.user)
   const [isProfileChange, setIsProfileChange] = useState(false)
   const [showChangePassword, setShowChangePassword] = useState(false)
-  const { refetch: updateProfile } = useChangeProfile({
-
-    fullName: userData?.fullName != props.user?.fullName ? userData?.fullName : undefined,
-    phone: userData?.phone != props.user?.phone ? userData?.phone : undefined,
-    birthDay: userData?.birthDay != props.user?.birthDay ? userData?.birthDay : undefined
-  })
+  const {
+    refetch: updateProfile,
+    isLoading: isUpdateProfileLoading,
+    isError: isUpdateProfileError } = useChangeProfile({
+      fullName: userData?.fullName != props.user?.fullName ? userData?.fullName : undefined,
+      phone: userData?.phone != props.user?.phone ? userData?.phone : undefined,
+      birthDay: userData?.birthDay != props.user?.birthDay ? userData?.birthDay : undefined
+    })
 
   const handleChangeProfile = (event: React.ChangeEvent<HTMLInputElement>) => {
     setUserData({ ...userData, [event.target.id]: event.target.value });
@@ -52,12 +57,6 @@ export default function UserProfile(props: UserProfileProps) {
     }
   }
 
-  const handleClickSaveProfile = () => useChangeProfile({
-    fullName: userData.fullName != props.user.fullName ? userData.fullName : undefined,
-    phone: userData.phone != props.user.phone ? userData.phone : undefined,
-    birthDay: userData.birthDay != props.user.birthDay ? userData.birthDay : undefined
-  })
-
   const handleShowChangePassword = () => {
     setShowChangePassword(!showChangePassword)
     if (!showChangePassword) {
@@ -80,6 +79,16 @@ export default function UserProfile(props: UserProfileProps) {
       setUserData(props.user)
     }
   }, [props.user])
+
+  useEffect(() => {
+    if (isUpdateProfileError) {
+      notify({
+        type: 'error',
+        content: 'Cập nhật thông tin thất bại',
+        autocloseDelay: 1250
+      })
+    }
+  }, [isUpdateProfileError])
 
   const validate = (fieldValues = values) => {
     const tmp = { ...errors };
@@ -113,6 +122,46 @@ export default function UserProfile(props: UserProfileProps) {
       true,
       validate
     );
+
+  const {
+    data: isPasswordVerfied,
+    refetch: verifyPassword,
+    isLoading: isVerifyLoading,
+    isError: isVerifyPasswordError
+  } = useVerifyPassword(
+    values.password
+  )
+
+  const handleVerifyPassword = () => {
+    verifyPassword()
+  }
+
+  useEffect(() => {
+    if (!isPasswordVerfied && values.password != '') {
+      setErrors({ password: 'Mật khẩu sai' })
+    }
+  }, [isPasswordVerfied])
+
+  useEffect(() => {
+    if (isVerifyPasswordError) {
+      notify({
+        type: 'error',
+        content: 'Xác thực mật khẩu gặp lỗi',
+        autocloseDelay: 1250
+      })
+    }
+  }, [isVerifyPasswordError])
+
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    if (isUpdateProfileLoading || isVerifyLoading) {
+      dispatch(loadingActions.load())
+
+    } else {
+      dispatch(loadingActions.finish())
+    }
+  }, [isUpdateProfileLoading, isVerifyLoading])
 
   const classes = useStyles()
 
@@ -170,7 +219,16 @@ export default function UserProfile(props: UserProfileProps) {
                   <CustomInput.TextField
                     label='Mật khẩu' name='password' variant='outlined'
                     type='password' value={values.password} error={errors.password}
-                    onChange={handleInputChange} />
+                    onChange={handleInputChange}
+                    onBlur={handleVerifyPassword}
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment position='end'>
+                          {isPasswordVerfied == true ?
+                            <Check color='success' /> : null}
+                        </InputAdornment>
+                      ),
+                    }} />
                 </Grid>
                 <Grid xs={7} />
                 <Grid xs={5}>
