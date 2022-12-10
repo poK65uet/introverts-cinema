@@ -28,7 +28,10 @@ const verifyToken = (req: Request, res: Response, next: NextFunction) => {
 		req.user = await User.findByPk(decoded.userId, {
 			include: [
 				{
-					model: Role
+					model: Role,
+					through: {
+						attributes: []
+					}
 				}
 			]
 		});
