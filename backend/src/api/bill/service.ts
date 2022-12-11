@@ -133,7 +133,7 @@ const cancelBill = async (req: Request) => {
 			]
 		});
 
-		if (!bill) {
+		if (!bill || bill.paymentStatus === PaymentStatus.PAID) {
 			return {
 				message: 'Bill invalid',
 				status: ResponeCodes.BAD_REQUEST
@@ -147,13 +147,19 @@ const cancelBill = async (req: Request) => {
 		}
 
 		for (let seat of bill.Seats) {
-			await seat.update(
-				{
-					status: SeatStatus.UN_BOOKED
-				},
-				{ transaction: t }
-			);
+			if (seat.status === SeatStatus.BOOKING) {
+				await seat.update(
+					{
+						status: SeatStatus.UN_BOOKED
+					},
+					{ transaction: t }
+				);
+			}
 		}
+
+		bill.update({
+			paymentStatus: PaymentStatus.PAID
+		});
 
 		t.commit();
 		return {
