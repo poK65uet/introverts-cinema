@@ -7,6 +7,8 @@ const paths = {
   FilmManagement: '/admin/films',
   RoomManagement: '/admin/rooms',
   TicketManagement: '/admin/tickets',
+  ShowtimeManagementPage: '/admin/showtime',
+  BookedTicketManagementPage: '/admin/bookedtickets',
 };
 
 export default paths;

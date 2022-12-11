@@ -11,6 +11,8 @@ import CustomerManagementPage from 'app/pages/CustomerManagementPage';
 import FilmManagementPage from 'app/pages/FilmManagementPage';
 import { RootState } from 'store';
 import { useSelector } from 'react-redux';
+import BookedTicketManagementPage from 'app/pages/BookedTicketManagementPage';
+import ShowtimeManagementPage from 'app/pages/ShowtimeManagementPage';
 
 const AdminLayout = () => {
 
@@ -36,6 +38,14 @@ const AdminLayout = () => {
         <Route
           path={paths.TicketManagement}
           component={TicketManagementPage}
+        />
+        <Route
+          path={paths.BookedTicketManagementPage}
+          component={BookedTicketManagementPage}
+        />
+        <Route
+          path={paths.ShowtimeManagementPage}
+          component={ShowtimeManagementPage}
         />
       </Switch>
       {/* <Footer/> */}

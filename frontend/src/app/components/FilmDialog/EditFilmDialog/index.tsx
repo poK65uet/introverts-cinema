@@ -99,7 +99,7 @@ export default function EditFilmDialog(props: any) {
   }, [isLoading]);
 
   return (
-    <Dialog open={props.open} onClose={handleCloseDialog}>
+    <Dialog open={props.open} onClose={handleCloseDialog}  fullWidth maxWidth="md" >
       <Box className={classes.AddFilmBox}>
         <Typography
           sx={{

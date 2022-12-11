@@ -8,21 +8,15 @@ const useStyles = makeStyles(() => ({
     borderRadius: '15px',
     overflow: 'hidden',
     padding: '2em',
+    // width: '1000 !important',
   },
 
   AddFilmButton: {
     borderRadius: '15px !important',
     transition: '0.5s !important',
     boxShadow: 'none !important',
-    // '&:hover': {
-    //   backgroundColor: theme.palette.primary.dark,
-    // },
   },
 
-  // registerButton: {
-  //   borderRadius: '15px !important',
-  //   transition: '0.5s !important',
-  // },
 }));
 
 export default useStyles;

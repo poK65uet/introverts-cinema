@@ -83,10 +83,11 @@ export default function FilmDialog(props: any) {
       );
     }
     handleCloseDialog();
+    window.location.reload();
   };
 
   return (
-    <Dialog open={props.open} onClose={handleCloseDialog} fullWidth={true} maxWidth="md">
+    <Dialog open={props.open} onClose={handleCloseDialog} fullWidth maxWidth="md">
       <Box className={classes.AddFilmBox}>
         <Typography
           sx={{
