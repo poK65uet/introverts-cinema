@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import loginRouter from './login';
 import registerRouter from './register';
+import forgotRouter from './forgot';
 import userRouter from './user';
 import nationalityRouter from './nationality';
 import actorRouter from './actor';
@@ -13,12 +14,13 @@ import showtimeRouter from './showtime';
 import seatRouter from './seat';
 import priceRouter from './price';
 import billRouter from './bill';
-import ticketRouter from './ticket'
+import ticketRouter from './ticket';
 
 const router = Router();
 
 router.use('/login', loginRouter);
 router.use('/register', registerRouter);
+router.use('/forgot', forgotRouter);
 router.use('/users', userRouter);
 router.use('/nationalities', nationalityRouter);
 router.use('/actors', actorRouter);
@@ -30,7 +32,6 @@ router.use('/rooms', roomRouter);
 router.use('/showtimes', showtimeRouter);
 router.use('/seats', seatRouter);
 router.use('/prices', priceRouter);
-router.use('/bills', billRouter);
 router.use('/bills', billRouter);
 router.use('/tickets', ticketRouter);
 

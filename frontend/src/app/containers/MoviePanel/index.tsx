@@ -1,5 +1,5 @@
 import React, { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
-import { Box, Button, Tab, Container } from '@mui/material';
+import { Box, Tab, Container } from '@mui/material';
 import { TabContext, TabList, TabPanel } from '@mui/lab';
 import useStyles from './styles';
 import { useSelector, useDispatch } from 'react-redux';
@@ -50,31 +50,23 @@ export default function MoviePanel() {
   }
 
   const handleSelectShowtime = (showtime: number) => {
-    if (!store.login.isLoggedin) {
-      notify({
-        type: 'error',
-        content: 'Cần đăng nhập để tiếp tục',
-        autocloseDelay: 2000
-      })
-    } else {
-      dispatch(bookTicketActions.selectShowtime(showtime))
-      window.scrollTo({
-        top: 0,
-      })
-    }
+    dispatch(bookTicketActions.selectShowtime(showtime))
+    window.scrollTo({
+      top: 0,
+    })
   }
 
   const classes = useStyles()
 
   return (
-    <TabContext value={store.bookTicket.selectedMovie}>
-      <Container className={classes.wrapper}>
+    <Container className={classes.wrapper}>
+      <TabContext value={store.bookTicket.selectedMovie}>
         <Box className={classes.container}>
           <div className={classes.title} >CHỌN PHIM</div>
           <TabList
             className={classes.tabContainer}
             orientation='vertical'
-            onChange={(event, newMovie) => handleSelectMovie(event, newMovie)}
+            onChange={(event, movie) => handleSelectMovie(event, movie)}
           >
             <Tab value={'0'} sx={{ all: 'unset', bgcolor: '#FFFFFF' }}
               ref={store.bookTicket.selectedMovie == '0' ? selectedTabRef : null}
@@ -121,7 +113,7 @@ export default function MoviePanel() {
             </TabPanel>
           })}
         </Box>
-      </Container>
-    </TabContext >
+      </TabContext >
+    </Container >
   )
 }

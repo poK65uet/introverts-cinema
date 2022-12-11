@@ -41,7 +41,7 @@ const getAllSeatByShowtime = async (showtimeId: number) => {
 
 const statusMapping = (seatList: SeatModel[]) => {
 	return seatList.map(seat => {
-		if (seat.status === SeatStatus.BOOKING && timeDiffToMinute(seat.updatedAt, new Date(Date.now())) > 30) {
+		if (seat.status === SeatStatus.BOOKING && timeDiffToMinute(seat.updatedAt, new Date(Date.now())) > 15) {
 			seat.status = SeatStatus.UN_BOOKED;
 		}
 		return seat;

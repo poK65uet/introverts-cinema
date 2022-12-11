@@ -3,14 +3,15 @@ import { Header } from "app/containers/Header";
 import { HomePage } from "app/pages/HomePage";
 import NewMoviePage from "app/pages/NewMoviePage";
 import UpcomingMoviePage from "app/pages/UpcomingMoviePage";
-import MovieDetailPage from '../pages/MovieDetailPage/index';
-import NotFoundPage from '../pages/NotFoundPage/index';
-import { Route, Switch } from 'react-router-dom';
+import MovieDetailPage from 'app/pages/MovieDetailPage/index';
+import NotFoundPage from 'app/pages/NotFoundPage/index';
+import BookTicketPage from 'app/pages/BookTicketPage/index';
+import UserPage from 'app/pages/UserPage/index';
+import { Redirect, Route, Switch } from 'react-router-dom';
 import Footer from "app/containers/Footer";
 import MasterDialog, { notify } from "app/components/MasterDialog";
 import { useSelector } from 'react-redux';
 import { RootState } from 'store';
-import BookTicketPage from '../pages/BookTicketPage/index';
 import paths from "paths";
 
 
@@ -27,6 +28,8 @@ const HomeLayout = () => {
 				<Route path={`${paths.UpcomingMoviePage}`} component={UpcomingMoviePage} />
 				<Route path={`${paths.MovieDetailPage}/:movieId`} component={MovieDetailPage} />
 				<Route path={`${paths.BookTicketPage}`} component={BookTicketPage} />
+				{!store.login.isLoggedin ? <Redirect from={`${paths.UserPage}`} exact to='/' /> : null}
+				<Route path={`${paths.UserPage}`} component={UserPage} />
 				<Route path='/*' component={NotFoundPage} />
 			</Switch>
 			<MasterDialog />
@@ -35,4 +38,4 @@ const HomeLayout = () => {
 	);
 };
 
-export default HomeLayout;
+export default HomeLayout;	

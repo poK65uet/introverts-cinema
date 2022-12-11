@@ -75,10 +75,4 @@ User.beforeCreate(user => {
 	user.password = hashedPassword;
 });
 
-export interface UserRequestInfo {
-	id: number;
-	email: string;
-	roleIds: number[];
-}
-
 export default User;

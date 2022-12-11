@@ -1,5 +1,5 @@
 import { Request } from 'express';
-import { Showtime, Room, Film, Seat } from 'databases/models';
+import { Showtime, Room, Film } from 'databases/models';
 import ResponeCodes from 'utils/constants/ResponeCode';
 import ShowtimePayload from './ShowtimePayload';
 import { ShowtimeModel } from 'databases/models/Showtime';
@@ -7,6 +7,9 @@ import { Op } from 'sequelize';
 import { getPrice } from 'api/price/service';
 import paginate from 'utils/helpers/pagination';
 import sequelize from 'databases';
+import { addTimeByMinute } from 'utils/helpers/timeService';
+
+const NEXT_SHOWTIME = 30; // minutes;
 
 const getShowtimes = async (req: Request) => {
 	try {
@@ -113,10 +116,10 @@ const getShowtimeById = async (req: Request) => {
 				message = 'Not found.';
 				status = ResponeCodes.NOT_FOUND;
 			} else {
-				const price = await getPrice(showtime.Room.visionType, showtime.startTime.getDay());
+				const price = await getPrice(showtime);
 				data = {
 					showtime,
-					price: price.value
+					price
 				};
 				message = 'Get successfully!';
 				status = ResponeCodes.OK;
@@ -133,10 +136,6 @@ const getShowtimeById = async (req: Request) => {
 	}
 };
 
-const checkDiffTime = (checkTime: Date, startTime: Date) => {
-	return checkTime > startTime;
-};
-
 const addShowtime = async (req: Request) => {
 	try {
 		let data;
@@ -144,22 +143,22 @@ const addShowtime = async (req: Request) => {
 		let status: number;
 
 		const newShowtime: ShowtimePayload = req.body;
-		const { film, room } = newShowtime;
+		const newSt = {
+			startTime: new Date(newShowtime.startTime),
+			film: await Film.findByPk(newShowtime.film),
+			roomId: newShowtime.room
+		};
 		const now = new Date(Date.now());
 
-		if (!newShowtime.startTime || new Date(newShowtime.startTime).getTime() < now.getTime() || !film || !room) {
+		if (!newSt.startTime || newSt.startTime < now || !newSt.film || !newSt.roomId) {
 			data = null;
 			message = 'Null.';
 			status = ResponeCodes.BAD_REQUEST;
 		} else {
-			const curStartTime = new Date(newShowtime.startTime);
-			const curFilm = await Film.findByPk(film);
-			const curRoom = room;
-
 			const checkShowtimes = await Showtime.findAll({
 				where: {
 					startTime: {
-						[Op.gt]: new Date(Date.now())
+						[Op.gt]: now
 					}
 				},
 				include: [
@@ -167,30 +166,31 @@ const addShowtime = async (req: Request) => {
 						model: Room,
 						attributes: [],
 						where: {
-							id: curRoom
+							id: newSt.roomId
 						}
 					},
 					{
-						model: Film
+						model: Film,
+						attributes: ['duration']
 					}
 				]
 			});
 
 			const checkResult = checkShowtimes.filter(checkSt => {
-				if (checkSt.startTime <= curStartTime) {
-					const checkTime = new Date(checkSt.startTime.getTime() + (checkSt.Film.duration + 30) * 60 * 1000);
-					return checkDiffTime(checkTime, curStartTime);
+				if (checkSt.startTime <= newSt.startTime) {
+					const checkTime = addTimeByMinute(checkSt.startTime, checkSt.Film.duration + NEXT_SHOWTIME);
+					return checkTime > newSt.startTime;
 				} else {
-					const checkTime = new Date(curStartTime.getTime() + (curFilm.duration + 30) * 60 * 1000);
-					return checkDiffTime(checkTime, checkSt.startTime);
+					const checkTime = addTimeByMinute(newSt.startTime, newSt.film.duration + NEXT_SHOWTIME);
+					return checkTime > checkSt.startTime;
 				}
 			});
 
 			if (checkResult.length === 0) {
 				const transaction = await sequelize.transaction(async t => {
 					const showtime = await Showtime.create(newShowtime, { transaction: t });
-					await showtime.setFilm(film, { transaction: t });
-					await showtime.setRoom(room, { transaction: t });
+					await showtime.setFilm(newSt.film, { transaction: t });
+					await showtime.setRoom(newSt.roomId, { transaction: t });
 
 					data = showtime;
 					message = 'Add successfully!';
