@@ -5,8 +5,16 @@ import AdminPage from 'app/pages/AdminPage';
 import LoadingLayer from 'app/components/LoadingLayer';
 import HomeLayout from './homeLayout';
 import AdminLayout from './adminLayout';
+import NotFoundPage from 'app/pages/NotFoundPage';
+import { useSelector } from 'react-redux';
+import { RootState } from 'store';
+import { constants } from 'buffer';
 
 const RootLayout = () => {
+
+
+	const store = useSelector<RootState, RootState>(state => state);
+  const role = store.login.user.Roles.map( role => role.id );
 
   useEffect(() => {
     document.body.style.margin = '0';
@@ -14,12 +22,12 @@ const RootLayout = () => {
   }, [])
 
   return (
+    
     <BrowserRouter>
       <Switch>
         <Redirect from='/admin' exact to='admin/customers' />
-        <Route path="/" exact component={HomeLayout} />
-        <Route path="/admin" component={AdminLayout}>
-        </Route>
+        {role ? <Route path="/" exact component={HomeLayout} /> : <Route path="/admin" component={AdminLayout} />}
+        <Route component={NotFoundPage}></Route>
       </Switch>
       <LoadingLayer />
     </BrowserRouter>
