@@ -25,6 +25,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     height: '100vh',
     float: 'left',
     textAlign: 'center',
+    '&.MuiDataGrid-main': {alignSelf: 'center !important'}
   },
 }));
 

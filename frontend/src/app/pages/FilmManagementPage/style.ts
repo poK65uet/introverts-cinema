@@ -4,8 +4,9 @@ import { spacing } from '@mui/system';
 
 const useStyles = makeStyles(() => ({
 filmTable: {
-    height: 400, 
+    height: 800, 
     width: '95%',
+    margin: 'auto'
 },
 collumnHeader: {
     fontWeight: 'bold',

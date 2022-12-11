@@ -91,7 +91,7 @@ function AdminMenu() {
         <Tab
           className={tab === 4 ? classes.activeTab : classes.tab}
           component={Link}
-          label="Quản lý vé"
+          label="Quản lý giá vé"
           icon={<LocalActivityIcon />}
           iconPosition="start"
           to={paths.TicketManagement}
@@ -99,7 +99,7 @@ function AdminMenu() {
         <Tab
           className={tab === 5 ? classes.activeTab : classes.tab}
           component={Link}
-          label="Danh sách vé đã đặt"
+          label="Lịch sử đặt vé"
           icon={<ConfirmationNumberIcon />}
           iconPosition="start"
           to={paths.BookedTicketManagementPage}

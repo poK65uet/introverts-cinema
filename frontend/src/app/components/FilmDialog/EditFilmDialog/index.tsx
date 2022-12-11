@@ -67,7 +67,10 @@ export default function EditFilmDialog(props: any) {
   };
 
   const handleEditFilm = () => {
-    setValues({...values, Actors: values.Actors.map(({ id } : { id : any}) => id)});
+    setValues({
+      ...values,
+      Actors: values.Actors.map(({ id }: { id: any }) => id),
+    });
     if (validate(values)) {
       const data = updateMovie(
         values.id.toString(),
@@ -88,7 +91,9 @@ export default function EditFilmDialog(props: any) {
     handleCloseDialog();
   };
 
+  // console.log(props);
   const { isLoading, remove, data: editFilmData } = useGetMovieById(props.data);
+  // console.log(editFilmData);
   if (editFilmData === undefined && props.data !== '0') {
     remove();
   }
@@ -96,10 +101,15 @@ export default function EditFilmDialog(props: any) {
     if (editFilmData !== undefined) {
       setValues({ ...editFilmData });
     }
-  }, [isLoading]);
+  }, [isLoading, props.data]);
 
   return (
-    <Dialog open={props.open} onClose={handleCloseDialog}  fullWidth maxWidth="md" >
+    <Dialog
+      open={props.open}
+      onClose={handleCloseDialog}
+      fullWidth
+      maxWidth="md"
+    >
       <Box className={classes.AddFilmBox}>
         <Typography
           sx={{
@@ -139,8 +149,8 @@ export default function EditFilmDialog(props: any) {
                 setValues({ ...values, status: event.target.value });
               }}
             >
-              <MenuItem value={'active'}>active</MenuItem>
-              <MenuItem value={'inactive'}>inactive</MenuItem>
+              <MenuItem value={'active'}>Đang chiếu</MenuItem>
+              <MenuItem value={'inactive'}>Ngừng chiếu</MenuItem>
             </Select>
           </Grid>
         </Grid>
@@ -246,16 +256,32 @@ export default function EditFilmDialog(props: any) {
           value={values.description}
           inputProps={{ maxLength: '64' }}
         />
-        <Button
-          fullWidth
-          variant="contained"
-          sx={{ mt: 2, p: 1, fontWeight: 'bold', color: 'white' }}
-          disableFocusRipple
-          className={classes.AddFilmButton}
-          onClick={handleEditFilm}
-        >
-          Thay đổi
-        </Button>
+        <Grid item={true} container xs={12} columnSpacing={2}>
+          <Grid item={true} xs={6}>
+            <Button
+              fullWidth
+              variant="contained"
+              sx={{ mt: 2, p: 1, fontWeight: 'bold', color: 'white' }}
+              disableFocusRipple
+              className={classes.AddFilmButton}
+              onClick={handleCloseDialog}
+            >
+              Hủy thao tác
+            </Button>
+          </Grid>
+          <Grid item={true} xs={6}>
+            <Button
+              fullWidth
+              variant="contained"
+              sx={{ mt: 2, p: 1, fontWeight: 'bold', color: 'white' }}
+              disableFocusRipple
+              className={classes.AddFilmButton}
+              onClick={handleEditFilm}
+            >
+              Thay đổi
+            </Button>
+          </Grid>
+        </Grid>
       </Box>
     </Dialog>
   );

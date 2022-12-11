@@ -13,41 +13,36 @@ import { RootState } from 'store';
 import { useSelector } from 'react-redux';
 import BookedTicketManagementPage from 'app/pages/BookedTicketManagementPage';
 import ShowtimeManagementPage from 'app/pages/ShowtimeManagementPage';
+import { Container } from '@mui/material';
 
 const AdminLayout = () => {
-
-	const store = useSelector<RootState, RootState>(state => state)
+  const store = useSelector<RootState, RootState>(state => state);
 
   return (
     <React.Fragment>
       <AdminAppBar />
       <AdminMenu />
-      <Switch>
-        <Route
-          path={paths.FilmManagement}
-          component={FilmManagementPage}
-        />
-        <Route
-          path={paths.CustomerManagement}
-          component={CustomerManagementPage}
-        />
-        <Route
-          path={paths.RoomManagement}
-          component={RoomManagementPage}
-        />
-        <Route
-          path={paths.TicketManagement}
-          component={TicketManagementPage}
-        />
-        <Route
-          path={paths.BookedTicketManagementPage}
-          component={BookedTicketManagementPage}
-        />
-        <Route
-          path={paths.ShowtimeManagementPage}
-          component={ShowtimeManagementPage}
-        />
-      </Switch>
+        <Switch>
+          <Route path={paths.FilmManagement} component={FilmManagementPage} />
+          <Route
+            path={paths.CustomerManagement}
+            component={CustomerManagementPage}
+          />
+          <Route path={paths.RoomManagement} component={RoomManagementPage} />
+          <Route
+            path={paths.TicketManagement}
+            component={TicketManagementPage}
+          />
+          <Route
+            path={paths.BookedTicketManagementPage}
+            component={BookedTicketManagementPage}
+          />
+          <Route
+            path={paths.ShowtimeManagementPage}
+            component={ShowtimeManagementPage}
+          />
+        </Switch>
+
       {/* <Footer/> */}
     </React.Fragment>
   );

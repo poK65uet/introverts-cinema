@@ -72,7 +72,7 @@ export default function FilmDialog(props: any) {
         values.imageUrl,
         values.trailerUrl,
         values.duration,
-        values.openingxDay,
+        values.openingDay,
         values.description,
         values.rated,
         values.status,
@@ -83,11 +83,15 @@ export default function FilmDialog(props: any) {
       );
     }
     handleCloseDialog();
-    window.location.reload();
   };
 
   return (
-    <Dialog open={props.open} onClose={handleCloseDialog} fullWidth maxWidth="md">
+    <Dialog
+      open={props.open}
+      onClose={handleCloseDialog}
+      fullWidth
+      maxWidth="lg"
+    >
       <Box className={classes.AddFilmBox}>
         <Typography
           sx={{
@@ -127,13 +131,13 @@ export default function FilmDialog(props: any) {
                 setValues({ ...values, status: event.target.value });
               }}
             >
-              <MenuItem value={'active'}>active</MenuItem>
-              <MenuItem value={'inactive'}>inactive</MenuItem>
+              <MenuItem value={'active'}>Đang chiếu</MenuItem>
+              <MenuItem value={'inactive'}>Ngừng chiếu</MenuItem>
             </Select>
           </Grid>
         </Grid>
-        <Grid xs={12} container columnSpacing={2} item={true}>
-          <Grid xs={6} item={true}>
+        <Grid xs={12} container columnSpacing={3} item={true}>
+          <Grid xs={3} item={true}>
             <CustomInput.TextField
               label="Thời lượng"
               name="duration"
@@ -146,16 +150,16 @@ export default function FilmDialog(props: any) {
                   <InputAdornment position="start">Phút</InputAdornment>
                 ),
               }}
-              inputProps={{ maxLength: '32' }}
+              inputProps={{ maxLength: '64' }}
             />
           </Grid>
-          <Grid xs={6} item={true}>
+          <Grid xs={3} item={true}>
             <CustomInput.DatePicker
               label="Ngày khởi chiếu"
               name="openingDay"
               margin="dense"
               value={values.openingDay}
-              inputProps={{ maxLength: '32' }}
+              inputProps={{ maxLength: '64' }}
               onChange={(openingDay: any) => {
                 if (openingDay === null) return;
                 validate({ openingDay: openingDay });
@@ -164,6 +168,14 @@ export default function FilmDialog(props: any) {
                   openingDay: openingDay,
                 });
               }}
+            />
+          </Grid>
+          <Grid xs={3} item={true}>
+            <CustomInput.TextField
+              label="Phân loại"
+              name="rated"
+              onChange={handleInputChange}
+              inputProps={{ maxLength: '64' }}
             />
           </Grid>
         </Grid>
@@ -187,41 +199,35 @@ export default function FilmDialog(props: any) {
           </Grid>
         </Grid>
 
-        <Autocomplete
-          multiple
-          id="tags-standard"
-          options={loadingActors ? [] : allActors.rows}
-          loading={loadingActors}
-          getOptionLabel={(option: any) => option.fullName}
-          onChange={(event, value) =>
-            setValues({ ...values, Actors: value.map(({ id }) => id) })
-          }
-          renderInput={params => (
-            <TextField
-              {...params}
-              variant="standard"
-              label="Diễn viên"
-              placeholder="Thêm"
-            />
-          )}
-        />
         <Grid xs={12} container columnSpacing={2} item={true}>
+          <Grid xs={6} item={true}>
+            <Autocomplete
+              multiple
+              id="tags-standard"
+              options={loadingActors ? [] : allActors.rows}
+              loading={loadingActors}
+              getOptionLabel={(option: any) => option.fullName}
+              onChange={(event, value) =>
+                setValues({ ...values, Actors: value.map(({ id }) => id) })
+              }
+              renderInput={params => (
+                <TextField
+                  {...params}
+                  variant="standard"
+                  label="Diễn viên"
+                  placeholder="Thêm"
+                  inputProps={{ maxLength: '64' }}
+                />
+              )}
+            />
+          </Grid>
           <Grid xs={6} item={true}>
             <CustomInput.TextField
               label="Mã quốc gia"
               name="NationalityId"
               type="number"
               onChange={handleInputChange}
-              inputProps={{ maxLength: '32' }}
-            />
-          </Grid>
-          <Grid xs={6} item={true}>
-            <CustomInput.TextField
-              label="Phân loại"
-              helperText="P: Phổ biến cho mọi đối tượng, C(*x): Cấm đối tượng có độ tuổi dưới x"
-              name="rated"
-              onChange={handleInputChange}
-              inputProps={{ maxLength: '32' }}
+              inputProps={{ maxLength: '64' }}
             />
           </Grid>
         </Grid>
@@ -234,16 +240,32 @@ export default function FilmDialog(props: any) {
           value={values.description}
           inputProps={{ maxLength: '64' }}
         />
-        <Button
-          fullWidth
-          variant="contained"
-          sx={{ mt: 2, p: 1, fontWeight: 'bold', color: 'white' }}
-          disableFocusRipple
-          className={classes.AddFilmButton}
-          onClick={handleAddFilm}
-        >
-          Thêm phim
-        </Button>
+        <Grid item={true} container xs={12} columnSpacing={2}>
+          <Grid item={true} xs={6}>
+            <Button
+              fullWidth
+              variant="contained"
+              sx={{ mt: 2, p: 1, fontWeight: 'bold', color: 'white' }}
+              disableFocusRipple
+              className={classes.AddFilmButton}
+              onClick={handleCloseDialog}
+            >
+              Hủy thao tác
+            </Button>
+          </Grid>
+          <Grid item={true} xs={6}>
+            <Button
+              fullWidth
+              variant="contained"
+              sx={{ mt: 2, p: 1, fontWeight: 'bold', color: 'white' }}
+              disableFocusRipple
+              className={classes.AddFilmButton}
+              onClick={handleAddFilm}
+            >
+              Thêm phim
+            </Button>
+          </Grid>
+        </Grid>
       </Box>
     </Dialog>
   );

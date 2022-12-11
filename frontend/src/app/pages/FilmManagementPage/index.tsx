@@ -13,6 +13,7 @@ import { Button, Chip, Typography } from '@mui/material';
 import AddFilmDialog from '../../components/FilmDialog/AddFilmDialog';
 import { useGetMovies } from 'queries/movies';
 import EditFilmDialog from 'app/components/FilmDialog/EditFilmDialog';
+import { usegetNationalities } from 'queries/nationality';
 
 //TODO: Add search button
 //TODO: Add button to change film's status
@@ -36,24 +37,27 @@ export default function FilmManagementPage() {
   };
 
   const handleClickOpenEditPage = (params: any) => {
+    // console.log(params);
     setEditRowId(params.toString());
     setOpenEdit(true);
   };
 
   
   const { isLoading, data } = useGetMovies();
+  const {isLoading: loadingNationalities, data: nationalities} = usegetNationalities();
+  console.log(nationalities);
 
   const columns: GridColDef[] = [
     {
-      field: 'imageUrl',
-      headerName: 'Poster',
+      field: 'id',
+      headerName: '#',
       width: 80,
       headerAlign: 'center',
       align: 'center',
       headerClassName: 'collumnHeader',
-      renderCell: (params: GridRenderCellParams<string>) => {
-        return params.value && <a href={params.value}>Poster</a>;
-      },
+      // renderCell: (params: GridRenderCellParams<string>) => {
+      //   return params.value && <a href={params.value}>Poster</a>;
+      // },
     },
     {
       field: 'title',
@@ -73,14 +77,14 @@ export default function FilmManagementPage() {
     {
       field: 'status',
       headerName: 'Trạng thái',
-      width: 100,
+      width: 150,
       align: 'center',
       headerAlign: 'center',
       renderCell: (params: GridRenderCellParams<string>) => {
         return params.value === 'active' ? (
-          <Chip label="active" variant="outlined" color="success" />
+          <Chip label="Đang chiếu" variant="outlined" color="success" />
         ) : (
-          <Chip label="inactive" variant="outlined" color="error" />
+          <Chip label="Ngừng chiếu" variant="outlined" color="error" />
         );
       },
     },
@@ -105,11 +109,11 @@ export default function FilmManagementPage() {
     },
     {
       field: 'NationalityId',
-      headerName: 'Mã quốc gia',
-      type: 'number',
+      headerName: 'Quốc gia',
       width: 140,
       align: 'center',
       headerAlign: 'center',
+      // valueGetter: (params) => nationalities === undefined ? '' : nationalities.rows.[params.value],
     },
     {
       field: 'trailerUrl',
@@ -133,16 +137,14 @@ export default function FilmManagementPage() {
         data={editRowId}
         open={openEdit}
         onClose={handleCloseEdit} />
-      <Typography variant="h4" component="h4" fontWeight="bold">
-        Quản lý phim trong hệ thống
-      </Typography>
       <Button className={classes.addButton} onClick={handleClickOpenAddPage}>
         Thêm phim mới
       </Button>
       <DataGrid
+        // rowHeight={100}
         page={page}
         pageSize={pageSize}
-        loading={isLoading}
+        loading={isLoading || loadingNationalities}
         onPageChange={newPage => setPage(newPage)}
         onPageSizeChange={newPageSize => setPageSize(newPageSize)}
         rowsPerPageOptions={[5, 10, 20]}
