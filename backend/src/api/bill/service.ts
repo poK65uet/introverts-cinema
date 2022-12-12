@@ -1,24 +1,22 @@
 import { Request } from 'express';
-import { Bill, Film, Room, Seat, Ticket } from 'databases/models';
+import { Bill, Room, Seat, Ticket } from 'databases/models';
 import { SeatModel } from 'databases/models/Seat';
 import BillPayload from './BillPayload';
 import sequelize from 'databases';
 import User, { UserModel } from 'databases/models/User';
 import Showtime, { ShowtimeModel } from 'databases/models/Showtime';
 import SeatStatus from 'utils/constants/SeatStatus';
-import Price, { PriceModel } from 'databases/models/Price';
 import { timeDiffToMinute } from 'utils/helpers/timeService';
 import ResponeCodes from 'utils/constants/ResponeCode';
 import { getPrice } from 'api/price/service';
 import PaymentStatus from 'utils/constants/PaymentStatus';
 import { BillModel } from 'databases/models/Bill';
 import config from 'config';
-import { DESCRIPTION_PREFIX, getAllTransactionThisWeek, verifyBillTransaction } from 'api/transaction/service';
+import { DESCRIPTION_PREFIX, getBillCodeById, verifyBillTransaction } from 'api/transaction/service';
 import { Transaction } from 'sequelize';
-import { userInfo } from 'os';
 
 const MAX_SEAT = 10;
-const MAX_PAY_TIME = 15; //minutes
+export const MAX_PAY_TIME = 15; //minutes
 
 const createBill = async (req: Request) => {
 	const payload: BillPayload = req.body;
@@ -265,9 +263,10 @@ const verifySeat = (seat: SeatModel, user: UserModel) => {
 };
 
 const createQrCode = (bill: BillModel) => {
-	return `${config.qr_code_base_url}?amount=${bill.totalPrice}&addInfo=${DESCRIPTION_PREFIX.replace(/ /g, '%20')}${
-		bill.id
-	}`;
+	return `${config.qr_code_base_url}?amount=${bill.totalPrice}&addInfo=${DESCRIPTION_PREFIX.replace(
+		/ /g,
+		'%20'
+	)}${getBillCodeById(bill.id)}`;
 };
 
 const createTicketForBill = async (bill: BillModel, t: Transaction) => {
