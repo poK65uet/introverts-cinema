@@ -59,6 +59,12 @@ const Seat = sequelize.define<SeatModel>(
 		}
 	},
 	{
+		indexes: [
+			{
+				unique: true,
+				fields: ['showtime_id', 'row', 'column']
+			}
+		],
 		tableName: 'seat',
 		underscored: true
 	}
