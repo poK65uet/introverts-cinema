@@ -4,8 +4,12 @@ import { spacing } from '@mui/system';
 
 const useStyles = makeStyles(() => ({
 customerTable: {
-    height: 400, 
+    // height: 1131, 
     width: '95%',
+    '&.MuiTab-root': {
+      align: 'center',
+    },
+
 },
 }));
 

@@ -10,12 +10,19 @@ import { useSelector } from 'react-redux';
 import { RootState } from 'store';
 import { constants } from 'buffer';
 
+enum Role {
+  ADMIN = 1,
+  CUSTOMER = 2,
+} 
+
+
 const RootLayout = () => {
 
 
 	const store = useSelector<RootState, RootState>(state => state);
-  const role = store.login.user.Roles.map( role => role.id );
+  const roles = store.login.user ? store.login.user.Roles.map( (role : any) => role.id ) : [];
 
+  // console.log(roles);
   useEffect(() => {
     document.body.style.margin = '0';
     document.body.style.color = '#1D1C1A';
@@ -26,8 +33,11 @@ const RootLayout = () => {
     <BrowserRouter>
       <Switch>
         <Redirect from='/admin' exact to='admin/customers' />
-        {role ? <Route path="/" exact component={HomeLayout} /> : <Route path="/admin" component={AdminLayout} />}
-        <Route component={NotFoundPage}></Route>
+        <Route path="/admin" component={AdminLayout} /> 
+        <Route path="/" exact component={HomeLayout} />
+        {/* {roles.includes(Role.ADMIN) ? <Route path="/admin" component={AdminLayout} /> : <Route path="/" exact component={HomeLayout} /> } */}
+        {roles.includes(Role.ADMIN) ? <Redirect from='/' exact to='admin' /> : <></>}
+        {/* <Route component={NotFoundPage}></Route> */}
       </Switch>
       <LoadingLayer />
     </BrowserRouter>

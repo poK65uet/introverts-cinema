@@ -12,7 +12,7 @@ import { Button, Typography } from '@mui/material';
 export default function CustomerManagementPage() {
   const classes = useStyles();
   const [page, setPage] = useState<number>(0);
-  const [pageSize, setPageSize] = useState<number>(5);
+  const [pageSize, setPageSize] = useState<number>(10);
   const [count, setCount] = useState<number>(0);
   const [rows, setRows] = useState<readonly any[]>([]);
 
@@ -44,6 +44,7 @@ export default function CustomerManagementPage() {
   };
 
   const { data, isLoading } = useGetUsers(page, pageSize);
+  console.log(page);
   console.log(data);
 
   useEffect(() => {
@@ -135,16 +136,14 @@ export default function CustomerManagementPage() {
   ];
   return (
     <Box className={classes.customerTable}>
-      <Typography variant="h4" component="h4" fontWeight="bold">
-        Quản lý khách hàng
-      </Typography>
       <DataGrid
+        autoHeight
         page={page}
         pageSize={pageSize}
         loading={isLoading}
         onPageChange={newPage => updatePage(newPage)}
         onPageSizeChange={newPageSize => updatePageSize(newPageSize)}
-        rowsPerPageOptions={[5, 10, 20]}
+        rowsPerPageOptions={[10, 30, 50]}
         rowCount={count}
         rows={rows}
         disableSelectionOnClick

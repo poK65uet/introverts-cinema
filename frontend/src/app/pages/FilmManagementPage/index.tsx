@@ -23,7 +23,7 @@ export default function FilmManagementPage() {
   const [openEdit, setOpenEdit] = useState(false);
   const [editRowId, setEditRowId] = useState('0');
   const [page, setPage] = useState<number>(0);
-  const [pageSize, setPageSize] = useState<number>(5);
+  const [pageSize, setPageSize] = useState<number>(20);
 
   const handleClickOpenAddPage = () => {
     setOpen(true);
@@ -62,15 +62,14 @@ export default function FilmManagementPage() {
     {
       field: 'title',
       headerName: 'Tên phim',
-      width: 200,
-      align: 'center',
+      width: 300,
       headerAlign: 'center',
     },
     {
       field: 'duration',
       headerName: 'Thời lượng',
       type: 'number',
-      width: 100,
+      width: 120,
       align: 'center',
       headerAlign: 'center',
     },
@@ -108,21 +107,13 @@ export default function FilmManagementPage() {
       },
     },
     {
-      field: 'NationalityId',
-      headerName: 'Quốc gia',
-      width: 140,
-      align: 'center',
-      headerAlign: 'center',
-      // valueGetter: (params) => nationalities === undefined ? '' : nationalities.rows.[params.value],
-    },
-    {
       field: 'trailerUrl',
       headerName: 'Trailer',
       width: 90,
       headerAlign: 'center',
       align: 'center',
       renderCell: (params: GridRenderCellParams<string>) => {
-        return <a href={params.value}>Trailer</a>;
+        return params.value && <a href={params.value}>Trailer</a>;
       },
     },
   ];
@@ -141,13 +132,13 @@ export default function FilmManagementPage() {
         Thêm phim mới
       </Button>
       <DataGrid
-        // rowHeight={100}
+        autoHeight
         page={page}
         pageSize={pageSize}
         loading={isLoading || loadingNationalities}
         onPageChange={newPage => setPage(newPage)}
         onPageSizeChange={newPageSize => setPageSize(newPageSize)}
-        rowsPerPageOptions={[5, 10, 20]}
+        rowsPerPageOptions={[15, 30, 50]}
         rows={isLoading ? [] : data.rows}
         disableSelectionOnClick
         columns={columns}

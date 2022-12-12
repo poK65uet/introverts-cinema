@@ -13,7 +13,6 @@ import { RootState } from 'store';
 import { useSelector } from 'react-redux';
 import BookedTicketManagementPage from 'app/pages/BookedTicketManagementPage';
 import ShowtimeManagementPage from 'app/pages/ShowtimeManagementPage';
-import { Container } from '@mui/material';
 
 const AdminLayout = () => {
   const store = useSelector<RootState, RootState>(state => state);
