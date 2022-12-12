@@ -1,7 +1,7 @@
 interface DirectorPayload {
 	fullName: string;
 	birthDay?: Date;
-	Nationality?: number;
+	nationality?: number;
 }
 
 export default DirectorPayload;

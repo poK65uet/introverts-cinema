@@ -22,7 +22,7 @@ export default function UpcomingMovieList() {
     if (!store.movies.getUpcomingMovies) {
       dispatch(getUpcomingMoviesThunk())
     };
-  }, [store.movies.getUpcomingMovies])
+  }, [])
 
   const classes = useStyles();
 
@@ -64,6 +64,7 @@ export default function UpcomingMovieList() {
                 name={movie.title}
                 img={movie.imageUrl}
                 genre={movie.Categories}
+                rated={movie.rated}
                 duration={movie.duration + ' phút'} />
             </SwiperSlide>
           })}

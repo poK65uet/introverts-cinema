@@ -5,9 +5,10 @@ const useStyles = makeStyles(() => ({
     backgroundColor: '#E5E5E5',
     display: 'flex',
     flexDirection: 'column',
-    minHeight: '100%',
+    minHeight: '100vh',
+    fontSize: '0.875rem',
   },
-  movieTittle: {
+  movieTitle: {
     textTransform: 'uppercase',
   },
   movieDetail: {

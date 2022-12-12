@@ -21,7 +21,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from 'store';
 import { useForm } from 'hooks/useForm';
 import { sendCodeThunk, validateEmailThunk, registerActions, registerThunk } from './slice';
-import { isValidEmail } from './validation';
+import { isValidEmail, isValidPhoneString } from 'utils/validation';
 import { notify } from 'app/components/MasterDialog/index';
 
 export default function Register() {
@@ -50,13 +50,20 @@ export default function Register() {
     if ('repassword' in fieldValues) {
       tmp.repassword = '';
       if (fieldValues.repassword.length == 0) { tmp.repassword = 'Vui lòng nhập lại mật khẩu của bạn'; }
-      else { if (fieldValues.repassword !== values.password) { tmp.repassword = 'Mật khẩu nhập lại không đúng'; } }
+      else { if (fieldValues.repassword !== values.password) { tmp.repassword = 'Mật khẩu nhập lại không khớp'; } }
     }
 
     if ('birthDay' in fieldValues) {
       tmp.birthDay = '';
       const today = new Date();
       if (fieldValues.birthDay > today) tmp.birthDay = 'Ngày sinh không hợp lệ'
+    }
+
+    if ('phone' in fieldValues) {
+      tmp.phone = '';
+      console.log(fieldValues.phone);
+
+      if (!isValidPhoneString(fieldValues.phone) && fieldValues.phone) { tmp.phone = 'Số điện thoại không hợp lệ' }
     }
 
     setErrors({ ...tmp });
@@ -111,10 +118,24 @@ export default function Register() {
             birthDay: values.birthDay,
           }))
         } else {
-          notify({
-            type: 'error',
-            content: 'Mã OTP không hợp lệ',
-          });
+          if (!store.register.isOTPSent) {
+            notify({
+              type: 'error',
+              content: 'Chưa kích hoạt gửi OTP',
+            });
+          } else {
+            if (store.register.OTP?.toString().length == 0) {
+              notify({
+                type: 'error',
+                content: 'Chưa nhập mã OTP',
+              });
+            } else {
+              notify({
+                type: 'error',
+                content: 'Mã OTP không hợp lệ',
+              });
+            }
+          }
         }
       }
     }
@@ -222,7 +243,7 @@ export default function Register() {
           inputProps={{ maxLength: '16' }}
           InputProps={{
             startAdornment: (
-              <InputAdornment position='start'><Phone />+84</InputAdornment>
+              <InputAdornment position='start'><Phone />(+84)</InputAdornment>
             ),
           }}
         />
@@ -284,7 +305,7 @@ export default function Register() {
           <Button
             disableFocusRipple
             variant='text'
-            size='small'
+            sx={{ fontWeight: 'bold' }}
             onClick={handleSendCode}
           >
             Gửi mã xác nhận

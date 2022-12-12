@@ -6,12 +6,16 @@ import FilmManagementPage from '../FilmManagementPage';
 import CustomerManagementPage from '../CustomerManagementPage';
 import RoomManagementPage from '../RoomManagementPage';
 import TicketManagementPage from '../TicketManagementPage';
+import AdminAppBar from 'app/components/AdminAppBar';
+import Footer from 'app/containers/Footer';
 import paths from 'paths';
 
 export default function AdminPage() {
   const classes = useStyles();
   return (
     <div>
+      <AdminAppBar />
+      <>
       <AdminMenu className={classes.adminMenu} />
 
       <div className={classes.adminContent}>
@@ -38,6 +42,8 @@ export default function AdminPage() {
           />
         </Switch>
       </div>
+      </>
+      {/* <Footer/> */}
     </div>
   );
 }

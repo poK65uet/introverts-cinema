@@ -8,8 +8,15 @@ dotenv.config();
 
 import sequelize from 'databases';
 import 'databases/models';
-
 import router from 'api';
+import { UserModel } from 'databases/models/User';
+declare global {
+	namespace Express {
+		interface Request {
+			user: UserModel;
+		}
+	}
+}
 
 const app = express();
 
@@ -30,10 +37,18 @@ const init = async () => {
 
 	app.use(bodyParser.json());
 
+	app.use('/', express.static('build'));
+
 	const { xss } = require('express-xss-sanitizer');
 	app.use(xss());
 
 	app.use('/api', router);
+
+	// 	app.use(express.static('build'));
+
+	//     	app.get('/*', function (req, res) {
+	//        	    res.sendFile('build/index.html', {root: '.'});
+	//      	});
 };
 
 init();

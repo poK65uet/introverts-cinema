@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import ResponeCodes from 'utils/constant/ResponeCode';
+import ResponeCodes from 'utils/constants/ResponeCode';
 import { ApiResponse } from 'utils/rest/ApiResponse';
 import * as service from './service';
 
@@ -32,7 +32,7 @@ const sendCode = async (req: Request, res: Response) => {
 const verifyAndRegister = async (req: Request, res: Response) => {
 	try {
 		const verifyResult = await service.verifyCode(req);
-		if (verifyResult.data !== null) {
+		if (verifyResult.data) {
 			const checkEmailResult = await service.checkEmail(req);
 			if (checkEmailResult.data) {
 				const registerResult = await service.register(req);

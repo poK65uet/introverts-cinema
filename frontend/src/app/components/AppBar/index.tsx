@@ -54,6 +54,10 @@ export default function AppBar() {
   const handleOpenOpt = () => setOpenOpt(true)
   const handleCloseOpt = () => setOpenOpt(false)
 
+  // Atempting to fix warning bugs
+  const onResize = () => { }
+  const onResizeCapture = () => { }
+
   const anchorRef = useRef<HTMLButtonElement>(null);
   const prevOpen = useRef(openOpt);
 
@@ -89,6 +93,10 @@ export default function AppBar() {
           sx={{
             position: 'absolute'
           }}
+          onClick={() => window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+          })}
           color='secondary'
         >
           <img className={classes.logo} src={require('app/assets/images/logo.webp')} />
@@ -125,17 +133,13 @@ export default function AppBar() {
             defaultCollapseIcon={<ExpandMoreIcon />}
             defaultExpandIcon={<ChevronRightIcon />}
           >
-            <TreeItem nodeId='1' className={classes.menuItem} label='TÌM KIẾM'>
-              <TreeItem nodeId='2' className={classes.menuItem} label='PHIM THEO THỂ LOẠI' />
-              <TreeItem nodeId='3' className={classes.menuItem} label='PHIM THEO GIỜ CHIẾU' />
+            <TreeItem nodeId='1' className={classes.menuItem} label='PHIM'>
+              <TreeItem nodeId='2' className={classes.menuItem} label='PHIM ĐANG CHIẾU' />
+              <TreeItem nodeId='3' className={classes.menuItem} label='PHIM SẮP CHIẾU' />
             </TreeItem>
-            <TreeItem nodeId='4' className={classes.menuItem} label='PHIM'>
-              <TreeItem nodeId='5' className={classes.menuItem} label='PHIM ĐANG CHIẾU' />
-              <TreeItem nodeId='6' className={classes.menuItem} label='PHIM SẮP CHIẾU' />
-            </TreeItem>
-            <TreeItem nodeId='7' className={classes.menuItem} label='LỊCH CHIẾU' />
-            <TreeItem nodeId='8' className={classes.menuItem} label='ĐẶT VÉ' />
-            <TreeItem nodeId='9' className={classes.menuItem} label='TÀI KHOẢN' />
+            <TreeItem nodeId='4' className={classes.menuItem} label='ĐẶT VÉ' />
+            <TreeItem nodeId='5' className={classes.menuItem} label='HỖ TRỢ' />
+            <TreeItem nodeId='6' className={classes.menuItem} label='TÀI KHOẢN' />
           </TreeView>
         </Drawer>
       </Container>
@@ -174,8 +178,12 @@ export default function AppBar() {
             </Button>
           </Fade>
         }
-        <Button disableRipple color='inherit' className={classes.button}>Lịch chiếu</Button>
-        <Button disableRipple color='inherit' className={classes.button}>Đặt vé</Button>
+        <Link className={classes.buttonLink} to={paths.BookTicketPage}>
+          <Button disableRipple color='inherit' className={classes.button}>
+            Đặt vé
+          </Button>
+        </Link>
+        <Button disableRipple color='inherit' className={classes.button}>Hỗ trợ</Button>
         <Button
           sx={{
             position: 'absolute',
@@ -221,6 +229,9 @@ export default function AppBar() {
           placement="bottom-start"
           transition
           disablePortal
+          onResize={onResize}
+          onResizeCapture={onResizeCapture}
+          nonce={''}
         >
           {({ TransitionProps, placement }) => (
             <Grow
@@ -237,13 +248,15 @@ export default function AppBar() {
               }}>
                 <ClickAwayListener onClickAway={handleCloseOpt}>
                   <MenuList>
-                    <MenuItem
-                      disableRipple
-                      className={classes.optItems}
-                      onClick={handleCloseOpt}>
-                      <ProfileIcon sx={{ pr: 1, mr: 'auto' }} />
-                      Thông tin
-                    </MenuItem>
+                    <Link to={`${paths.UserPage}`} style={{ all: 'unset' }}>
+                      <MenuItem
+                        disableRipple
+                        className={classes.optItems}
+                        onClick={handleCloseOpt}>
+                        <ProfileIcon sx={{ pr: 1, mr: 'auto' }} />
+                        Thông tin
+                      </MenuItem>
+                    </Link>
                     <MenuItem
                       disableRipple
                       className={classes.optItems}

@@ -1,13 +1,12 @@
-import { NextFunction, Request, Response } from 'express';
+import { Request, Response } from 'express';
 import * as service from './service';
 import { ApiResponse } from 'utils/rest/ApiResponse';
-import ResponeCodes from 'utils/constant/ResponeCode';
+import ResponeCodes from 'utils/constants/ResponeCode';
 
 const getDirectors = async (req: Request, res: Response) => {
 	try {
 		const result = await service.getDirectors(req);
-		const { data, message, status } = result;
-		return new ApiResponse(data, message, status).send(res);
+		return new ApiResponse(result).send(res);
 	} catch (error) {
 		return new ApiResponse(error.message, "Couldn't get directors.", ResponeCodes.ERROR).send(res);
 	}
@@ -23,7 +22,7 @@ const getDirector = async (req: Request, res: Response) => {
 	}
 };
 
-const addDirector = async (req: Request, res: Response, next: NextFunction) => {
+const addDirector = async (req: Request, res: Response) => {
 	try {
 		const result = await service.addDirector(req);
 		const { data, message, status } = result;

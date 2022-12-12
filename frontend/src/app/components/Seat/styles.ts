@@ -10,21 +10,29 @@ const useStyles = makeStyles(() => ({
   },
 
   vacant: {
+    color: '#ABABAB',
+    transition: '0.2s !important',
+    '&:hover': {
+      color: '#696969',
+    },
+  },
+
+  selected: {
     color: '#07BC0C',
-    transition: '0.35s !important',
+    transition: '0.2s !important',
     '&:hover': {
       color: '#2E7D32',
     },
   },
 
   booked: {
-    color: '#888888',
+    color: '#E74C3C',
     cursor: 'not-allowed',
   },
 
-  selected: {
+  waiting: {
     color: '#F1C40F',
-    transition: '0.35s !important',
+    transition: '0.1s !important',
     '&:hover': {
       color: '#cfa80e',
     },

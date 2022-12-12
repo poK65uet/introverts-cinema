@@ -3,8 +3,8 @@ import sequelize from 'databases';
 
 export interface PriceModel extends Model<InferAttributes<PriceModel>, InferCreationAttributes<PriceModel>> {
 	id: CreationOptional<number>;
-	visionType: number;
-	dayCode: string;
+	visionType: string;
+	dayCode: number;
 	value: number;
 	updatedAt: CreationOptional<Date>;
 }
@@ -20,11 +20,11 @@ const Price = sequelize.define<PriceModel>(
 		},
 		visionType: {
 			allowNull: false,
-			type: DataTypes.INTEGER
+			type: DataTypes.STRING
 		},
 		dayCode: {
 			allowNull: false,
-			type: DataTypes.STRING
+			type: DataTypes.TINYINT
 		},
 		value: {
 			type: DataTypes.BIGINT

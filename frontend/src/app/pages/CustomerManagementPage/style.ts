@@ -5,7 +5,7 @@ import { spacing } from '@mui/system';
 const useStyles = makeStyles(() => ({
 customerTable: {
     height: 400, 
-    width: '80%',
+    width: '95%',
 },
 }));
 

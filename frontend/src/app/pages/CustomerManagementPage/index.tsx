@@ -1,93 +1,124 @@
-import * as React from 'react';
 import Box from '@mui/material/Box';
 import useStyles from './style';
-import { DataGrid, GridColDef, GridValueGetterParams } from '@mui/x-data-grid';
-import DeleteIcon from '@mui/icons-material/Delete';
-import EditIcon from '@mui/icons-material/Edit';
-// import GridActionsCellItem from '@mui/x-data-grid-pro';
+import { DataGrid, GridColDef, GridToolbar } from '@mui/x-data-grid';
+// import DeleteIcon from '@mui/icons-material/Delete';
+// import EditIcon from '@mui/icons-material/Edit';
+// import { IconButton, Typography } from '@mui/material';
+import { useGetUsers } from '../../../queries/user';
+import { useState, useEffect } from 'react';
+import { Button, Typography } from '@mui/material';
 
 export default function CustomerManagementPage() {
-
-
   const classes = useStyles();
-  function createData(
-    id: number,
-    customerName: string,
-    customerEmail: string,
-    customerLocation: string,
-    customerStatus: any,
-    customerOption: any,
-  ) {
-    return { id, customerName, customerEmail, customerLocation, customerStatus, customerOption };
-  }
-  const rows = [
-    createData(1, 'Nguyễn Văn A', 'a@gmail.com', 'Hà Nội', null, null),
-    createData(2, 'Nguyễn Văn B', 'b@gmail.com', 'Hà Nội', null, null),
-    createData(3, 'Nguyễn Văn C', 'c@gmail.com', 'Hà Nội', null, null),
-    createData(4, 'Nguyễn Văn D', 'd@gmail.com', 'Hà Nội', null, null),
-    createData(5, 'Nguyễn Văn E', 'e@gmail.com', 'Hà Nội', null, null),
-    createData(6, 'Nguyễn Văn A', 'a@gmail.com', 'Hà Nội', null, null),
-    createData(7, 'Nguyễn Văn B', 'b@gmail.com', 'Hà Nội', null, null),
-    createData(8, 'Nguyễn Văn C', 'c@gmail.com', 'Hà Nội', null, null),
-    createData(9, 'Nguyễn Văn D', 'd@gmail.com', 'Hà Nội', null, null),
-    createData(10, 'Nguyễn Văn E', 'e@gmail.com', 'Hà Nội', null, null),
-    createData(11, 'Nguyễn Văn E', 'e@gmail.com', 'Hà Nội', null, null),
-  ];
+  const [page, setPage] = useState<number>(0);
+  const [pageSize, setPageSize] = useState<number>(5);
+  const [count, setCount] = useState<number>(0);
+  const [rows, setRows] = useState<readonly any[]>([]);
+
+  const updatePage = async (newPage: number) => {
+    setPage(newPage);
+  };
+
+  const updatePageSize = (newPageSize: number) => {
+    setPageSize(newPageSize);
+  };
+
+  const updateRows = (newRows: readonly any[]) => {
+    if (rows.length === 0) {
+      setRows(newRows);
+      return;
+    }
+    if (rows.length === count) {
+      return;
+    }
+    let run = newRows.length - 1;
+    let largestId = rows.slice(-1)[0].id;
+    while (run > 0 && newRows[run].id > largestId) {
+      run--;
+    }
+    if (run == newRows.length - 1) {
+      return;
+    }
+    setRows(rows.concat(newRows.slice(run - newRows.length)));
+  };
+
+  const { data, isLoading } = useGetUsers(page, pageSize);
+
+  useEffect(() => {
+    if (data !== undefined) {
+      setCount(data.count);
+      updateRows(data.rows);
+      console.log(rows);
+    }
+  }, [isLoading]);
 
   const columns: GridColDef[] = [
     {
       field: 'id',
-      headerName: 'ID',
+      headerName: '#',
       type: 'number',
-      width: 90,
+      width: 70,
+      align: 'center',
+      headerAlign: 'center',
     },
     {
-      field: 'customerName',
+      field: 'fullName',
       headerName: 'Họ tên',
       width: 220,
-      editable: true,
+      align: 'center',
+      headerAlign: 'center',
     },
     {
-      field: 'customerEmail',
+      field: 'email',
       headerName: 'Email',
       width: 220,
-      editable: true,
+      align: 'center',
+      headerAlign: 'center',
     },
     {
-      field: 'customerLocation',
-      headerName: 'Địa chỉ',
+      field: 'birthDay',
+      headerName: 'Ngày sinh',
+      type: 'date',
+      width: 150,
+      align: 'center',
+      headerAlign: 'center',
+    },
+    {
+      field: 'createdAt',
+      headerName: 'Ngày tạo',
+      type: 'date',
+      width: 150,
+      align: 'center',
+      headerAlign: 'center',
+    },
+    {
+      field: 'updatedAt',
+      headerName: 'Ngày cập nhật',
+      type: 'date',
       width: 200,
-      editable: true,
-    },
-    {
-      field: 'customerStatus',
-      headerName: 'Trạng thái',
-      type: 'any',
-      width: 160,
-      editable: true,
-    },
-    {
-      field: 'customerOption',
-      type: 'any',
-      headerName: 'Tùy chọn',
-      width: 200,
-      // editable: true, getActions: () => [
-        // <GridActionsCellItem icon={<EditIcon />} label="Edit" />,
-        // <GridActionsCellItem icon={<DeleteIcon />} label="Delete" />,
-      // ],
+      align: 'center',
+      headerAlign: 'center',
     },
   ];
-
   return (
-    // <h2>Trang quản lý khách hàng </h2>
     <Box className={classes.customerTable}>
+      <Typography variant="h4" component="h4" fontWeight="bold">
+        Quản lý khách hàng
+      </Typography>
       <DataGrid
+        page={page}
+        pageSize={pageSize}
+        loading={isLoading ? true : false}
+        onPageChange={newPage => updatePage(newPage)}
+        onPageSizeChange={newPageSize => updatePageSize(newPageSize)}
+        rowsPerPageOptions={[5, 10, 20]}
+        rowCount={count}
         rows={rows}
-        columns={columns}
-        pageSize={5}
-        rowsPerPageOptions={[5]}
         disableSelectionOnClick
-        experimentalFeatures={{ newEditingApi: true }}
+        columns={columns}
+        components={{
+          Toolbar: GridToolbar,
+        }}
       />
     </Box>
   );

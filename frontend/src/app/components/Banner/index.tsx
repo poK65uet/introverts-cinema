@@ -20,7 +20,7 @@ export default function Banner() {
     if (!store.banners.getBannerList) {
       dispatch(getBannersThunk())
     };
-  }, [store.banners.getBannerList])
+  }, [])
 
   const classes = useStyles();
 

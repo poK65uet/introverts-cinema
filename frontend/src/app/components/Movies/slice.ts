@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { getNewMovies, getUpcomingMovies } from 'queries/movies';
+import { notify } from '../MasterDialog/index';
 
 export interface MoviesState {
   isLoading: boolean;
@@ -20,7 +21,14 @@ const initialState: MoviesState = {
 export const moviesSlice = createSlice({
   name: 'movies',
   initialState: initialState,
-  reducers: {},
+  reducers: {
+    loading: state => {
+      state.isLoading = true;
+    },
+    loadingDone: state => {
+      state.isLoading = false;
+    },
+  },
   extraReducers: builder => {
     builder.addCase(getNewMoviesThunk.pending, state => {
       state.isLoading = true;
@@ -35,6 +43,11 @@ export const moviesSlice = createSlice({
     builder.addCase(getNewMoviesThunk.rejected, state => {
       state.isLoading = false;
       console.log('GET NEW MOVIES ERROR');
+      notify({
+        type: 'error',
+        content: 'Lấy dữ liệu phim mới thất bại',
+        autocloseDelay: 1000,
+      });
     });
     builder.addCase(getUpcomingMoviesThunk.pending, state => {
       state.isLoading = true;
@@ -49,6 +62,11 @@ export const moviesSlice = createSlice({
     builder.addCase(getUpcomingMoviesThunk.rejected, state => {
       state.isLoading = false;
       console.log('GET UPCOMING MOVIES ERROR');
+      notify({
+        type: 'error',
+        content: 'Lấy dữ phim sắp chiếu thất bại',
+        autocloseDelay: 1000,
+      });
     });
   },
 });

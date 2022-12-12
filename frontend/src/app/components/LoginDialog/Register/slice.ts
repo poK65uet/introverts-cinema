@@ -76,6 +76,11 @@ export const registerSlice = createSlice({
         if (action.payload == '200') {
           state.isOTPSent = false;
           console.log('SEND OTP FAILED');
+          notify({
+            type: 'error',
+            content: 'Gửi mã xác nhận thất bại',
+            autocloseDelay: 1250,
+          });
         }
       }
     });
@@ -83,6 +88,11 @@ export const registerSlice = createSlice({
       state.isLoading = false;
       state.isOTPSent = false;
       console.log('SEND OTP ERROR');
+      notify({
+        type: 'error',
+        content: 'Gửi mã xác nhận gặp lỗi',
+        autocloseDelay: 1250,
+      });
     });
 
     builder.addCase(registerThunk.pending, state => {
@@ -102,16 +112,26 @@ export const registerSlice = createSlice({
           console.log('REGISTER FAILED - CODE EXPIRED/INCORRECT');
           notify({
             type: 'error',
-            content: 'Kiểm tra lại mã OTP',
+            content: 'Kiểm tra lại mã OTP và thử lại',
           });
         } else {
           console.log('REGISTER FAILED');
+          notify({
+            type: 'error',
+            content: 'Đăng ký không thành công',
+            autocloseDelay: 1250,
+          });
         }
       }
     });
     builder.addCase(registerThunk.rejected, state => {
       state.isLoading = false;
       console.log('REGISTER ERROR');
+      notify({
+        type: 'error',
+        content: 'Đăng ký gặp lỗi',
+        autocloseDelay: 1250,
+      });
     });
   },
 });

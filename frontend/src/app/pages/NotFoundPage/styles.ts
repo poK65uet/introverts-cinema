@@ -7,7 +7,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     backgroundImage: `url(${background})`,
     backgroundSize: 'cover',
     display: 'flex',
-    height: 'auto',
+    minHeight: '90vh',
   },
   icon: {
     margin: 'auto',

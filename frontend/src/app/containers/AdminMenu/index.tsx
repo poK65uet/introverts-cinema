@@ -9,6 +9,11 @@ import paths from 'paths';
 import path from 'path';
 import FilmManagementPage from '../../pages/FilmManagementPage/index';
 
+import PeopleIcon from '@mui/icons-material/People';
+import LocalActivityIcon from '@mui/icons-material/LocalActivity';
+import CameraIndoorIcon from '@mui/icons-material/CameraIndoor';
+import CameraRollIcon from '@mui/icons-material/CameraRoll';
+
 function AdminMenu(props: { className: string }) {
   const classes = useStyles();
   const location = useLocation();
@@ -40,25 +45,33 @@ function AdminMenu(props: { className: string }) {
         <Tab
           className={tab === 0 ? classes.activeTab : classes.tab}
           component={Link}
-          label="Khách hàng"
+          label="Quản lý Khách hàng"
+          icon={<PeopleIcon />}
+          iconPosition="start"
           to={paths.CustomerManagement}
         />
         <Tab
           className={tab === 1 ? classes.activeTab : classes.tab}
           component={Link}
-          label="Phòng chiếu"
+          label="Quản lý phòng chiếu"
+          icon={<CameraIndoorIcon />}
+          iconPosition="start"
           to={paths.RoomManagement}
         />
         <Tab
           className={tab === 2 ? classes.activeTab : classes.tab}
           component={Link}
-          label="Phim"
+          label="Quản lý phim"
+          icon={<CameraRollIcon />}
+          iconPosition="start"
           to={paths.FilmManagement}
         />
         <Tab
           className={tab === 3 ? classes.activeTab : classes.tab}
           component={Link}
-          label="Vé"
+          label="Quản lý vé"
+          icon={<LocalActivityIcon />}
+          iconPosition="start"
           to={paths.TicketManagement}
         />
       </Tabs>

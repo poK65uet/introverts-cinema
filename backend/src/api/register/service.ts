@@ -1,23 +1,11 @@
-import jwt from 'jsonwebtoken';
-import config from 'config';
 import { Request } from 'express';
 import RegisterPayLoad from './RegisterPayLoad';
 import { User, UserCode } from 'databases/models';
-import RoleCodes from 'utils/constant/RoleCode';
-import ResponeCodes from 'utils/constant/ResponeCode';
-import { sendEmail } from 'utils/email';
-
-const generateCode = () => {
-	const code = `${Math.floor(100000 + Math.random() * 900000)}`;
-	return code;
-};
-
-function generateToken(userId: number, roleIds: number[]) {
-	const token = jwt.sign({ userId, roleIds }, config.secret_key, {
-		expiresIn: config.expires_in
-	});
-	return token;
-}
+import RoleCodes from 'utils/constants/RoleCode';
+import ResponeCodes from 'utils/constants/ResponeCode';
+import { sendRegisterEmail } from 'utils/helpers/email';
+import sequelize from 'databases';
+import { generateCode, generateToken } from 'utils/helpers/generate';
 
 const checkEmail = async (req: Request) => {
 	try {
@@ -61,22 +49,19 @@ const sendCode = async (req: Request) => {
 		let message: string;
 		let status: number;
 		const email = req.body.email;
-		if (!email) {
-			data = null;
-			message = 'Invalid email';
-			status = ResponeCodes.BAD_REQUEST;
-		} else {
-			const code = generateCode();
-			const expires = new Date(Date.now() + 1000 * 60 * 30);
-			const userCode = await UserCode.create({
-				email,
-				code,
-				expires
-			});
-			sendEmail(email, 'Verify your email address', code);
-			message = 'Send code successfully!';
-			status = ResponeCodes.CREATED;
-		}
+
+		const { code, expires } = generateCode();
+		await UserCode.create({
+			email,
+			code,
+			expires
+		});
+		sendRegisterEmail(email, code);
+
+		data = email;
+		message = 'Send code successfully!';
+		status = ResponeCodes.CREATED;
+
 		return {
 			data,
 			message,
@@ -89,13 +74,13 @@ const sendCode = async (req: Request) => {
 
 const verifyCode = async (req: Request) => {
 	try {
-		let data;
+		let data: boolean;
 		let message: string;
 		let status: number;
 		const { email, code } = req.body;
 
 		if (!email || !code) {
-			data = null;
+			data = false;
 			message = 'Invalid email or code';
 			status = ResponeCodes.BAD_REQUEST;
 		} else {
@@ -107,16 +92,16 @@ const verifyCode = async (req: Request) => {
 			});
 
 			if (!registerUser) {
-				data = null;
+				data = false;
 				message = 'Incorrect code!';
 				status = ResponeCodes.OK;
 			} else {
 				if (registerUser.expires < new Date(Date.now())) {
-					data = null;
+					data = false;
 					message = 'Expired code!';
 					status = ResponeCodes.OK;
 				} else {
-					data = registerUser;
+					data = true;
 					message = 'Verify code successfully!';
 					status = ResponeCodes.OK;
 				}
@@ -143,20 +128,19 @@ const register = async (req: Request) => {
 			message = 'Invalid email or password';
 			status = ResponeCodes.BAD_REQUEST;
 		} else {
-			const user = await User.create(newUser);
+			const transaction = await sequelize.transaction(async t => {
+				const user = await User.create(newUser, { transaction: t });
+				await user.setRoles([RoleCodes.CUSTOMER], { transaction: t });
+				const roleIds = [RoleCodes.CUSTOMER];
+				const token = generateToken(user.id, roleIds, user.email);
 
-			await user.addRole(RoleCodes.CUSTOMER);
-			// const roles = await user.getRoles();
-			const roleIds = [RoleCodes.CUSTOMER];
-
-			const token = generateToken(user.id, roleIds);
-
-			data = {
-				user,
-				token
-			};
-			message = 'Register successfully!';
-			status = ResponeCodes.CREATED;
+				data = {
+					user,
+					token
+				};
+				message = 'Register successfully!';
+				status = ResponeCodes.CREATED;
+			});
 		}
 
 		return {

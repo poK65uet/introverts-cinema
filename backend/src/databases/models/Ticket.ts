@@ -1,16 +1,25 @@
-import { CreationOptional, DataTypes, InferAttributes, InferCreationAttributes, Model } from 'sequelize';
+import {
+	CreationOptional,
+	DataTypes,
+	InferAttributes,
+	InferCreationAttributes,
+	Model,
+	BelongsToSetAssociationMixin
+} from 'sequelize';
 import sequelize from 'databases';
-import User from './User';
+import User, { UserModel } from './User';
 
 export interface TicketModel extends Model<InferAttributes<TicketModel>, InferCreationAttributes<TicketModel>> {
 	id: CreationOptional<number>;
 	room: string;
-	seatRow: string;
-	seatColumn: string;
+	seatRow: number;
+	seatColumn: number;
+	seatCode: string;
 	time: Date;
 	price: number;
 	createdAt: CreationOptional<Date>;
 	updatedAt: CreationOptional<Date>;
+	setUser: BelongsToSetAssociationMixin<UserModel, UserModel['id']>;
 }
 
 const Ticket = sequelize.define<TicketModel>(
@@ -28,15 +37,19 @@ const Ticket = sequelize.define<TicketModel>(
 		},
 		seatRow: {
 			allowNull: false,
-			type: DataTypes.STRING
+			type: DataTypes.INTEGER
 		},
 		seatColumn: {
+			allowNull: false,
+			type: DataTypes.INTEGER
+		},
+		seatCode: {
 			allowNull: false,
 			type: DataTypes.STRING
 		},
 		time: {
 			allowNull: false,
-			type: DataTypes.TIME
+			type: DataTypes.DATE
 		},
 		price: {
 			allowNull: false,

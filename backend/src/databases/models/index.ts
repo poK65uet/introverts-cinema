@@ -16,6 +16,8 @@ import Seat from './Seat';
 import Ticket from './Ticket';
 import UserCode from './UserCode';
 import Banner from './Banner';
+import Bill from './Bill';
+import BillSeat from './BillSeat';
 
 export {
 	User,
@@ -35,5 +37,7 @@ export {
 	Price,
 	Showtime,
 	Seat,
-	Ticket
+	Ticket,
+	Bill,
+	BillSeat
 };

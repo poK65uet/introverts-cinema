@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react'
 import {
+  Container,
   Divider,
   Typography,
 } from '@mui/material';
@@ -10,6 +11,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { getNewMoviesThunk } from 'app/components/Movies/slice';
 import { RootState } from 'store';
 import { Link } from 'react-router-dom';
+import paths from 'paths';
 
 export default function NewMoviePage() {
 
@@ -21,7 +23,7 @@ export default function NewMoviePage() {
       dispatch(getNewMoviesThunk())
     };
 
-  }, [store.movies.getNewMovies])
+  }, [])
 
   const classes = useStyles()
 
@@ -35,28 +37,30 @@ export default function NewMoviePage() {
           Phim Đang Chiếu
         </Typography>
       </Divider >
-      <Grid container xs={12}
-        display='flex'
-        alignSelf='center'
-        py={{ xs: 1, md: 2 }}
-        px={{ xs: 3, sm: 6, lg: 12 }}
-        columnSpacing={{ xs: 1, sm: 2, lg: 4 }}
-        rowSpacing={{ xs: 2, sm: 4, lg: 8 }}>
-        {store.movies.newMovieList.map((movie: any, index: number) => {
-          return <Grid xs={6} md={3} fontSize='1.25rem' key={index}>
-            <MovieCard
-              id={movie.id}
-              img={movie.imageUrl}
-              hideContent
-            />
-            <Typography variant='body1' fontWeight='bold' className={classes.movieTittle} noWrap >
-              <Link to={`movie-detail/${movie.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
-                {movie.title}
-              </Link>
-            </Typography>
-          </Grid>
-        })}
-      </Grid>
+      <Container sx={{ mb: 4 }}>
+        <Grid container xs={12}
+          display='flex'
+          alignSelf='center'
+          columnSpacing={{ xs: 1, sm: 2, lg: 4 }}
+          rowSpacing={{ xs: 2, sm: 4, lg: 8 }}>
+          {store.movies.newMovieList.map((movie: any, index: number) => {
+            return <Grid xs={6} md={3} fontSize='1.25rem' key={index}>
+              <MovieCard
+                id={movie.id}
+                img={movie.imageUrl}
+                rated={movie.rated}
+                hideContent
+              />
+              <Typography variant='body1' fontWeight='bold' className={classes.movieTitle} noWrap >
+                <Link to={`${paths.MovieDetailPage}/${movie.id}`}
+                  style={{ textDecoration: 'none', color: 'inherit' }}>
+                  {movie.title}
+                </Link>
+              </Typography>
+            </Grid>
+          })}
+        </Grid>
+      </Container>
     </div >
   )
 }

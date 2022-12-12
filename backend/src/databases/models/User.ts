@@ -6,11 +6,8 @@ import {
 	InferCreationAttributes,
 	Model,
 	HasManyGetAssociationsMixin,
-	HasManyAddAssociationMixin,
-	HasManyAddAssociationsMixin,
-	HasManyRemoveAssociationMixin,
-	HasManyRemoveAssociationsMixin,
-	NonAttribute
+	NonAttribute,
+	HasManySetAssociationsMixin
 } from 'sequelize';
 import sequelize from 'databases';
 import { RoleModel } from './Role';
@@ -24,12 +21,9 @@ export interface UserModel extends Model<InferAttributes<UserModel>, InferCreati
 	birthDay: Date;
 	createdAt: CreationOptional<Date>;
 	updatedAt: CreationOptional<Date>;
+
 	Roles?: NonAttribute<RoleModel[]>;
-	getRoles: HasManyGetAssociationsMixin<RoleModel>;
-	addRole: HasManyAddAssociationMixin<RoleModel, RoleModel['id']>;
-	addRoles: HasManyAddAssociationsMixin<RoleModel, RoleModel['id']>;
-	removeRole: HasManyRemoveAssociationMixin<RoleModel, RoleModel['id']>;
-	removeRoles: HasManyRemoveAssociationsMixin<RoleModel, RoleModel['id']>;
+	setRoles: HasManySetAssociationsMixin<RoleModel, RoleModel['id']>;
 }
 
 const User = sequelize.define<UserModel>(
@@ -57,7 +51,7 @@ const User = sequelize.define<UserModel>(
 			type: DataTypes.STRING
 		},
 		birthDay: {
-			type: DataTypes.DATE
+			type: DataTypes.DATEONLY
 		},
 		createdAt: {
 			type: DataTypes.DATE
