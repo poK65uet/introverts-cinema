@@ -44,7 +44,7 @@ const verifyBillTransaction = async (bill: BillModel) => {
 	await syncWalletTransaction();
 	const allTransactions: Transaction[] = await getAllTransactionThisWeek();
 	const billTransactions: Transaction[] = allTransactions.filter(transaction =>
-		transaction.description.includes(`${DESCRIPTION_PREFIX}${bill.id}`)
+		transaction.description.includes(`${DESCRIPTION_PREFIX}${getBillCodeById(bill.id)}`)
 	);
 
 	let totalAmount = 0;
@@ -52,4 +52,12 @@ const verifyBillTransaction = async (bill: BillModel) => {
 	return totalAmount >= bill.totalPrice;
 };
 
-export { getAllTransactionThisWeek, verifyBillTransaction, DESCRIPTION_PREFIX };
+const getBillCodeById = (id: number) => {
+	let strId = id.toString();
+	while (strId.length < 6) {
+		strId = '0'.concat(strId);
+	}
+	return 'HD'.concat(strId);
+};
+
+export { getAllTransactionThisWeek, verifyBillTransaction, DESCRIPTION_PREFIX, getBillCodeById };

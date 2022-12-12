@@ -12,7 +12,7 @@ import { getPrice } from 'api/price/service';
 import PaymentStatus from 'utils/constants/PaymentStatus';
 import { BillModel } from 'databases/models/Bill';
 import config from 'config';
-import { DESCRIPTION_PREFIX, verifyBillTransaction } from 'api/transaction/service';
+import { DESCRIPTION_PREFIX, getBillCodeById, verifyBillTransaction } from 'api/transaction/service';
 import { Transaction } from 'sequelize';
 
 const MAX_SEAT = 10;
@@ -263,9 +263,10 @@ const verifySeat = (seat: SeatModel, user: UserModel) => {
 };
 
 const createQrCode = (bill: BillModel) => {
-	return `${config.qr_code_base_url}?amount=${bill.totalPrice}&addInfo=${DESCRIPTION_PREFIX.replace(/ /g, '%20')}${
-		bill.id
-	}`;
+	return `${config.qr_code_base_url}?amount=${bill.totalPrice}&addInfo=${DESCRIPTION_PREFIX.replace(
+		/ /g,
+		'%20'
+	)}${getBillCodeById(bill.id)}`;
 };
 
 const createTicketForBill = async (bill: BillModel, t: Transaction) => {
