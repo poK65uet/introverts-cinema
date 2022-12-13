@@ -244,8 +244,8 @@ export default function UserProfile() {
             <LocalizationProvider dateAdapter={AdapterDateFns}>
               <DatePicker
                 className={classes.profileField}
-                label="Ngày sinh"
-                inputFormat="dd/MM/yyyy"
+                label='Ngày sinh'
+                inputFormat='dd/MM/yyyy'
                 value={userData.birthDay}
                 onChange={(newValue) => {
                   if (newValue != 'Invalid Date')
