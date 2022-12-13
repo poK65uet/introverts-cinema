@@ -1,5 +1,5 @@
-import { TextField } from "@mui/material";
-import { ReactElement } from "react";
+import { TextField } from '@mui/material';
+import { ReactElement } from 'react';
 
 interface ICustomTFProps {
 	name: string;
@@ -15,7 +15,7 @@ interface ICustomTFProps {
 
 export default function Textfield(props: any): ReactElement {
 	const {
-		type = "text",
+		type = 'text',
 		required = false,
 		name,
 		label,
@@ -28,10 +28,10 @@ export default function Textfield(props: any): ReactElement {
 	return (
 		<TextField
 			type={type}
-			variant="standard"
+			variant='standard'
 			required={required}
 			fullWidth
-			margin="normal"
+			margin='normal'
 			label={label}
 			name={name}
 			value={value}

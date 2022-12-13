@@ -20,7 +20,7 @@ export default function TicketDetail(props: TicketDetailProps) {
   return (
     <Card className={classes.ticket}>
       <CardMedia
-        component="img"
+        component='img'
         height={240}
         image={props.movie.imageUrl} />
       <CardContent sx={{ display: 'flex', flexDirection: 'column' }}>

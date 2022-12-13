@@ -42,7 +42,7 @@ export default function DigitCode(props: DigitCodeProps) {
             <input
               placeholder='_'
               className={classes.digit}
-              inputMode="decimal"
+              inputMode='decimal'
               autoFocus={index == 0 ? true : undefined}
               {...digits[index]} />
           </Grid>
