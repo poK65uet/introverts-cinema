@@ -77,7 +77,7 @@ export const verifyPassword = async (password: string): Promise<any> => {
 };
 
 export const useVerifyPassword = (password: string, queryOpts?: any) =>
-  useQuery(['user/verifyPassword'], () => verifyPassword(password), {
+  useQuery(['user/verify-password'], () => verifyPassword(password), {
     refetchOnWindowFocus: false,
     enabled: false,
     ...queryOpts,
@@ -101,7 +101,7 @@ export const changePassword = async (newPassword: string): Promise<any> => {
 };
 
 export const useChangePassword = (newPassword: string, queryOpts?: any) =>
-  useQuery(['user/changePassword'], () => changePassword(newPassword), {
+  useQuery(['user/change-password'], () => changePassword(newPassword), {
     refetchOnWindowFocus: false,
     enabled: false,
     ...queryOpts,

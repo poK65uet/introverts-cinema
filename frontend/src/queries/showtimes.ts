@@ -11,7 +11,7 @@ export const getShowtimesByMovie = async (movieId: string): Promise<any> => {
 
 export const useGetShowtimesByMovie = (movieId: string) =>
   useQuery(
-    ['showtimes/getByMovie', movieId],
+    ['showtimes/get-showtime-by-movie', movieId],
     () => getShowtimesByMovie(movieId),
     { refetchOnWindowFocus: false },
   );
@@ -24,7 +24,7 @@ export const getShowtimeDetail = async (id: string): Promise<any> => {
 };
 
 export const useGetShowtimeDetail = (id: string, queryOpts?: any) =>
-  useQuery(['showtimes/getDetail', id], () => getShowtimeDetail(id), {
+  useQuery(['showtimes/get-detail', id], () => getShowtimeDetail(id), {
     refetchOnWindowFocus: false,
     ...queryOpts,
   });
@@ -41,7 +41,7 @@ export const getSeatsByShowtimeId = async (
 };
 
 export const useGetSeatsByShowtimeId = (showtimeId: number, queryOpts?: any) =>
-  useQuery(['showtimes/getDetail'], () => getSeatsByShowtimeId(showtimeId), {
+  useQuery(['showtimes/get-detail'], () => getSeatsByShowtimeId(showtimeId), {
     refetchOnWindowFocus: false,
     ...queryOpts,
   });

@@ -3,9 +3,14 @@ import useDigitInput from 'react-digit-input';
 import Grid from '@mui/material/Unstable_Grid2';
 import useStyles from './styles';
 import { useDispatch } from 'react-redux';
-import { registerActions } from '../../LoginDialog/Register/slice';
+import { registerActions } from 'app/components/LoginDialog/Register/slice';
+import { forgotPasswordActions } from 'app/components/LoginDialog/ForgotPassword/slice';
 
-export default function DigitCode() {
+interface DigitCodeProps {
+  action: 'register' | 'forgot-password'
+}
+
+export default function DigitCode(props: DigitCodeProps) {
   const [value, onChange] = React.useState('');
   const digits = useDigitInput({
     acceptedCharacters: /^[0-9]$/,
@@ -16,7 +21,11 @@ export default function DigitCode() {
 
   const dispatch = useDispatch()
   useEffect(() => {
-    dispatch(registerActions.storeOTP(value))
+    props.action == 'register' ?
+      dispatch(registerActions.storeOTP(value))
+      : props.action == 'forgot-password'
+        ? dispatch(forgotPasswordActions.storeOTP(value))
+        : null
   }, [value])
 
   const classes = useStyles();
