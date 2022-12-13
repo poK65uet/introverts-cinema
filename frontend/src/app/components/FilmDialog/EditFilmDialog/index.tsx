@@ -31,8 +31,6 @@ import { useGetDirectors } from 'queries/director';
 export default function EditFilmDialog(props: any) {
   const classes = useStyles();
 
-  const rateOptions = ['P', 'C13', 'C16', 'C18'];
-
   const validate = (fieldValues = values) => {
     const tmp = { ...errors };
     if ('openingDay' in fieldValues) {
@@ -48,7 +46,6 @@ export default function EditFilmDialog(props: any) {
 
   const { isLoading: loadingActors, data: allActors } = usegetActors();
 
-
   const { values, setValues, errors, setErrors, handleInputChange } = useForm(
     {
       id: 0,
@@ -58,7 +55,7 @@ export default function EditFilmDialog(props: any) {
       duration: 0,
       openingDay: null,
       description: '',
-      rated: '',
+      rated: 'P',
       status: '',
       Nationality: null,
       NationalityId: 0,
@@ -102,8 +99,10 @@ export default function EditFilmDialog(props: any) {
   const { isLoading, remove, data: editFilmData } = useGetMovieById(props.data);
   const { isLoading: loadingNationalities, data: allNationalities } =
     useGetNationalities();
-  const {isLoading: loadingDirectors, data: allDirectors} = useGetDirectors();
-  const {isLoading: loadingCategories, data: allCategories} = useGetCategories();
+  const { isLoading: loadingDirectors, data: allDirectors } = useGetDirectors();
+  const { isLoading: loadingCategories, data: allCategories } =
+    useGetCategories();
+  console.log(allCategories);
   console.log(allDirectors);
   if (
     (editFilmData === undefined && props.data !== '0') ||
@@ -178,7 +177,13 @@ export default function EditFilmDialog(props: any) {
               </MenuItem>
             </Select>
           </Grid>
-          <Grid xs={12} container spacing={3} item={true} sx={{ alignContent: 'center' }}>
+          <Grid
+            xs={12}
+            container
+            spacing={3}
+            item={true}
+            sx={{ alignContent: 'center' }}
+          >
             <Grid xs={3} item={true}>
               <CustomInput.TextField
                 label="Thời lượng"
@@ -213,25 +218,31 @@ export default function EditFilmDialog(props: any) {
               />
             </Grid>
             <Grid xs={5} item={true}>
-            <FormControl fullWidth>
-              <InputLabel>Phân loại</InputLabel>
-              <Select
-                label="Phân loại"
-                value={values.rated}
-                IconComponent={() => null}
-                onChange={(event: any) => {
-                  setValues({ ...values, rated: event.target.value });
-                }}
-              >
-                <MenuItem value={'P'}>P - Phù hợp với mọi lứa tuổi</MenuItem>
-                <MenuItem value={'C13'}>C13 - Cấm trẻ em dưới 13 tuối</MenuItem>
-                <MenuItem value={'C16'}>C16 - Cấm trẻ em dưới 16 tuối</MenuItem>
-                <MenuItem value={'C18'}>C18 - Cấm người dưới 18 tuối</MenuItem>
-              </Select>
-            </FormControl>
+              <FormControl fullWidth>
+                <InputLabel>Phân loại</InputLabel>
+                <Select
+                  label="Phân loại"
+                  value={values.rated}
+                  IconComponent={() => null}
+                  onChange={(event: any) => {
+                    setValues({ ...values, rated: event.target.value });
+                  }}
+                >
+                  <MenuItem value={'P'}>P - Phù hợp với mọi lứa tuổi</MenuItem>
+                  <MenuItem value={'C13'}>
+                    C13 - Cấm trẻ em dưới 13 tuối
+                  </MenuItem>
+                  <MenuItem value={'C16'}>
+                    C16 - Cấm trẻ em dưới 16 tuối
+                  </MenuItem>
+                  <MenuItem value={'C18'}>
+                    C18 - Cấm người dưới 18 tuối
+                  </MenuItem>
+                </Select>
+              </FormControl>
             </Grid>
           </Grid>
-          <Grid xs={12} container columnSpacing={2} item={true}>
+          <Grid xs={12} item={true} container spacing={2}>
             <Grid xs={8} item={true}>
               <CustomInput.TextField
                 label="Poster"
@@ -241,6 +252,28 @@ export default function EditFilmDialog(props: any) {
                 inputProps={{ maxLength: '64' }}
               />
             </Grid>
+            <Grid xs={4} item={true}>
+              <Autocomplete
+                multiple
+                value={values.Categories}
+                options={loadingCategories ? [] : allCategories.rows}
+                loading={loadingCategories}
+                getOptionLabel={(option: any) => option.name}
+                onChange={(event, value) =>
+                  setValues({ ...values, Categories: value.map(id => id) })
+                }
+                isOptionEqualToValue={(option, value) => option.id === value.id}
+                renderInput={params => (
+                  <TextField
+                    {...params}
+                    variant="standard"
+                    label="Thể loại"
+                  />
+                )}
+              />
+            </Grid>
+          </Grid>
+          <Grid xs={12} container spacing={2} item={true}>
             <Grid xs={8} item={true}>
               <CustomInput.TextField
                 label="Trailer"
@@ -265,7 +298,6 @@ export default function EditFilmDialog(props: any) {
                     {...params}
                     variant="standard"
                     label="Đạo diễn"
-                    placeholder="Thêm"
                   />
                 )}
               />

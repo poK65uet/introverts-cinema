@@ -35,7 +35,10 @@ export const usegetNationalityByID = (id: string | undefined) =>
     return response.data.data;
   };
   
-  export const useGetNationalities = () => useQuery(['getNationalities'], () => getNationalities());
+  export const useGetNationalities = () => useQuery(['getNationalities'], () => getNationalities(), {
+    enabled: false,
+    refetchOnWindowFocus: false,
+  });
 
   
 export const addNationality = async (

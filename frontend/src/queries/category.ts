@@ -35,7 +35,10 @@ export const usegetCategoryByID = (id: string | undefined) =>
     return response.data.data;
   };
   
-  export const useGetCategories = () => useQuery(['getCategories'], () => getCategories());
+  export const useGetCategories = () => useQuery(['getCategories'], () => getCategories(), {
+    enabled: false,
+    refetchOnWindowFocus: false,
+  });
 
   
 export const addCategory = async (
