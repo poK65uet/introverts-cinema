@@ -28,50 +28,81 @@ export const getUserProfile = async (): Promise<any> => {
   return response.data.data;
 };
 
-export const useGetUserProfile = () =>
-  useQuery(['user/getUserProfile'], () => getUserProfile());
+export const useGetUserProfile = (queryOpts?: any) =>
+  useQuery(['user/getUserProfile'], () => getUserProfile(), {
+    ...queryOpts,
+  });
 
 export const changeProfile = async (newProfile: any): Promise<any> => {
   let response: AxiosResponse<any>;
-  response = await axios.patch(`${config.apiEndpoint}/users/change-info`, {
-    data: {
+  response = await axios.patch(
+    `${config.apiEndpoint}/users/change-info`,
+    {
       fullName: newProfile.fullName,
       phone: newProfile.phone,
       birthDay: newProfile.birthDay,
     },
-    headers: {
-      Authorization: `Bearer ${sessionStorage.getItem('token')}`,
+    {
+      headers: {
+        Authorization: `Bearer ${sessionStorage.getItem('token')}`,
+      },
     },
-  });
+  );
 
   return response.data.data;
 };
 
-export const useChangeProfile = (newProfile: any) =>
+export const useChangeProfile = (newProfile: any, queryOpts?: any) =>
   useQuery(['user/changeProfile'], () => changeProfile(newProfile), {
     refetchOnWindowFocus: false,
     enabled: false,
+    ...queryOpts,
   });
 
 export const verifyPassword = async (password: string): Promise<any> => {
   let response: AxiosResponse<any>;
-  console.log(sessionStorage.getItem('token'));
-
-  response = await axios.post(`${config.apiEndpoint}/users/verify-password`, {
-    data: {
+  response = await axios.post(
+    `${config.apiEndpoint}/users/verify-password`,
+    {
       password: password,
     },
-    headers: {
-      Authorization: `Bearer ${sessionStorage.getItem('token')}`,
+    {
+      headers: {
+        Authorization: `Bearer ${sessionStorage.getItem('token')}`,
+      },
     },
-  });
-  console.log(sessionStorage.getItem('token'));
+  );
 
   return response.data.data;
 };
 
-export const useVerifyPassword = (password: string) =>
+export const useVerifyPassword = (password: string, queryOpts?: any) =>
   useQuery(['user/verifyPassword'], () => verifyPassword(password), {
     refetchOnWindowFocus: false,
     enabled: false,
+    ...queryOpts,
+  });
+
+export const changePassword = async (newPassword: string): Promise<any> => {
+  let response: AxiosResponse<any>;
+  response = await axios.patch(
+    `${config.apiEndpoint}/users/change-password`,
+    {
+      password: newPassword,
+    },
+    {
+      headers: {
+        Authorization: `Bearer ${sessionStorage.getItem('token')}`,
+      },
+    },
+  );
+
+  return response.data.data;
+};
+
+export const useChangePassword = (newPassword: string, queryOpts?: any) =>
+  useQuery(['user/changePassword'], () => changePassword(newPassword), {
+    refetchOnWindowFocus: false,
+    enabled: false,
+    ...queryOpts,
   });

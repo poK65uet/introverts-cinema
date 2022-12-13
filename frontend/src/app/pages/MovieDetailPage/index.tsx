@@ -10,27 +10,25 @@ import useStyles from './styles';
 import { Update as DurationIcon } from '@mui/icons-material';
 import NotFoundPage from 'app/pages/NotFoundPage/index';
 import { bookTicketActions } from '../BookTicketPage/slice';
-import paths from 'paths';
 import { formatDate } from 'utils/date';
-import { moviesActions } from '../../components/Movies/slice';
+import { moviesActions } from 'app/components/Movies/slice';
 import { notify } from 'app/components/MasterDialog';
+import paths from 'paths';
 
 export default function MovieDetailPage() {
 
   let { movieId } = useParams<{ movieId: string | undefined }>()
 
-  const { data: movie, isLoading, isError } = useGetMovieById(movieId)
+  const onGetMovieError = () => {
+    notify({
+      type: 'error',
+      content: 'Không tìm thấy phim, hãy thử lại',
+      autocloseDelay: 1250
+    })
+    dispatch(moviesActions.loadingDone)
+  }
 
-  useEffect(() => {
-    if (isError) {
-      notify({
-        type: 'error',
-        content: 'Đã gặp lỗi, hãy thử lại',
-        autocloseDelay: 1250
-      })
-      dispatch(bookTicketActions.loadingDone())
-    }
-  }, [isError])
+  const { data: movie, isLoading } = useGetMovieById(movieId, { onError: onGetMovieError })
 
   useEffect(() => {
     window.scrollTo({

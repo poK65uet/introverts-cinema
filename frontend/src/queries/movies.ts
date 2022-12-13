@@ -24,9 +24,10 @@ export const getMovieById = async (id: string | undefined): Promise<any> => {
   return response.data.data;
 };
 
-export const useGetMovieById = (id: string | undefined) =>
-  useQuery(['getMovieById'], () => getMovieById(id),   {
+export const useGetMovieById = (id: string | undefined, queryOpts?: any) =>
+  useQuery(['getMovieById'], () => getMovieById(id), {
     refetchOnWindowFocus: false,
+    ...queryOpts,
   });
 
 export const getMovies = async (): Promise<any> => {
@@ -36,7 +37,10 @@ export const getMovies = async (): Promise<any> => {
   return response.data.data;
 };
 
-export const useGetMovies = () => useQuery(['getMovies'], () => getMovies());
+export const useGetMovies = () =>
+  useQuery(['getMovies'], () => getMovies(), {
+    refetchOnWindowFocus: false,
+  });
 
 export const addMovie = async (
   id: string,

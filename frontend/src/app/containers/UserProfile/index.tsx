@@ -5,33 +5,42 @@ import useStyles from './styles';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import { notify } from '../MasterDialog/index';
+import { notify } from '../../components/MasterDialog/index';
 import { isValidPhoneString } from 'utils/validation';
 import { useForm } from 'hooks/useForm';
 import { CustomInput } from 'app/components/CustomInput';
-import { useChangeProfile, useVerifyPassword } from 'queries/user';
+import { useChangePassword, useChangeProfile, useVerifyPassword } from 'queries/user';
 import { Check } from '@mui/icons-material';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { loadingActions } from 'app/components/LoadingLayer/slice';
-
-interface UserProfileProps {
-  user: any
-}
+import { getUserProfileThunk } from 'app/components/LoginDialog/slice';
+import { RootState } from 'store';
 
 
-export default function UserProfile(props: UserProfileProps) {
+export default function UserProfile() {
 
-  const [userData, setUserData] = useState(props.user)
+  const store = useSelector<RootState, RootState>(state => state)
+
+  const [userData, setUserData] = useState(store.login.user)
   const [isProfileChange, setIsProfileChange] = useState(false)
   const [showChangePassword, setShowChangePassword] = useState(false)
+
+  const onUpdateProfileError = () => notify({
+    type: 'error',
+    content: 'Cập nhật thông tin gặp lỗi',
+    autocloseDelay: 1250
+  })
+
   const {
     refetch: updateProfile,
     isLoading: isUpdateProfileLoading,
-    isError: isUpdateProfileError } = useChangeProfile({
-      fullName: userData?.fullName != props.user?.fullName ? userData?.fullName : undefined,
-      phone: userData?.phone != props.user?.phone ? userData?.phone : undefined,
-      birthDay: userData?.birthDay != props.user?.birthDay ? userData?.birthDay : undefined
-    })
+    isSuccess: isUpdateProfileSuccess,
+    isFetching: isUpdateProfile,
+  } = useChangeProfile({
+    fullName: userData?.fullName != store.login.user?.fullName ? userData?.fullName : undefined,
+    phone: userData?.phone != store.login.user?.phone ? userData?.phone : undefined,
+    birthDay: userData?.birthDay != store.login.user?.birthDay ? userData?.birthDay : undefined
+  }, { onError: onUpdateProfileError })
 
   const handleChangeProfile = (event: React.ChangeEvent<HTMLInputElement>) => {
     setUserData({ ...userData, [event.target.id]: event.target.value });
@@ -64,34 +73,40 @@ export default function UserProfile(props: UserProfileProps) {
     }
   }
 
-  useMemo(() => {
+  useEffect(() => {
     setIsProfileChange(
-      !(userData?.fullName == props.user?.fullName
+      !(userData?.fullName == store.login.user?.fullName
         && (new Date(userData?.birthDay ? userData.birthDay : 0).toISOString()
-          == new Date(props.user?.birthDay ? props.user.birthDay : 0).toISOString()
+          == new Date(store.login.user?.birthDay ? store.login.user.birthDay : 0).toISOString()
           && new Date(userData?.birthDay).toString() != 'Invalid Date')
-        && userData?.phone == props.user?.phone)
+        && userData?.phone == store.login.user?.phone)
     )
-  }, [userData])
-
-  useMemo(() => {
-    if (!userData && props.user) {
-      setUserData(props.user)
-    }
-  }, [props.user])
+  }, [userData, store.login.user])
 
   useEffect(() => {
-    if (isUpdateProfileError) {
+    if (!userData && store.login.user) {
+      setUserData(store.login.user)
+    }
+  }, [store.login.user])
+
+  useEffect(() => {
+    if (isUpdateProfileSuccess && !isUpdateProfile) {
       notify({
-        type: 'error',
-        content: 'Cập nhật thông tin thất bại',
+        type: 'success',
+        content: 'Cập nhật thông tin thành công',
         autocloseDelay: 1250
       })
+      dispatch(getUserProfileThunk())
     }
-  }, [isUpdateProfileError])
+  }, [isUpdateProfile])
 
   const validate = (fieldValues = values) => {
     const tmp = { ...errors };
+
+    if ('password' in fieldValues) {
+      tmp.password = '';
+      if (fieldValues.password.length == 0) { tmp.password = 'Vui lòng điền mật khẩu của bạn'; }
+    }
 
     if ('newPassword' in fieldValues) {
       tmp.newPassword = '';
@@ -123,45 +138,89 @@ export default function UserProfile(props: UserProfileProps) {
       validate
     );
 
+  const onVerifyPasswordError = () => notify({
+    type: 'error',
+    content: 'Xác thực mật khẩu gặp lỗi',
+    autocloseDelay: 1250
+  })
+
+  const onChangePasswordError = () => notify({
+    type: 'error',
+    content: 'Đổi mật khẩu gặp lỗi',
+    autocloseDelay: 1250
+  })
+
   const {
     data: isPasswordVerfied,
     refetch: verifyPassword,
     isLoading: isVerifyLoading,
-    isError: isVerifyPasswordError
+    remove: resetVerifyPassword
   } = useVerifyPassword(
-    values.password
+    values.password,
+    { onError: onVerifyPasswordError }
   )
 
-  const handleVerifyPassword = () => {
+  const {
+    data: userChangePassword,
+    refetch: changePassword,
+    isLoading: isChangingPassword,
+    isSuccess: isPasswordChanged,
+    remove: resetChangePassword
+  } = useChangePassword(
+    values.newPassword,
+    { onError: onChangePasswordError }
+  )
+
+  const handleVerifyPassword = async () => {
     verifyPassword()
   }
 
-  useEffect(() => {
-    if (!isPasswordVerfied && values.password != '') {
-      setErrors({ password: 'Mật khẩu sai' })
+  const handleChangePassword = () => {
+    if (validate(values)) {
+      changePassword()
     }
-  }, [isPasswordVerfied])
+  }
+  useEffect(() => {
+    if (isPasswordChanged) {
+      if (userChangePassword?.id != undefined) {
+        notify({
+          type: 'success',
+          content: 'Đổi mật khẩu thành công',
+          autocloseDelay: 1250
+        })
+        handleShowChangePassword()
+        resetVerifyPassword()
+        window.scrollTo({
+          top: 0,
+          behavior: 'smooth'
+        })
+      } else {
+        notify({
+          type: 'error',
+          content: 'Mật khẩu mới giống mật khẩu cũ',
+          autocloseDelay: 1250
+        })
+      }
+      resetChangePassword()
+    }
+  }, [userChangePassword, isChangingPassword])
 
   useEffect(() => {
-    if (isVerifyPasswordError) {
-      notify({
-        type: 'error',
-        content: 'Xác thực mật khẩu gặp lỗi',
-        autocloseDelay: 1250
-      })
+    if (isPasswordVerfied != true && values.password != '') {
+      setErrors({ password: 'Mật khẩu không đúng' })
     }
-  }, [isVerifyPasswordError])
+  }, [isPasswordVerfied])
 
   const dispatch = useDispatch()
 
   useEffect(() => {
-    if (isUpdateProfileLoading || isVerifyLoading) {
+    if (isUpdateProfileLoading || isVerifyLoading || isChangingPassword) {
       dispatch(loadingActions.load())
 
     } else {
       dispatch(loadingActions.finish())
     }
-  }, [isUpdateProfileLoading, isVerifyLoading])
+  }, [isUpdateProfileLoading, isVerifyLoading, isChangingPassword])
 
   const classes = useStyles()
 
@@ -189,7 +248,6 @@ export default function UserProfile(props: UserProfileProps) {
                 inputFormat="dd/MM/yyyy"
                 value={userData.birthDay}
                 onChange={(newValue) => {
-                  console.log(newValue);
                   if (newValue != 'Invalid Date')
 
                     setUserData({ ...userData, birthDay: newValue });
@@ -219,10 +277,10 @@ export default function UserProfile(props: UserProfileProps) {
                   <CustomInput.TextField
                     label='Mật khẩu' name='password' variant='outlined'
                     type='password' value={values.password} error={errors.password}
-                    onChange={handleInputChange}
+                    onChange={(event: any) => { handleInputChange(event), resetVerifyPassword() }}
                     onBlur={handleVerifyPassword}
                     InputProps={{
-                      startAdornment: (
+                      endAdornment: (
                         <InputAdornment position='end'>
                           {isPasswordVerfied == true ?
                             <Check color='success' /> : null}
@@ -245,8 +303,8 @@ export default function UserProfile(props: UserProfileProps) {
                     onChange={handleInputChange} />
                 </Grid>
                 <Grid xs={7} alignSelf='end' textAlign='end'>
-                  <Button variant='contained' disableRipple
-                    className={classes.saveButton}>
+                  <Button variant='contained' disableRipple className={classes.saveButton}
+                    disabled={isPasswordVerfied != true} onClick={handleChangePassword}>
                     Lưu mật khẩu
                   </Button>
                 </Grid>

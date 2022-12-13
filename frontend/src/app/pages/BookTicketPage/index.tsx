@@ -19,14 +19,15 @@ export default function BookTicketPage() {
   const handleReselectSeats = () => {
     dispatch(bookTicketActions.reSelectSeats())
     setTimeout(() => {
-      dispatch(bookTicketActions.paymentTimeOut())
       notify({
         type: 'warning',
         content: 'Đã hủy thanh toán',
         autocloseDelay: 1500,
       })
+    }, 100)
+    setTimeout(() => {
       dispatch(bookTicketActions.paymentTimeOut())
-    }, 100);
+    }, 500)
   }
 
   useEffect(() => {
@@ -50,7 +51,7 @@ export default function BookTicketPage() {
           <Dialog open={store.bookTicket.activeStep == BookingStep.MAKE_PAYMENT}>
             <PaymentForm
               timeStartPayment={store.bookTicket.timeStartPayment}
-              reselectSeats={() => handleReselectSeats()} />
+              reselectSeats={handleReselectSeats} />
           </Dialog>
         </React.Fragment>
       }

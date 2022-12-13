@@ -11,12 +11,13 @@ const renderer = ({ minutes, seconds }: any) => {
 interface CountDownClockProps {
   onComplete: () => void
   timeStart: number
+  duration: number //in minutes
 }
 
 export default function CountDownClock(props: CountDownClockProps) {
   return (
     <Countdown
-      date={props.timeStart + 5 * 60 * 1000}
+      date={props.timeStart + props.duration * 60 * 1000}
       renderer={renderer}
       onComplete={props.onComplete}
     />

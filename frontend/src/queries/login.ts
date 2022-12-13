@@ -17,6 +17,3 @@ export const login = async (email: string, password: string): Promise<any> => {
 
   return response.data.data;
 };
-
-export const useLogin = (email: string, password: string) =>
-  useQuery(['login'], () => login(email, password));
