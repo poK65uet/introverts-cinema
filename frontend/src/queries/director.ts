@@ -18,8 +18,8 @@ export const getDirectors = async (): Promise<any> => {
 };
 
 export const useGetDirectors = () => useQuery(['getDirectors'], () => getDirectors(), {
-  enabled: false,
-  refetchOnWindowFocus: false,
+  // enabled: false,
+  // refetchOnWindowFocus: false,
 });
 
 export const getDirectorByID = async (id: string | undefined): Promise<any> => {

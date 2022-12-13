@@ -36,8 +36,8 @@ export const usegetCategoryByID = (id: string | undefined) =>
   };
   
   export const useGetCategories = () => useQuery(['getCategories'], () => getCategories(), {
-    enabled: false,
-    refetchOnWindowFocus: false,
+    // enabled: false,
+    // refetchOnWindowFocus: false,
   });
 
   

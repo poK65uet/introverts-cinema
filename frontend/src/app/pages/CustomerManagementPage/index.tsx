@@ -11,7 +11,7 @@ import { Button, Typography } from '@mui/material';
 export default function CustomerManagementPage() {
   const classes = useStyles();
   const [page, setPage] = useState<number>(1);
-  const [pageSize, setPageSize] = useState<number>(5);
+  const [pageSize, setPageSize] = useState<number>(15);
   const [count, setCount] = useState<number>(0);
   const [rows, setRows] = useState<readonly any[]>([]);
 
@@ -40,14 +40,11 @@ export default function CustomerManagementPage() {
       return;
     }
     console.log(newRows, run, newRows.slice(run - newRows.length + 1));
-    
     setRows(rows.concat(newRows.slice(run - newRows.length + 1)));
     console.log(rows);
   };
 
   const { data, isLoading } = useGetUsers(page, pageSize);
-  // console.log(page, pageSize);
-  // console.log(data);
 
   useEffect(() => {
     if (data !== undefined) {
@@ -145,7 +142,7 @@ export default function CustomerManagementPage() {
         loading={isLoading}
         onPageChange={newPage => updatePage(newPage+1)}
         onPageSizeChange={newPageSize => updatePageSize(newPageSize)}
-        rowsPerPageOptions={[5, 10, 30, 50]}
+        rowsPerPageOptions={[15, 30, 50]}
         rowCount={count}
         rows={rows}
         disableSelectionOnClick

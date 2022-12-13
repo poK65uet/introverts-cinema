@@ -36,8 +36,8 @@ export const usegetNationalityByID = (id: string | undefined) =>
   };
   
   export const useGetNationalities = () => useQuery(['getNationalities'], () => getNationalities(), {
-    enabled: false,
-    refetchOnWindowFocus: false,
+    // enabled: false,
+    // refetchOnWindowFocus: false,
   });
 
   

@@ -42,7 +42,7 @@ export const getMovieById = async (id: string | undefined): Promise<any> => {
 export const useGetMovieById = (id: string | undefined) =>
   useQuery(['getMovieById'], () => getMovieById(id));
 
-export const getMovies = async (): Promise<any> => {
+export const getMovies = async (page: number, size: number): Promise<any> => {
   let response: AxiosResponse<any>;
 
   const token = sessionStorage.getItem('token');
@@ -51,7 +51,7 @@ export const getMovies = async (): Promise<any> => {
   }
   
   try {
-    response = await axios.get(`${config.apiEndpoint}/films/pagination`, authenticationHeader);
+    response = await axios.get(`${config.apiEndpoint}/films/pagination?page=${page}&size=${size}`, authenticationHeader);
   } catch (e) {
     console.log(e);
     return [];
@@ -59,7 +59,7 @@ export const getMovies = async (): Promise<any> => {
   return response.data.data;
 };
 
-export const useGetMovies = () => useQuery(['getMovies'], () => getMovies());
+export const useGetMovies = (page: number, size: number) => useQuery(['getMovies', page, size], () => getMovies(page, size));
 
 export const addMovie = async (
   id: string,

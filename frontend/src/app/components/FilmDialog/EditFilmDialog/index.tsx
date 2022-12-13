@@ -102,8 +102,8 @@ export default function EditFilmDialog(props: any) {
   const { isLoading: loadingDirectors, data: allDirectors } = useGetDirectors();
   const { isLoading: loadingCategories, data: allCategories } =
     useGetCategories();
-  console.log(allCategories);
-  console.log(allDirectors);
+  // console.log(allCategories);
+  // console.log(allDirectors);
   if (
     (editFilmData === undefined && props.data !== '0') ||
     (editFilmData !== undefined &&

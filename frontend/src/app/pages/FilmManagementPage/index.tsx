@@ -19,8 +19,10 @@ export default function FilmManagementPage() {
   const [open, setOpen] = useState(false);
   const [openEdit, setOpenEdit] = useState(false);
   const [editRowId, setEditRowId] = useState('0');
-  const [page, setPage] = useState<number>(0);
-  const [pageSize, setPageSize] = useState<number>(20);
+  const [count, setCount] = useState<number>(0);
+  const [rows, setRows] = useState<readonly any[]>([]);
+  const [page, setPage] = useState<number>(1);
+  const [pageSize, setPageSize] = useState<number>(5);
 
   const handleClickOpenAddPage = () => {
     setOpen(true);
@@ -40,7 +42,36 @@ export default function FilmManagementPage() {
   };
 
   
-  const { isLoading, data } = useGetMovies();
+  const updateRows = (newRows: readonly any[]) => {
+    if (rows.length === 0) {
+      setRows(newRows);
+      return;
+    }
+    if (rows.length === count) {
+      return;
+    }
+    let run = newRows.length - 1;
+    let largestId = rows.slice(-1)[0].id;
+    while (run >= 0 && newRows[run].id > largestId) {
+      run--;
+    }
+    if (run == newRows.length - 1) {
+      return;
+    }
+    console.log(newRows, run, newRows.slice(run - newRows.length + 1));
+    setRows(rows.concat(newRows.slice(run - newRows.length + 1)));
+    console.log(rows);
+  };
+
+  const { isLoading, data } = useGetMovies(page, pageSize);
+  console.log(page, pageSize, data);
+
+  useEffect(() => {
+    if (data !== undefined) {
+      setCount(data.count);
+      updateRows(data.rows);
+    }
+  }, [isLoading]);
 
   const columns: GridColDef[] = [
     {
@@ -125,13 +156,14 @@ export default function FilmManagementPage() {
       </Button>
       <DataGrid
         autoHeight
-        page={page}
+        page={page-1}
         pageSize={pageSize}
         loading={isLoading}
-        onPageChange={newPage => setPage(newPage)}
+        onPageChange={newPage => setPage(newPage+1)}
         onPageSizeChange={newPageSize => setPageSize(newPageSize)}
-        rowsPerPageOptions={[15, 30, 50]}
-        rows={isLoading ? [] : data.rows}
+        rowsPerPageOptions={[5, 30, 50]}
+        rows={rows}
+        rowCount={count}
         disableSelectionOnClick
         columns={columns}
         onRowDoubleClick={GridCellParams =>
