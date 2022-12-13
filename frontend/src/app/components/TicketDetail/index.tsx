@@ -3,8 +3,6 @@ import { Card, CardContent, CardMedia, Divider, Typography } from '@mui/material
 import { CssVarsProvider, CardOverflow } from '@mui/joy';
 import useStyles from './styles';
 import RatedTag from '../RatedTag';
-import { useSelector } from 'react-redux';
-import { RootState } from 'store';
 import { formatDate, formatDay, formatHour } from 'utils/date';
 import { StyledEngineProvider } from '@mui/styled-engine-sc';
 
@@ -42,7 +40,7 @@ export default function TicketDetail(props: TicketDetailProps) {
         </Typography>
         <Typography my={0.5}>
           <strong> Phòng chiếu: </strong>
-          {props.showtime.name}
+          {props.showtime.room} - {props.showtime.visionType}
         </Typography>
         <Typography my={0.5}>
           <strong> Ghế: </strong>

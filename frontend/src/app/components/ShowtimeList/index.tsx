@@ -20,10 +20,8 @@ export default function ShowtimeList(props: ShowtimeListProps) {
         {formatDate(new Date(props.showtimesByDate.date))}
       </Grid>
       <Grid xs={9} />
-      <Grid xs={3} alignSelf='center'>
-        2D - Phụ đề
-      </Grid>
-      <Grid container xs={9}>
+      <Grid xs={1} />
+      <Grid container xs={11}>
         {props.showtimesByDate.showtimes.map((showtime: any, index: number) => {
           return (
             <Grid xs={3} key={index}>

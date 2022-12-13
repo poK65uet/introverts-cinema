@@ -3,11 +3,7 @@ import config from 'config';
 
 export const getBanners = async (): Promise<string[]> => {
   let response: AxiosResponse<any>;
-  try {
-    response = await axios.get(`${config.apiEndpoint}/banners`);
-  } catch (e) {
-    return [];
-  }
+  response = await axios.get(`${config.apiEndpoint}/banners`);
 
   return response.data.data;
 };

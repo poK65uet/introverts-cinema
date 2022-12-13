@@ -61,8 +61,6 @@ export default function Register() {
 
     if ('phone' in fieldValues) {
       tmp.phone = '';
-      console.log(fieldValues.phone);
-
       if (!isValidPhoneString(fieldValues.phone) && fieldValues.phone) { tmp.phone = 'Số điện thoại không hợp lệ' }
     }
 
@@ -218,9 +216,6 @@ export default function Register() {
             value={values.birthDay}
             error={errors.birthDay}
             margin='dense'
-            onClick={() => {
-              console.log(errors.birthDay);
-            }}
             onChange={(birthDay: any) => {
               if (birthDay === null) return;
               validate({ birthDay: birthDay });

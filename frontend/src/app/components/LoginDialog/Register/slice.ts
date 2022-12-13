@@ -138,7 +138,7 @@ export const registerSlice = createSlice({
 
 export const validateEmailThunk = createAsyncThunk(
   'register/validateEmail',
-  async (data: { email: string }, reject) => {
+  async (data: { email: string }) => {
     const receivedData = await validateEmail(data.email);
     return receivedData;
   },
@@ -146,7 +146,7 @@ export const validateEmailThunk = createAsyncThunk(
 
 export const sendCodeThunk = createAsyncThunk(
   'register/sendCode',
-  async (data: { email: string | undefined }, reject) => {
+  async (data: { email: string | undefined }) => {
     const receivedData = await sendCode(data.email);
     return receivedData;
   },
@@ -154,17 +154,14 @@ export const sendCodeThunk = createAsyncThunk(
 
 export const registerThunk = createAsyncThunk(
   'register/register',
-  async (
-    data: {
-      email: string;
-      password: string;
-      otp: number;
-      fullName: string;
-      phone: string;
-      birthDay: string;
-    },
-    reject,
-  ) => {
+  async (data: {
+    email: string;
+    password: string;
+    otp: number;
+    fullName: string;
+    phone: string;
+    birthDay: string;
+  }) => {
     const receivedData = await register(
       data.email,
       data.password,

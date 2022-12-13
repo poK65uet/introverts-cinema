@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, Container } from '@mui/material';
 import { East, West } from '@mui/icons-material';
 import { SeatPlan } from 'app/containers/SeatPlan';
@@ -8,7 +8,7 @@ import useStyles from './styles';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from 'store';
 import { bookTicketActions } from 'app/pages/BookTicketPage/slice';
-import { useGetShowtimeDetail } from 'queries/showtimes';
+import { useGetSeatsByShowtimeId, useGetShowtimeDetail } from 'queries/showtimes';
 import { notify } from 'app/components/MasterDialog';
 
 
@@ -16,11 +16,36 @@ export default function SeatsSelector() {
 
   const store = useSelector<RootState, RootState>(state => state);
 
-  const data = useGetShowtimeDetail(store.bookTicket.selectedShowtime.id).data
+  const onGetShowtimeDetailError = () => {
+    notify({
+      type: 'error',
+      content: 'Không tìm thấy thông tin suát chiếu',
+      autocloseDelay: 1250
+    })
+    dispatch(bookTicketActions.loadingDone())
+  }
 
-  const showtime = data?.showtime
+  const { data: detail } = useGetShowtimeDetail(
+    store.bookTicket.selectedShowtime.id,
+    { onError: onGetShowtimeDetailError }
+  )
+
+  const onGetSeatsByShowtimeError = () => {
+    notify({
+      type: 'error',
+      content: 'Không tìm thấy thông tin ghế',
+      autocloseDelay: 1250
+    })
+  }
+
+  const { data: seats } = useGetSeatsByShowtimeId(
+    store.bookTicket.selectedShowtime.id,
+    { onError: onGetSeatsByShowtimeError }
+  )
+
+  const showtime = detail?.showtime
   const room = showtime?.Room
-  const price = data?.price
+  const price = detail?.price
 
   const [showConfirmSelectSeats, setShowConfirmSelectSeats] = useState(false);
 
@@ -65,12 +90,8 @@ export default function SeatsSelector() {
   const selectedSeats = () => {
     let seats = '';
     store.bookTicket.selectedSeats.map((seat, index) => {
-      seats +=
-        seat.name +
-        (store.bookTicket.selectedSeats.length == 1 ||
-          store.bookTicket.selectedSeats.length == index + 1
-          ? ''
-          : ', ');
+      seats += seat.name + (store.bookTicket.selectedSeats.length == 1 ||
+        store.bookTicket.selectedSeats.length == index + 1 ? '' : ', ');
     });
     return seats;
   };
@@ -84,14 +105,17 @@ export default function SeatsSelector() {
   return (
     <Container className={classes.seatSelectWrapper}>
       <Container className={classes.seatPlanWrapper}>
-        <SeatPlan seatCols={room?.colNumber} seatRows={room?.rowNumber} emptyCols={room?.colEmpty} emptyRows={room?.rowEmpty} />
+        <SeatPlan seats={seats}
+          seatCols={room?.colNumber} seatRows={room?.rowNumber}
+          emptyCols={room?.colEmpty} emptyRows={room?.rowEmpty} />
       </Container>
       <Container sx={{ all: 'unset', px: '0 !important' }} >
         <TicketDetail
           movie={selectedMovie()}
           showtime={{
             startTime: new Date(store.bookTicket.selectedShowtime.startTime),
-            name: room?.name
+            visionType: room?.visionType,
+            room: room?.name
           }}
           seats={store.bookTicket.selectedSeats}
           price={price * store.bookTicket.selectedSeats.length} />

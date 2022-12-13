@@ -1,9 +1,9 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 export interface HomeState {
-  isLoading: boolean
-  message: string
-  data: string
+  isLoading: boolean;
+  message: string;
+  data: string;
 }
 
 const initialState: HomeState = {
@@ -16,13 +16,13 @@ export const homeSlice = createSlice({
   name: 'home',
   initialState: initialState,
   reducers: {
-    loadData: (state, action) => {
-      state.isLoading = true
+    loadData: state => {
+      state.isLoading = true;
     },
-    receivedData: (state, action) => {
-        state.isLoading = false
+    receivedData: state => {
+      state.isLoading = false;
     },
-    changeMessage: (state, action) => { 
+    changeMessage: (state, action) => {
       state.message = action.payload;
     },
   },

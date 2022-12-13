@@ -7,6 +7,7 @@ const useStyles = makeStyles((theme: Theme) => ({
       color: theme.palette.secondary.main,
       fontSize: '1rem',
       border: '1px solid #C1C1C1',
+      padding: '0.5rem',
       margin: '1rem',
       '&:hover': {
         color: theme.palette.primary.main,

@@ -10,6 +10,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     '&.MuiPaper-root': {
       backgroundColor: theme.palette.primary.main,
       color: '#FFFFFF',
+      maxWidth: '22.5rem',
     },
     justifyContent: 'center',
     '& .MuiCardHeader-root': {
@@ -20,11 +21,11 @@ const useStyles = makeStyles((theme: Theme) => ({
       color: theme.palette.text.primary,
       padding: '0 !important',
       '& .MuiCardMedia-root': {
-        maxWidth: '15rem',
+        maxWidth: '20rem',
         display: 'initial',
       },
       '& .MuiCardActions-root': {
-        justifyContent: 'center',
+        justifyContent: 'space-around',
       },
     },
   },
@@ -32,6 +33,7 @@ const useStyles = makeStyles((theme: Theme) => ({
   button: {
     '&.MuiButtonBase-root': {
       color: '#FFFFFF',
+      margin: 10,
     },
   },
 }));
