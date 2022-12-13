@@ -1,6 +1,6 @@
 import { useGetMessage } from 'queries/message';
 import Box from '@mui/material/Box';
-import useStyles from './style';
+import useStyles from './styles';
 import {
   DataGrid,
   GridColDef,

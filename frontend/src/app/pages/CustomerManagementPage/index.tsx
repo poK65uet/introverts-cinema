@@ -1,5 +1,5 @@
 import Box from '@mui/material/Box';
-import useStyles from './style';
+import useStyles from './styles';
 import { DataGrid, GridColDef, GridRenderCellParams, GridToolbar } from '@mui/x-data-grid';
 // import DeleteIcon from '@mui/icons-material/Delete';
 // import EditIcon from '@mui/icons-material/Edit';
