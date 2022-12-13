@@ -13,9 +13,7 @@ import { Button, Chip, Typography } from '@mui/material';
 import AddFilmDialog from '../../components/FilmDialog/AddFilmDialog';
 import { useGetMovies } from 'queries/movies';
 import EditFilmDialog from 'app/components/FilmDialog/EditFilmDialog';
-import { usegetNationalities } from 'queries/nationality';
 
-//TODO: Add search button
 export default function FilmManagementPage() {
   const classes = useStyles();
   const [open, setOpen] = useState(false);

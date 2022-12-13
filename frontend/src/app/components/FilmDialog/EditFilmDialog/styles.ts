@@ -1,6 +1,5 @@
 import { makeStyles } from '@mui/styles';
 
-//TODO: Add Column spacing, add close button
 const useStyles = makeStyles(() => ({
   EditFilmBox: {
     display: 'flex',

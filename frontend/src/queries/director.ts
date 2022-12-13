@@ -2,43 +2,41 @@ import axios, { AxiosResponse } from 'axios';
 import config from 'config';
 import { useQuery } from 'react-query';
 
-
-export const getNationalityByID = async (id: string | undefined): Promise<any> => {
+export const getDirectors = async (): Promise<any> => {
   let response: AxiosResponse<any>;
   const token = sessionStorage.getItem('token');
   const authenticationHeader = {
       headers: {Authorization: `Bearer ${token}`}
   }
   try {
-    response = await axios.get(`${config.apiEndpoint}/nationalities/${id}`);
+    response = await axios.get(`${config.apiEndpoint}/directors/pagination`, authenticationHeader);
+  } catch (e) {
+    console.log(e);
+    return [];
+  }
+  return response.data.data;
+};
+
+export const useGetDirectors = () => useQuery(['getDirectors'], () => getDirectors());
+
+export const getDirectorByID = async (id: string | undefined): Promise<any> => {
+  let response: AxiosResponse<any>;
+  const token = sessionStorage.getItem('token');
+  const authenticationHeader = {
+      headers: {Authorization: `Bearer ${token}`}
+  }
+  try {
+    response = await axios.get(`${config.apiEndpoint}/directors/${id}`);
   } catch (e) {
     return [];
   }
   return response.data.data;
 };
 
-export const usegetNationalityByID = (id: string | undefined) =>
-  useQuery(['getNationalityByID'], () => getNationalityByID(id));
+export const usegetDirectorByID = (id: string | undefined) =>
+  useQuery(['getDirectorByID'], () => getDirectorByID(id));
 
-  export const getNationalities = async (): Promise<any> => {
-    let response: AxiosResponse<any>;
-    const token = sessionStorage.getItem('token');
-    const authenticationHeader = {
-        headers: {Authorization: `Bearer ${token}`}
-    }
-    try {
-      response = await axios.get(`${config.apiEndpoint}/nationalities/pagination`, authenticationHeader);
-    } catch (e) {
-      console.log(e);
-      return [];
-    }
-    return response.data.data;
-  };
-  
-  export const useGetNationalities = () => useQuery(['getNationalities'], () => getNationalities());
-
-  
-export const addNationality = async (
+export const addDirector = async (
   fullName: string,
   birthDay?: Date,
   Nationality?: number,
@@ -49,7 +47,7 @@ export const addNationality = async (
       headers: {Authorization: `Bearer ${token}`}
   }
   try {
-    response = await axios.post(`${config.apiEndpoint}/nationalities`, {
+    response = await axios.post(`${config.apiEndpoint}/directors`, {
       fullName: fullName,
       birthDay: birthDay,
       Nationality: Nationality,
@@ -60,7 +58,7 @@ export const addNationality = async (
   return response.data.data;
 };
 
-export const updateNationality = async (
+export const updateDirector = async (
     fullName: string,
     birthDay?: Date,
     Nationality?: number,
@@ -71,7 +69,7 @@ export const updateNationality = async (
         headers: {Authorization: `Bearer ${token}`}
     }
     try {
-      response = await axios.patch(`${config.apiEndpoint}/nationalities`, {
+      response = await axios.patch(`${config.apiEndpoint}/directors`, {
         fullName: fullName,
         birthDay: birthDay,
         Nationality: Nationality,

@@ -24,9 +24,10 @@ import useStyles from './styles';
 import { useForm } from 'hooks/useForm';
 import { addMovie, updateMovie, useGetMovieById } from 'queries/movies';
 import { usegetActors } from 'queries/actor';
-import { usegetNationalities } from 'queries/nationality';
+import { useGetNationalities } from 'queries/nationality';
+import { useGetCategories } from 'queries/category';
+import { useGetDirectors } from 'queries/director';
 
-//TODO: Add Column spacing, add close button
 export default function EditFilmDialog(props: any) {
   const classes = useStyles();
 
@@ -46,6 +47,7 @@ export default function EditFilmDialog(props: any) {
   };
 
   const { isLoading: loadingActors, data: allActors } = usegetActors();
+
 
   const { values, setValues, errors, setErrors, handleInputChange } = useForm(
     {
@@ -99,9 +101,10 @@ export default function EditFilmDialog(props: any) {
 
   const { isLoading, remove, data: editFilmData } = useGetMovieById(props.data);
   const { isLoading: loadingNationalities, data: allNationalities } =
-    usegetNationalities();
-  console.log(allNationalities);
-  console.log(editFilmData);
+    useGetNationalities();
+  const {isLoading: loadingDirectors, data: allDirectors} = useGetDirectors();
+  const {isLoading: loadingCategories, data: allCategories} = useGetCategories();
+  console.log(allDirectors);
   if (
     (editFilmData === undefined && props.data !== '0') ||
     (editFilmData !== undefined &&
@@ -244,6 +247,27 @@ export default function EditFilmDialog(props: any) {
                 name="trailerUrl"
                 onChange={handleInputChange}
                 inputProps={{ maxLength: '64' }}
+              />
+            </Grid>
+            <Grid xs={4} item={true}>
+              <Autocomplete
+                multiple
+                value={values.Directors}
+                options={loadingDirectors ? [] : allDirectors.rows}
+                loading={loadingDirectors}
+                getOptionLabel={(option: any) => option.fullName}
+                onChange={(event, value) =>
+                  setValues({ ...values, Directors: value.map(id => id) })
+                }
+                isOptionEqualToValue={(option, value) => option.id === value.id}
+                renderInput={params => (
+                  <TextField
+                    {...params}
+                    variant="standard"
+                    label="Đạo diễn"
+                    placeholder="Thêm"
+                  />
+                )}
               />
             </Grid>
           </Grid>

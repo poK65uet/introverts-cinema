@@ -8,7 +8,6 @@ import { useGetUsers } from '../../../queries/user';
 import { useState, useEffect } from 'react';
 import { Button, Typography } from '@mui/material';
 
-//TODO: Add search button
 export default function CustomerManagementPage() {
   const classes = useStyles();
   const [page, setPage] = useState<number>(0);

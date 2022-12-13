@@ -22,10 +22,9 @@ import useStyles from './styles';
 import { useForm } from 'hooks/useForm';
 import { addMovie, updateMovie, useGetMovieById } from 'queries/movies';
 import { usegetActors } from 'queries/actor';
-import { usegetNationalities } from 'queries/nationality';
+import { useGetNationalities } from 'queries/nationality';
 export default function FilmDialog(props: any) {
   const classes = useStyles();
-  const rateOptions = ['P', 'C13', 'C16', 'C18'];
 
   const validate = (fieldValues = values) => {
     const tmp = { ...errors };
@@ -41,7 +40,7 @@ export default function FilmDialog(props: any) {
   };
 
   const { isLoading: loadingActors, data: allActors } = usegetActors();
-  const { isLoading: loadingNationalities, data: allNationalities } = usegetNationalities();
+  const { isLoading: loadingNationalities, data: allNationalities } = useGetNationalities();
 
   const { values, setValues, errors, setErrors, handleInputChange } = useForm(
     {
