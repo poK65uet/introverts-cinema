@@ -30,7 +30,7 @@ export const useCreateBill = (
   },
   queryOpts?: any,
 ) =>
-  useQuery(['bill/createBill'], () => createBill(bill), {
+  useQuery(['bill/create-bill'], () => createBill(bill), {
     refetchOnWindowFocus: false,
     enabled: false,
     ...queryOpts,
@@ -54,7 +54,7 @@ export const verifyBill = async (bill: number): Promise<any> => {
 };
 
 export const useVerifyBill = (bill: number, queryOpts?: any) =>
-  useQuery(['bill/verifyBill'], () => verifyBill(bill), {
+  useQuery(['bill/verify-bill'], () => verifyBill(bill), {
     refetchOnWindowFocus: false,
     enabled: false,
     ...queryOpts,
@@ -78,7 +78,7 @@ export const cancelBill = async (bill: number): Promise<any> => {
 };
 
 export const useCancelBill = (bill: number, queryOpts?: any) =>
-  useQuery(['bill/cancelBill'], () => cancelBill(bill), {
+  useQuery(['bill/cancel-bill'], () => cancelBill(bill), {
     refetchOnWindowFocus: false,
     enabled: false,
     ...queryOpts,

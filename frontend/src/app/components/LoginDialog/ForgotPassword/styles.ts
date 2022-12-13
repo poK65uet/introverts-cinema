@@ -2,7 +2,7 @@ import { makeStyles } from '@mui/styles';
 import { Theme } from '@mui/material';
 
 const useStyles = makeStyles((theme: Theme) => ({
-  registerBox: {
+  forgotPasswordBox: {
     display: 'flex',
     flexDirection: 'column',
     backgroundColor: 'white',
@@ -10,7 +10,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     overflow: 'hidden',
     padding: '2em',
   },
-  registerButton: {
+  verifyButton: {
     borderRadius: '15px !important',
     transition: '0.5s !important',
     boxShadow: 'none !important',

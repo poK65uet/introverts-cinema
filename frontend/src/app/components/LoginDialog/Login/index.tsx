@@ -19,7 +19,7 @@ import {
 import { CustomInput } from 'app/components/CustomInput';
 import useStyles from './styles';
 import { useForm } from 'hooks/useForm';
-import { loginThunk, loginActions } from '../slice';
+import { loginThunk, loginActions, DialogActions } from '../slice';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from 'store';
 
@@ -93,16 +93,14 @@ export default function Login(props: any) {
         if (event.code === 'Enter') {
           await handleClickSubmit()
         }
-      }}
-    >
+      }}>
       <Typography
         sx={{
           textAlign: 'center',
           mb: 2,
         }}
         variant='h5'
-        fontWeight='bold'
-      >
+        fontWeight='bold'>
         Chào mừng đến Introvert Cinema
       </Typography>
       <CustomInput.TextField
@@ -120,8 +118,7 @@ export default function Login(props: any) {
           startAdornment: (
             <InputAdornment position='start'><Person /></InputAdornment>
           ),
-        }}
-      />
+        }} />
       <div>
         <CustomInput.TextField
           required
@@ -139,14 +136,12 @@ export default function Login(props: any) {
             endAdornment: (
               <InputAdornment position='end'>
                 <IconButton
-                  onClick={handleClickShowPassword}
-                >
+                  onClick={handleClickShowPassword}>
                   {showPassword ? <Visibility /> : <VisibilityOff />}
                 </IconButton>
               </InputAdornment>
             ),
-          }}
-        />
+          }} />
       </div>
       <Grid container>
         <Grid item xs>
@@ -154,11 +149,13 @@ export default function Login(props: any) {
             sx={{ fontSize: '0.875em', fontFamily: '' }}
             disableTypography
             control={<Checkbox disableFocusRipple sx={{ color: '#FF884B' }} />}
-            label='Duy trì đăng nhập'
-          />
+            label='Duy trì đăng nhập' />
         </Grid>
         <Grid item marginY='auto'>
-          <LinkMUI>Quên mật khẩu ?</LinkMUI>
+          <LinkMUI sx={{ cursor: 'pointer' }}
+            onClick={() => dispatch(loginActions.changeAction(DialogActions.FORGOT_PASSWORD))}>
+            Quên mật khẩu ?
+          </LinkMUI>
         </Grid>
       </Grid>
       <Button
@@ -167,12 +164,12 @@ export default function Login(props: any) {
         disableFocusRipple
         sx={{ my: 1, p: 1, fontWeight: 'bold', color: 'white' }}
         className={classes.loginButton}
-        onClick={handleClickSubmit}
-      >Đăng nhập</Button>
+        onClick={handleClickSubmit}>
+        Đăng nhập
+      </Button>
       <Typography
         sx={{ textAlign: 'center', }}
-        variant='body1'
-      >
+        variant='body1'>
         Bạn chưa có tài khoản ?
       </Typography>
       <Button
@@ -181,10 +178,9 @@ export default function Login(props: any) {
         disableFocusRipple
         sx={{ my: 1, fontWeight: 'bold', borderWidth: '2px !important' }}
         className={classes.registerButton}
-        onClick={() => { dispatch(loginActions.changeAction('validateEmail')) }}
-      >
+        onClick={() => dispatch(loginActions.changeAction(DialogActions.REGISTER))}>
         Tạo tài khoản mới
       </Button>
-    </Box>
+    </Box >
   );
 }

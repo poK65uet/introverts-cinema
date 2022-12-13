@@ -20,7 +20,7 @@ import { CustomInput } from 'app/components/CustomInput';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from 'store';
 import { useForm } from 'hooks/useForm';
-import { sendCodeThunk, validateEmailThunk, registerActions, registerThunk } from './slice';
+import { registerActions, registerThunk, sendRegisterCodeThunk, validateEmailThunk } from './slice';
 import { isValidEmail, isValidPhoneString } from 'utils/validation';
 import { notify } from 'app/components/MasterDialog/index';
 
@@ -99,14 +99,13 @@ export default function Register() {
   }
 
   const handleSendCode = () => {
-    dispatch(sendCodeThunk({ email: values.email }))
+    dispatch(sendRegisterCodeThunk({ email: values.email }))
   }
 
   const handleClickSignUp = () => {
     if (validate(values)) {
       if (store.register.isEmailValid) {
         if (store.register.OTP?.toString().length == 6) {
-          console.log('sign_up');
           dispatch(registerThunk({
             email: values.email,
             password: values.password,
@@ -159,16 +158,14 @@ export default function Register() {
       onKeyDown={(event: React.KeyboardEvent) => {
         if (event.code === 'Enter') {
         }
-      }}
-    >
+      }}>
       <Typography
         sx={{
           textAlign: 'center',
           mb: 2,
         }}
         variant='h5'
-        fontWeight='bold'
-      >
+        fontWeight='bold'>
         Đăng ký tài khoản Introverts Cinema
       </Typography>
       <CustomInput.TextField
@@ -196,8 +193,7 @@ export default function Register() {
                 <Check color='success' /> : null}
             </InputAdornment>
           ),
-        }}
-      />
+        }} />
       <Grid xs={12} container columnSpacing={2}>
         <Grid xs={7}>
           <CustomInput.TextField
@@ -207,8 +203,7 @@ export default function Register() {
             error={errors.fullName}
             margin='dense'
             onChange={handleInputChange}
-            inputProps={{ maxLength: '32' }}
-          />
+            inputProps={{ maxLength: '32' }} />
         </Grid>
         <Grid xs={5}>
           <CustomInput.DatePicker
@@ -223,8 +218,7 @@ export default function Register() {
                 ...values,
                 birthDay: birthDay,
               });
-            }}
-          />
+            }} />
         </Grid>
       </Grid>
       <Grid xs={12}>
@@ -240,8 +234,7 @@ export default function Register() {
             startAdornment: (
               <InputAdornment position='start'><Phone />(+84)</InputAdornment>
             ),
-          }}
-        />
+          }} />
       </Grid>
       <CustomInput.TextField
         required
@@ -267,8 +260,7 @@ export default function Register() {
               </IconButton>
             </InputAdornment>
           ),
-        }}
-      />
+        }} />
       <CustomInput.TextField
         required
         type={showRepassword ? 'text' : 'password'}
@@ -287,34 +279,30 @@ export default function Register() {
             <InputAdornment position='end'>
               <IconButton
                 tabIndex={-1}
-                onClick={handleClickShowRepassword}
-              >
+                onClick={handleClickShowRepassword}>
                 {showRepassword ? <Visibility /> : <VisibilityOff />}
               </IconButton>
             </InputAdornment>
           ),
-        }}
-      />
+        }} />
       <span style={{}}>
         {store.register.isEmailValid ?
           <Button
             disableFocusRipple
             variant='text'
             sx={{ fontWeight: 'bold' }}
-            onClick={handleSendCode}
-          >
+            onClick={handleSendCode}>
             Gửi mã xác nhận
           </Button> : null}
-        {store.register.isOTPSent ? <CustomInput.DigitCode /> : null}
+        {store.register.isOTPSent ? <CustomInput.DigitCode action='register' /> : null}
       </span>
       <Button
         fullWidth
         variant='contained'
         sx={{ mt: 2, p: 1, fontWeight: 'bold', color: 'white' }}
         disableFocusRipple
-        className={classes.loginButton}
-        onClick={handleClickSignUp}
-      >
+        className={classes.registerButton}
+        onClick={handleClickSignUp}>
         Đăng ký
       </Button>
     </Box >
