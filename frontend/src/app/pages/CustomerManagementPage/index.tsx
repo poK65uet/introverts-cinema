@@ -11,7 +11,7 @@ import { Button, Typography } from '@mui/material';
 export default function CustomerManagementPage() {
   const classes = useStyles();
   const [page, setPage] = useState<number>(1);
-  const [pageSize, setPageSize] = useState<number>(10);
+  const [pageSize, setPageSize] = useState<number>(5);
   const [count, setCount] = useState<number>(0);
   const [rows, setRows] = useState<readonly any[]>([]);
 
@@ -33,18 +33,21 @@ export default function CustomerManagementPage() {
     }
     let run = newRows.length - 1;
     let largestId = rows.slice(-1)[0].id;
-    while (run > 0 && newRows[run].id > largestId) {
+    while (run >= 0 && newRows[run].id > largestId) {
       run--;
     }
     if (run == newRows.length - 1) {
       return;
     }
-    setRows(rows.concat(newRows.slice(run - newRows.length)));
+    console.log(newRows, run, newRows.slice(run - newRows.length + 1));
+    
+    setRows(rows.concat(newRows.slice(run - newRows.length + 1)));
+    console.log(rows);
   };
 
   const { data, isLoading } = useGetUsers(page, pageSize);
-  console.log(page);
-  console.log(data);
+  // console.log(page, pageSize);
+  // console.log(data);
 
   useEffect(() => {
     if (data !== undefined) {
@@ -140,9 +143,9 @@ export default function CustomerManagementPage() {
         page={page-1}
         pageSize={pageSize}
         loading={isLoading}
-        onPageChange={newPage => updatePage(newPage)}
+        onPageChange={newPage => updatePage(newPage+1)}
         onPageSizeChange={newPageSize => updatePageSize(newPageSize)}
-        rowsPerPageOptions={[10, 30, 50]}
+        rowsPerPageOptions={[5, 10, 30, 50]}
         rowCount={count}
         rows={rows}
         disableSelectionOnClick

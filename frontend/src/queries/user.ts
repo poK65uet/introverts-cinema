@@ -17,7 +17,10 @@ export const getUsers = async (page: number, size: number): Promise<any> => {
 };
 
 export const useGetUsers = (page: number, size: number) =>
-  useQuery(['getUsers', page, size], () => getUsers(page, size));
+  useQuery(['getUsers', page, size], () => getUsers(page, size), {
+    // enabled: false,
+    refetchOnWindowFocus: false,
+  });
 
 export const getUserProfile = async (): Promise<any> => {
   let response: AxiosResponse<any>;
