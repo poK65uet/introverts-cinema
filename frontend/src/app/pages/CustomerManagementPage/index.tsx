@@ -10,7 +10,7 @@ import { Button, Typography } from '@mui/material';
 
 export default function CustomerManagementPage() {
   const classes = useStyles();
-  const [page, setPage] = useState<number>(0);
+  const [page, setPage] = useState<number>(1);
   const [pageSize, setPageSize] = useState<number>(10);
   const [count, setCount] = useState<number>(0);
   const [rows, setRows] = useState<readonly any[]>([]);
@@ -137,7 +137,7 @@ export default function CustomerManagementPage() {
     <Box className={classes.customerTable}>
       <DataGrid
         autoHeight
-        page={page}
+        page={page-1}
         pageSize={pageSize}
         loading={isLoading}
         onPageChange={newPage => updatePage(newPage)}

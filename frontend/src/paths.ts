@@ -7,7 +7,7 @@ const paths = {
   CustomerManagement: '/admin/customers',
   FilmManagement: '/admin/films',
   RoomManagement: '/admin/rooms',
-  TicketManagement: '/admin/tickets',
+  TicketPriceManagement: '/admin/tickets',
   ShowtimeManagementPage: '/admin/showtime',
   BookedTicketManagementPage: '/admin/bookedtickets',
 };

@@ -5,7 +5,7 @@ import { Route, Switch } from 'react-router-dom';
 import FilmManagementPage from '../FilmManagementPage';
 import CustomerManagementPage from '../CustomerManagementPage';
 import RoomManagementPage from '../RoomManagementPage';
-import TicketManagementPage from '../TicketManagementPage';
+import TicketManagementPage from '../TicketPriceManagementPage';
 import AdminAppBar from 'app/components/AdminAppBar';
 import Footer from 'app/containers/Footer';
 import paths from 'paths';
@@ -35,7 +35,7 @@ export default function AdminPage() {
             exact={true}
           />
           <Route
-            path={paths.TicketManagement}
+            path={paths.TicketPriceManagement}
             component={TicketManagementPage}
             exact={true}
           />

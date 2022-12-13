@@ -37,7 +37,7 @@ function AdminMenu() {
       case paths.FilmManagement:
         setTab(3);
         break;
-      case paths.TicketManagement:
+      case paths.TicketPriceManagement:
         setTab(4);
         break;
       case paths.BookedTicketManagementPage:
@@ -94,7 +94,7 @@ function AdminMenu() {
           label="Quản lý giá vé"
           icon={<LocalActivityIcon />}
           iconPosition="start"
-          to={paths.TicketManagement}
+          to={paths.TicketPriceManagement}
         />
         <Tab
           className={tab === 5 ? classes.activeTab : classes.tab}

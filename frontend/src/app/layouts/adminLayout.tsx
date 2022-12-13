@@ -6,7 +6,7 @@ import paths from 'paths';
 import AdminAppBar from 'app/components/AdminAppBar';
 import AdminMenu from 'app/containers/AdminMenu';
 import RoomManagementPage from 'app/pages/RoomManagementPage';
-import TicketManagementPage from 'app/pages/TicketManagementPage';
+import TicketPriceManagementPage from 'app/pages/TicketPriceManagementPage';
 import CustomerManagementPage from 'app/pages/CustomerManagementPage';
 import FilmManagementPage from 'app/pages/FilmManagementPage';
 import { RootState } from 'store';
@@ -29,8 +29,8 @@ const AdminLayout = () => {
           />
           <Route path={paths.RoomManagement} component={RoomManagementPage} />
           <Route
-            path={paths.TicketManagement}
-            component={TicketManagementPage}
+            path={paths.TicketPriceManagement}
+            component={TicketPriceManagementPage}
           />
           <Route
             path={paths.BookedTicketManagementPage}
