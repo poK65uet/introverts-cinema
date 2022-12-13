@@ -1,5 +1,4 @@
 import { makeStyles } from '@mui/styles';
-// TODO: Change dialog size
 const useStyles = makeStyles(() => ({
   AddFilmBox: {
     display: 'flex',
@@ -8,7 +7,6 @@ const useStyles = makeStyles(() => ({
     borderRadius: '15px',
     overflow: 'hidden',
     padding: '2em',
-    // width: '1000 !important',
   },
 
   AddFilmButton: {

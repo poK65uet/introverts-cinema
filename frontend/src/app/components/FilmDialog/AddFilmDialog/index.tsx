@@ -22,9 +22,10 @@ import useStyles from './styles';
 import { useForm } from 'hooks/useForm';
 import { addMovie, updateMovie, useGetMovieById } from 'queries/movies';
 import { usegetActors } from 'queries/actor';
-//TODO: Add Column spacing, add close button
+import { usegetNationalities } from 'queries/nationality';
 export default function FilmDialog(props: any) {
   const classes = useStyles();
+  const rateOptions = ['P', 'C13', 'C16', 'C18'];
 
   const validate = (fieldValues = values) => {
     const tmp = { ...errors };
@@ -40,6 +41,7 @@ export default function FilmDialog(props: any) {
   };
 
   const { isLoading: loadingActors, data: allActors } = usegetActors();
+  const { isLoading: loadingNationalities, data: allNationalities } = usegetNationalities();
 
   const { values, setValues, errors, setErrors, handleInputChange } = useForm(
     {
@@ -170,14 +172,21 @@ export default function FilmDialog(props: any) {
               }}
             />
           </Grid>
-          <Grid xs={3} item={true}>
-            <CustomInput.TextField
-              label="Phân loại"
-              name="rated"
-              onChange={handleInputChange}
-              inputProps={{ maxLength: '64' }}
-            />
-          </Grid>
+            <Grid xs={3} item={true}>
+              <InputLabel>Phân loại</InputLabel>
+              <Select
+                value={values.rated}
+                IconComponent={() => null}
+                onChange={(event: any) => {
+                  setValues({ ...values, rated: event.target.value });
+                }}
+              >
+                <MenuItem value={'P'}>P - Phù hợp với mọi lứa tuổi</MenuItem>
+                <MenuItem value={'C13'}>C13 - Cấm trẻ em dưới 13 tuối</MenuItem>
+                <MenuItem value={'C16'}>C16 - Cấm trẻ em dưới 16 tuối</MenuItem>
+                <MenuItem value={'C18'}>C18 - Cấm người dưới 18 tuối</MenuItem>
+              </Select>
+            </Grid>
         </Grid>
         <Grid xs={12} container columnSpacing={2} item={true}>
           <Grid xs={6} item={true}>
@@ -203,13 +212,11 @@ export default function FilmDialog(props: any) {
           <Grid xs={6} item={true}>
             <Autocomplete
               multiple
-              id="tags-standard"
               options={loadingActors ? [] : allActors.rows}
               loading={loadingActors}
               getOptionLabel={(option: any) => option.fullName}
-              onChange={(event, value) =>
-                setValues({ ...values, Actors: value.map(({ id }) => id) })
-              }
+              onChange={(event, value) => setValues({ ...values, Actors: value })}
+              isOptionEqualToValue={(option, value) => option.id === value.id}
               renderInput={params => (
                 <TextField
                   {...params}
@@ -221,15 +228,29 @@ export default function FilmDialog(props: any) {
               )}
             />
           </Grid>
-          <Grid xs={6} item={true}>
-            <CustomInput.TextField
-              label="Mã quốc gia"
-              name="NationalityId"
-              type="number"
-              onChange={handleInputChange}
-              inputProps={{ maxLength: '64' }}
-            />
-          </Grid>
+            <Grid xs={2} item={true}>
+              <Autocomplete
+                options={loadingNationalities ? [] : allNationalities.rows}
+                loading={loadingNationalities}
+                getOptionLabel={(option: any) => option.name}
+                onChange={(event, value) =>
+                  setValues({
+                    ...values,
+                    NationalityId: value?.map((id: any) => id),
+                  })
+                }
+                isOptionEqualToValue={(option, value) => option.id === value.id}
+                value={values.Nationality}
+                renderInput={params => (
+                  <TextField
+                    {...params}
+                    variant="standard"
+                    label="Quốc gia"
+                    placeholder=""
+                  />
+                )}
+              />
+            </Grid>
         </Grid>
 
         <CustomInput.TextField

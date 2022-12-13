@@ -4,8 +4,10 @@ import {
   Box,
   Button,
   Checkbox,
+  Chip,
   Dialog,
   Divider,
+  FormControl,
   FormControlLabel,
   Grid,
   IconButton,
@@ -22,10 +24,13 @@ import useStyles from './styles';
 import { useForm } from 'hooks/useForm';
 import { addMovie, updateMovie, useGetMovieById } from 'queries/movies';
 import { usegetActors } from 'queries/actor';
+import { usegetNationalities } from 'queries/nationality';
 
 //TODO: Add Column spacing, add close button
 export default function EditFilmDialog(props: any) {
   const classes = useStyles();
+
+  const rateOptions = ['P', 'C13', 'C16', 'C18'];
 
   const validate = (fieldValues = values) => {
     const tmp = { ...errors };
@@ -53,6 +58,7 @@ export default function EditFilmDialog(props: any) {
       description: '',
       rated: '',
       status: '',
+      Nationality: null,
       NationalityId: 0,
       Actors: [],
       Categories: [],
@@ -91,10 +97,17 @@ export default function EditFilmDialog(props: any) {
     handleCloseDialog();
   };
 
-  // console.log(props);
   const { isLoading, remove, data: editFilmData } = useGetMovieById(props.data);
-  // console.log(editFilmData);
-  if (editFilmData === undefined && props.data !== '0') {
+  const { isLoading: loadingNationalities, data: allNationalities } =
+    usegetNationalities();
+  console.log(allNationalities);
+  console.log(editFilmData);
+  if (
+    (editFilmData === undefined && props.data !== '0') ||
+    (editFilmData !== undefined &&
+      props.data != '0' &&
+      editFilmData.id.toString() !== props.data)
+  ) {
     remove();
   }
   useEffect(() => {
@@ -110,7 +123,7 @@ export default function EditFilmDialog(props: any) {
       fullWidth
       maxWidth="md"
     >
-      <Box className={classes.AddFilmBox}>
+      <Box className={classes.EditFilmBox}>
         <Typography
           sx={{
             textAlign: 'center',
@@ -124,7 +137,7 @@ export default function EditFilmDialog(props: any) {
         <Grid
           xs={12}
           container
-          columnSpacing={2}
+          spacing={2}
           sx={{ alignContent: 'center' }}
           item={true}
         >
@@ -138,148 +151,184 @@ export default function EditFilmDialog(props: any) {
               inputProps={{ maxLength: '64' }}
             />
           </Grid>
-          <Grid xs={1} item={true} />
           <Grid xs={3} item={true}>
             <InputLabel>Trạng thái</InputLabel>
             <Select
+              className={
+                values.status === 'active'
+                  ? classes.ActiveSelect
+                  : classes.InactiveSelect
+              }
               value={values.status}
               autoWidth
               label="Trạng thái"
+              IconComponent={() => null}
               onChange={(event: any) => {
                 setValues({ ...values, status: event.target.value });
               }}
             >
-              <MenuItem value={'active'}>Đang chiếu</MenuItem>
-              <MenuItem value={'inactive'}>Ngừng chiếu</MenuItem>
+              <MenuItem value={'active'} sx={{ background: 'green' }}>
+                Đang chiếu
+              </MenuItem>
+              <MenuItem value={'inactive'} sx={{ background: 'red' }}>
+                Ngừng chiếu
+              </MenuItem>
             </Select>
           </Grid>
-        </Grid>
-        <Grid xs={12} container columnSpacing={2} item={true}>
-          <Grid xs={6} item={true}>
-            <CustomInput.TextField
-              label="Thời lượng"
-              name="duration"
-              margin="dense"
-              type="number"
-              onChange={handleInputChange}
-              value={values.duration}
-              InputProps={{
-                endAdornment: (
-                  <InputAdornment position="start">Phút</InputAdornment>
-                ),
-              }}
-              inputProps={{ maxLength: '32' }}
-            />
+          <Grid xs={12} container spacing={3} item={true} sx={{ alignContent: 'center' }}>
+            <Grid xs={3} item={true}>
+              <CustomInput.TextField
+                label="Thời lượng"
+                name="duration"
+                margin="dense"
+                type="number"
+                onChange={handleInputChange}
+                value={values.duration}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="start">Phút</InputAdornment>
+                  ),
+                }}
+                inputProps={{ maxLength: '32' }}
+              />
+            </Grid>
+            <Grid xs={4} item={true}>
+              <CustomInput.DatePicker
+                label="Ngày khởi chiếu"
+                name="openingDay"
+                margin="dense"
+                value={values.openingDay}
+                inputProps={{ maxLength: '32' }}
+                onChange={(openingDay: any) => {
+                  if (openingDay === null) return;
+                  validate({ openingDay: openingDay });
+                  setValues({
+                    ...values,
+                    openingDay: openingDay,
+                  });
+                }}
+              />
+            </Grid>
+            <Grid xs={5} item={true}>
+            <FormControl fullWidth>
+              <InputLabel>Phân loại</InputLabel>
+              <Select
+                label="Phân loại"
+                value={values.rated}
+                IconComponent={() => null}
+                onChange={(event: any) => {
+                  setValues({ ...values, rated: event.target.value });
+                }}
+              >
+                <MenuItem value={'P'}>P - Phù hợp với mọi lứa tuổi</MenuItem>
+                <MenuItem value={'C13'}>C13 - Cấm trẻ em dưới 13 tuối</MenuItem>
+                <MenuItem value={'C16'}>C16 - Cấm trẻ em dưới 16 tuối</MenuItem>
+                <MenuItem value={'C18'}>C18 - Cấm người dưới 18 tuối</MenuItem>
+              </Select>
+            </FormControl>
+            </Grid>
           </Grid>
-          <Grid xs={6} item={true}>
-            <CustomInput.DatePicker
-              label="Ngày khởi chiếu"
-              name="openingDay"
-              margin="dense"
-              value={values.openingDay}
-              inputProps={{ maxLength: '32' }}
-              onChange={(openingDay: any) => {
-                if (openingDay === null) return;
-                validate({ openingDay: openingDay });
-                setValues({
-                  ...values,
-                  openingDay: openingDay,
-                });
-              }}
-            />
+          <Grid xs={12} container columnSpacing={2} item={true}>
+            <Grid xs={8} item={true}>
+              <CustomInput.TextField
+                label="Poster"
+                name="imageUrl"
+                onChange={handleInputChange}
+                value={values.imageUrl}
+                inputProps={{ maxLength: '64' }}
+              />
+            </Grid>
+            <Grid xs={8} item={true}>
+              <CustomInput.TextField
+                label="Trailer"
+                name="trailerUrl"
+                onChange={handleInputChange}
+                inputProps={{ maxLength: '64' }}
+              />
+            </Grid>
           </Grid>
-        </Grid>
-        <Grid xs={12} container columnSpacing={2} item={true}>
-          <Grid xs={6} item={true}>
+          <Grid xs={12} container item={true} spacing={2}>
+            <Grid xs={9} item={true}>
+              <Autocomplete
+                multiple
+                value={values.Actors}
+                options={loadingActors ? [] : allActors.rows}
+                loading={loadingActors}
+                getOptionLabel={(option: any) => option.fullName}
+                onChange={(event, value) =>
+                  setValues({ ...values, Actors: value.map(id => id) })
+                }
+                isOptionEqualToValue={(option, value) => option.id === value.id}
+                renderInput={params => (
+                  <TextField
+                    {...params}
+                    variant="standard"
+                    label="Diễn viên"
+                    placeholder="Thêm"
+                  />
+                )}
+              />
+            </Grid>
+            <Grid xs={3} item={true}>
+              <Autocomplete
+                options={loadingNationalities ? [] : allNationalities.rows}
+                loading={loadingNationalities}
+                getOptionLabel={(option: any) => option.name}
+                onChange={(event, value) =>
+                  setValues({
+                    ...values,
+                    NationalityId: value?.map((id: any) => id),
+                  })
+                }
+                isOptionEqualToValue={(option, value) => option.id === value.id}
+                value={values.Nationality}
+                renderInput={params => (
+                  <TextField
+                    {...params}
+                    variant="standard"
+                    label="Quốc gia"
+                    placeholder=""
+                  />
+                )}
+              />
+            </Grid>
+          </Grid>
+          <Grid xs={12} container spacing={2} item={true}></Grid>
+          <Grid xs={12} item={true} spacing={2}>
             <CustomInput.TextField
-              label="Poster"
-              name="imageUrl"
+              label="Mô tả"
+              name="description"
+              multiline
               onChange={handleInputChange}
-              value={values.imageUrl}
+              value={values.description}
               inputProps={{ maxLength: '64' }}
             />
           </Grid>
-          <Grid xs={6} item={true}>
-            <CustomInput.TextField
-              label="Trailer"
-              name="trailerUrl"
-              onChange={handleInputChange}
-              inputProps={{ maxLength: '64' }}
-            />
-          </Grid>
-        </Grid>
-
-        <Autocomplete
-          multiple
-          id="tags-standard"
-          value={values.Actors}
-          options={loadingActors ? [] : allActors.rows}
-          loading={loadingActors}
-          getOptionLabel={(option: any) => option.fullName}
-          onChange={(event, value) => setValues({ ...values, Actors: value })}
-          isOptionEqualToValue={(option, value) => option.id === value.id}
-          renderInput={params => (
-            <TextField
-              {...params}
-              variant="standard"
-              label="Diễn viên"
-              placeholder="Thêm"
-            />
-          )}
-        />
-        <Grid xs={12} container columnSpacing={2} item={true}>
-          <Grid xs={6} item={true}>
-            <CustomInput.TextField
-              label="Mã quốc gia"
-              name="NationalityId"
-              type="number"
-              value={values.NationalityId}
-              onChange={handleInputChange}
-              inputProps={{ maxLength: '32' }}
-            />
-          </Grid>
-          <Grid xs={6} item={true}>
-            <CustomInput.TextField
-              label="Phân loại"
-              name="rated"
-              onChange={handleInputChange}
-              inputProps={{ maxLength: '32' }}
-            />
-          </Grid>
-        </Grid>
-
-        <CustomInput.TextField
-          label="Mô tả"
-          name="description"
-          multiline
-          onChange={handleInputChange}
-          value={values.description}
-          inputProps={{ maxLength: '64' }}
-        />
-        <Grid item={true} container xs={12} columnSpacing={2}>
-          <Grid item={true} xs={6}>
-            <Button
-              fullWidth
-              variant="contained"
-              sx={{ mt: 2, p: 1, fontWeight: 'bold', color: 'white' }}
-              disableFocusRipple
-              className={classes.AddFilmButton}
-              onClick={handleCloseDialog}
-            >
-              Hủy thao tác
-            </Button>
-          </Grid>
-          <Grid item={true} xs={6}>
-            <Button
-              fullWidth
-              variant="contained"
-              sx={{ mt: 2, p: 1, fontWeight: 'bold', color: 'white' }}
-              disableFocusRipple
-              className={classes.AddFilmButton}
-              onClick={handleEditFilm}
-            >
-              Thay đổi
-            </Button>
+          <Grid item={true} container xs={12} columnSpacing={2}>
+            <Grid item={true} xs={6}>
+              <Button
+                fullWidth
+                variant="contained"
+                sx={{ mt: 2, p: 1, fontWeight: 'bold', color: 'white' }}
+                disableFocusRipple
+                className={classes.CancelButton}
+                onClick={handleCloseDialog}
+              >
+                Hủy thao tác
+              </Button>
+            </Grid>
+            <Grid item={true} xs={6}>
+              <Button
+                fullWidth
+                variant="contained"
+                sx={{ mt: 2, p: 1, fontWeight: 'bold', color: 'white' }}
+                disableFocusRipple
+                className={classes.EditFilmButton}
+                onClick={handleEditFilm}
+              >
+                Thay đổi
+              </Button>
+            </Grid>
           </Grid>
         </Grid>
       </Box>

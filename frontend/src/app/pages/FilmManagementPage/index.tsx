@@ -16,7 +16,6 @@ import EditFilmDialog from 'app/components/FilmDialog/EditFilmDialog';
 import { usegetNationalities } from 'queries/nationality';
 
 //TODO: Add search button
-//TODO: Add button to change film's status
 export default function FilmManagementPage() {
   const classes = useStyles();
   const [open, setOpen] = useState(false);
@@ -30,6 +29,7 @@ export default function FilmManagementPage() {
   };
 
   const handleClose = () => {
+    setEditRowId('0');
     setOpen(false);
   };
   const handleCloseEdit = () => {
@@ -37,15 +37,12 @@ export default function FilmManagementPage() {
   };
 
   const handleClickOpenEditPage = (params: any) => {
-    // console.log(params);
     setEditRowId(params.toString());
     setOpenEdit(true);
   };
 
   
   const { isLoading, data } = useGetMovies();
-  const {isLoading: loadingNationalities, data: nationalities} = usegetNationalities();
-  console.log(nationalities);
 
   const columns: GridColDef[] = [
     {
@@ -55,9 +52,6 @@ export default function FilmManagementPage() {
       headerAlign: 'center',
       align: 'center',
       headerClassName: 'collumnHeader',
-      // renderCell: (params: GridRenderCellParams<string>) => {
-      //   return params.value && <a href={params.value}>Poster</a>;
-      // },
     },
     {
       field: 'title',
@@ -135,7 +129,7 @@ export default function FilmManagementPage() {
         autoHeight
         page={page}
         pageSize={pageSize}
-        loading={isLoading || loadingNationalities}
+        loading={isLoading}
         onPageChange={newPage => setPage(newPage)}
         onPageSizeChange={newPageSize => setPageSize(newPageSize)}
         rowsPerPageOptions={[15, 30, 50]}
