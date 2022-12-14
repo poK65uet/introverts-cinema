@@ -84,7 +84,7 @@ export default function PaymentForm(props: PaymentFormProps) {
   const {
     refetch: cancelBill,
     isLoading: isCancelingBill,
-    remove: removeBillCancleData
+    remove: removeBillCancelData
   } = useCancelBill(billData?.bill.id, { onError: onCancelBillError })
 
   const handleVerifyBill = () => {
@@ -121,7 +121,7 @@ export default function PaymentForm(props: PaymentFormProps) {
       cancelBill()
       removeBillData()
       removeVerifyBillData()
-      removeBillCancleData()
+      removeBillCancelData()
     }
   }, [])
 
