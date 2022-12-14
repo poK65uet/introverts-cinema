@@ -8,7 +8,7 @@ const useStyles = makeStyles((theme: Theme) => ({
 
   activeTab: {
     transition: '0.5s',
-    textColor:  'primary !important',
+    textColor: 'primary !important',
     backgroundColor: 'orange !important',
     fontWeight: 'bold !important',
   },
@@ -21,11 +21,11 @@ const useStyles = makeStyles((theme: Theme) => ({
     display: 'flex',
     padding: '0 !important',
     borderRight: '1px solid #ccc',
-    backgroundColor: '#fff',
+    backgroundColor: '#d1e9ea',
     height: '100vh',
     float: 'left',
     textAlign: 'center',
-    '&.MuiDataGrid-main': {alignSelf: 'center !important'}
+    '&.MuiDataGrid-main': { alignSelf: 'center !important' },
   },
 }));
 
