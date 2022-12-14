@@ -19,8 +19,15 @@ export const getUpcomingMovies = async (): Promise<string[]> => {
 export const getMovieById = async (id: string | undefined): Promise<any> => {
   if (id === '0') return undefined;
   let response: AxiosResponse<any>;
-  response = await axios.get(`${config.apiEndpoint}/films/${id}`);
-
+  const token = sessionStorage.getItem('token');
+  const authenticationHeader = {
+      headers: {Authorization: `Bearer ${token}`}
+  }
+  try {
+    response = await axios.get(`${config.apiEndpoint}/films/${id}`, authenticationHeader);
+  } catch (e) {
+    return undefined;
+  }
   return response.data.data;
 };
 
@@ -32,15 +39,22 @@ export const useGetMovieById = (id: string | undefined, queryOpts?: any) =>
 
 export const getMovies = async (page: number, size: number): Promise<any> => {
   let response: AxiosResponse<any>;
-  response = await axios.get(`${config.apiEndpoint}/films/pagination`);
 
+  const token = sessionStorage.getItem('token');
+  const authenticationHeader = {
+      headers: {Authorization: `Bearer ${token}`}
+  }
+  
+  try {
+    response = await axios.get(`${config.apiEndpoint}/films/pagination?page=${page}&size=${size}`, authenticationHeader);
+  } catch (e) {
+    console.log(e);
+    return [];
+  }
   return response.data.data;
 };
 
-export const useGetMovies = () =>
-  useQuery(['get-movies'], () => getMovies(), {
-    refetchOnWindowFocus: false,
-  });
+export const useGetMovies = (page: number, size: number) => useQuery(['getMovies', page, size], () => getMovies(page, size));
 
 export const addMovie = async (
   id: string,
