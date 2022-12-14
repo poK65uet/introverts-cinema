@@ -52,15 +52,18 @@ export default function PaymentForm(props: PaymentFormProps) {
     dispatch(bookTicketActions.reSelectSeats())
   }
 
-  const onVerifyBillError = () => notify({
-    type: 'error',
-    content: 'Xác nhận thanh toán thất bại',
-    autocloseDelay: 1250
-  })
+  const onVerifyBillError = () => {
+    notify({
+      type: 'error',
+      content: 'Xác nhận thanh toán thất bại',
+      autocloseDelay: 1250
+    })
+    removeVerifyBillData()
+  }
 
   const onCancelBillError = () => notify({
     type: 'error',
-    content: 'Xác nhận thanh toán thất bại',
+    content: 'Hủy thanh toán thất bại',
     autocloseDelay: 1250
   })
 
@@ -108,12 +111,6 @@ export default function PaymentForm(props: PaymentFormProps) {
         dispatch(bookTicketActions.resetMovie())
         dispatch(bookTicketActions.paymentTimeOut())
       }, 2000);
-    } else {
-      notify({
-        type: 'warning',
-        content: 'Xác nhận không thành công',
-        autocloseDelay: 1250
-      })
     }
   }, [verifyBillData])
 
