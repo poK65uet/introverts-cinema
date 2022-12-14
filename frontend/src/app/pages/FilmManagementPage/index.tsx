@@ -41,7 +41,6 @@ export default function FilmManagementPage() {
     setOpenEdit(true);
   };
 
-  
   const updateRows = (newRows: readonly any[]) => {
     if (rows.length === 0) {
       setRows(newRows);
@@ -58,13 +57,13 @@ export default function FilmManagementPage() {
     if (run == newRows.length - 1) {
       return;
     }
-    console.log(newRows, run, newRows.slice(run - newRows.length + 1));
+    // console.log(newRows, run, newRows.slice(run - newRows.length + 1));
     setRows(rows.concat(newRows.slice(run - newRows.length + 1)));
-    console.log(rows);
+    // console.log(rows);
   };
 
   const { isLoading, data } = useGetMovies(page, pageSize);
-  console.log(page, pageSize, data);
+  // console.log(page, pageSize, data?.rows);
 
   useEffect(() => {
     if (data !== undefined) {
@@ -143,23 +142,21 @@ export default function FilmManagementPage() {
 
   return (
     <Box className={classes.filmTable}>
-      <AddFilmDialog
-        open={open}
-        onClose={handleClose}
-      />
+      <AddFilmDialog open={open} onClose={handleClose} />
       <EditFilmDialog
         data={editRowId}
         open={openEdit}
-        onClose={handleCloseEdit} />
+        onClose={handleCloseEdit}
+      />
       <Button className={classes.addButton} onClick={handleClickOpenAddPage}>
         Thêm phim mới
       </Button>
       <DataGrid
         autoHeight
-        page={page-1}
+        page={page - 1}
         pageSize={pageSize}
         loading={isLoading}
-        onPageChange={newPage => setPage(newPage+1)}
+        onPageChange={newPage => setPage(newPage + 1)}
         onPageSizeChange={newPageSize => setPageSize(newPageSize)}
         rowsPerPageOptions={[15, 30, 50]}
         rows={rows}

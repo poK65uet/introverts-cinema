@@ -2,7 +2,6 @@ import axios, { AxiosResponse } from 'axios';
 import config from 'config';
 import { useQuery } from 'react-query';
 
-
 export const getNewMovies = async (): Promise<string[]> => {
   let response: AxiosResponse<any>;
   response = await axios.get(`${config.apiEndpoint}/films/opening`);
@@ -21,10 +20,13 @@ export const getMovieById = async (id: string | undefined): Promise<any> => {
   let response: AxiosResponse<any>;
   const token = sessionStorage.getItem('token');
   const authenticationHeader = {
-      headers: {Authorization: `Bearer ${token}`}
-  }
+    headers: { Authorization: `Bearer ${token}` },
+  };
   try {
-    response = await axios.get(`${config.apiEndpoint}/films/${id}`, authenticationHeader);
+    response = await axios.get(
+      `${config.apiEndpoint}/films/${id}`,
+      authenticationHeader,
+    );
   } catch (e) {
     return undefined;
   }
@@ -42,11 +44,14 @@ export const getMovies = async (page: number, size: number): Promise<any> => {
 
   const token = sessionStorage.getItem('token');
   const authenticationHeader = {
-      headers: {Authorization: `Bearer ${token}`}
-  }
-  
+    headers: { Authorization: `Bearer ${token}` },
+  };
+
   try {
-    response = await axios.get(`${config.apiEndpoint}/films/pagination?page=${page}&size=${size}`, authenticationHeader);
+    response = await axios.get(
+      `${config.apiEndpoint}/films/pagination?page=${page}&size=${size}`,
+      authenticationHeader,
+    );
   } catch (e) {
     console.log(e);
     return [];
@@ -54,7 +59,8 @@ export const getMovies = async (page: number, size: number): Promise<any> => {
   return response.data.data;
 };
 
-export const useGetMovies = (page: number, size: number) => useQuery(['getMovies', page, size], () => getMovies(page, size));
+export const useGetMovies = (page: number, size: number) =>
+  useQuery(['getMovies', page, size], () => getMovies(page, size));
 
 export const addMovie = async (
   id: string,
@@ -74,23 +80,27 @@ export const addMovie = async (
   let response: AxiosResponse<any>;
   const token = sessionStorage.getItem('token');
   const authenticationHeader = {
-      headers: {Authorization: `Bearer ${token}`}
-  }
+    headers: { Authorization: `Bearer ${token}` },
+  };
   try {
-    response = await axios.post(`${config.apiEndpoint}/films/${id}`, {
-      title: title,
-      imageUrl: imageUrl,
-      trailerUrl: trailerUrl,
-      duration: duration,
-      openingDay: openingDay,
-      description: description,
-      rated: rated,
-      status: status,
-      NationalityId: NationalityId,
-      Categories: Categories,
-      Actors: Actors,
-      Directors: Directors,
-    }, authenticationHeader);
+    response = await axios.post(
+      `${config.apiEndpoint}/films/${id}`,
+      {
+        title: title,
+        imageUrl: imageUrl,
+        trailerUrl: trailerUrl,
+        duration: duration,
+        openingDay: openingDay,
+        description: description,
+        rated: rated,
+        status: status,
+        NationalityId: NationalityId,
+        Categories: Categories,
+        Actors: Actors,
+        Directors: Directors,
+      },
+      authenticationHeader,
+    );
   } catch (e) {
     console.log(e);
     return [];
@@ -117,23 +127,27 @@ export const updateMovie = async (
   let response: AxiosResponse<any>;
   const token = sessionStorage.getItem('token');
   const authenticationHeader = {
-      headers: {Authorization: `Bearer ${token}`}
-  }
+    headers: { Authorization: `Bearer ${token}` },
+  };
   try {
-    response = await axios.patch(`${config.apiEndpoint}/films/${id}`, {
-      title: title,
-      imageUrl: imageUrl,
-      trailerUrl: trailerUrl,
-      duration: duration,
-      openingDay: openingDay,
-      description: description,
-      rated: rated,
-      status: status,
-      Nationality: NationalityId,
-      Categories: Categories,
-      Actors: Actors,
-      Directors: Directors,
-    }, authenticationHeader);
+    response = await axios.patch(
+      `${config.apiEndpoint}/films/${id}`,
+      {
+        title: title,
+        imageUrl: imageUrl,
+        trailerUrl: trailerUrl,
+        duration: duration,
+        openingDay: openingDay,
+        description: description,
+        rated: rated,
+        status: status,
+        Nationality: NationalityId,
+        Categories: Categories,
+        Actors: Actors,
+        Directors: Directors,
+      },
+      authenticationHeader,
+    );
   } catch (e) {
     return [];
   }

@@ -115,6 +115,7 @@ export default function EditFilmDialog(props: any) {
   useEffect(() => {
     if (editFilmData !== undefined) {
       setValues({ ...editFilmData });
+      console.log(values);
     }
   }, [isLoading, props.data]);
 
@@ -177,13 +178,7 @@ export default function EditFilmDialog(props: any) {
               </MenuItem>
             </Select>
           </Grid>
-          <Grid
-            xs={12}
-            container
-            spacing={3}
-            item={true}
-            sx={{ alignContent: 'center' }}
-          >
+          <Grid xs={12} container spacing={3} item={true}>
             <Grid xs={3} item={true}>
               <CustomInput.TextField
                 label="Thời lượng"
@@ -200,12 +195,12 @@ export default function EditFilmDialog(props: any) {
                 inputProps={{ maxLength: '32' }}
               />
             </Grid>
-            <Grid xs={4} item={true}>
+            <Grid xs={3} item={true}>
               <CustomInput.DatePicker
                 label="Ngày khởi chiếu"
                 name="openingDay"
                 margin="dense"
-                value={values.openingDay}
+                value={values?.openingDay}
                 inputProps={{ maxLength: '32' }}
                 onChange={(openingDay: any) => {
                   if (openingDay === null) return;
@@ -268,6 +263,7 @@ export default function EditFilmDialog(props: any) {
                     {...params}
                     variant="standard"
                     label="Thể loại"
+                    margin="normal"
                   />
                 )}
               />
@@ -298,6 +294,7 @@ export default function EditFilmDialog(props: any) {
                     {...params}
                     variant="standard"
                     label="Đạo diễn"
+                    margin="normal"
                   />
                 )}
               />
@@ -334,10 +331,11 @@ export default function EditFilmDialog(props: any) {
                   setValues({
                     ...values,
                     NationalityId: value?.map((id: any) => id),
+                    Nationality: value,
                   })
                 }
                 isOptionEqualToValue={(option, value) => option.id === value.id}
-                value={values.Nationality}
+                value={values?.Nationality}
                 renderInput={params => (
                   <TextField
                     {...params}
@@ -350,7 +348,7 @@ export default function EditFilmDialog(props: any) {
             </Grid>
           </Grid>
           <Grid xs={12} container spacing={2} item={true}></Grid>
-          <Grid xs={12} item={true} spacing={2}>
+          <Grid xs={12} item={true}>
             <CustomInput.TextField
               label="Mô tả"
               name="description"
