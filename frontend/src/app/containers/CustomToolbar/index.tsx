@@ -1,4 +1,5 @@
 import { GridToolbarColumnsButton, GridToolbarContainer, GridToolbarDensitySelector, GridToolbarExport, GridToolbarFilterButton } from "@mui/x-data-grid";
+import SearchBar from "app/components/SearchBar";
 
 export default function CustomToolbar() {
     return (
@@ -7,6 +8,7 @@ export default function CustomToolbar() {
           <GridToolbarFilterButton nonce={undefined} onResize={undefined} onResizeCapture={undefined} />
           <GridToolbarDensitySelector nonce={undefined} onResize={undefined} onResizeCapture={undefined} />
           <GridToolbarExport />
+          <SearchBar />
         </GridToolbarContainer>
       );
 }
