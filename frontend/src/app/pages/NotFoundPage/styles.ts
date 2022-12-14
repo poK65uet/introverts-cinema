@@ -17,6 +17,7 @@ const useStyles = makeStyles((theme: Theme) => ({
       padding: '5rem',
     },
   },
+  
 }));
 
 export default useStyles;

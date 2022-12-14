@@ -1,12 +1,21 @@
 import Box from '@mui/material/Box';
 import useStyles from './styles';
-import { DataGrid, GridColDef, GridRenderCellParams, GridToolbar } from '@mui/x-data-grid';
+import {
+  DataGrid,
+  GridColDef,
+  GridRenderCellParams,
+  GridToolbar,
+} from '@mui/x-data-grid';
 // import DeleteIcon from '@mui/icons-material/Delete';
 // import EditIcon from '@mui/icons-material/Edit';
 // import { IconButton, Typography } from '@mui/material';
 import { useGetUsers } from '../../../queries/user';
+import SearchIcon from '@mui/icons-material/Search';
 import { useState, useEffect } from 'react';
-import { Button, Typography } from '@mui/material';
+import { Button, IconButton, InputBase, Paper, Typography } from '@mui/material';
+import { Search } from '@mui/icons-material';
+import SearchBar from 'app/components/SearchBar';
+import CustomToolbar from 'app/containers/CustomToolbar';
 
 export default function CustomerManagementPage() {
   const classes = useStyles();
@@ -39,9 +48,7 @@ export default function CustomerManagementPage() {
     if (run == newRows.length - 1) {
       return;
     }
-    console.log(newRows, run, newRows.slice(run - newRows.length + 1));
     setRows(rows.concat(newRows.slice(run - newRows.length + 1)));
-    console.log(rows);
   };
 
   const { data, isLoading } = useGetUsers(page, pageSize);
@@ -92,7 +99,6 @@ export default function CustomerManagementPage() {
           openingDay.getFullYear()
         );
       },
-      
     },
     {
       field: 'createdAt',
@@ -135,12 +141,15 @@ export default function CustomerManagementPage() {
   ];
   return (
     <Box className={classes.customerTable}>
+      {/* <div className={classes.searchWrapper}> */}
+      {/* <SearchBar /> */}
+      {/* </div> */}
       <DataGrid
         autoHeight
-        page={page-1}
+        page={page - 1}
         pageSize={pageSize}
         loading={isLoading}
-        onPageChange={newPage => updatePage(newPage+1)}
+        onPageChange={newPage => updatePage(newPage + 1)}
         onPageSizeChange={newPageSize => updatePageSize(newPageSize)}
         rowsPerPageOptions={[15, 30, 50]}
         rowCount={count}
@@ -148,7 +157,13 @@ export default function CustomerManagementPage() {
         disableSelectionOnClick
         columns={columns}
         components={{
-          Toolbar: GridToolbar,
+          Toolbar: CustomToolbar, 
+        }}
+        componentsProps={{
+          toolbar: {
+            showQuickFilter: true,
+            quickFilterProps: { debounceMs: 500 },
+          },
         }}
       />
     </Box>

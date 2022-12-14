@@ -22,7 +22,7 @@ export default function FilmManagementPage() {
   const [count, setCount] = useState<number>(0);
   const [rows, setRows] = useState<readonly any[]>([]);
   const [page, setPage] = useState<number>(1);
-  const [pageSize, setPageSize] = useState<number>(5);
+  const [pageSize, setPageSize] = useState<number>(15);
 
   const handleClickOpenAddPage = () => {
     setOpen(true);
@@ -161,7 +161,7 @@ export default function FilmManagementPage() {
         loading={isLoading}
         onPageChange={newPage => setPage(newPage+1)}
         onPageSizeChange={newPageSize => setPageSize(newPageSize)}
-        rowsPerPageOptions={[5, 30, 50]}
+        rowsPerPageOptions={[15, 30, 50]}
         rows={rows}
         rowCount={count}
         disableSelectionOnClick
