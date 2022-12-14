@@ -30,6 +30,7 @@ const createBill = async (req: Request) => {
 		});
 
 		if (!showtime) {
+			t.commit();
 			return {
 				message: 'Showtime invalid',
 				status: ResponeCodes.BAD_REQUEST
@@ -37,6 +38,7 @@ const createBill = async (req: Request) => {
 		}
 		var totalPrice = 0;
 		if (payload.seats.length > MAX_SEAT) {
+			t.commit();
 			return {
 				message: 'Number of seats invalid',
 				status: ResponeCodes.BAD_REQUEST
@@ -132,12 +134,14 @@ const cancelBill = async (req: Request) => {
 		});
 
 		if (!bill || bill.paymentStatus === PaymentStatus.PAID) {
+			t.commit();
 			return {
 				message: 'Bill invalid',
 				status: ResponeCodes.BAD_REQUEST
 			};
 		}
 		if (bill.User.id !== req.user.id) {
+			t.commit();
 			return {
 				message: 'Error Authorization',
 				status: ResponeCodes.BAD_REQUEST
@@ -195,6 +199,7 @@ const verifyBillPayment = async (req: Request) => {
 			]
 		});
 		if (!bill) {
+			t.commit();
 			return {
 				message: 'Bill invalid!',
 				status: ResponeCodes.BAD_REQUEST
@@ -202,6 +207,7 @@ const verifyBillPayment = async (req: Request) => {
 		}
 
 		if (bill.User.id !== req.user.id) {
+			t.commit();
 			return {
 				message: 'Error Authorization',
 				status: ResponeCodes.BAD_REQUEST
@@ -209,6 +215,7 @@ const verifyBillPayment = async (req: Request) => {
 		}
 
 		if (bill.paymentStatus === PaymentStatus.PAID) {
+			t.commit();
 			return {
 				message: 'Payment had been paid',
 				status: ResponeCodes.BAD_REQUEST
@@ -217,14 +224,15 @@ const verifyBillPayment = async (req: Request) => {
 
 		const startTime = new Date(Date.now());
 		let isPaid = false;
-		while (timeDiffToMinute(new Date(Date.now()), startTime) <= 0.5) {
+		while (timeDiffToMinute(new Date(Date.now()), startTime) <= 0.08) {
 			isPaid = await verifyBillTransaction(bill);
 			if (isPaid) {
-				console.log(isPaid);
-
-				await bill.update({
-					paymentStatus: PaymentStatus.PAID
-				});
+				await bill.update(
+					{
+						paymentStatus: PaymentStatus.PAID
+					},
+					{ transaction: t }
+				);
 
 				await createTicketForBill(bill, t);
 				break;
@@ -233,12 +241,13 @@ const verifyBillPayment = async (req: Request) => {
 		t.commit();
 		if (isPaid) {
 			return {
-				data: 0,
+				data: true,
 				message: 'Successfully',
 				status: ResponeCodes.OK
 			};
 		} else {
 			return {
+				data: false,
 				message: `Not found payment`,
 				status: ResponeCodes.BAD_REQUEST
 			};
