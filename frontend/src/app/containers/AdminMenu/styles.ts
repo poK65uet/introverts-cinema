@@ -16,7 +16,7 @@ const useStyles = makeStyles((theme: Theme) => ({
   wrapper: {},
 
   adminMenu: {
-    width: 'fit-content !important',
+    width: '300px !important',
     minWidth: '17%',
     display: 'flex',
     padding: '0 !important',
@@ -26,6 +26,8 @@ const useStyles = makeStyles((theme: Theme) => ({
     float: 'left',
     textAlign: 'center',
     '&.MuiDataGrid-main': { alignSelf: 'center !important' },
+    position: 'fixed',
+    zIndex: 11,
   },
 }));
 
