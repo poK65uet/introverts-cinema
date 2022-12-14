@@ -1,6 +1,6 @@
+import { MAX_PAY_TIME } from 'api/bill/service';
 import { Showtime } from 'databases/models';
 import Seat, { SeatModel } from 'databases/models/Seat';
-import { Request } from 'express';
 import ResponeCodes from 'utils/constants/ResponeCode';
 import SeatStatus from 'utils/constants/SeatStatus';
 import { timeDiffToMinute } from 'utils/helpers/timeService';
@@ -25,7 +25,7 @@ const getAllSeatByShowtime = async (showtimeId: number) => {
 			]
 		});
 
-		data = statusMapping(seatList);
+		data = await updateSeatStatus(seatList);
 		message = 'Get successfully!';
 		status = ResponeCodes.OK;
 
@@ -39,13 +39,20 @@ const getAllSeatByShowtime = async (showtimeId: number) => {
 	}
 };
 
-const statusMapping = (seatList: SeatModel[]) => {
-	return seatList.map(seat => {
-		if (seat.status === SeatStatus.BOOKING && timeDiffToMinute(seat.updatedAt, new Date(Date.now())) > 15) {
-			seat.status = SeatStatus.UN_BOOKED;
-		}
-		return seat;
-	});
+const updateSeatStatus = async (seatList: SeatModel[]) => {
+	return await Promise.all(
+		seatList.map(async seat => {
+			if (
+				seat.status === SeatStatus.BOOKING &&
+				timeDiffToMinute(seat.updatedAt, new Date(Date.now())) > MAX_PAY_TIME
+			) {
+				await seat.update({
+					status: SeatStatus.UN_BOOKED
+				});
+			}
+			return seat;
+		})
+	);
 };
 
 export { getAllSeatByShowtime };

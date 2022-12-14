@@ -1,24 +1,18 @@
 import axios, { AxiosResponse } from 'axios';
 import config from 'config';
 
-export const register = async (
+export const resetPassword = async (
   email: string,
   password: string,
   otp: number,
-  fullName: string,
-  phone: string,
-  birthDay: string,
 ): Promise<string> => {
   let response: AxiosResponse<any>;
 
-  response = await axios.post(`${config.apiEndpoint}/register`, {
+  response = await axios.patch(`${config.apiEndpoint}/forgot/reset-password`, {
     email: email,
     password: password,
     code: otp,
-    fullName: fullName,
-    phone: phone,
-    birthDay: birthDay,
   });
 
-  return response.data.status;
+  return response.data.data;
 };

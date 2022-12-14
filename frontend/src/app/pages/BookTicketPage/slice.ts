@@ -10,7 +10,13 @@ export interface BookTicketState {
   isLoading: boolean;
   selectedMovie: string;
   selectedShowtime: any;
-  selectedSeats: { id: number; name: string }[];
+  selectedSeats: {
+    id: number;
+    showtimeId: number;
+    name: string;
+    seatCol?: number;
+    seatRow?: number;
+  }[];
   activeStep: BookingStep;
   completedSteps: { [index: number]: boolean };
   stepBack: boolean;
@@ -21,7 +27,7 @@ const initialState: BookTicketState = {
   isLoading: false,
   selectedMovie: '0',
   selectedShowtime: undefined,
-  selectedSeats: <{ id: number; name: string }[]>[],
+  selectedSeats: <{ id: number; showtimeId: number; name: string }[]>[],
   activeStep: BookingStep.SELECT_MOVIE,
   completedSteps: {},
   stepBack: false,
@@ -66,7 +72,10 @@ export const bookTicketSlice = createSlice({
     selectSeat: (state, action) => {
       state.selectedSeats.push({
         id: action.payload.id,
+        showtimeId: action.payload.showtimeId,
         name: action.payload.name,
+        seatCol: action.payload.seatCol,
+        seatRow: action.payload.seatRow,
       });
       state.selectedSeats = current(state.selectedSeats).sort(
         (seat1, seat2) => {
@@ -77,7 +86,10 @@ export const bookTicketSlice = createSlice({
     unselectSeat: (state, action) => {
       let seat = {
         id: action.payload.id,
+        showtimeId: action.payload.showtimeId,
         name: action.payload.name,
+        seatCol: action.payload.seatCol,
+        seatRow: action.payload.seatRow,
       };
       let stateTemp = state.selectedSeats;
 
@@ -103,8 +115,17 @@ export const bookTicketSlice = createSlice({
     startPayment: (state, action) => {
       if (state.timeStartPayment == 0) state.timeStartPayment = action.payload;
     },
+    paymentDone: state => {
+      state.completedSteps[BookingStep.MAKE_PAYMENT] = true;
+      state.stepBack = false;
+    },
     paymentTimeOut: state => {
       state.timeStartPayment = 0;
+    },
+    resetPayment: state => {
+      state.completedSteps[BookingStep.MAKE_PAYMENT] = false;
+      state.activeStep = BookingStep.SELECT_MOVIE;
+      state.stepBack = true;
     },
   },
 });

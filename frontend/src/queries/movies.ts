@@ -5,61 +5,42 @@ import { useQuery } from 'react-query';
 
 export const getNewMovies = async (): Promise<string[]> => {
   let response: AxiosResponse<any>;
-  try {
-    response = await axios.get(`${config.apiEndpoint}/films/opening`);
-  } catch (e) {
-    return [''];
-  }
+  response = await axios.get(`${config.apiEndpoint}/films/opening`);
 
   return response.data.data;
 };
 
 export const getUpcomingMovies = async (): Promise<string[]> => {
   let response: AxiosResponse<any>;
-  try {
-    response = await axios.get(`${config.apiEndpoint}/films/upcoming`);
-  } catch (e) {
-    return [''];
-  }
+  response = await axios.get(`${config.apiEndpoint}/films/upcoming`);
 
   return response.data.data;
 };
 export const getMovieById = async (id: string | undefined): Promise<any> => {
-  if(id === '0') return undefined;
+  if (id === '0') return undefined;
   let response: AxiosResponse<any>;
-  const token = sessionStorage.getItem('token');
-  const authenticationHeader = {
-      headers: {Authorization: `Bearer ${token}`}
-  }
-  try {
-    response = await axios.get(`${config.apiEndpoint}/films/${id}`, authenticationHeader);
-  } catch (e) {
-    return undefined;
-  }
+  response = await axios.get(`${config.apiEndpoint}/films/${id}`);
+
   return response.data.data;
 };
 
-export const useGetMovieById = (id: string | undefined) =>
-  useQuery(['getMovieById'], () => getMovieById(id));
+export const useGetMovieById = (id: string | undefined, queryOpts?: any) =>
+  useQuery(['get-movie-by-id'], () => getMovieById(id), {
+    refetchOnWindowFocus: false,
+    ...queryOpts,
+  });
 
 export const getMovies = async (page: number, size: number): Promise<any> => {
   let response: AxiosResponse<any>;
+  response = await axios.get(`${config.apiEndpoint}/films/pagination`);
 
-  const token = sessionStorage.getItem('token');
-  const authenticationHeader = {
-      headers: {Authorization: `Bearer ${token}`}
-  }
-  
-  try {
-    response = await axios.get(`${config.apiEndpoint}/films/pagination?page=${page}&size=${size}`, authenticationHeader);
-  } catch (e) {
-    console.log(e);
-    return [];
-  }
   return response.data.data;
 };
 
-export const useGetMovies = (page: number, size: number) => useQuery(['getMovies', page, size], () => getMovies(page, size));
+export const useGetMovies = () =>
+  useQuery(['get-movies'], () => getMovies(), {
+    refetchOnWindowFocus: false,
+  });
 
 export const addMovie = async (
   id: string,

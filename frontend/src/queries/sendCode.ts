@@ -1,16 +1,24 @@
 import axios, { AxiosResponse } from 'axios';
 import config from 'config';
 
-export const sendCode = async (
+export const sendRegisterCode = async (
   email: string | undefined,
-): Promise<string | boolean> => {
+): Promise<string> => {
   let response: AxiosResponse<any>;
-  try {
-    response = await axios.post(`${config.apiEndpoint}/register/sendCode`, {
-      email: email,
-    });
-  } catch (e) {
-    return false;
-  }
+  response = await axios.post(`${config.apiEndpoint}/register/send-code`, {
+    email: email,
+  });
+
+  return response.data.status;
+};
+
+export const sendForgotPasswordCode = async (
+  email: string | undefined,
+): Promise<string> => {
+  let response: AxiosResponse<any>;
+  response = await axios.post(`${config.apiEndpoint}/forgot/send-code`, {
+    email: email,
+  });
+
   return response.data.status;
 };

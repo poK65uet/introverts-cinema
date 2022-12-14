@@ -3,10 +3,15 @@ import { login } from 'queries/login';
 import { getUserProfile } from 'queries/user';
 import { notify } from 'app/components/MasterDialog/index';
 
+export enum DialogActions {
+  LOGIN = 'login',
+  REGISTER = 'register',
+  FORGOT_PASSWORD = 'forgot-password',
+}
 export interface LoginState {
   isLoggedin: boolean;
   isLoading: boolean;
-  dialogAction: 'login' | 'register';
+  dialogAction: DialogActions;
   user: any;
 }
 
@@ -16,7 +21,7 @@ const initialState: LoginState = {
     sessionStorage.getItem('token') !== null,
   user: undefined,
   isLoading: false,
-  dialogAction: 'login',
+  dialogAction: DialogActions.LOGIN,
 };
 
 export const loginSlice = createSlice({

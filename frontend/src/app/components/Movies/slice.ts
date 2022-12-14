@@ -72,7 +72,7 @@ export const moviesSlice = createSlice({
 });
 
 export const getNewMoviesThunk = createAsyncThunk(
-  'movies/newMovies',
+  'movies/new-movies',
   async () => {
     const recievedData = await getNewMovies();
     return recievedData;
@@ -80,7 +80,7 @@ export const getNewMoviesThunk = createAsyncThunk(
 );
 
 export const getUpcomingMoviesThunk = createAsyncThunk(
-  'movies/upcomingMovies',
+  'movies/upcoming-movies',
   async () => {
     const recievedData = await getUpcomingMovies();
     return recievedData;

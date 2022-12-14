@@ -32,7 +32,7 @@ export default function ConfirmDialog(props: ConfirmDialogProps) {
 				</Typography>
 			</DialogTitle>
 			<Divider variant='middle' />
-			<DialogContent>
+			<DialogContent className={classes.content} >
 				<Typography variant='body1'>
 					{props.content}
 				</Typography>

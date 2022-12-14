@@ -226,7 +226,7 @@ export default function AppBar() {
           open={openOpt}
           anchorEl={anchorRef.current}
           role={undefined}
-          placement="bottom-start"
+          placement='bottom-start'
           transition
           disablePortal
           onResize={onResize}

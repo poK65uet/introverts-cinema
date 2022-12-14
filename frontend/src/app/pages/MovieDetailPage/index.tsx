@@ -1,24 +1,36 @@
-import React, { useEffect } from 'react'
-import { Button, CardMedia, Container, Typography } from '@mui/material';
-import RatedTag from 'app/components/RatedTag/index';
+import React, { useEffect, useState } from 'react'
+import { Button, CardMedia, Container, IconButton, Typography } from '@mui/material';
 import Grid from '@mui/material/Unstable_Grid2';
 import { RootState } from 'store';
 import { useSelector, useDispatch } from 'react-redux';
 import { Link, useParams } from 'react-router-dom';
 import { useGetMovieById } from 'queries/movies';
 import useStyles from './styles';
-import { Update as DurationIcon } from '@mui/icons-material';
+import { PlayCircleTwoTone, Update as DurationIcon } from '@mui/icons-material';
+import RatedTag from 'app/components/RatedTag/index';
+import VideoPlayer from 'app/components/VideoPlayer';
 import NotFoundPage from 'app/pages/NotFoundPage/index';
 import { bookTicketActions } from '../BookTicketPage/slice';
-import paths from 'paths';
 import { formatDate } from 'utils/date';
-import { moviesActions } from '../../components/Movies/slice';
+import { moviesActions } from 'app/components/Movies/slice';
+import { notify } from 'app/components/MasterDialog';
+import paths from 'paths';
 
 export default function MovieDetailPage() {
 
-  let { movieId } = useParams<{ movieId: string | undefined }>()
+  const { movieId } = useParams<{ movieId: string | undefined }>()
+  const [showTrailer, setShowTrailer] = useState(false)
 
-  const { data: movie, isLoading } = useGetMovieById(movieId)
+  const onGetMovieError = () => {
+    notify({
+      type: 'error',
+      content: 'Không tìm thấy phim, hãy thử lại',
+      autocloseDelay: 1250
+    })
+    dispatch(moviesActions.loadingDone)
+  }
+
+  const { data: movie, isLoading } = useGetMovieById(movieId, { onError: onGetMovieError })
 
   useEffect(() => {
     window.scrollTo({
@@ -32,6 +44,13 @@ export default function MovieDetailPage() {
     isLoading ? dispatch(moviesActions.loading()) : dispatch(moviesActions.loadingDone())
   }, [isLoading])
 
+  const handleShowTrailer = () => {
+    setShowTrailer(true)
+  }
+
+  const handleCloseTrailer = () => {
+    setShowTrailer(false)
+  }
 
   const handleClickBookTicket = () => {
     dispatch(bookTicketActions.selectMovie(movieId))
@@ -72,14 +91,26 @@ export default function MovieDetailPage() {
               </Typography>
             </Grid>
             <Grid xs={12} mt='auto'>
-              <Grid xs={12} display='inline-flex' alignItems='center'>
-                <Link to={paths.BookTicketPage} style={{ all: 'unset' }}>
-                  <Button variant='contained' disableFocusRipple
-                    onClick={handleClickBookTicket}
-                    sx={{ color: 'ButtonHighlight', fontSize: '0.75em', my: 2 }} >
-                    Đặt vé
-                  </Button>
-                </Link>
+              <Grid xs={12} container>
+                <Grid xs={1.15} display='inline-flex' alignItems='center'>
+                  <Link to={paths.BookTicketPage} style={{ all: 'unset' }}>
+                    <Button variant='contained' disableFocusRipple
+                      onClick={handleClickBookTicket}
+                      sx={{ color: 'ButtonHighlight', fontSize: '0.75em', my: 2 }} >
+                      Đặt vé
+                    </Button>
+                  </Link>
+                </Grid>
+                <Grid xs={10.85} display='inline-flex' alignItems='center'>
+                  <IconButton
+                    sx={{ p: 0, fontSize: '2.25em', '&:hover': { bgcolor: 'transparent' } }}
+                    onClick={handleShowTrailer}>
+                    <PlayCircleTwoTone fontSize='inherit' color='secondary' />
+                  </IconButton>
+                  <VideoPlayer
+                    trailer={movie.trailerUrl}
+                    show={showTrailer} onClose={handleCloseTrailer} />
+                </Grid>
               </Grid>
               <Grid xs={12} display='inline-flex' alignItems='center'>
                 {movie.rated ?

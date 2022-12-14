@@ -6,10 +6,6 @@ import {
 	InferCreationAttributes,
 	Model,
 	HasManyGetAssociationsMixin,
-	HasManyAddAssociationMixin,
-	HasManyAddAssociationsMixin,
-	HasManyRemoveAssociationMixin,
-	HasManyRemoveAssociationsMixin,
 	NonAttribute,
 	HasManySetAssociationsMixin
 } from 'sequelize';
@@ -25,8 +21,8 @@ export interface UserModel extends Model<InferAttributes<UserModel>, InferCreati
 	birthDay: Date;
 	createdAt: CreationOptional<Date>;
 	updatedAt: CreationOptional<Date>;
-	Roles?: NonAttribute<RoleModel[]>;
 
+	Roles?: NonAttribute<RoleModel[]>;
 	setRoles: HasManySetAssociationsMixin<RoleModel, RoleModel['id']>;
 }
 

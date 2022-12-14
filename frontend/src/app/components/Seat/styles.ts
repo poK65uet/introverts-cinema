@@ -27,10 +27,9 @@ const useStyles = makeStyles(() => ({
 
   booked: {
     color: '#E74C3C',
-    cursor: 'not-allowed',
   },
 
-  waiting: {
+  booking: {
     color: '#F1C40F',
     transition: '0.1s !important',
     '&:hover': {

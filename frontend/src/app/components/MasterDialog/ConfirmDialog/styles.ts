@@ -3,17 +3,19 @@ import { Theme } from '@mui/material';
 
 const useStyles = makeStyles((theme: Theme) => ({
   dialog: {
-    width: 'fit-content',
+    width: 'min-content',
     minWidth: '22.5vw',
     overflow: 'hidden !important',
     zIndex: 10,
   },
   title: {
     display: 'flex',
-    padding: '8px 12px !important',
+    padding: '18px 12px !important',
     alignItems: 'center',
   },
-  content: {},
+  content: {
+    margin: '12px auto',
+  },
 
   button: {
     width: '50%',
