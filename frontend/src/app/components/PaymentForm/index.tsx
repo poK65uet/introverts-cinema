@@ -52,7 +52,23 @@ export default function PaymentForm(props: PaymentFormProps) {
     dispatch(bookTicketActions.reSelectSeats())
   }
 
-  const onVerifyBillError = () => {
+  const handleVerifyBillSuccess = () => {
+    notify({
+      type: 'success',
+      content: 'Thanh toán thành công',
+      autocloseDelay: 2000
+    })
+    dispatch(bookTicketActions.paymentDone())
+    dispatch(bookTicketActions.resetPayment())
+    dispatch(bookTicketActions.resetSeat())
+    dispatch(bookTicketActions.resetShowtime())
+    dispatch(bookTicketActions.resetMovie())
+    setTimeout(() => {
+      dispatch(bookTicketActions.paymentTimeOut())
+    }, 500);
+  }
+
+  const handleVerifyBillError = () => {
     notify({
       type: 'error',
       content: 'Xác nhận thanh toán thất bại',
@@ -79,12 +95,15 @@ export default function PaymentForm(props: PaymentFormProps) {
     refetch: verifyBill,
     isLoading: isVerifyingBill,
     remove: removeVerifyBillData
-  } = useVerifyBill(billData?.bill.id, { onError: onVerifyBillError })
+  } = useVerifyBill(billData?.bill.id, {
+    onSuccess: handleVerifyBillSuccess,
+    onError: handleVerifyBillError
+  })
 
   const {
     refetch: cancelBill,
     isLoading: isCancelingBill,
-    remove: removeBillCancleData
+    remove: removeBillCancelData
   } = useCancelBill(billData?.bill.id, { onError: onCancelBillError })
 
   const handleVerifyBill = () => {
@@ -97,31 +116,13 @@ export default function PaymentForm(props: PaymentFormProps) {
   }
 
   useEffect(() => {
-    if (verifyBillData == 0) {
-      notify({
-        type: 'success',
-        content: 'Thanh toán thành công',
-        autocloseDelay: 2000
-      })
-      dispatch(bookTicketActions.paymentDone())
-      setTimeout(() => {
-        dispatch(bookTicketActions.resetPayment())
-        dispatch(bookTicketActions.resetSeat())
-        dispatch(bookTicketActions.resetShowtime())
-        dispatch(bookTicketActions.resetMovie())
-        dispatch(bookTicketActions.paymentTimeOut())
-      }, 2000);
-    }
-  }, [verifyBillData])
-
-  useEffect(() => {
     createBill()
 
     return () => {
       cancelBill()
       removeBillData()
       removeVerifyBillData()
-      removeBillCancleData()
+      removeBillCancelData()
     }
   }, [])
 
