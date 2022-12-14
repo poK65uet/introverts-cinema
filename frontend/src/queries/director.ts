@@ -2,14 +2,14 @@ import axios, { AxiosResponse } from 'axios';
 import config from 'config';
 import { useQuery } from 'react-query';
 
-export const getActors = async (): Promise<any> => {
+export const getDirectors = async (): Promise<any> => {
   let response: AxiosResponse<any>;
   const token = sessionStorage.getItem('token');
   const authenticationHeader = {
       headers: {Authorization: `Bearer ${token}`}
   }
   try {
-    response = await axios.get(`${config.apiEndpoint}/actors/pagination`, authenticationHeader);
+    response = await axios.get(`${config.apiEndpoint}/directors/pagination`, authenticationHeader);
   } catch (e) {
     console.log(e);
     return [];
@@ -17,26 +17,29 @@ export const getActors = async (): Promise<any> => {
   return response.data.data;
 };
 
-export const usegetActors = () => useQuery(['getActors'], () => getActors());
+export const useGetDirectors = () => useQuery(['getDirectors'], () => getDirectors(), {
+  // enabled: false,
+  // refetchOnWindowFocus: false,
+});
 
-export const getActorByID = async (id: string | undefined): Promise<any> => {
+export const getDirectorByID = async (id: string | undefined): Promise<any> => {
   let response: AxiosResponse<any>;
   const token = sessionStorage.getItem('token');
   const authenticationHeader = {
       headers: {Authorization: `Bearer ${token}`}
   }
   try {
-    response = await axios.get(`${config.apiEndpoint}/actors/${id}`);
+    response = await axios.get(`${config.apiEndpoint}/directors/${id}`);
   } catch (e) {
     return [];
   }
   return response.data.data;
 };
 
-export const usegetActorByID = (id: string | undefined) =>
-  useQuery(['getActorByID'], () => getActorByID(id));
+export const usegetDirectorByID = (id: string | undefined) =>
+  useQuery(['getDirectorByID'], () => getDirectorByID(id));
 
-export const addActor = async (
+export const addDirector = async (
   fullName: string,
   birthDay?: Date,
   Nationality?: number,
@@ -47,7 +50,7 @@ export const addActor = async (
       headers: {Authorization: `Bearer ${token}`}
   }
   try {
-    response = await axios.post(`${config.apiEndpoint}/actors`, {
+    response = await axios.post(`${config.apiEndpoint}/directors`, {
       fullName: fullName,
       birthDay: birthDay,
       Nationality: Nationality,
@@ -58,7 +61,7 @@ export const addActor = async (
   return response.data.data;
 };
 
-export const updateActor = async (
+export const updateDirector = async (
     fullName: string,
     birthDay?: Date,
     Nationality?: number,
@@ -69,7 +72,7 @@ export const updateActor = async (
         headers: {Authorization: `Bearer ${token}`}
     }
     try {
-      response = await axios.patch(`${config.apiEndpoint}/actors`, {
+      response = await axios.patch(`${config.apiEndpoint}/directors`, {
         fullName: fullName,
         birthDay: birthDay,
         Nationality: Nationality,

@@ -2,41 +2,46 @@ import axios, { AxiosResponse } from 'axios';
 import config from 'config';
 import { useQuery } from 'react-query';
 
-export const getActors = async (): Promise<any> => {
+
+export const getNationalityByID = async (id: string | undefined): Promise<any> => {
   let response: AxiosResponse<any>;
   const token = sessionStorage.getItem('token');
   const authenticationHeader = {
       headers: {Authorization: `Bearer ${token}`}
   }
   try {
-    response = await axios.get(`${config.apiEndpoint}/actors/pagination`, authenticationHeader);
-  } catch (e) {
-    console.log(e);
-    return [];
-  }
-  return response.data.data;
-};
-
-export const usegetActors = () => useQuery(['getActors'], () => getActors());
-
-export const getActorByID = async (id: string | undefined): Promise<any> => {
-  let response: AxiosResponse<any>;
-  const token = sessionStorage.getItem('token');
-  const authenticationHeader = {
-      headers: {Authorization: `Bearer ${token}`}
-  }
-  try {
-    response = await axios.get(`${config.apiEndpoint}/actors/${id}`);
+    response = await axios.get(`${config.apiEndpoint}/nationalities/${id}`);
   } catch (e) {
     return [];
   }
   return response.data.data;
 };
 
-export const usegetActorByID = (id: string | undefined) =>
-  useQuery(['getActorByID'], () => getActorByID(id));
+export const usegetNationalityByID = (id: string | undefined) =>
+  useQuery(['getNationalityByID'], () => getNationalityByID(id));
 
-export const addActor = async (
+  export const getNationalities = async (): Promise<any> => {
+    let response: AxiosResponse<any>;
+    const token = sessionStorage.getItem('token');
+    const authenticationHeader = {
+        headers: {Authorization: `Bearer ${token}`}
+    }
+    try {
+      response = await axios.get(`${config.apiEndpoint}/nationalities/pagination`, authenticationHeader);
+    } catch (e) {
+      console.log(e);
+      return [];
+    }
+    return response.data.data;
+  };
+  
+  export const useGetNationalities = () => useQuery(['getNationalities'], () => getNationalities(), {
+    // enabled: false,
+    // refetchOnWindowFocus: false,
+  });
+
+  
+export const addNationality = async (
   fullName: string,
   birthDay?: Date,
   Nationality?: number,
@@ -47,7 +52,7 @@ export const addActor = async (
       headers: {Authorization: `Bearer ${token}`}
   }
   try {
-    response = await axios.post(`${config.apiEndpoint}/actors`, {
+    response = await axios.post(`${config.apiEndpoint}/nationalities`, {
       fullName: fullName,
       birthDay: birthDay,
       Nationality: Nationality,
@@ -58,7 +63,7 @@ export const addActor = async (
   return response.data.data;
 };
 
-export const updateActor = async (
+export const updateNationality = async (
     fullName: string,
     birthDay?: Date,
     Nationality?: number,
@@ -69,7 +74,7 @@ export const updateActor = async (
         headers: {Authorization: `Bearer ${token}`}
     }
     try {
-      response = await axios.patch(`${config.apiEndpoint}/actors`, {
+      response = await axios.patch(`${config.apiEndpoint}/nationalities`, {
         fullName: fullName,
         birthDay: birthDay,
         Nationality: Nationality,

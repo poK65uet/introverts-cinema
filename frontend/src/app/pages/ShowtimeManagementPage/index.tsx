@@ -5,7 +5,7 @@ import useStyles from './styles';
 import { Box } from '@mui/material';
 import { DataGrid, GridColDef, GridRenderCellParams, GridToolbar } from '@mui/x-data-grid';
 
-export default function RoomManagementPage() {
+export default function ShowtimeManagementPage() {
   const classes = useStyles();
   const [pageState, setPageState] = useState({
     isLoading: false,
@@ -25,27 +25,35 @@ export default function RoomManagementPage() {
       headerAlign: 'center',
     },
     {
-      field: 'name',
-      headerName: 'Tên phòng',
+      field: 'startTime',
+      headerName: 'Giờ chiếu',
+      width: 220,
+      headerAlign: 'center',
+      renderCell: (params: GridRenderCellParams<string>) => {
+        if (params.value === undefined) return null;
+        const openingDay = new Date(params.value);
+        return (
+          openingDay.getHours() +
+          ':' +
+          openingDay.getMinutes() +
+          ' ' +
+          openingDay.getDate() +
+          '/' +
+          openingDay.getMonth() +
+          '/' +
+          openingDay.getFullYear()
+        );
+      },
+    },
+    {
+      field: 'roomId',
+      headerName: 'Mã phòng chiếu',
       width: 220,
       headerAlign: 'center',
     },
     {
-      field: 'visionType',
-      headerName: 'Định dạng phim',
-      width: 220,
-      headerAlign: 'center',
-    },
-    {
-      field: 'columnNumber',
-      headerName: 'Số cột ghế',
-      width: 150,
-      align: 'center',
-      headerAlign: 'center',
-    },
-    {
-      field: 'rowNumber',
-      headerName: 'Số hàng ghế',
+      field: 'filmId',
+      headerName: 'Mã số phim',
       width: 150,
       align: 'center',
       headerAlign: 'center',

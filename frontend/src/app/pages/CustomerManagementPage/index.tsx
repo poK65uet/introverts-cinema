@@ -1,17 +1,26 @@
 import Box from '@mui/material/Box';
-import useStyles from './style';
-import { DataGrid, GridColDef, GridToolbar } from '@mui/x-data-grid';
+import useStyles from './styles';
+import {
+  DataGrid,
+  GridColDef,
+  GridRenderCellParams,
+  GridToolbar,
+} from '@mui/x-data-grid';
 // import DeleteIcon from '@mui/icons-material/Delete';
 // import EditIcon from '@mui/icons-material/Edit';
 // import { IconButton, Typography } from '@mui/material';
 import { useGetUsers } from '../../../queries/user';
+import SearchIcon from '@mui/icons-material/Search';
 import { useState, useEffect } from 'react';
-import { Button, Typography } from '@mui/material';
+import { Button, IconButton, InputBase, Paper, Typography } from '@mui/material';
+import { Search } from '@mui/icons-material';
+import SearchBar from 'app/components/SearchBar';
+import CustomToolbar from 'app/containers/CustomToolbar';
 
 export default function CustomerManagementPage() {
   const classes = useStyles();
-  const [page, setPage] = useState<number>(0);
-  const [pageSize, setPageSize] = useState<number>(5);
+  const [page, setPage] = useState<number>(1);
+  const [pageSize, setPageSize] = useState<number>(15);
   const [count, setCount] = useState<number>(0);
   const [rows, setRows] = useState<readonly any[]>([]);
 
@@ -33,13 +42,13 @@ export default function CustomerManagementPage() {
     }
     let run = newRows.length - 1;
     let largestId = rows.slice(-1)[0].id;
-    while (run > 0 && newRows[run].id > largestId) {
+    while (run >= 0 && newRows[run].id > largestId) {
       run--;
     }
     if (run == newRows.length - 1) {
       return;
     }
-    setRows(rows.concat(newRows.slice(run - newRows.length)));
+    setRows(rows.concat(newRows.slice(run - newRows.length + 1)));
   };
 
   const { data, isLoading } = useGetUsers(page, pageSize);
@@ -48,7 +57,6 @@ export default function CustomerManagementPage() {
     if (data !== undefined) {
       setCount(data.count);
       updateRows(data.rows);
-      console.log(rows);
     }
   }, [isLoading]);
 
@@ -65,14 +73,12 @@ export default function CustomerManagementPage() {
       field: 'fullName',
       headerName: 'Họ tên',
       width: 220,
-      align: 'center',
       headerAlign: 'center',
     },
     {
       field: 'email',
       headerName: 'Email',
       width: 220,
-      align: 'center',
       headerAlign: 'center',
     },
     {
@@ -82,6 +88,17 @@ export default function CustomerManagementPage() {
       width: 150,
       align: 'center',
       headerAlign: 'center',
+      renderCell: (params: GridRenderCellParams<string>) => {
+        if (params.value === undefined) return null;
+        const openingDay = new Date(params.value);
+        return (
+          openingDay.getDate() +
+          '/' +
+          openingDay.getMonth() +
+          '/' +
+          openingDay.getFullYear()
+        );
+      },
     },
     {
       field: 'createdAt',
@@ -90,6 +107,17 @@ export default function CustomerManagementPage() {
       width: 150,
       align: 'center',
       headerAlign: 'center',
+      renderCell: (params: GridRenderCellParams<string>) => {
+        if (params.value === undefined) return null;
+        const openingDay = new Date(params.value);
+        return (
+          openingDay.getDate() +
+          '/' +
+          openingDay.getMonth() +
+          '/' +
+          openingDay.getFullYear()
+        );
+      },
     },
     {
       field: 'updatedAt',
@@ -98,26 +126,44 @@ export default function CustomerManagementPage() {
       width: 200,
       align: 'center',
       headerAlign: 'center',
+      renderCell: (params: GridRenderCellParams<string>) => {
+        if (params.value === undefined) return null;
+        const openingDay = new Date(params.value);
+        return (
+          openingDay.getDate() +
+          '/' +
+          openingDay.getMonth() +
+          '/' +
+          openingDay.getFullYear()
+        );
+      },
     },
   ];
   return (
     <Box className={classes.customerTable}>
-      <Typography variant="h4" component="h4" fontWeight="bold">
-        Quản lý khách hàng
-      </Typography>
+      {/* <div className={classes.searchWrapper}> */}
+      {/* <SearchBar /> */}
+      {/* </div> */}
       <DataGrid
-        page={page}
+        autoHeight
+        page={page - 1}
         pageSize={pageSize}
-        loading={isLoading ? true : false}
-        onPageChange={newPage => updatePage(newPage)}
+        loading={isLoading}
+        onPageChange={newPage => updatePage(newPage + 1)}
         onPageSizeChange={newPageSize => updatePageSize(newPageSize)}
-        rowsPerPageOptions={[5, 10, 20]}
+        rowsPerPageOptions={[15, 30, 50]}
         rowCount={count}
         rows={rows}
         disableSelectionOnClick
         columns={columns}
         components={{
-          Toolbar: GridToolbar,
+          Toolbar: CustomToolbar, 
+        }}
+        componentsProps={{
+          toolbar: {
+            showQuickFilter: true,
+            quickFilterProps: { debounceMs: 500 },
+          },
         }}
       />
     </Box>

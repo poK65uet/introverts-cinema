@@ -5,7 +5,7 @@ import useStyles from './styles';
 import { Box } from '@mui/material';
 import { DataGrid, GridColDef, GridRenderCellParams, GridToolbar } from '@mui/x-data-grid';
 
-export default function RoomManagementPage() {
+export default function BookedTicketManagementPage() {
   const classes = useStyles();
   const [pageState, setPageState] = useState({
     isLoading: false,
@@ -25,27 +25,34 @@ export default function RoomManagementPage() {
       headerAlign: 'center',
     },
     {
-      field: 'name',
+      field: 'room',
       headerName: 'Tên phòng',
       width: 220,
       headerAlign: 'center',
     },
     {
-      field: 'visionType',
-      headerName: 'Định dạng phim',
+      field: 'seatRow',
+      headerName: 'Số thứ tự hàng',
       width: 220,
       headerAlign: 'center',
     },
     {
-      field: 'columnNumber',
-      headerName: 'Số cột ghế',
+      field: 'seatCollumn',
+      headerName: 'Số thứ tự cột',
       width: 150,
       align: 'center',
       headerAlign: 'center',
     },
     {
-      field: 'rowNumber',
-      headerName: 'Số hàng ghế',
+      field: 'time',
+      headerName: 'Thời gian',
+      width: 150,
+      align: 'center',
+      headerAlign: 'center',
+    },
+    {
+      field: 'price',
+      headerName: 'Giá vé',
       width: 150,
       align: 'center',
       headerAlign: 'center',

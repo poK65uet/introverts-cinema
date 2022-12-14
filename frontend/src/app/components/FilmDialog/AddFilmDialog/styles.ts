@@ -1,5 +1,4 @@
 import { makeStyles } from '@mui/styles';
-
 const useStyles = makeStyles(() => ({
   AddFilmBox: {
     display: 'flex',
@@ -14,15 +13,8 @@ const useStyles = makeStyles(() => ({
     borderRadius: '15px !important',
     transition: '0.5s !important',
     boxShadow: 'none !important',
-    // '&:hover': {
-    //   backgroundColor: theme.palette.primary.dark,
-    // },
   },
 
-  // registerButton: {
-  //   borderRadius: '15px !important',
-  //   transition: '0.5s !important',
-  // },
 }));
 
 export default useStyles;
