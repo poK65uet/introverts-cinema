@@ -11,8 +11,9 @@ import {
 import { useState, useEffect } from 'react';
 import { Button, Chip, Typography } from '@mui/material';
 import AddFilmDialog from '../../components/FilmDialog/AddFilmDialog';
-import { useGetMovies } from 'queries/movies';
+import { useGetMovies, useSearchMovies } from 'queries/movies';
 import EditFilmDialog from 'app/components/FilmDialog/EditFilmDialog';
+import CustomToolbar from 'app/containers/CustomToolbar';
 
 export default function FilmManagementPage() {
   const classes = useStyles();
@@ -23,6 +24,7 @@ export default function FilmManagementPage() {
   const [rows, setRows] = useState<readonly any[]>([]);
   const [page, setPage] = useState<number>(1);
   const [pageSize, setPageSize] = useState<number>(15);
+  const [query, setQuery] = useState('');
 
   const handleClickOpenAddPage = () => {
     setOpen(true);
@@ -41,7 +43,6 @@ export default function FilmManagementPage() {
     setOpenEdit(true);
   };
 
-  
   const updateRows = (newRows: readonly any[]) => {
     if (rows.length === 0) {
       setRows(newRows);
@@ -58,20 +59,26 @@ export default function FilmManagementPage() {
     if (run == newRows.length - 1) {
       return;
     }
-    console.log(newRows, run, newRows.slice(run - newRows.length + 1));
+    // console.log(newRows, run, newRows.slice(run - newRows.length + 1));
     setRows(rows.concat(newRows.slice(run - newRows.length + 1)));
-    console.log(rows);
+    // console.log(rows);
   };
 
   const { isLoading, data } = useGetMovies(page, pageSize);
-  console.log(page, pageSize, data);
+  const { isLoading: isLoadingQueryData, data: queryData } =
+    useSearchMovies(query);
+  // console.log(page, pageSize, data?.rows);
 
   useEffect(() => {
-    if (data !== undefined) {
+    if (data !== undefined && queryData === undefined) {
       setCount(data.count);
       updateRows(data.rows);
     }
-  }, [isLoading]);
+    if (queryData !== undefined) {
+      setCount(queryData.count);
+      setRows(queryData.rows);
+    }
+  }, [isLoading, isLoadingQueryData]);
 
   const columns: GridColDef[] = [
     {
@@ -129,37 +136,35 @@ export default function FilmManagementPage() {
         );
       },
     },
-    {
-      field: 'trailerUrl',
-      headerName: 'Trailer',
-      width: 90,
-      headerAlign: 'center',
-      align: 'center',
-      renderCell: (params: GridRenderCellParams<string>) => {
-        return params.value && <a href={params.value}>Trailer</a>;
-      },
-    },
+    // {
+    //   field: 'trailerUrl',
+    //   headerName: 'Trailer',
+    //   width: 90,
+    //   headerAlign: 'center',
+    //   align: 'center',
+    //   renderCell: (params: GridRenderCellParams<string>) => {
+    //     return params.value && <a href={params.value}>Trailer</a>;
+    //   },
+    // },
   ];
 
   return (
     <Box className={classes.filmTable}>
-      <AddFilmDialog
-        open={open}
-        onClose={handleClose}
-      />
+      <AddFilmDialog open={open} onClose={handleClose} />
       <EditFilmDialog
         data={editRowId}
         open={openEdit}
-        onClose={handleCloseEdit} />
+        onClose={handleCloseEdit}
+      />
       <Button className={classes.addButton} onClick={handleClickOpenAddPage}>
         Thêm phim mới
       </Button>
       <DataGrid
         autoHeight
-        page={page-1}
+        page={page - 1}
         pageSize={pageSize}
-        loading={isLoading}
-        onPageChange={newPage => setPage(newPage+1)}
+        loading={isLoading || isLoadingQueryData}
+        onPageChange={newPage => setPage(newPage + 1)}
         onPageSizeChange={newPageSize => setPageSize(newPageSize)}
         rowsPerPageOptions={[15, 30, 50]}
         rows={rows}
@@ -170,7 +175,10 @@ export default function FilmManagementPage() {
           handleClickOpenEditPage(GridCellParams.id)
         }
         components={{
-          Toolbar: GridToolbar,
+          Toolbar: CustomToolbar,
+        }}
+        componentsProps={{
+          toolbar: { setQuery },
         }}
       />
     </Box>

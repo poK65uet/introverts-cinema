@@ -4,24 +4,22 @@ import { spacing } from '@mui/system';
 import { Theme } from '@mui/material';
 
 const useStyles = makeStyles((theme: Theme) => ({
-customerTable: {
-    // height: 1131, 
-    width: '95%',
-    '&.MuiTab-root': {
-      align: 'center',
-    },
+  customerTable: {
+    height: 1100,
+    width: 'calc(100% - 360px)',
+    marginLeft: '330px',
+    marginTop: '20px',
+  },
 
-},
-
-searchInput: {
-  color: 'inherit',
-  '& .MuiInputBase-input': {
-    width: '50%',
-    [theme.breakpoints.up('md')]: {
-      width: '20ch',
+  searchInput: {
+    color: 'inherit',
+    '& .MuiInputBase-input': {
+      width: '50%',
+      [theme.breakpoints.up('md')]: {
+        width: '20ch',
+      },
     },
   },
-},
 
   searchWrapper: {
     padding: theme.spacing(0, 2),
@@ -32,7 +30,6 @@ searchInput: {
     alignItems: 'center',
     justifyContent: 'center',
   },
-
 }));
 
 export default useStyles;

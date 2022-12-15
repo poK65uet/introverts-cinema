@@ -3,18 +3,19 @@ import { makeStyles } from '@mui/styles';
 import { spacing } from '@mui/system';
 
 const useStyles = makeStyles(() => ({
-roomTable: {
-    height: 1100, 
-    width: '95%',
-    margin: 'auto'
-},
-collumnHeader: {
+  roomTable: {
+    height: 1100,
+    width: 'calc(100% - 360px)',
+    marginLeft: '330px',
+    marginTop: '20px',
+  },
+  collumnHeader: {
     fontWeight: 'bold',
-},
-addButton: {
+  },
+  addButton: {
     variant: 'outlined',
     align: 'left !important',
-}
+  },
 }));
 
 export default useStyles;

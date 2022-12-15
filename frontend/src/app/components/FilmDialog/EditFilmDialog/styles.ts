@@ -8,8 +8,6 @@ const useStyles = makeStyles(() => ({
     borderRadius: '15px',
     overflow: 'hidden',
     padding: '2em',
-    rowspacing: '3',
-    spacing: '3',
   },
 
   EditFilmButton: {
@@ -18,36 +16,36 @@ const useStyles = makeStyles(() => ({
     boxShadow: 'none !important',
   },
 
-  
   CancelButton: {
     borderRadius: '15px !important',
     transition: '0.5s !important',
     boxShadow: 'none !important',
+    backgroundColor: '#909090 !important',
   },
 
   ActiveSelect: {
     '&:before': {
-        borderColor: 'green !important',
+      borderColor: 'green !important',
     },
     '&:after': {
-        borderColor: 'green !important',
+      borderColor: 'green !important',
     },
     '&:not(.Mui-disabled):hover::before': {
-        borderColor: 'green !important',
+      borderColor: 'green !important',
     },
   },
 
   InactiveSelect: {
     '&:before': {
-        borderColor: 'red !important',
+      borderColor: 'red !important',
     },
     '&:after': {
-        borderColor: 'red !important',
+      borderColor: 'red !important',
     },
     '&:not(.Mui-disabled):hover::before': {
-        borderColor: 'red !important',
+      borderColor: 'red !important',
     },
-  }
+  },
 }));
 
 export default useStyles;

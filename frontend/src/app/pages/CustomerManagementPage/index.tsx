@@ -9,10 +9,16 @@ import {
 // import DeleteIcon from '@mui/icons-material/Delete';
 // import EditIcon from '@mui/icons-material/Edit';
 // import { IconButton, Typography } from '@mui/material';
-import { useGetUsers } from '../../../queries/user';
+import { useGetUsers, useSearchUsers } from '../../../queries/user';
 import SearchIcon from '@mui/icons-material/Search';
 import { useState, useEffect } from 'react';
-import { Button, IconButton, InputBase, Paper, Typography } from '@mui/material';
+import {
+  Button,
+  IconButton,
+  InputBase,
+  Paper,
+  Typography,
+} from '@mui/material';
 import { Search } from '@mui/icons-material';
 import SearchBar from 'app/components/SearchBar';
 import CustomToolbar from 'app/containers/CustomToolbar';
@@ -23,6 +29,7 @@ export default function CustomerManagementPage() {
   const [pageSize, setPageSize] = useState<number>(15);
   const [count, setCount] = useState<number>(0);
   const [rows, setRows] = useState<readonly any[]>([]);
+  const [query, setQuery] = useState('');
 
   const updatePage = async (newPage: number) => {
     setPage(newPage);
@@ -52,13 +59,18 @@ export default function CustomerManagementPage() {
   };
 
   const { data, isLoading } = useGetUsers(page, pageSize);
-
+  const { isLoading: isLoadingQueryData, data: queryData } =
+    useSearchUsers(query);
   useEffect(() => {
-    if (data !== undefined) {
+    if (data !== undefined && queryData === undefined) {
       setCount(data.count);
       updateRows(data.rows);
     }
-  }, [isLoading]);
+    if (queryData !== undefined) {
+      setCount(queryData.count);
+      setRows(queryData.rows);
+    }
+  }, [isLoading, isLoadingQueryData]);
 
   const columns: GridColDef[] = [
     {
@@ -141,14 +153,11 @@ export default function CustomerManagementPage() {
   ];
   return (
     <Box className={classes.customerTable}>
-      {/* <div className={classes.searchWrapper}> */}
-      {/* <SearchBar /> */}
-      {/* </div> */}
       <DataGrid
         autoHeight
         page={page - 1}
         pageSize={pageSize}
-        loading={isLoading}
+        loading={isLoading || isLoadingQueryData}
         onPageChange={newPage => updatePage(newPage + 1)}
         onPageSizeChange={newPageSize => updatePageSize(newPageSize)}
         rowsPerPageOptions={[15, 30, 50]}
@@ -157,13 +166,10 @@ export default function CustomerManagementPage() {
         disableSelectionOnClick
         columns={columns}
         components={{
-          Toolbar: CustomToolbar, 
+          Toolbar: CustomToolbar,
         }}
         componentsProps={{
-          toolbar: {
-            showQuickFilter: true,
-            quickFilterProps: { debounceMs: 500 },
-          },
+          toolbar: { setQuery },
         }}
       />
     </Box>
