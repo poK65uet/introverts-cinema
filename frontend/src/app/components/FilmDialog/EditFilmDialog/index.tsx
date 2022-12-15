@@ -269,7 +269,7 @@ export default function EditFilmDialog(props: any) {
               />
             </Grid>
           </Grid>
-          <Grid xs={12} container spacing={2} item={true}>
+          <Grid xs={12} container columnSpacing={2} item={true}>
             <Grid xs={8} item={true}>
               <CustomInput.TextField
                 label="Trailer"
@@ -318,6 +318,7 @@ export default function EditFilmDialog(props: any) {
                     variant="standard"
                     label="Diễn viên"
                     placeholder="Thêm"
+                    margin="normal"
                   />
                 )}
               />
@@ -342,12 +343,12 @@ export default function EditFilmDialog(props: any) {
                     variant="standard"
                     label="Quốc gia"
                     placeholder=""
+                    margin="normal"
                   />
                 )}
               />
             </Grid>
           </Grid>
-          <Grid xs={12} container spacing={2} item={true}></Grid>
           <Grid xs={12} item={true}>
             <CustomInput.TextField
               label="Mô tả"
