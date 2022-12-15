@@ -1,43 +1,55 @@
 import React, { useEffect } from 'react';
 import { BrowserRouter, Route, Switch, Redirect, Router } from 'react-router-dom';
-import FilmManagementPage from 'app/pages/FilmManagementPage';
 import AdminPage from 'app/pages/AdminPage';
 import LoadingLayer from 'app/components/LoadingLayer';
 import HomeLayout from './homeLayout';
 import AdminLayout from './adminLayout';
-import NotFoundPage from 'app/pages/NotFoundPage';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from 'store';
-import { constants } from 'buffer';
+import { loginActions } from 'app/components/LoginDialog/slice';
+import { useGetUserProfile } from 'queries/user';
+
 
 enum Role {
   ADMIN = 1,
   CUSTOMER = 2,
-} 
+}
 
 
 const RootLayout = () => {
 
-
-	const store = useSelector<RootState, RootState>(state => state);
-  const roles = store.login.user ? store.login.user.Roles.map( (role : any) => role.id ) : [];
-
-  // console.log(roles);
   useEffect(() => {
     document.body.style.margin = '0';
     document.body.style.color = '#1D1C1A';
   }, [])
 
+  const store = useSelector<RootState, RootState>(state => state);
+
+  const { data: user, refetch: getUser } = useGetUserProfile({
+    refetchOnWindowFocus: false,
+    enabled: false,
+  })
+
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    if (sessionStorage.getItem('token') && !store.login.user) {
+      getUser()
+    }
+  }, [sessionStorage.getItem('token')])
+
+  useEffect(() => {
+    if (user) {
+      dispatch(loginActions.setUser(user))
+    }
+  }, [user])
+
   return (
-    
     <BrowserRouter>
       <Switch>
-        <Redirect from='/admin' exact to='admin/customers' />
-        <Route path="/admin" component={AdminLayout} /> 
-        <Route path="/" exact component={HomeLayout} />
-        {/* {roles.includes(Role.ADMIN) ? <Route path="/admin" component={AdminLayout} /> : <Route path="/" exact component={HomeLayout} /> } */}
-        {roles.includes(Role.ADMIN) ? <Redirect from='/' exact to='admin' /> : <></>}
-        {/* <Route component={NotFoundPage}></Route> */}
+        {store.login.isAdmin ? <Redirect from='/admin' exact to='/admin/customers' /> : null}
+        <Route path="/admin" component={store.login.isAdmin ? AdminLayout : HomeLayout} />
+        <Route path="/" component={HomeLayout} />
       </Switch>
       <LoadingLayer />
     </BrowserRouter>

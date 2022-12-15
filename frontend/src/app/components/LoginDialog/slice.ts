@@ -13,15 +13,17 @@ export interface LoginState {
   isLoading: boolean;
   dialogAction: DialogActions;
   user: any;
+  isAdmin: boolean;
 }
 
 const initialState: LoginState = {
   isLoggedin:
     sessionStorage.getItem('token') !== undefined &&
     sessionStorage.getItem('token') !== null,
-  user: undefined,
   isLoading: false,
   dialogAction: DialogActions.LOGIN,
+  user: undefined,
+  isAdmin: false,
 };
 
 export const loginSlice = createSlice({
@@ -31,12 +33,17 @@ export const loginSlice = createSlice({
     logout: state => {
       state.isLoggedin = false;
       state.user = [];
+      state.isAdmin = false;
       sessionStorage.removeItem('token');
       notify({
         type: 'info',
         content: 'Đã đăng xuất',
         autocloseDelay: 1250,
       });
+    },
+    setUser: (state, action) => {
+      state.user = action.payload;
+      state.isAdmin = state.user.Roles.some((role: any) => role.id == 1);
     },
     changeAction: (state, action) => {
       state.dialogAction = action.payload;
@@ -57,6 +64,10 @@ export const loginSlice = createSlice({
           autocloseDelay: 1250,
         });
         state.user = action.payload.user;
+        if (state.user.Roles.some((role: any) => role.id == 1)) {
+          window.location.href = '/admin';
+          state.isAdmin = true;
+        }
         console.log('LOGIN SUCCESS');
       } else {
         console.log('LOGIN FAILED');

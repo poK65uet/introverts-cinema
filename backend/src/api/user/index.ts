@@ -13,7 +13,7 @@ import { verifyToken, verifyAdmin, verifyCustomer } from 'middlewares';
 
 const router = Router();
 
-router.get('/me', [verifyToken, verifyCustomer], getMe);
+router.get('/me', [verifyToken], getMe);
 router.patch('/change-info', [verifyToken, verifyCustomer], changeInfo);
 router.patch('/change-password', [verifyToken, verifyCustomer], changePassword);
 router.post('/verify-password', [verifyToken, verifyCustomer], verifyPassword);
