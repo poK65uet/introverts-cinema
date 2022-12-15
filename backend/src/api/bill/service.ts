@@ -224,7 +224,7 @@ const verifyBillPayment = async (req: Request) => {
 
 		const startTime = new Date(Date.now());
 		let isPaid = false;
-		while (timeDiffToMinute(new Date(Date.now()), startTime) <= 0.3) {
+		while (timeDiffToMinute(new Date(Date.now()), startTime) <= 0.01) {
 			isPaid = await verifyBillTransaction(bill);
 			if (isPaid) {
 				await bill.update(
