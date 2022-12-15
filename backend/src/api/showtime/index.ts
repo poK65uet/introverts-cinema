@@ -1,11 +1,18 @@
 import Router from 'express';
 import { verifyToken, verifyAdmin } from 'middlewares';
-import { addShowtime, deleteShowtime, getAllShowtimes, getShowtime, getShowtimes, updateShowtime } from './controller';
+import {
+	addShowtime,
+	deleteShowtime,
+	getShowtimesByFilm,
+	getShowtime,
+	getShowtimes,
+	updateShowtime
+} from './controller';
 
 const router = Router();
 
 router.get('/pagination', [verifyToken, verifyAdmin], getShowtimes);
-router.get('/', getAllShowtimes);
+router.get('/', getShowtimesByFilm);
 router.get('/:id', getShowtime);
 router.post('/', [verifyToken, verifyAdmin], addShowtime);
 // router.patch('/:id', updateShowtime);
