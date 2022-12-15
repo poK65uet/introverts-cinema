@@ -154,3 +154,27 @@ export const updateMovie = async (
   console.log('EDIT OK');
   return response.data.data;
 };
+
+export const searchMovies = async (query: string): Promise<any> => {
+  if (query === '') return undefined;
+  let response: AxiosResponse<any>;
+  const token = sessionStorage.getItem('token');
+  const authenticationHeader = {
+    headers: { Authorization: `Bearer ${token}` },
+  };
+  try {
+    response = await axios.get(
+      `${config.apiEndpoint}/films/pagination?query=${query}`,
+      authenticationHeader,
+    );
+  } catch (e) {
+    return [];
+  }
+  return response.data.data;
+};
+
+export const useSearchMovies = (query: string) =>
+  useQuery(['getMovies', query], () => searchMovies(query), {
+    // enabled: false,
+    refetchOnWindowFocus: false,
+  });

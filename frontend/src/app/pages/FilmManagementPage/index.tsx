@@ -11,8 +11,9 @@ import {
 import { useState, useEffect } from 'react';
 import { Button, Chip, Typography } from '@mui/material';
 import AddFilmDialog from '../../components/FilmDialog/AddFilmDialog';
-import { useGetMovies } from 'queries/movies';
+import { useGetMovies, useSearchMovies } from 'queries/movies';
 import EditFilmDialog from 'app/components/FilmDialog/EditFilmDialog';
+import CustomToolbar from 'app/containers/CustomToolbar';
 
 export default function FilmManagementPage() {
   const classes = useStyles();
@@ -23,6 +24,7 @@ export default function FilmManagementPage() {
   const [rows, setRows] = useState<readonly any[]>([]);
   const [page, setPage] = useState<number>(1);
   const [pageSize, setPageSize] = useState<number>(15);
+  const [query, setQuery] = useState('');
 
   const handleClickOpenAddPage = () => {
     setOpen(true);
@@ -63,14 +65,20 @@ export default function FilmManagementPage() {
   };
 
   const { isLoading, data } = useGetMovies(page, pageSize);
+  const { isLoading: isLoadingQueryData, data: queryData } =
+    useSearchMovies(query);
   // console.log(page, pageSize, data?.rows);
 
   useEffect(() => {
-    if (data !== undefined) {
+    if (data !== undefined && queryData === undefined) {
       setCount(data.count);
       updateRows(data.rows);
     }
-  }, [isLoading]);
+    if (queryData !== undefined) {
+      setCount(queryData.count);
+      setRows(queryData.rows);
+    }
+  }, [isLoading, isLoadingQueryData]);
 
   const columns: GridColDef[] = [
     {
@@ -128,16 +136,16 @@ export default function FilmManagementPage() {
         );
       },
     },
-    {
-      field: 'trailerUrl',
-      headerName: 'Trailer',
-      width: 90,
-      headerAlign: 'center',
-      align: 'center',
-      renderCell: (params: GridRenderCellParams<string>) => {
-        return params.value && <a href={params.value}>Trailer</a>;
-      },
-    },
+    // {
+    //   field: 'trailerUrl',
+    //   headerName: 'Trailer',
+    //   width: 90,
+    //   headerAlign: 'center',
+    //   align: 'center',
+    //   renderCell: (params: GridRenderCellParams<string>) => {
+    //     return params.value && <a href={params.value}>Trailer</a>;
+    //   },
+    // },
   ];
 
   return (
@@ -155,7 +163,7 @@ export default function FilmManagementPage() {
         autoHeight
         page={page - 1}
         pageSize={pageSize}
-        loading={isLoading}
+        loading={isLoading || isLoadingQueryData}
         onPageChange={newPage => setPage(newPage + 1)}
         onPageSizeChange={newPageSize => setPageSize(newPageSize)}
         rowsPerPageOptions={[15, 30, 50]}
@@ -167,7 +175,10 @@ export default function FilmManagementPage() {
           handleClickOpenEditPage(GridCellParams.id)
         }
         components={{
-          Toolbar: GridToolbar,
+          Toolbar: CustomToolbar,
+        }}
+        componentsProps={{
+          toolbar: { setQuery },
         }}
       />
     </Box>
