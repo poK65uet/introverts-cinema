@@ -224,7 +224,7 @@ const verifyBillPayment = async (req: Request) => {
 
 		const startTime = new Date(Date.now());
 		let isPaid = false;
-		while (timeDiffToMinute(new Date(Date.now()), startTime) <= 0.08) {
+		while (timeDiffToMinute(new Date(Date.now()), startTime) <= 0.3) {
 			isPaid = await verifyBillTransaction(bill);
 			if (isPaid) {
 				await bill.update(
@@ -249,7 +249,7 @@ const verifyBillPayment = async (req: Request) => {
 			return {
 				data: false,
 				message: `Not found payment`,
-				status: ResponeCodes.BAD_REQUEST
+				status: ResponeCodes.OK
 			};
 		}
 	} catch (error) {
