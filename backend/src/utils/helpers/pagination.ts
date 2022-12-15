@@ -13,7 +13,7 @@ const paginate = (req: Request) => {
 	const sort = (req.query.sort as string) || '';
 	const query = (req.query.query as string) || '';
 
-	const maxLimit = 20;
+	const maxLimit = 50;
 
 	const pageNumber = parseInt(page) || 1;
 	const sizeNumber = parseInt(size) || maxLimit;
