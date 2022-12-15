@@ -3,7 +3,7 @@ import { Redirect, Route, Switch } from 'react-router-dom';
 import Footer from 'app/containers/Footer';
 import MasterDialog, { notify } from 'app/components/MasterDialog';
 import paths from 'paths';
-import AdminAppBar from 'app/components/AdminAppBar';
+import AppBar from 'app/components/AppBar';
 import AdminMenu from 'app/containers/AdminMenu';
 import RoomManagementPage from 'app/pages/RoomManagementPage';
 import TicketPriceManagementPage from 'app/pages/TicketPriceManagementPage';
@@ -19,28 +19,28 @@ const AdminLayout = () => {
 
   return (
     <React.Fragment>
-      <AdminAppBar />
+      <AppBar />
       <AdminMenu />
-        <Switch>
-          <Route path={paths.FilmManagement} component={FilmManagementPage} />
-          <Route
-            path={paths.CustomerManagement}
-            component={CustomerManagementPage}
-          />
-          <Route path={paths.RoomManagement} component={RoomManagementPage} />
-          <Route
-            path={paths.TicketPriceManagement}
-            component={TicketPriceManagementPage}
-          />
-          <Route
-            path={paths.BookedTicketManagementPage}
-            component={BookedTicketManagementPage}
-          />
-          <Route
-            path={paths.ShowtimeManagementPage}
-            component={ShowtimeManagementPage}
-          />
-        </Switch>
+      <Switch>
+        <Route path={paths.FilmManagement} component={FilmManagementPage} />
+        <Route
+          path={paths.CustomerManagement}
+          component={CustomerManagementPage}
+        />
+        <Route path={paths.RoomManagement} component={RoomManagementPage} />
+        <Route
+          path={paths.TicketPriceManagement}
+          component={TicketPriceManagementPage}
+        />
+        <Route
+          path={paths.BookedTicketManagementPage}
+          component={BookedTicketManagementPage}
+        />
+        <Route
+          path={paths.ShowtimeManagementPage}
+          component={ShowtimeManagementPage}
+        />
+      </Switch>
 
       {/* <Footer/> */}
     </React.Fragment>
