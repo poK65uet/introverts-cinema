@@ -10,7 +10,7 @@ import SearchBar from 'app/components/SearchBar';
 export default function CustomToolbar(props: any) {
   return (
     <GridToolbarContainer>
-      <GridToolbarColumnsButton
+      {/* <GridToolbarColumnsButton
         nonce={undefined}
         onResize={undefined}
         onResizeCapture={undefined}
@@ -24,7 +24,7 @@ export default function CustomToolbar(props: any) {
         nonce={undefined}
         onResize={undefined}
         onResizeCapture={undefined}
-      />
+      /> */}
       <GridToolbarExport />
       <SearchBar {...props} />
     </GridToolbarContainer>
