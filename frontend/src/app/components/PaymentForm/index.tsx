@@ -53,25 +53,35 @@ export default function PaymentForm(props: PaymentFormProps) {
   }
 
   const handleVerifyBillSuccess = () => {
-    notify({
-      type: 'success',
-      content: 'Thanh toán thành công',
-      autocloseDelay: 2000
-    })
-    dispatch(bookTicketActions.paymentDone())
-    dispatch(bookTicketActions.resetPayment())
-    dispatch(bookTicketActions.resetSeat())
-    dispatch(bookTicketActions.resetShowtime())
-    dispatch(bookTicketActions.resetMovie())
-    setTimeout(() => {
-      dispatch(bookTicketActions.paymentTimeOut())
-    }, 500);
+    if (verifyBillData) {
+      notify({
+        type: 'success',
+        content: 'Thanh toán thành công',
+        autocloseDelay: 2000
+      })
+      dispatch(bookTicketActions.loadingDone())
+      dispatch(bookTicketActions.paymentDone())
+      dispatch(bookTicketActions.resetPayment())
+      dispatch(bookTicketActions.resetSeat())
+      dispatch(bookTicketActions.resetShowtime())
+      dispatch(bookTicketActions.resetMovie())
+      setTimeout(() => {
+        dispatch(bookTicketActions.paymentTimeOut())
+      }, 500);
+    } else {
+      notify({
+        type: 'error',
+        content: 'Xác nhận thanh toán gặp thất bại',
+        autocloseDelay: 1250
+      })
+      removeVerifyBillData()
+    }
   }
 
   const handleVerifyBillError = () => {
     notify({
       type: 'error',
-      content: 'Xác nhận thanh toán thất bại',
+      content: 'Xác nhận thanh toán gặp lỗi',
       autocloseDelay: 1250
     })
     removeVerifyBillData()
@@ -155,7 +165,7 @@ export default function PaymentForm(props: PaymentFormProps) {
         </Typography>
         <CardActions>
           <Button variant='contained' className={classes.button}
-            disableRipple startIcon={<West />} fullWidth
+            disableRipple startIcon={<West />} color='secondary' fullWidth
             onClick={handleCancelPayment} >
             Hủy
           </Button>

@@ -6,7 +6,10 @@ import { useSelector, useDispatch } from 'react-redux';
 import { Link, useParams } from 'react-router-dom';
 import { useGetMovieById } from 'queries/movies';
 import useStyles from './styles';
-import { PlayCircleTwoTone, Update as DurationIcon } from '@mui/icons-material';
+import {
+  PlayArrow as Play,
+  Update as DurationIcon
+} from '@mui/icons-material';
 import RatedTag from 'app/components/RatedTag/index';
 import VideoPlayer from 'app/components/VideoPlayer';
 import NotFoundPage from 'app/pages/NotFoundPage/index';
@@ -69,15 +72,25 @@ export default function MovieDetailPage() {
           columnSpacing={{ xs: 0, md: 2 }}
           fontSize={{ xs: '0.75em', sm: '0.875em  ', md: '1em' }}
           my={4} px={{ xs: 4, sm: 8, md: 10 }}>
-          <Grid xs={12} md={3} lg={2.25}
+          <Grid xs={12} md={3} lg={1.875}
             px={{ xs: 8, sm: 20, md: 0, lg: 0 }}
             pb={{ xs: 4, md: 0 }}
-            display='flex' justifyContent='center'>
+            display='flex'
+            justifyContent='center'
+            alignItems='center'>
             <Container sx={{ px: '0 !important' }}>
               <CardMedia component='img' image={movie?.imageUrl} />
             </Container>
+            <IconButton
+              sx={{ fontSize: '2.25em' }} disableFocusRipple
+              className={classes.playTrailer} onClick={handleShowTrailer}>
+              <Play sx={{ fontSize: '1.5em', }} />
+            </IconButton>
+            <VideoPlayer
+              trailer={movie.trailerUrl}
+              show={showTrailer} onClose={handleCloseTrailer} />
           </Grid>
-          <Grid xs={12} md={8} lg={9.75}
+          <Grid xs={12} md={8} lg={10.125}
             container
             fontSize={{ xs: '1.25em', lg: '1.5em' }}
             fontWeight='bold'
@@ -91,26 +104,14 @@ export default function MovieDetailPage() {
               </Typography>
             </Grid>
             <Grid xs={12} mt='auto'>
-              <Grid xs={12} container>
-                <Grid xs={1.15} display='inline-flex' alignItems='center'>
-                  <Link to={paths.BookTicketPage} style={{ all: 'unset' }}>
-                    <Button variant='contained' disableFocusRipple
-                      onClick={handleClickBookTicket}
-                      sx={{ color: 'ButtonHighlight', fontSize: '0.75em', my: 2 }} >
-                      Đặt vé
-                    </Button>
-                  </Link>
-                </Grid>
-                <Grid xs={10.85} display='inline-flex' alignItems='center'>
-                  <IconButton
-                    sx={{ p: 0, fontSize: '2.25em', '&:hover': { bgcolor: 'transparent' } }}
-                    onClick={handleShowTrailer}>
-                    <PlayCircleTwoTone fontSize='inherit' color='secondary' />
-                  </IconButton>
-                  <VideoPlayer
-                    trailer={movie.trailerUrl}
-                    show={showTrailer} onClose={handleCloseTrailer} />
-                </Grid>
+              <Grid xs={12} display='inline-flex' alignItems='center'>
+                <Link to={paths.BookTicketPage} style={{ all: 'unset' }}>
+                  <Button variant='contained' disableFocusRipple
+                    onClick={handleClickBookTicket}
+                    sx={{ color: 'ButtonHighlight', fontSize: '0.75em', my: 2 }} >
+                    Đặt vé
+                  </Button>
+                </Link>
               </Grid>
               <Grid xs={12} display='inline-flex' alignItems='center'>
                 {movie.rated ?
