@@ -1,10 +1,20 @@
 import Router from 'express';
 import { verifyAdmin, verifyToken } from 'middlewares';
-import { getFilms, getFilm, addFilm, updateFilm, deleteFilm, getOpeningFilm, getUpcomingFilm } from './controller';
+import {
+	getFilms,
+	getFilm,
+	addFilm,
+	updateFilm,
+	deleteFilm,
+	getOpeningFilm,
+	getUpcomingFilm,
+	getActiveFilms
+} from './controller';
 
 const router = Router();
 
 router.get('/pagination', [verifyToken, verifyAdmin], getFilms);
+router.get('/active', [verifyToken, verifyAdmin], getActiveFilms);
 router.get('/opening', getOpeningFilm);
 router.get('/upcoming', getUpcomingFilm);
 

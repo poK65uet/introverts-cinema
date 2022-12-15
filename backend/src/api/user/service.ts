@@ -1,6 +1,6 @@
 import bcrypt from 'bcrypt';
 import { Request } from 'express';
-import { User } from 'databases/models';
+import { Role, User, UserRole } from 'databases/models';
 import { UserModel } from 'databases/models/IModel';
 import ResponeCodes from 'utils/constants/ResponeCode';
 import UserPayload from './UserPayload';
@@ -8,10 +8,13 @@ import UserInfo from './UserInfo';
 import paginate from 'utils/helpers/pagination';
 import { Op } from 'sequelize';
 import sequelize from 'databases';
+import RoleCodes from 'utils/constants/RoleCode';
 
 const getUsers = async (req: Request) => {
 	try {
 		const { limit, offset, order, query } = paginate(req);
+
+		const roleId = (req.query.role as string) || RoleCodes.CUSTOMER;
 
 		const users = await User.findAndCountAll({
 			where: {
@@ -27,6 +30,13 @@ const getUsers = async (req: Request) => {
 						}
 					}
 				]
+			},
+			include: {
+				model: Role,
+				where: {
+					id: roleId
+				},
+				attributes: []
 			},
 			limit,
 			offset,

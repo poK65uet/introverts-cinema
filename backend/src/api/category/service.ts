@@ -7,16 +7,14 @@ import { Op } from 'sequelize';
 
 const getCategories = async (req: Request) => {
 	try {
-		const { limit, offset, order, query } = paginate(req);
+		const { order, query } = paginate(req);
 
-		const categories = await Category.findAndCountAll({
+		const categories = await Category.findAll({
 			where: {
 				name: {
 					[Op.like]: `%${query}%`
 				}
 			},
-			limit,
-			offset,
 			order: [order]
 		});
 
