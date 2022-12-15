@@ -6,11 +6,14 @@ export const getUsers = async (page: number, size: number): Promise<any> => {
   let response: AxiosResponse<any>;
   const token = sessionStorage.getItem('token');
   const authenticationHeader = {
-      headers: {Authorization: `Bearer ${token}`}
-  }
+    headers: { Authorization: `Bearer ${token}` },
+  };
   try {
-    response = await axios.get(`${config.apiEndpoint}/users/pagination?page=${page}&size=${size}`, authenticationHeader);
-  } catch (e) { 
+    response = await axios.get(
+      `${config.apiEndpoint}/users/pagination?page=${page}&size=${size}`,
+      authenticationHeader,
+    );
+  } catch (e) {
     return [];
   }
   return response.data.data;
@@ -18,6 +21,30 @@ export const getUsers = async (page: number, size: number): Promise<any> => {
 
 export const useGetUsers = (page: number, size: number) =>
   useQuery(['getUsers', page, size], () => getUsers(page, size), {
+    // enabled: false,
+    refetchOnWindowFocus: false,
+  });
+
+export const searchUsers = async (query: string): Promise<any> => {
+  if (query === '') return undefined;
+  let response: AxiosResponse<any>;
+  const token = sessionStorage.getItem('token');
+  const authenticationHeader = {
+    headers: { Authorization: `Bearer ${token}` },
+  };
+  try {
+    response = await axios.get(
+      `${config.apiEndpoint}/users/pagination?query=${query}`,
+      authenticationHeader,
+    );
+  } catch (e) {
+    return [];
+  }
+  return response.data.data;
+};
+
+export const useSearchUsers = (query: string) =>
+  useQuery(['getUsers', query], () => searchUsers(query), {
     // enabled: false,
     refetchOnWindowFocus: false,
   });

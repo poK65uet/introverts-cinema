@@ -128,7 +128,7 @@ export default function TicketPriceManagementPage() {
           />
         </Grid>
         <Grid item={true} xs={6}>
-          {/* <DataGrid
+          <DataGrid
             autoHeight
             page={pageState.page}
             pageSize={pageState.pageSize}
@@ -147,7 +147,7 @@ export default function TicketPriceManagementPage() {
             components={{
               Toolbar: GridToolbar,
             }}
-          /> */}
+          />
         </Grid>
       </Grid>
     </Box>
