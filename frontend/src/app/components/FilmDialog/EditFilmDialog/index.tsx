@@ -103,7 +103,7 @@ export default function EditFilmDialog(props: any) {
   const { isLoading: loadingCategories, data: allCategories } =
     useGetCategories();
   // console.log(allCategories);
-  // console.log(allDirectors);
+  console.log(values);
   if (
     (editFilmData === undefined && props.data !== '0') ||
     (editFilmData !== undefined &&
@@ -178,7 +178,7 @@ export default function EditFilmDialog(props: any) {
               </MenuItem>
             </Select>
           </Grid>
-          <Grid xs={12} container spacing={3} item={true}>
+          <Grid xs={12} container spacing={5} item={true}>
             <Grid xs={3} item={true}>
               <CustomInput.TextField
                 label="Thời lượng"
@@ -217,7 +217,7 @@ export default function EditFilmDialog(props: any) {
                 <InputLabel>Phân loại</InputLabel>
                 <Select
                   label="Phân loại"
-                  value={values.rated}
+                  value={values?.rated === null ? '' : values.rated}
                   IconComponent={() => null}
                   onChange={(event: any) => {
                     setValues({ ...values, rated: event.target.value });
@@ -330,7 +330,7 @@ export default function EditFilmDialog(props: any) {
                 onChange={(event, value) =>
                   setValues({
                     ...values,
-                    NationalityId: value?.map((id: any) => id),
+                    NationalityId: value.id,
                     Nationality: value,
                   })
                 }
