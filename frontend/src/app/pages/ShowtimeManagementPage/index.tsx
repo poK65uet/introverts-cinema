@@ -3,7 +3,13 @@ import { Helmet } from 'react-helmet-async';
 import { useGetMessage } from 'queries/message';
 import useStyles from './styles';
 import { Box } from '@mui/material';
-import { DataGrid, GridColDef, GridRenderCellParams, GridToolbar } from '@mui/x-data-grid';
+import {
+  DataGrid,
+  GridColDef,
+  GridRenderCellParams,
+  GridToolbar,
+} from '@mui/x-data-grid';
+import { useGetShowtimes } from 'queries/showtimes';
 
 export default function ShowtimeManagementPage() {
   const classes = useStyles();
@@ -13,8 +19,19 @@ export default function ShowtimeManagementPage() {
     count: 0,
     pageSize: 20,
     page: 0,
-  })
-  
+  });
+
+  const { data, isLoading } = useGetShowtimes(
+    pageState.page,
+    pageState.pageSize,
+  );
+  console.log(data);
+  useEffect(() => {
+    if (data !== undefined) {
+      setPageState({ ...pageState, count: data.count, rows: data.rows });
+    }
+  }, [isLoading]);
+
   const columns: GridColDef[] = [
     {
       field: 'id',
@@ -29,21 +46,22 @@ export default function ShowtimeManagementPage() {
       headerName: 'Giờ chiếu',
       width: 220,
       headerAlign: 'center',
-      renderCell: (params: GridRenderCellParams<string>) => {
-        if (params.value === undefined) return null;
-        const openingDay = new Date(params.value);
-        return (
-          openingDay.getHours() +
-          ':' +
-          openingDay.getMinutes() +
-          ' ' +
-          openingDay.getDate() +
-          '/' +
-          openingDay.getMonth() +
-          '/' +
-          openingDay.getFullYear()
-        );
-      },
+      align: 'center',
+      // renderCell: (params: GridRenderCellParams<string>) => {
+      //   if (params.value === undefined) return null;
+      //   const openingDay = new Date(params.value);
+      //   return (
+      //     openingDay.getHours() +
+      //     ':' +
+      //     openingDay.getMinutes() +
+      //     ' ' +
+      //     openingDay.getDate() +
+      //     '/' +
+      //     openingDay.getMonth() +
+      //     '/' +
+      //     openingDay.getFullYear()
+      //   );
+      // },
     },
     {
       field: 'roomId',
@@ -95,7 +113,7 @@ export default function ShowtimeManagementPage() {
           openingDay.getFullYear()
         );
       },
-    }
+    },
   ];
 
   return (
@@ -105,8 +123,10 @@ export default function ShowtimeManagementPage() {
         page={pageState.page}
         pageSize={pageState.pageSize}
         loading={pageState.isLoading}
-        onPageChange={newPage => setPageState({...pageState, page: newPage})}
-        onPageSizeChange={newPageSize => setPageState({...pageState, pageSize: newPageSize})}
+        onPageChange={newPage => setPageState({ ...pageState, page: newPage })}
+        onPageSizeChange={newPageSize =>
+          setPageState({ ...pageState, pageSize: newPageSize })
+        }
         rowsPerPageOptions={[10, 30, 50]}
         rowCount={pageState.count}
         rows={pageState.rows}

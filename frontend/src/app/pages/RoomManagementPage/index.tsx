@@ -21,12 +21,14 @@ export default function RoomManagementPage() {
     page: 0,
   });
 
-  const { data, isLoading } = useGetRooms(pageState.page, pageState.pageSize);
-  useEffect(() => {
-    if (data !== undefined) {
-      setPageState({ ...pageState, count: data.count, rows: data.rows });
-    }
-  }, [isLoading]);
+  const data = useGetRooms(pageState.page, pageState.pageSize);
+  console.log(data);
+  // const { data, isLoading } = useGetRooms(pageState.page, pageState.pageSize);
+  // useEffect(() => {
+  //   if (data !== undefined) {
+  //     setPageState({ ...pageState, count: data.count, rows: data.rows });
+  //   }
+  // }, [isLoading]);
 
   const columns: GridColDef[] = [
     {
