@@ -5,27 +5,8 @@ import { Theme } from '@mui/material';
 
 const useStyles = makeStyles((theme: Theme) => ({
   searchBar: {
-    display: 'flex',
-    alignItems: 'center',
-    width: 400,
-  },
-  searchInput: {
-    color: 'inherit',
-    '& .MuiInputBase-input': {
-      width: '50%',
-      [theme.breakpoints.up('md')]: {
-        width: '20ch',
-      },
-    },
-  },
-  searchWrapper: {
-    padding: theme.spacing(0, 2),
-    height: '100%',
-    position: 'absolute',
-    pointerEvents: 'none',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
+    marginLeft: 'auto !important',
+    alignSelf: 'right !important',
   },
 }));
 

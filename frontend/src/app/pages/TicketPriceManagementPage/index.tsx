@@ -9,6 +9,7 @@ import {
   GridRenderCellParams,
   GridToolbar,
 } from '@mui/x-data-grid';
+import CustomToolbar from 'app/containers/CustomToolbar';
 
 export default function TicketPriceManagementPage() {
   const classes = useStyles();
@@ -19,6 +20,7 @@ export default function TicketPriceManagementPage() {
     pageSize: 20,
     page: 0,
   });
+  const [query, setQuery] = useState('');
 
   const columns: GridColDef[] = [
     {
@@ -30,56 +32,27 @@ export default function TicketPriceManagementPage() {
       headerAlign: 'center',
     },
     {
-      field: 'room',
-      headerName: 'Tên phòng',
+      field: 'dayCode',
+      headerName: 'Ngày',
+      width: 170,
+      headerAlign: 'center',
+      // renderCell: (params: GridRenderCellParams<string>) => {
+      //   if (params.value === undefined) return null;
+      //   const openingDay = new Date(params.value);
+      //   return (
+      //     openingDay.getDate() +
+      //     '/' +
+      //     openingDay.getMonth() +
+      //     '/' +
+      //     openingDay.getFullYear()
+      //   );
+      // },
+    },
+    {
+      field: 'value',
+      headerName: 'Giá trị',
       width: 220,
       headerAlign: 'center',
-    },
-    {
-      field: 'seatRow',
-      headerName: 'Số thứ tự hàng',
-      width: 220,
-      headerAlign: 'center',
-    },
-    {
-      field: 'seatCollumn',
-      headerName: 'Số thứ tự cột',
-      width: 150,
-      align: 'center',
-      headerAlign: 'center',
-    },
-    {
-      field: 'time',
-      headerName: 'Thời gian',
-      width: 150,
-      align: 'center',
-      headerAlign: 'center',
-    },
-    {
-      field: 'price',
-      headerName: 'Giá vé',
-      width: 150,
-      align: 'center',
-      headerAlign: 'center',
-    },
-    {
-      field: 'createdAt',
-      headerName: 'Ngày tạo',
-      type: 'date',
-      width: 150,
-      align: 'center',
-      headerAlign: 'center',
-      renderCell: (params: GridRenderCellParams<string>) => {
-        if (params.value === undefined) return null;
-        const openingDay = new Date(params.value);
-        return (
-          openingDay.getDate() +
-          '/' +
-          openingDay.getMonth() +
-          '/' +
-          openingDay.getFullYear()
-        );
-      },
     },
     {
       field: 'updatedAt',
@@ -123,12 +96,15 @@ export default function TicketPriceManagementPage() {
             disableSelectionOnClick
             columns={columns}
             components={{
-              Toolbar: GridToolbar,
+              Toolbar: CustomToolbar,
+            }}
+            componentsProps={{
+              toolbar: { setQuery },
             }}
           />
         </Grid>
         <Grid item={true} xs={6}>
-          {/* <DataGrid
+          <DataGrid
             autoHeight
             page={pageState.page}
             pageSize={pageState.pageSize}
@@ -145,9 +121,12 @@ export default function TicketPriceManagementPage() {
             disableSelectionOnClick
             columns={columns}
             components={{
-              Toolbar: GridToolbar,
+              Toolbar: CustomToolbar,
             }}
-          /> */}
+            componentsProps={{
+              toolbar: { setQuery },
+            }}
+          />
         </Grid>
       </Grid>
     </Box>
