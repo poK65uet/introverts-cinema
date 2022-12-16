@@ -4,10 +4,12 @@ import {
 	InferAttributes,
 	InferCreationAttributes,
 	Model,
-	BelongsToSetAssociationMixin
+	BelongsToSetAssociationMixin,
+	NonAttribute
 } from 'sequelize';
 import sequelize from 'databases';
 import User, { UserModel } from './User';
+import Film, { FilmModel } from './Film';
 
 export interface TicketModel extends Model<InferAttributes<TicketModel>, InferCreationAttributes<TicketModel>> {
 	id: CreationOptional<number>;
@@ -17,9 +19,12 @@ export interface TicketModel extends Model<InferAttributes<TicketModel>, InferCr
 	seatCode: string;
 	time: Date;
 	price: number;
+	status: string;
+	Film?: NonAttribute<FilmModel>;
 	createdAt: CreationOptional<Date>;
 	updatedAt: CreationOptional<Date>;
 	setUser: BelongsToSetAssociationMixin<UserModel, UserModel['id']>;
+	setFilm: BelongsToSetAssociationMixin<FilmModel, FilmModel['id']>;
 }
 
 const Ticket = sequelize.define<TicketModel>(
@@ -55,6 +60,11 @@ const Ticket = sequelize.define<TicketModel>(
 			allowNull: false,
 			type: DataTypes.BIGINT
 		},
+		status: {
+			allowNull: false,
+			type: DataTypes.STRING
+		},
+
 		createdAt: {
 			type: DataTypes.DATE
 		},
@@ -70,5 +80,8 @@ const Ticket = sequelize.define<TicketModel>(
 
 User.hasOne(Ticket);
 Ticket.belongsTo(User);
+
+Film.hasOne(Ticket);
+Ticket.belongsTo(Film);
 
 export default Ticket;
