@@ -346,7 +346,7 @@ export default function FilmDialog(props: any) {
               variant="contained"
               sx={{ mt: 2, p: 1, fontWeight: 'bold', color: 'white' }}
               disableFocusRipple
-              className={classes.AddFilmButton}
+              className={classes.CancelButton}
               onClick={handleCloseDialog}
             >
               Hủy thao tác

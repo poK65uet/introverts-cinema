@@ -33,9 +33,11 @@ export default function FilmManagementPage() {
   const handleClose = () => {
     setEditRowId('0');
     setOpen(false);
+    // window.location.reload();
   };
   const handleCloseEdit = () => {
     setOpenEdit(false);
+    // window.location.reload();
   };
 
   const handleClickOpenEditPage = (params: any) => {
@@ -59,15 +61,13 @@ export default function FilmManagementPage() {
     if (run == newRows.length - 1) {
       return;
     }
-    // console.log(newRows, run, newRows.slice(run - newRows.length + 1));
     setRows(rows.concat(newRows.slice(run - newRows.length + 1)));
-    // console.log(rows);
   };
 
-  const { isLoading, data } = useGetMovies(page, pageSize);
+  const { isLoading, data, remove } = useGetMovies(page, pageSize);
   const { isLoading: isLoadingQueryData, data: queryData } =
     useSearchMovies(query);
-  // console.log(page, pageSize, data?.rows);
+  console.log(page, pageSize, data?.rows);
 
   useEffect(() => {
     if (data !== undefined && queryData === undefined) {
@@ -78,7 +78,7 @@ export default function FilmManagementPage() {
       setCount(queryData.count);
       setRows(queryData.rows);
     }
-  }, [isLoading, isLoadingQueryData]);
+  }, [isLoading, isLoadingQueryData, data]);
 
   const columns: GridColDef[] = [
     {
