@@ -219,7 +219,7 @@ export default function FilmDialog(props: any) {
               <Autocomplete
                 multiple
                 value={values.Categories}
-                options={loadingCategories ? [] : allCategories.rows}
+                options={loadingCategories ? [] : allCategories}
                 loading={loadingCategories}
                 getOptionLabel={(option: any) => option.name}
                 onChange={(event, value) =>
@@ -251,7 +251,7 @@ export default function FilmDialog(props: any) {
               <Autocomplete
                 multiple
                 value={values.Directors}
-                options={loadingDirectors ? [] : allDirectors.rows}
+                options={loadingDirectors ? [] : allDirectors}
                 loading={loadingDirectors}
                 getOptionLabel={(option: any) => option.fullName}
                 onChange={(event, value) =>
@@ -274,7 +274,7 @@ export default function FilmDialog(props: any) {
               <Autocomplete
                 multiple
                 value={values.Actors}
-                options={loadingActors ? [] : allActors.rows}
+                options={loadingActors ? [] : allActors}
                 loading={loadingActors}
                 getOptionLabel={(option: any) => option.fullName}
                 onChange={(event, value) =>
@@ -293,7 +293,7 @@ export default function FilmDialog(props: any) {
             </Grid>
             <Grid xs={3} item={true}>
               <Autocomplete
-                options={loadingNationalities ? [] : allNationalities.rows}
+                options={loadingNationalities ? [] : allNationalities}
                 loading={loadingNationalities}
                 getOptionLabel={(option: any) => option.name}
                 onChange={(event, value) =>

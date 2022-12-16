@@ -72,7 +72,7 @@ export const getAllMovies = async (): Promise<any> => {
 
   try {
     response = await axios.get(
-      `${config.apiEndpoint}/films/pagination`,
+      `${config.apiEndpoint}/films/active`,
       authenticationHeader,
     );
   } catch (e) {
