@@ -363,13 +363,14 @@ export default function EditFilmDialog(props: any) {
               </Grid>
             </Grid>
             <Grid xs={12} item={true}>
-              <CustomInput.TextField
+              <TextField
                 label="Mô tả"
                 name="description"
                 multiline
                 onChange={handleInputChange}
                 value={values?.description === null ? '' : values.description}
-                inputProps={{ maxLength: '64' }}
+                fullWidth
+                minRows={2}
               />
             </Grid>
           </Grid>
