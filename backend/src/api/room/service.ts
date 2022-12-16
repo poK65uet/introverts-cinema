@@ -7,25 +7,7 @@ import { Op } from 'sequelize';
 
 const getRooms = async (req: Request) => {
 	try {
-		const { order, query } = paginate(req);
-		const rooms = await Room.findAndCountAll({
-			where: {
-				[Op.or]: [
-					{
-						name: {
-							[Op.like]: `%${query}%`
-						}
-					},
-					{
-						visionType: {
-							[Op.like]: `%${query}%`
-						}
-					}
-				]
-			},
-			order: [order]
-		});
-
+		const rooms = await Room.findAll();
 		return rooms;
 	} catch (error) {
 		throw error;
