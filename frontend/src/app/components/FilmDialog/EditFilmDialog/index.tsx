@@ -75,9 +75,10 @@ export default function EditFilmDialog(props: any) {
   const handleEditFilm = () => {
     setValues({
       ...values,
-      Actors: values.Actors.map(({ id }: { id: any }) => id),
+      // Actors: values.Actors.map(({ id }: { id: any }) => id),
+      // Directors: values.Directors.map(({ id }: { id: any }) => id),
+      // Categories: values.Categories.map(({ id }: { id: any }) => id),
     });
-    console.log(values);
     const data = updateMovie(
       values.id.toString(),
       values.title,
@@ -107,6 +108,7 @@ export default function EditFilmDialog(props: any) {
   // console.log('thể loại', allCategories);
   // console.log('đạo diễn', allDirectors);
   // console.log('diễn viên', allActors);
+  console.log(values);
   if (
     (editFilmData === undefined && props.data !== '0') ||
     (editFilmData !== undefined &&
@@ -322,9 +324,10 @@ export default function EditFilmDialog(props: any) {
                   onChange={(event, value) =>
                     setValues({ ...values, Actors: value.map(id => id) })
                   }
-                  isOptionEqualToValue={(option, value) =>
-                    option.id === value.id
-                  }
+                  isOptionEqualToValue={(option, value) => {
+                    console.log(option, value);
+                    return option.id === value.id;
+                  }}
                   renderInput={params => (
                     <TextField
                       {...params}
