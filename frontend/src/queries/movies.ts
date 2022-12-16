@@ -172,6 +172,7 @@ export const updateMovie = async (
       authenticationHeader,
     );
   } catch (e) {
+    console.log(e);
     return [];
   }
   console.log('EDIT OK');
