@@ -10,6 +10,7 @@ export enum DialogActions {
 }
 export interface LoginState {
   isLoggedin: boolean;
+  isRequireLogin: boolean;
   isLoading: boolean;
   dialogAction: DialogActions;
   user: any;
@@ -20,6 +21,7 @@ const initialState: LoginState = {
   isLoggedin:
     sessionStorage.getItem('token') !== undefined &&
     sessionStorage.getItem('token') !== null,
+  isRequireLogin: false,
   isLoading: false,
   dialogAction: DialogActions.LOGIN,
   user: undefined,
@@ -40,6 +42,12 @@ export const loginSlice = createSlice({
         content: 'Đã đăng xuất',
         autocloseDelay: 1250,
       });
+    },
+    requireLogin: state => {
+      state.isRequireLogin = true;
+    },
+    denyRequire: state => {
+      state.isRequireLogin = false;
     },
     setUser: (state, action) => {
       state.user = action.payload;
