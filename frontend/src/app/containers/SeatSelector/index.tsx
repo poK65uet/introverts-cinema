@@ -8,6 +8,7 @@ import useStyles from './styles';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from 'store';
 import { bookTicketActions } from 'app/pages/BookTicketPage/slice';
+import { loginActions } from 'app/components/LoginDialog/slice';
 import { useGetSeatsByShowtimeId, useGetShowtimeDetail } from 'queries/showtimes';
 import { notify } from 'app/components/MasterDialog';
 
@@ -63,6 +64,7 @@ export default function SeatsSelector() {
         content: 'Cần đăng nhập để tiếp tục',
         autocloseDelay: 1000
       })
+      dispatch(loginActions.requireLogin())
     } else {
       setShowConfirmSelectSeats(true);
     };

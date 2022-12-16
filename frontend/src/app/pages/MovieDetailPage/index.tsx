@@ -212,13 +212,14 @@ export default function MovieDetailPage() {
           </Grid>
           <Grid xs={12}
             fontSize={{ xs: '1.25em', lg: '1.625em' }}
-            fontFamily=''
-            mt={4}>
+            fontFamily='' whiteSpace='pre-wrap'
+            mt={4} >
             {movie?.description}
           </Grid>
         </Grid>
         : isLoading ? <PageSekeleton />
-          : <NotFoundPage />}
+          : <NotFoundPage />
+      }
     </div >
   )
 }
