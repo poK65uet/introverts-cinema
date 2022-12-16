@@ -92,6 +92,7 @@ export default function FilmDialog(props: any) {
     handleCloseDialog();
   };
 
+  // console.log(values);
   return (
     <Dialog
       open={props.open}
@@ -328,13 +329,14 @@ export default function FilmDialog(props: any) {
               </Grid>
             </Grid>
             <Grid xs={12} item={true}>
-              <CustomInput.TextField
+              <TextField
                 label="Mô tả"
                 name="description"
                 multiline
                 onChange={handleInputChange}
                 value={values?.description === null ? '' : values.description}
-                inputProps={{ maxLength: '64' }}
+                fullWidth
+                minRows={2}
               />
             </Grid>
           </Grid>
@@ -346,7 +348,7 @@ export default function FilmDialog(props: any) {
               variant="contained"
               sx={{ mt: 2, p: 1, fontWeight: 'bold', color: 'white' }}
               disableFocusRipple
-              className={classes.AddFilmButton}
+              className={classes.CancelButton}
               onClick={handleCloseDialog}
             >
               Hủy thao tác
