@@ -74,22 +74,20 @@ export default function FilmDialog(props: any) {
   };
 
   const handleAddFilm = () => {
-    if (validate(values)) {
-      const data = addMovie(
-        values.title,
-        values.imageUrl,
-        values.trailerUrl,
-        values.duration,
-        values.openingDay,
-        values.description,
-        values.rated,
-        values.status,
-        values.NationalityId,
-        values.Categories,
-        values.Actors,
-        values.Directors,
-      );
-    }
+    const data = addMovie(
+      values.title,
+      values.imageUrl,
+      values.trailerUrl,
+      values.duration,
+      values.openingDay,
+      values.description,
+      values.rated,
+      values.status,
+      values.NationalityId,
+      values.Categories,
+      values.Actors,
+      values.Directors,
+    );
     handleCloseDialog();
   };
 

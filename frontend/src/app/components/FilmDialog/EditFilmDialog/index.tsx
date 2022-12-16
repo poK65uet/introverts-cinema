@@ -76,23 +76,24 @@ export default function EditFilmDialog(props: any) {
       ...values,
       Actors: values.Actors.map(({ id }: { id: any }) => id),
     });
-    if (validate(values)) {
-      const data = updateMovie(
-        values.id.toString(),
-        values.title,
-        values.imageUrl,
-        values.trailerUrl,
-        values.duration,
-        values.openingxDay,
-        values.description,
-        values.rated,
-        values.status,
-        values.NationalityId,
-        values.Categories,
-        values.Actors,
-        values.Directors,
-      );
-    }
+    console.log(values);
+    const data = updateMovie(
+      values.id.toString(),
+      values.title,
+      values.imageUrl,
+      values.trailerUrl,
+      values.duration,
+      values.openingxDay,
+      values.description,
+      values.rated,
+      values.status,
+      values.NationalityId,
+      values.Categories,
+      values.Actors,
+      values.Directors,
+    );
+    console.log(data);
+
     handleCloseDialog();
   };
 
@@ -102,9 +103,9 @@ export default function EditFilmDialog(props: any) {
   const { isLoading: loadingDirectors, data: allDirectors } = useGetDirectors();
   const { isLoading: loadingCategories, data: allCategories } =
     useGetCategories();
-  console.log('thể loại', allCategories);
-  console.log('đạo diễn', allDirectors);
-  console.log('diễn viên', allActors);
+  // console.log('thể loại', allCategories);
+  // console.log('đạo diễn', allDirectors);
+  // console.log('diễn viên', allActors);
   if (
     (editFilmData === undefined && props.data !== '0') ||
     (editFilmData !== undefined &&
@@ -116,7 +117,7 @@ export default function EditFilmDialog(props: any) {
   useEffect(() => {
     if (editFilmData !== undefined) {
       setValues({ ...editFilmData });
-      console.log(values);
+      // console.log(values);
     }
   }, [isLoading, props.data]);
 
