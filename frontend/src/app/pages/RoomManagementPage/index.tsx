@@ -9,7 +9,7 @@ import {
   GridRenderCellParams,
   GridToolbar,
 } from '@mui/x-data-grid';
-import { useGetRooms } from 'queries/room';
+import { useGetRooms } from 'queries/rooms';
 
 export default function RoomManagementPage() {
   const classes = useStyles();

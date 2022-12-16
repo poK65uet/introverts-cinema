@@ -10,6 +10,9 @@ import {
   GridToolbar,
 } from '@mui/x-data-grid';
 import { useGetShowtimes } from 'queries/showtimes';
+import ShowtimeCustomToolbar from 'app/containers/ShowtimeCustomToolbar';
+import { useGetAllMovies, useGetMovies } from 'queries/movies';
+import { useGetAllRooms } from 'queries/rooms';
 
 export default function ShowtimeManagementPage() {
   const classes = useStyles();
@@ -20,12 +23,16 @@ export default function ShowtimeManagementPage() {
     pageSize: 20,
     page: 1,
   });
+  const [roomQuery, setRoomQuery] = useState('');
+  const [movieQuery, setMovieQuery] = useState('');
 
   console.log(pageState);
   const { data, isLoading } = useGetShowtimes(
     pageState.page,
     pageState.pageSize,
   );
+  const movieData = useGetAllMovies();
+  const roomData = useGetAllRooms();
   useEffect(() => {
     if (data !== undefined) {
       setPageState({ ...pageState, count: data.count, rows: data.rows });
@@ -137,7 +144,10 @@ export default function ShowtimeManagementPage() {
         disableSelectionOnClick
         columns={columns}
         components={{
-          Toolbar: GridToolbar,
+          Toolbar: ShowtimeCustomToolbar,
+        }}
+        componentsProps={{
+          toolbar: { setMovieQuery, setRoomQuery, movieData, roomData },
         }}
       />
     </Box>

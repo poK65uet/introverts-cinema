@@ -23,10 +23,10 @@ import { CustomInput } from 'app/components/CustomInput';
 import useStyles from './styles';
 import { useForm } from 'hooks/useForm';
 import { addMovie, updateMovie, useGetMovieById } from 'queries/movies';
-import { usegetActors } from 'queries/actor';
+import { usegetActors } from 'queries/actors';
 import { useGetNationalities } from 'queries/nationality';
-import { useGetCategories } from 'queries/category';
-import { useGetDirectors } from 'queries/director';
+import { useGetCategories } from 'queries/categories';
+import { useGetDirectors } from 'queries/directors';
 
 export default function EditFilmDialog(props: any) {
   const classes = useStyles();

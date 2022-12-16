@@ -43,6 +43,29 @@ export const useGetRooms = (page: number, size: number) =>
     refetchOnWindowFocus: false,
   });
 
+export const getAllRooms = async (): Promise<any> => {
+  let response: AxiosResponse<any>;
+
+  const token = sessionStorage.getItem('token');
+  const authenticationHeader = {
+    headers: { Authorization: `Bearer ${token}` },
+  };
+
+  try {
+    response = await axios.get(
+      `${config.apiEndpoint}/rooms/pagination`,
+      authenticationHeader,
+    );
+  } catch (e) {
+    console.log(e);
+    return [];
+  }
+  return response.data.data;
+};
+
+export const useGetAllRooms = () =>
+  useQuery(['getAllRooms'], () => getAllRooms());
+
 export const addRoom = async (
   fullName: string,
   birthDay?: Date,

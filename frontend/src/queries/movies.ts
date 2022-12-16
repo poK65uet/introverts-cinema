@@ -62,6 +62,29 @@ export const getMovies = async (page: number, size: number): Promise<any> => {
 export const useGetMovies = (page: number, size: number) =>
   useQuery(['getMovies', page, size], () => getMovies(page, size));
 
+export const getAllMovies = async (): Promise<any> => {
+  let response: AxiosResponse<any>;
+
+  const token = sessionStorage.getItem('token');
+  const authenticationHeader = {
+    headers: { Authorization: `Bearer ${token}` },
+  };
+
+  try {
+    response = await axios.get(
+      `${config.apiEndpoint}/films/pagination`,
+      authenticationHeader,
+    );
+  } catch (e) {
+    console.log(e);
+    return [];
+  }
+  return response.data.data;
+};
+
+export const useGetAllMovies = () =>
+  useQuery(['getAllMovies'], () => getAllMovies());
+
 export const addMovie = async (
   id: string,
   title: string,

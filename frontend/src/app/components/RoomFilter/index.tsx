@@ -12,7 +12,7 @@ import {
 import { useState } from 'react';
 import useStyles from './styles';
 
-export default function SearchBar(props: any) {
+export default function RoomFilter(props: any) {
   const classes = useStyles();
   const [input, setInput] = useState('');
 
