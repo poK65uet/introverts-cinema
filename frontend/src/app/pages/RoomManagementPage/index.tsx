@@ -18,7 +18,7 @@ export default function RoomManagementPage() {
     rows: [],
     count: 0,
     pageSize: 20,
-    page: 0,
+    page: 1,
   });
 
   const data = useGetRooms(pageState.page, pageState.pageSize);
@@ -109,10 +109,12 @@ export default function RoomManagementPage() {
     <Box className={classes.roomTable}>
       <DataGrid
         autoHeight
-        page={pageState.page}
+        page={pageState.page - 1}
         pageSize={pageState.pageSize}
         loading={pageState.isLoading}
-        onPageChange={newPage => setPageState({ ...pageState, page: newPage })}
+        onPageChange={newPage =>
+          setPageState({ ...pageState, page: newPage + 1 })
+        }
         onPageSizeChange={newPageSize =>
           setPageState({ ...pageState, pageSize: newPageSize })
         }

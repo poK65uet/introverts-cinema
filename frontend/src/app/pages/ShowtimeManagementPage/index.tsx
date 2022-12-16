@@ -18,19 +18,20 @@ export default function ShowtimeManagementPage() {
     rows: [],
     count: 0,
     pageSize: 20,
-    page: 0,
+    page: 1,
   });
 
+  console.log(pageState);
   const { data, isLoading } = useGetShowtimes(
     pageState.page,
     pageState.pageSize,
   );
-  console.log(data);
   useEffect(() => {
     if (data !== undefined) {
       setPageState({ ...pageState, count: data.count, rows: data.rows });
     }
   }, [isLoading]);
+  // console.log(data);
 
   const columns: GridColDef[] = [
     {
@@ -64,13 +65,14 @@ export default function ShowtimeManagementPage() {
       // },
     },
     {
-      field: 'roomId',
+      field: 'RoomId',
       headerName: 'Mã phòng chiếu',
-      width: 220,
+      width: 150,
       headerAlign: 'center',
+      align: 'center',
     },
     {
-      field: 'filmId',
+      field: 'FilmId',
       headerName: 'Mã số phim',
       width: 150,
       align: 'center',
@@ -80,7 +82,7 @@ export default function ShowtimeManagementPage() {
       field: 'createdAt',
       headerName: 'Ngày tạo',
       type: 'date',
-      width: 150,
+      width: 180,
       align: 'center',
       headerAlign: 'center',
       renderCell: (params: GridRenderCellParams<string>) => {
@@ -99,7 +101,7 @@ export default function ShowtimeManagementPage() {
       field: 'updatedAt',
       headerName: 'Ngày cập nhật',
       type: 'date',
-      width: 200,
+      width: 180,
       align: 'center',
       headerAlign: 'center',
       renderCell: (params: GridRenderCellParams<string>) => {
@@ -120,10 +122,12 @@ export default function ShowtimeManagementPage() {
     <Box className={classes.roomTable}>
       <DataGrid
         autoHeight
-        page={pageState.page}
+        page={pageState.page - 1}
         pageSize={pageState.pageSize}
         loading={pageState.isLoading}
-        onPageChange={newPage => setPageState({ ...pageState, page: newPage })}
+        onPageChange={newPage =>
+          setPageState({ ...pageState, page: newPage + 1 })
+        }
         onPageSizeChange={newPageSize =>
           setPageState({ ...pageState, pageSize: newPageSize })
         }

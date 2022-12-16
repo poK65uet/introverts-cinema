@@ -322,7 +322,7 @@ export default function FilmDialog(props: any) {
               name="description"
               multiline
               onChange={handleInputChange}
-              value={values.description}
+              value={values?.description === null ? '' : values.description}
               inputProps={{ maxLength: '64' }}
             />
           </Grid>
