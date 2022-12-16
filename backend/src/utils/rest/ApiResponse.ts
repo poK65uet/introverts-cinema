@@ -7,7 +7,7 @@ export class ApiResponse<T> {
 	cookie: String = 'hi';
 
 	constructor(data?: T, message?: string, status?: number, cookieName?: string, cookie?: string) {
-		data && (this.data = data);
+		this.data = data;
 		message && (this.message = message);
 		status && (this.status = status);
 		cookieName && (this.cookieName = cookieName);

@@ -8,16 +8,14 @@ import sequelize from 'databases';
 
 const getDirectors = async (req: Request) => {
 	try {
-		const { limit, offset, order, query } = paginate(req);
+		const { order, query } = paginate(req);
 
-		const directors = await Director.findAndCountAll({
+		const directors = await Director.findAll({
 			where: {
 				fullName: {
 					[Op.like]: `%${query}%`
 				}
 			},
-			limit,
-			offset,
 			order: [order]
 		});
 

@@ -52,36 +52,10 @@ export default function PaymentForm(props: PaymentFormProps) {
     dispatch(bookTicketActions.reSelectSeats())
   }
 
-  const handleVerifyBillSuccess = () => {
-    if (verifyBillData) {
-      notify({
-        type: 'success',
-        content: 'Thanh toán thành công',
-        autocloseDelay: 2000
-      })
-      dispatch(bookTicketActions.loadingDone())
-      dispatch(bookTicketActions.paymentDone())
-      dispatch(bookTicketActions.resetPayment())
-      dispatch(bookTicketActions.resetSeat())
-      dispatch(bookTicketActions.resetShowtime())
-      dispatch(bookTicketActions.resetMovie())
-      setTimeout(() => {
-        dispatch(bookTicketActions.paymentTimeOut())
-      }, 500);
-    } else {
-      notify({
-        type: 'error',
-        content: 'Xác nhận thanh toán gặp thất bại',
-        autocloseDelay: 1250
-      })
-      removeVerifyBillData()
-    }
-  }
-
   const handleVerifyBillError = () => {
     notify({
       type: 'error',
-      content: 'Xác nhận thanh toán gặp lỗi',
+      content: 'Thanh toán gặp lỗi',
       autocloseDelay: 1250
     })
     removeVerifyBillData()
@@ -103,12 +77,40 @@ export default function PaymentForm(props: PaymentFormProps) {
   const {
     data: verifyBillData,
     refetch: verifyBill,
+    isSuccess: isVerrifyBillSuccess,
     isLoading: isVerifyingBill,
     remove: removeVerifyBillData
   } = useVerifyBill(billData?.bill.id, {
-    onSuccess: handleVerifyBillSuccess,
     onError: handleVerifyBillError
   })
+
+  useEffect(() => {
+    if (verifyBillData != undefined) {
+      if (verifyBillData) {
+        notify({
+          type: 'success',
+          content: 'Thanh toán thành công',
+          autocloseDelay: 2000
+        })
+        dispatch(bookTicketActions.loadingDone())
+        dispatch(bookTicketActions.paymentDone())
+        dispatch(bookTicketActions.resetPayment())
+        dispatch(bookTicketActions.resetSeat())
+        dispatch(bookTicketActions.resetShowtime())
+        dispatch(bookTicketActions.resetMovie())
+        setTimeout(() => {
+          dispatch(bookTicketActions.paymentTimeOut())
+        }, 500);
+      } else {
+        notify({
+          type: 'error',
+          content: 'Thanh toán thất bại',
+          autocloseDelay: 1250
+        })
+        removeVerifyBillData()
+      }
+    }
+  }, [verifyBillData])
 
   const {
     refetch: cancelBill,

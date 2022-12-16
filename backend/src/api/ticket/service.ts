@@ -3,6 +3,7 @@ import ResponeCodes from 'utils/constants/ResponeCode';
 import paginate from 'utils/helpers/pagination';
 import { Op } from 'sequelize';
 import { Ticket, User } from 'databases/models';
+import { create } from 'domain';
 
 const getTickets = async (req: Request) => {
 	try {
@@ -27,10 +28,6 @@ const getTickets = async (req: Request) => {
 
 const getMyTickets = async (req: Request) => {
 	try {
-		let data;
-		let message: string;
-		let status: number;
-
 		const id = req.user.id;
 
 		const myTickets = await Ticket.findAll({
@@ -40,17 +37,11 @@ const getMyTickets = async (req: Request) => {
 				where: {
 					id
 				}
-			}
+			},
+			order: [['createdAt', 'DESC']]
 		});
 
-		data = myTickets;
-		message = 'Get successfully!';
-		status = ResponeCodes.OK;
-		return {
-			data,
-			message,
-			status
-		};
+		return myTickets;
 	} catch (error) {
 		throw error;
 	}

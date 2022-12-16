@@ -7,16 +7,14 @@ import { Op } from 'sequelize';
 
 const getNationalities = async (req: Request) => {
 	try {
-		const { limit, offset, order, query } = paginate(req);
+		const { order, query } = paginate(req);
 
-		const nationalities= await Nationality.findAndCountAll({
+		const nationalities = await Nationality.findAll({
 			where: {
 				name: {
 					[Op.like]: `%${query}%`
 				}
 			},
-			limit,
-			offset,
 			order: [order]
 		});
 
