@@ -67,7 +67,7 @@ export default function FilmManagementPage() {
   const { isLoading, data, remove } = useGetMovies(page, pageSize);
   const { isLoading: isLoadingQueryData, data: queryData } =
     useSearchMovies(query);
-  // console.log(page, pageSize, data?.rows);
+  console.log(page, pageSize, data?.rows);
 
   useEffect(() => {
     if (data !== undefined && queryData === undefined) {
