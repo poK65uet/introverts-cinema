@@ -36,11 +36,7 @@ export default function FilmFilter(props: any) {
         isOptionEqualToValue={(option, value) => option.id === value.id}
         value={value}
         renderInput={params => (
-          <TextField
-            {...params}
-            variant="standard"
-            placeholder="Lọc theo phim"
-          />
+          <TextField {...params} variant="standard" placeholder="Phim" />
         )}
       />
     </FormControl>

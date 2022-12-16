@@ -68,6 +68,5 @@ export const getShowtimes = async (
 
 export const useGetShowtimes = (page: number, size: number) =>
   useQuery(['getShowtimes', page, size], () => getShowtimes(page, size), {
-    // enabled: false,
     refetchOnWindowFocus: false,
   });

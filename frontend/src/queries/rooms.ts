@@ -57,7 +57,6 @@ export const getAllRooms = async (): Promise<any> => {
       authenticationHeader,
     );
   } catch (e) {
-    console.log(e);
     return [];
   }
   return response.data.data;
