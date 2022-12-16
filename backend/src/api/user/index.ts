@@ -14,9 +14,9 @@ import { verifyToken, verifyAdmin, verifyCustomer } from 'middlewares';
 const router = Router();
 
 router.get('/me', [verifyToken], getMe);
-router.patch('/change-info', [verifyToken, verifyCustomer], changeInfo);
-router.patch('/change-password', [verifyToken, verifyCustomer], changePassword);
-router.post('/verify-password', [verifyToken, verifyCustomer], verifyPassword);
+router.patch('/change-info', [verifyToken], changeInfo);
+router.patch('/change-password', [verifyToken], changePassword);
+router.post('/verify-password', [verifyToken], verifyPassword);
 
 router.get('/pagination', [verifyToken, verifyAdmin], getUsers);
 router.get('/:id', [verifyToken, verifyAdmin], getUser);
