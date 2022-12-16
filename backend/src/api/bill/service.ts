@@ -1,5 +1,5 @@
 import { Request } from 'express';
-import { Bill, Room, Seat, Ticket } from 'databases/models';
+import { Bill, Film, Room, Seat, Ticket } from 'databases/models';
 import { SeatModel } from 'databases/models/Seat';
 import BillPayload from './BillPayload';
 import sequelize from 'databases';
@@ -14,6 +14,7 @@ import { BillModel } from 'databases/models/Bill';
 import config from 'config';
 import { DESCRIPTION_PREFIX, getBillCodeById, verifyBillTransaction } from 'api/transaction/service';
 import { Transaction } from 'sequelize';
+import Status from 'utils/constants/Status';
 
 const MAX_SEAT = 10;
 export const MAX_PAY_TIME = 15; //minutes
@@ -193,6 +194,9 @@ const verifyBillPayment = async (req: Request) => {
 					include: [
 						{
 							model: Room
+						},
+						{
+							model: Film
 						}
 					]
 				}
@@ -296,11 +300,13 @@ const createTicketForBill = async (bill: BillModel, t: Transaction) => {
 				seatCode: seat.code,
 				time: bill.Showtime.startTime,
 				price,
-				room: bill.Showtime.Room.name
+				room: bill.Showtime.Room.name,
+				status: Status.ACTIVE
 			},
 			{ transaction: t }
 		);
 		await ticket.setUser(bill.User, { transaction: t });
+		await ticket.setFilm(bill.Showtime.Film, { transaction: t });
 	}
 };
 
