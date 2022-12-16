@@ -94,7 +94,6 @@ export default function EditFilmDialog(props: any) {
       values.Actors,
       values.Directors,
     );
-    console.log(data);
 
     handleCloseDialog();
   };
@@ -105,10 +104,6 @@ export default function EditFilmDialog(props: any) {
   const { isLoading: loadingDirectors, data: allDirectors } = useGetDirectors();
   const { isLoading: loadingCategories, data: allCategories } =
     useGetCategories();
-  // console.log('thể loại', allCategories);
-  // console.log('đạo diễn', allDirectors);
-  // console.log('diễn viên', allActors);
-  console.log(values);
   if (
     (editFilmData === undefined && props.data !== '0') ||
     (editFilmData !== undefined &&
