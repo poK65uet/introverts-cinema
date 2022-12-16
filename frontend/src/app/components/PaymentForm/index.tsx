@@ -85,7 +85,7 @@ export default function PaymentForm(props: PaymentFormProps) {
   })
 
   useEffect(() => {
-    if (verifyBillData != undefined) {
+    if (isVerrifyBillSuccess) {
       if (verifyBillData) {
         notify({
           type: 'success',
@@ -103,9 +103,9 @@ export default function PaymentForm(props: PaymentFormProps) {
         }, 500);
       } else {
         notify({
-          type: 'error',
-          content: 'Thanh toán thất bại',
-          autocloseDelay: 1250
+          type: 'warning',
+          content: 'Xác nhận thanh toán thất bại',
+          autocloseDelay: 1500
         })
         removeVerifyBillData()
       }
@@ -153,7 +153,7 @@ export default function PaymentForm(props: PaymentFormProps) {
   const classes = useStyles()
 
   return (
-    <Card className={classes.form}>
+    <Card className={classes.form} sx={{ display: !billData ? 'none' : 'initial' }}>
       <CardHeader
         title={<Typography variant='h6' fontWeight='bold' display='flex' justifyContent='space-between'>
           THANH TOÁN VÉ&nbsp;
