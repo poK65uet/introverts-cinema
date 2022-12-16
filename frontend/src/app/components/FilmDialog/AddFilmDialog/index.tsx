@@ -99,6 +99,7 @@ export default function FilmDialog(props: any) {
       onClose={handleCloseDialog}
       fullWidth
       maxWidth="md"
+      scroll="body"
     >
       <Box className={classes.AddFilmBox}>
         <Typography
