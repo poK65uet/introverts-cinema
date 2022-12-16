@@ -123,9 +123,6 @@ export default function RoomManagementPage() {
         rows={pageState?.rows}
         disableSelectionOnClick
         columns={columns}
-        components={{
-          Toolbar: GridToolbar,
-        }}
       />
     </Box>
   );

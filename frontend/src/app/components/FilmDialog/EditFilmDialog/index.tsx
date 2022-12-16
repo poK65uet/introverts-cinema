@@ -102,8 +102,9 @@ export default function EditFilmDialog(props: any) {
   const { isLoading: loadingDirectors, data: allDirectors } = useGetDirectors();
   const { isLoading: loadingCategories, data: allCategories } =
     useGetCategories();
-  // console.log(allCategories);
-  console.log(values);
+  console.log('thể loại', allCategories);
+  console.log('đạo diễn', allDirectors);
+  console.log('diễn viên', allActors);
   if (
     (editFilmData === undefined && props.data !== '0') ||
     (editFilmData !== undefined &&
@@ -250,8 +251,8 @@ export default function EditFilmDialog(props: any) {
             <Grid xs={4} item={true}>
               <Autocomplete
                 multiple
-                value={values.Categories}
-                options={loadingCategories ? [] : allCategories.rows}
+                value={values?.Categories}
+                options={loadingCategories ? [] : allCategories}
                 loading={loadingCategories}
                 getOptionLabel={(option: any) => option.name}
                 onChange={(event, value) =>
@@ -281,8 +282,8 @@ export default function EditFilmDialog(props: any) {
             <Grid xs={4} item={true}>
               <Autocomplete
                 multiple
-                value={values.Directors}
-                options={loadingDirectors ? [] : allDirectors.rows}
+                value={values?.Directors}
+                options={loadingDirectors ? [] : allDirectors}
                 loading={loadingDirectors}
                 getOptionLabel={(option: any) => option.fullName}
                 onChange={(event, value) =>
@@ -304,8 +305,8 @@ export default function EditFilmDialog(props: any) {
             <Grid xs={9} item={true}>
               <Autocomplete
                 multiple
-                value={values.Actors}
-                options={loadingActors ? [] : allActors.rows}
+                value={values?.Actors}
+                options={loadingActors ? [] : allActors}
                 loading={loadingActors}
                 getOptionLabel={(option: any) => option.fullName}
                 onChange={(event, value) =>
@@ -325,7 +326,7 @@ export default function EditFilmDialog(props: any) {
             </Grid>
             <Grid xs={3} item={true}>
               <Autocomplete
-                options={loadingNationalities ? [] : allNationalities.rows}
+                options={loadingNationalities ? [] : allNationalities}
                 loading={loadingNationalities}
                 getOptionLabel={(option: any) => option.name}
                 onChange={(event, value) =>
