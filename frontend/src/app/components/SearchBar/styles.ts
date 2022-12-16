@@ -4,7 +4,9 @@ import { spacing } from '@mui/system';
 import { Theme } from '@mui/material';
 
 const useStyles = makeStyles((theme: Theme) => ({
-  searchBar: {},
+  searchBar: {
+    marginLeft: '1em !important',
+  },
 }));
 
 export default useStyles;

@@ -26,18 +26,18 @@ export default function ShowtimeManagementPage() {
   const [roomQuery, setRoomQuery] = useState('');
   const [movieQuery, setMovieQuery] = useState('');
 
-  console.log(pageState);
   const { data, isLoading } = useGetShowtimes(
     pageState.page,
     pageState.pageSize,
   );
   const movieData = useGetAllMovies();
   const roomData = useGetAllRooms();
-  useEffect(() => {
-    if (data !== undefined) {
-      setPageState({ ...pageState, count: data.count, rows: data.rows });
-    }
-  }, [isLoading]);
+  // console.log(data);
+  // useEffect(() => {
+  //   if (data !== undefined) {
+  //     setPageState({ ...pageState, count: data?.count, rows: data?.rows });
+  //   }
+  // }, [isLoading]);
   // console.log(data);
 
   const columns: GridColDef[] = [
@@ -140,7 +140,7 @@ export default function ShowtimeManagementPage() {
         }
         rowsPerPageOptions={[10, 30, 50]}
         rowCount={pageState.count}
-        rows={pageState.rows}
+        rows={pageState.rows ? [] : pageState.rows}
         disableSelectionOnClick
         columns={columns}
         components={{
