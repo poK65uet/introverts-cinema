@@ -45,3 +45,29 @@ export const useGetSeatsByShowtimeId = (showtimeId: number, queryOpts?: any) =>
     refetchOnWindowFocus: false,
     ...queryOpts,
   });
+
+export const getShowtimes = async (
+  page: number,
+  size: number,
+): Promise<any> => {
+  let response: AxiosResponse<any>;
+  const token = sessionStorage.getItem('token');
+  const authenticationHeader = {
+    headers: { Authorization: `Bearer ${token}` },
+  };
+  try {
+    response = await axios.get(
+      `${config.apiEndpoint}/showtimes/pagination?page=${page}&size=${size}`,
+      authenticationHeader,
+    );
+  } catch (e) {
+    return [];
+  }
+  return response.data.data;
+};
+
+export const useGetShowtimes = (page: number, size: number) =>
+  useQuery(['getShowtimes', page, size], () => getShowtimes(page, size), {
+    // enabled: false,
+    refetchOnWindowFocus: false,
+  });

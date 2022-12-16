@@ -15,10 +15,26 @@ const getShowtimes = async (req: Request) => {
 	try {
 		const { limit, offset, order, query } = paginate(req);
 
+		const roomId = parseInt(req.query.room as string);
+		const filmId = parseInt(req.query.film as string);
+
+		const whereRoom = isNaN(roomId) ? {} : { id: roomId };
+		const whereFilm = isNaN(filmId) ? {} : { id: filmId };
+
 		const showtimes = await Showtime.findAndCountAll({
 			limit,
 			offset,
-			order: [order]
+			order: [order],
+			include: [
+				{
+					model: Room,
+					where: whereRoom
+				},
+				{
+					model: Film,
+					where: whereFilm
+				}
+			]
 		});
 
 		return showtimes;
@@ -27,33 +43,14 @@ const getShowtimes = async (req: Request) => {
 	}
 };
 
-const getAllShowtimes = async (req: Request) => {
+const getShowtimesByFilm = async (req: Request) => {
 	try {
 		let data;
 		let message: string;
 		let status: number;
 
-		const showtime = await Showtime.findAll();
-
-		data = showtime;
-		message = 'Get successfully!';
-		status = ResponeCodes.OK;
-
-		return {
-			data,
-			message,
-			status
-		};
-	} catch (error) {
-		throw error;
-	}
-};
-
-const getShowtimesByFilm = async (filmId: number) => {
-	try {
-		let data;
-		let message: string;
-		let status: number;
+		const filmId = parseInt(req.query.film as string);
+		const whereFilm = isNaN(filmId) ? {} : { id: filmId };
 		const now = new Date(Date.now());
 
 		const showtime = await Showtime.findAll({
@@ -66,9 +63,7 @@ const getShowtimesByFilm = async (filmId: number) => {
 				{
 					model: Film,
 					attributes: [],
-					where: {
-						id: filmId
-					}
+					where: whereFilm
 				}
 			],
 			order: [['start_time', 'ASC']]
@@ -303,12 +298,4 @@ const groupShowtimeByDate = (showtimes: ShowtimeModel[]) => {
 	return newShowtimes;
 };
 
-export {
-	getShowtimes,
-	getShowtimeById,
-	getShowtimesByFilm,
-	getAllShowtimes,
-	addShowtime,
-	updateShowtime,
-	deleteShowtime
-};
+export { getShowtimes, getShowtimeById, getShowtimesByFilm, addShowtime, updateShowtime, deleteShowtime };

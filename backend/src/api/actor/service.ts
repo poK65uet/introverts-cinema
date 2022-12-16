@@ -8,16 +8,14 @@ import sequelize from 'databases';
 
 const getActors = async (req: Request) => {
 	try {
-		const { limit, offset, order, query } = paginate(req);
+		const { order, query } = paginate(req);
 
-		const actors = await Actor.findAndCountAll({
+		const actors = await Actor.findAll({
 			where: {
 				fullName: {
 					[Op.like]: `%${query}%`
 				}
 			},
-			limit,
-			offset,
 			order: [order]
 		});
 

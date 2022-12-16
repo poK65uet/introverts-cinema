@@ -13,6 +13,16 @@ const getFilms = async (req: Request, res: Response) => {
 	}
 };
 
+// GET: /films/pagination
+const getActiveFilms = async (req: Request, res: Response) => {
+	try {
+		const result = await service.getActiveFilms(req);
+		return new ApiResponse(result).send(res);
+	} catch (error) {
+		return new ApiResponse(error.message, "Couldn't get active films.", ResponeCodes.ERROR).send(res);
+	}
+};
+
 // GET: /films/:id
 const getFilm = async (req: Request, res: Response) => {
 	try {
@@ -79,4 +89,4 @@ const getUpcomingFilm = async (req: Request, res: Response) => {
 	}
 };
 
-export { getFilms, getFilm, addFilm, updateFilm, deleteFilm, getOpeningFilm, getUpcomingFilm };
+export { getFilms, getFilm, addFilm, updateFilm, deleteFilm, getOpeningFilm, getUpcomingFilm, getActiveFilms };

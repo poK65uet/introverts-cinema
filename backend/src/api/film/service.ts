@@ -28,6 +28,21 @@ const getFilms = async (req: Request) => {
 	}
 };
 
+const getActiveFilms = async (req: Request) => {
+	try {
+		const films = await Film.findAll({
+			where: {
+				status: Status.ACTIVE
+			},
+			order: [['title', 'ASC']]
+		});
+
+		return films;
+	} catch (error) {
+		throw error;
+	}
+};
+
 const getFilmById = async (req: Request) => {
 	try {
 		let data;
@@ -276,4 +291,4 @@ const getUpcomingFilm = async () => {
 	}
 };
 
-export { getFilms, getFilmById, addFilm, updateFilm, deleteFilm, getOpeningFilm, getUpcomingFilm };
+export { getFilms, getFilmById, addFilm, updateFilm, deleteFilm, getOpeningFilm, getUpcomingFilm, getActiveFilms };

@@ -7,8 +7,7 @@ import { Op } from 'sequelize';
 
 const getRooms = async (req: Request) => {
 	try {
-		const { limit, offset, order, query } = paginate(req);
-
+		const { order, query } = paginate(req);
 		const rooms = await Room.findAndCountAll({
 			where: {
 				[Op.or]: [
@@ -24,8 +23,6 @@ const getRooms = async (req: Request) => {
 					}
 				]
 			},
-			limit,
-			offset,
 			order: [order]
 		});
 
