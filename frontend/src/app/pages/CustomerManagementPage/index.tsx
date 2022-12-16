@@ -9,7 +9,7 @@ import {
 // import DeleteIcon from '@mui/icons-material/Delete';
 // import EditIcon from '@mui/icons-material/Edit';
 // import { IconButton, Typography } from '@mui/material';
-import { useGetUsers, useSearchUsers } from '../../../queries/user';
+import { useGetUsers, useSearchUsers } from '../../../queries/users';
 import SearchIcon from '@mui/icons-material/Search';
 import { useState, useEffect } from 'react';
 import {

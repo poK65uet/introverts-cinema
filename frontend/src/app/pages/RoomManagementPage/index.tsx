@@ -3,7 +3,13 @@ import { Helmet } from 'react-helmet-async';
 import { useGetMessage } from 'queries/message';
 import useStyles from './styles';
 import { Box } from '@mui/material';
-import { DataGrid, GridColDef, GridRenderCellParams, GridToolbar } from '@mui/x-data-grid';
+import {
+  DataGrid,
+  GridColDef,
+  GridRenderCellParams,
+  GridToolbar,
+} from '@mui/x-data-grid';
+import { useGetRooms } from 'queries/rooms';
 
 export default function RoomManagementPage() {
   const classes = useStyles();
@@ -12,9 +18,18 @@ export default function RoomManagementPage() {
     rows: [],
     count: 0,
     pageSize: 20,
-    page: 0,
-  })
-  
+    page: 1,
+  });
+
+  const data = useGetRooms(pageState.page, pageState.pageSize);
+  console.log(data);
+  // const { data, isLoading } = useGetRooms(pageState.page, pageState.pageSize);
+  // useEffect(() => {
+  //   if (data !== undefined) {
+  //     setPageState({ ...pageState, count: data.count, rows: data.rows });
+  //   }
+  // }, [isLoading]);
+
   const columns: GridColDef[] = [
     {
       field: 'id',
@@ -87,26 +102,27 @@ export default function RoomManagementPage() {
           openingDay.getFullYear()
         );
       },
-    }
+    },
   ];
 
   return (
     <Box className={classes.roomTable}>
       <DataGrid
         autoHeight
-        page={pageState.page}
+        page={pageState.page - 1}
         pageSize={pageState.pageSize}
         loading={pageState.isLoading}
-        onPageChange={newPage => setPageState({...pageState, page: newPage})}
-        onPageSizeChange={newPageSize => setPageState({...pageState, pageSize: newPageSize})}
+        onPageChange={newPage =>
+          setPageState({ ...pageState, page: newPage + 1 })
+        }
+        onPageSizeChange={newPageSize =>
+          setPageState({ ...pageState, pageSize: newPageSize })
+        }
         rowsPerPageOptions={[10, 30, 50]}
         rowCount={pageState.count}
-        rows={pageState.rows}
+        rows={pageState?.rows}
         disableSelectionOnClick
         columns={columns}
-        components={{
-          Toolbar: GridToolbar,
-        }}
       />
     </Box>
   );

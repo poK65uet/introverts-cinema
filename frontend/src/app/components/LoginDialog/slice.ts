@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { login } from 'queries/login';
-import { getUserProfile } from 'queries/user';
+import { getUserProfile } from 'queries/users';
 import { notify } from 'app/components/MasterDialog/index';
 
 export enum DialogActions {
