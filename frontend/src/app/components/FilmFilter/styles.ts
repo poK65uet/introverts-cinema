@@ -5,7 +5,6 @@ import { Theme } from '@mui/material';
 
 const useStyles = makeStyles((theme: Theme) => ({
   filmFilter: {
-    marginLeft: 'auto !important',
     maxWidth: '300px',
   },
 }));
