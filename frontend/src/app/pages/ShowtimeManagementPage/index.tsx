@@ -9,7 +9,7 @@ import {
   GridRenderCellParams,
   GridToolbar,
 } from '@mui/x-data-grid';
-import { useGetShowtimes } from 'queries/showtimes';
+import { useGetShowtimes, useGetShowtimesQuery } from 'queries/showtimes';
 import ShowtimeCustomToolbar from 'app/containers/ShowtimeCustomToolbar';
 import { useGetAllMovies, useGetMovies } from 'queries/movies';
 import { useGetAllRooms } from 'queries/rooms';
@@ -17,28 +17,40 @@ import { useGetAllRooms } from 'queries/rooms';
 export default function ShowtimeManagementPage() {
   const classes = useStyles();
   const [pageState, setPageState] = useState({
-    isLoading: false,
     rows: [],
     count: 0,
     pageSize: 20,
     page: 1,
   });
-  const [roomQuery, setRoomQuery] = useState('');
-  const [movieQuery, setMovieQuery] = useState('');
+  const [roomQuery, setRoomQuery] = useState(0);
+  const [movieQuery, setMovieQuery] = useState(0);
 
-  console.log(pageState);
   const { data, isLoading } = useGetShowtimes(
     pageState.page,
     pageState.pageSize,
   );
+
+  const { data: queryData, isLoading: isLoadingQueryData } =
+    useGetShowtimesQuery(movieQuery, roomQuery);
   const movieData = useGetAllMovies();
   const roomData = useGetAllRooms();
   useEffect(() => {
-    if (data !== undefined) {
-      setPageState({ ...pageState, count: data.count, rows: data.rows });
+    if (
+      data !== undefined &&
+      queryData === undefined &&
+      movieQuery === 0 &&
+      roomQuery === 0
+    ) {
+      setPageState({ ...pageState, count: data?.count, rows: data?.rows });
     }
-  }, [isLoading]);
-  // console.log(data);
+    if (queryData !== undefined) {
+      setPageState({
+        ...pageState,
+        rows: queryData.rows,
+        count: queryData.count,
+      });
+    }
+  }, [isLoading, isLoadingQueryData, data, queryData]);
 
   const columns: GridColDef[] = [
     {
@@ -55,35 +67,42 @@ export default function ShowtimeManagementPage() {
       width: 220,
       headerAlign: 'center',
       align: 'center',
-      // renderCell: (params: GridRenderCellParams<string>) => {
-      //   if (params.value === undefined) return null;
-      //   const openingDay = new Date(params.value);
-      //   return (
-      //     openingDay.getHours() +
-      //     ':' +
-      //     openingDay.getMinutes() +
-      //     ' ' +
-      //     openingDay.getDate() +
-      //     '/' +
-      //     openingDay.getMonth() +
-      //     '/' +
-      //     openingDay.getFullYear()
-      //   );
-      // },
+      renderCell: (params: GridRenderCellParams<string>) => {
+        if (params.value === undefined) return null;
+        const openingDay = new Date(params.value);
+        return (
+          openingDay.getHours() +
+          ':' +
+          openingDay.getMinutes() +
+          ' ' +
+          openingDay.getDate() +
+          '/' +
+          openingDay.getMonth() +
+          '/' +
+          openingDay.getFullYear()
+        );
+      },
     },
     {
-      field: 'RoomId',
-      headerName: 'Mã phòng chiếu',
+      field: 'Room',
+      headerName: 'Tên phòng chiếu',
       width: 150,
       headerAlign: 'center',
       align: 'center',
+      renderCell: (params: GridRenderCellParams<any>) => {
+        if (params.value === undefined) return null;
+        return params.value.name;
+      },
     },
     {
-      field: 'FilmId',
-      headerName: 'Mã số phim',
-      width: 150,
-      align: 'center',
+      field: 'Film',
+      headerName: 'Tên phim',
+      width: 280,
       headerAlign: 'center',
+      renderCell: (params: GridRenderCellParams<any>) => {
+        if (params.value === undefined) return null;
+        return params.value.title;
+      },
     },
     {
       field: 'createdAt',
@@ -131,7 +150,7 @@ export default function ShowtimeManagementPage() {
         autoHeight
         page={pageState.page - 1}
         pageSize={pageState.pageSize}
-        loading={pageState.isLoading}
+        loading={isLoading || isLoadingQueryData}
         onPageChange={newPage =>
           setPageState({ ...pageState, page: newPage + 1 })
         }
@@ -140,7 +159,7 @@ export default function ShowtimeManagementPage() {
         }
         rowsPerPageOptions={[10, 30, 50]}
         rowCount={pageState.count}
-        rows={pageState.rows}
+        rows={pageState.rows ? pageState.rows : []}
         disableSelectionOnClick
         columns={columns}
         components={{

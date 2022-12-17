@@ -21,14 +21,13 @@ export default function RoomManagementPage() {
     page: 1,
   });
 
-  const data = useGetRooms(pageState.page, pageState.pageSize);
+  const { data, isLoading } = useGetRooms(pageState.page, pageState.pageSize);
   console.log(data);
-  // const { data, isLoading } = useGetRooms(pageState.page, pageState.pageSize);
-  // useEffect(() => {
-  //   if (data !== undefined) {
-  //     setPageState({ ...pageState, count: data.count, rows: data.rows });
-  //   }
-  // }, [isLoading]);
+  useEffect(() => {
+    if (data !== undefined) {
+      setPageState({ ...pageState, count: data.count, rows: data.rows });
+    }
+  }, [isLoading]);
 
   const columns: GridColDef[] = [
     {
@@ -44,12 +43,14 @@ export default function RoomManagementPage() {
       headerName: 'Tên phòng',
       width: 220,
       headerAlign: 'center',
+      align: 'center',
     },
     {
       field: 'visionType',
       headerName: 'Định dạng phim',
       width: 220,
       headerAlign: 'center',
+      align: 'center',
     },
     {
       field: 'columnNumber',

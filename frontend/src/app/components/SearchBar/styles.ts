@@ -5,8 +5,7 @@ import { Theme } from '@mui/material';
 
 const useStyles = makeStyles((theme: Theme) => ({
   searchBar: {
-    marginLeft: 'auto !important',
-    alignSelf: 'right !important',
+    marginLeft: '1em !important',
   },
 }));
 
