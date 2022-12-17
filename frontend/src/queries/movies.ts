@@ -86,7 +86,6 @@ export const useGetAllMovies = () =>
   useQuery(['getAllMovies'], () => getAllMovies());
 
 export const addMovie = async (
-  id: string,
   title: string,
   imageUrl?: string,
   trailerUrl?: string,
@@ -106,7 +105,7 @@ export const addMovie = async (
     headers: { Authorization: `Bearer ${token}` },
   };
   response = await axios.post(
-    `${config.apiEndpoint}/films/${id}`,
+    `${config.apiEndpoint}/films`,
     {
       title: title,
       imageUrl: imageUrl,
@@ -127,7 +126,6 @@ export const addMovie = async (
 };
 
 export const useAddMovie = (
-  id: string,
   title: string,
   imageUrl?: string,
   trailerUrl?: string,
@@ -145,7 +143,6 @@ export const useAddMovie = (
     ['addMovie'],
     () =>
       addMovie(
-        id,
         title,
         imageUrl,
         trailerUrl,

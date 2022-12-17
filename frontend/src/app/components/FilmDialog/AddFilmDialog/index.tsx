@@ -105,7 +105,7 @@ export default function FilmDialog(props: any) {
     if (addMovie.isError) {
       setTimeout(() => {
         notify({
-          type: 'success',
+          type: 'error',
           content: 'Thêm phim thất bại',
           autocloseDelay: 1500,
         });
