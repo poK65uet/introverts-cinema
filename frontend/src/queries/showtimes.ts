@@ -138,3 +138,9 @@ export const addShowtime = async (
   console.log('ADD OK');
   return response.data.data;
 };
+
+export const useAddShowtime = (film: number, room: number, startTime: Date) =>
+  useQuery(['addShowtime'], () => addShowtime(film, room, startTime), {
+    enabled: false,
+    refetchOnWindowFocus: false,
+  });

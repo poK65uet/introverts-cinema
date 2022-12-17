@@ -105,29 +105,24 @@ export const addMovie = async (
   const authenticationHeader = {
     headers: { Authorization: `Bearer ${token}` },
   };
-  try {
-    response = await axios.post(
-      `${config.apiEndpoint}/films/${id}`,
-      {
-        title: title,
-        imageUrl: imageUrl,
-        trailerUrl: trailerUrl,
-        duration: duration,
-        openingDay: openingDay,
-        description: description,
-        rated: rated,
-        status: status,
-        NationalityId: NationalityId,
-        Categories: Categories,
-        Actors: Actors,
-        Directors: Directors,
-      },
-      authenticationHeader,
-    );
-  } catch (e) {
-    console.log(e);
-    return [];
-  }
+  response = await axios.post(
+    `${config.apiEndpoint}/films/${id}`,
+    {
+      title: title,
+      imageUrl: imageUrl,
+      trailerUrl: trailerUrl,
+      duration: duration,
+      openingDay: openingDay,
+      description: description,
+      rated: rated,
+      status: status,
+      NationalityId: NationalityId,
+      Categories: Categories,
+      Actors: Actors,
+      Directors: Directors,
+    },
+    authenticationHeader,
+  );
   return response.data.data;
 };
 
@@ -189,28 +184,24 @@ export const updateMovie = async (
   const authenticationHeader = {
     headers: { Authorization: `Bearer ${token}` },
   };
-  try {
-    response = await axios.patch(
-      `${config.apiEndpoint}/films/${id}`,
-      {
-        title: title,
-        imageUrl: imageUrl,
-        trailerUrl: trailerUrl,
-        duration: duration,
-        openingDay: openingDay,
-        description: description,
-        rated: rated,
-        status: status,
-        Nationality: NationalityId,
-        Categories: Categories,
-        Actors: Actors,
-        Directors: Directors,
-      },
-      authenticationHeader,
-    );
-  } catch (e) {
-    return [];
-  }
+  response = await axios.patch(
+    `${config.apiEndpoint}/films/${id}`,
+    {
+      title: title,
+      imageUrl: imageUrl,
+      trailerUrl: trailerUrl,
+      duration: duration,
+      openingDay: openingDay,
+      description: description,
+      rated: rated,
+      status: status,
+      Nationality: NationalityId,
+      Categories: Categories,
+      Actors: Actors,
+      Directors: Directors,
+    },
+    authenticationHeader,
+  );
   return response.data.data;
 };
 
