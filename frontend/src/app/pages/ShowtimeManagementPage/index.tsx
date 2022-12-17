@@ -2,17 +2,20 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { useGetMessage } from 'queries/message';
 import useStyles from './styles';
-import { Box } from '@mui/material';
+import { Box, Button } from '@mui/material';
 import {
   DataGrid,
   GridColDef,
   GridRenderCellParams,
+  GridRowId,
   GridToolbar,
 } from '@mui/x-data-grid';
 import { useGetShowtimes, useGetShowtimesQuery } from 'queries/showtimes';
 import ShowtimeCustomToolbar from 'app/containers/ShowtimeCustomToolbar';
 import { useGetAllMovies, useGetMovies } from 'queries/movies';
 import { useGetAllRooms } from 'queries/rooms';
+import AddShowtimeDialog from 'app/components/ShowtimeDialog/AddShowtimeDialog';
+import { validateEmailThunk } from 'app/components/LoginDialog/Register/slice';
 
 export default function ShowtimeManagementPage() {
   const classes = useStyles();
@@ -22,6 +25,7 @@ export default function ShowtimeManagementPage() {
     pageSize: 20,
     page: 1,
   });
+  const [open, setOpen] = useState(false);
   const [roomQuery, setRoomQuery] = useState(0);
   const [movieQuery, setMovieQuery] = useState(0);
 
@@ -52,6 +56,14 @@ export default function ShowtimeManagementPage() {
     }
   }, [isLoading, isLoadingQueryData, data, queryData]);
 
+  const handleClickOpenAddPage = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+  // console.log(data);
   const columns: GridColDef[] = [
     {
       field: 'id',
@@ -104,6 +116,16 @@ export default function ShowtimeManagementPage() {
         return params.value.title;
       },
     },
+    // {
+    //   field: 'Film2',
+    //   headerName: 'Thời lượng',
+    //   width: 100,
+    //   headerAlign: 'center',
+    //   valueGetter: ({ id }) => {
+    //     const item = data.find((item: { id: GridRowId }) => item.id === id);
+    //     return item.duration;
+    //   },
+    // },
     {
       field: 'createdAt',
       headerName: 'Ngày tạo',
@@ -145,7 +167,11 @@ export default function ShowtimeManagementPage() {
   ];
 
   return (
-    <Box className={classes.roomTable}>
+    <Box className={classes.showtimeTable}>
+      <AddShowtimeDialog open={open} onClose={handleClose} />
+      <Button className={classes.addButton} onClick={handleClickOpenAddPage}>
+        Thêm suất chiếu mới
+      </Button>
       <DataGrid
         autoHeight
         page={pageState.page - 1}

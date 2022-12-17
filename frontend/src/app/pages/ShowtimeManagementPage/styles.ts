@@ -3,7 +3,7 @@ import { makeStyles } from '@mui/styles';
 import { spacing } from '@mui/system';
 
 const useStyles = makeStyles(() => ({
-  roomTable: {
+  showtimeTable: {
     height: 1100,
     width: 'calc(100% - 360px)',
     marginLeft: '330px',
