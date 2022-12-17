@@ -55,7 +55,7 @@ export default function FilmManagementPage() {
     }
     let run = newRows.length - 1;
     let largestId = rows.slice(-1)[0].id;
-    while (run >= 0 && newRows[run].id > largestId) {
+    while (run >= 0 && newRows[run].id != largestId) {
       run--;
     }
     if (run == newRows.length - 1) {
