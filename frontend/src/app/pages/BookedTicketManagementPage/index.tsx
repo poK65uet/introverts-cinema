@@ -9,7 +9,8 @@ import {
   GridRenderCellParams,
   GridToolbar,
 } from '@mui/x-data-grid';
-import { useGetTickets } from 'queries/tickets';
+import { useGetTickets, useGetTicketsPagination } from 'queries/tickets';
+import { formatDate, formatHour } from 'utils/date';
 
 export default function BookedTicketManagementPage() {
   const classes = useStyles();
@@ -23,85 +24,80 @@ export default function BookedTicketManagementPage() {
 
   const { data, isLoading } = useGetTickets();
 
+  console.log(data);
+
+  useEffect(() => {
+    if (data !== undefined) {
+      setPageState({
+        ...pageState,
+        count: data?.count,
+        rows: data?.rows.map((row: any, index: any) => {
+          return {
+            id: row.id,
+            filmTitle: row.Film?.title,
+            startDateTime: formatDate(new Date(row.startTime)),
+            startHourTime: formatHour(new Date(row.startTime)),
+            roomName: row.room,
+            setCode: row.seatCode,
+            price: row.price.toLocaleString() + ' VNĐ',
+            createAt:
+              formatHour(new Date(row.createAt)) +
+              ' ' +
+              formatDate(new Date(row.createAt)),
+          };
+        }),
+      });
+    }
+  }, [data]);
+
   const columns: GridColDef[] = [
     {
       field: 'id',
-      headerName: '#',
-      type: 'number',
+      headerName: 'Mã vé',
       width: 70,
       align: 'center',
       headerAlign: 'center',
     },
     {
-      field: 'room',
-      headerName: 'Tên phòng',
+      field: 'filmTitle',
+      headerName: 'Tên phim',
+      width: 280,
+      headerAlign: 'center',
+    },
+    {
+      field: 'roomName',
+      headerName: 'Tên phòng chiếu',
+      width: 150,
+      headerAlign: 'center',
+      align: 'center',
+    },
+    {
+      field: 'startHourTime',
+      headerName: 'Giờ chiếu',
       width: 220,
       headerAlign: 'center',
+      align: 'center',
     },
     {
-      field: 'seatRow',
-      headerName: 'Số thứ tự hàng',
+      field: 'startDateTime',
+      headerName: 'Ngày chiếu',
       width: 220,
       headerAlign: 'center',
+      align: 'center',
     },
     {
-      field: 'seatCollumn',
-      headerName: 'Số thứ tự cột',
+      field: 'filmDuration',
+      headerName: 'Thời lượng',
       width: 150,
-      align: 'center',
       headerAlign: 'center',
-    },
-    {
-      field: 'time',
-      headerName: 'Thời gian',
-      width: 150,
       align: 'center',
-      headerAlign: 'center',
-    },
-    {
-      field: 'price',
-      headerName: 'Giá vé',
-      width: 150,
-      align: 'center',
-      headerAlign: 'center',
     },
     {
       field: 'createdAt',
       headerName: 'Ngày tạo',
-      type: 'date',
-      width: 150,
+      width: 180,
       align: 'center',
       headerAlign: 'center',
-      renderCell: (params: GridRenderCellParams<string>) => {
-        if (params.value === undefined) return null;
-        const openingDay = new Date(params.value);
-        return (
-          openingDay.getDate() +
-          '/' +
-          openingDay.getMonth() +
-          '/' +
-          openingDay.getFullYear()
-        );
-      },
-    },
-    {
-      field: 'updatedAt',
-      headerName: 'Ngày cập nhật',
-      type: 'date',
-      width: 200,
-      align: 'center',
-      headerAlign: 'center',
-      renderCell: (params: GridRenderCellParams<string>) => {
-        if (params.value === undefined) return null;
-        const openingDay = new Date(params.value);
-        return (
-          openingDay.getDate() +
-          '/' +
-          openingDay.getMonth() +
-          '/' +
-          openingDay.getFullYear()
-        );
-      },
     },
   ];
 

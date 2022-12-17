@@ -16,6 +16,7 @@ import { useGetAllMovies, useGetMovies } from 'queries/movies';
 import { useGetAllRooms } from 'queries/rooms';
 import AddShowtimeDialog from 'app/components/ShowtimeDialog/AddShowtimeDialog';
 import { validateEmailThunk } from 'app/components/LoginDialog/Register/slice';
+import { formatDate, formatHour } from 'utils/date';
 
 export default function ShowtimeManagementPage() {
   const classes = useStyles();
@@ -38,6 +39,7 @@ export default function ShowtimeManagementPage() {
     useGetShowtimesQuery(movieQuery, roomQuery);
   const movieData = useGetAllMovies();
   const roomData = useGetAllRooms();
+
   useEffect(() => {
     if (
       data !== undefined &&
@@ -45,13 +47,43 @@ export default function ShowtimeManagementPage() {
       movieQuery === 0 &&
       roomQuery === 0
     ) {
-      setPageState({ ...pageState, count: data?.count, rows: data?.rows });
+      setPageState({
+        ...pageState,
+        count: data?.count,
+        rows: data?.rows.map((row: any, index: any) => {
+          return {
+            id: row.id,
+            startDateTime: formatDate(new Date(row.startTime)),
+            startHourTime: formatHour(new Date(row.startTime)),
+            roomName: row.Room?.name,
+            filmTitle: row.Film?.title,
+            filmDuration: row.Film?.duration + ' phút',
+            createdAt:
+              formatHour(new Date(row.createdAt)) +
+              ' ' +
+              formatDate(new Date(row.createdAt)),
+          };
+        }),
+      });
     }
     if (queryData !== undefined) {
       setPageState({
         ...pageState,
-        rows: queryData.rows,
         count: queryData.count,
+        rows: queryData.rows.map((row: any, index: any) => {
+          return {
+            id: row.id,
+            startDateTime: formatDate(new Date(row.startTime)),
+            startHourTime: formatHour(new Date(row.startTime)),
+            roomName: row.Room?.name,
+            filmTitle: row.Film?.title,
+            filmDuration: row.Film?.duration + ' phút',
+            createdAt:
+              formatHour(new Date(row.createdAt)) +
+              ' ' +
+              formatDate(new Date(row.createdAt)),
+          };
+        }),
       });
     }
   }, [isLoading, isLoadingQueryData, data, queryData]);
@@ -74,95 +106,45 @@ export default function ShowtimeManagementPage() {
       headerAlign: 'center',
     },
     {
-      field: 'startTime',
-      headerName: 'Giờ chiếu',
-      width: 220,
+      field: 'filmTitle',
+      headerName: 'Tên phim',
+      width: 280,
       headerAlign: 'center',
-      align: 'center',
-      renderCell: (params: GridRenderCellParams<string>) => {
-        if (params.value === undefined) return null;
-        const openingDay = new Date(params.value);
-        return (
-          openingDay.getHours() +
-          ':' +
-          openingDay.getMinutes() +
-          ' ' +
-          openingDay.getDate() +
-          '/' +
-          openingDay.getMonth() +
-          '/' +
-          openingDay.getFullYear()
-        );
-      },
     },
     {
-      field: 'Room',
+      field: 'roomName',
       headerName: 'Tên phòng chiếu',
       width: 150,
       headerAlign: 'center',
       align: 'center',
-      renderCell: (params: GridRenderCellParams<any>) => {
-        if (params.value === undefined) return null;
-        return params.value.name;
-      },
     },
     {
-      field: 'Film',
-      headerName: 'Tên phim',
-      width: 280,
+      field: 'startHourTime',
+      headerName: 'Giờ chiếu',
+      width: 220,
       headerAlign: 'center',
-      renderCell: (params: GridRenderCellParams<any>) => {
-        if (params.value === undefined) return null;
-        return params.value.title;
-      },
+      align: 'center',
     },
-    // {
-    //   field: 'Film2',
-    //   headerName: 'Thời lượng',
-    //   width: 100,
-    //   headerAlign: 'center',
-    //   valueGetter: ({ id }) => {
-    //     const item = data.find((item: { id: GridRowId }) => item.id === id);
-    //     return item.duration;
-    //   },
-    // },
+    {
+      field: 'startDateTime',
+      headerName: 'Ngày chiếu',
+      width: 220,
+      headerAlign: 'center',
+      align: 'center',
+    },
+    {
+      field: 'filmDuration',
+      headerName: 'Thời lượng',
+      width: 150,
+      headerAlign: 'center',
+      align: 'center',
+    },
     {
       field: 'createdAt',
       headerName: 'Ngày tạo',
-      type: 'date',
       width: 180,
       align: 'center',
       headerAlign: 'center',
-      renderCell: (params: GridRenderCellParams<string>) => {
-        if (params.value === undefined) return null;
-        const openingDay = new Date(params.value);
-        return (
-          openingDay.getDate() +
-          '/' +
-          openingDay.getMonth() +
-          '/' +
-          openingDay.getFullYear()
-        );
-      },
-    },
-    {
-      field: 'updatedAt',
-      headerName: 'Ngày cập nhật',
-      type: 'date',
-      width: 180,
-      align: 'center',
-      headerAlign: 'center',
-      renderCell: (params: GridRenderCellParams<string>) => {
-        if (params.value === undefined) return null;
-        const openingDay = new Date(params.value);
-        return (
-          openingDay.getDate() +
-          '/' +
-          openingDay.getMonth() +
-          '/' +
-          openingDay.getFullYear()
-        );
-      },
     },
   ];
 
