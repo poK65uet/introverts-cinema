@@ -74,13 +74,49 @@ export default function EditFilmDialog(props: any) {
     validate,
   );
 
+  const editMovie = useUpdateMovie(
+    values.id.toString(),
+    values.title,
+    values.imageUrl,
+    values.trailerUrl,
+    values.duration,
+    values.openingxDay,
+    values.description,
+    values.rated,
+    values.status,
+    values.NationalityId,
+    values.Categories,
+    values.Actors,
+    values.Directors,
+  );
+  useEffect(() => {
+    if (editMovie.isSuccess) {
+      setTimeout(() => {
+        notify({
+          type: 'success',
+          content: 'Thay đổi thông tin phim thành công',
+          autocloseDelay: 1500,
+        });
+      }, 100);
+    }
+
+    if (editMovie.isError) {
+      setTimeout(() => {
+        notify({
+          type: 'success',
+          content: 'Thay đổi thất bại',
+          autocloseDelay: 1500,
+        });
+      }, 100);
+    }
+  }, [editMovie.isLoading]);
+
   const handleCloseDialog = () => {
     props.onClose();
   };
 
   const handleCancelDialog = () => {
     handleCloseDialog();
-    console.log('cancel');
     setTimeout(() => {
       notify({
         type: 'warning',
@@ -89,22 +125,10 @@ export default function EditFilmDialog(props: any) {
       });
     }, 100);
   };
+
   const handleEditFilm = () => {
-    useUpdateMovie(
-      values.id.toString(),
-      values.title,
-      values.imageUrl,
-      values.trailerUrl,
-      values.duration,
-      values.openingxDay,
-      values.description,
-      values.rated,
-      values.status,
-      values.NationalityId,
-      values.Categories,
-      values.Actors,
-      values.Directors,
-    );
+    editMovie.refetch();
+    console.log('here');
     handleCloseDialog();
   };
 

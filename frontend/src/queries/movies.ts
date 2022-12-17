@@ -131,6 +131,44 @@ export const addMovie = async (
   return response.data.data;
 };
 
+export const useAddMovie = (
+  id: string,
+  title: string,
+  imageUrl?: string,
+  trailerUrl?: string,
+  duration?: number,
+  openingDay?: Date,
+  description?: string,
+  rated?: string,
+  status?: string,
+  NationalityId?: number,
+  Categories?: number[],
+  Actors?: number[],
+  Directors?: number[],
+) =>
+  useQuery(
+    ['addMovie'],
+    () =>
+      addMovie(
+        id,
+        title,
+        imageUrl,
+        trailerUrl,
+        duration,
+        openingDay,
+        description,
+        rated,
+        status,
+        NationalityId,
+        Categories,
+        Actors,
+        Directors,
+      ),
+    {
+      enabled: false,
+      refetchOnWindowFocus: false,
+    },
+  );
 export const updateMovie = async (
   id: string,
   title: string,
@@ -226,6 +264,7 @@ export const useUpdateMovie = (
       ),
     {
       refetchOnWindowFocus: false,
+      enabled: false,
     },
   );
 
