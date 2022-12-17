@@ -1,5 +1,6 @@
 import { Search } from '@mui/icons-material';
 import {
+  Autocomplete,
   FormControl,
   IconButton,
   Input,
@@ -14,28 +15,27 @@ import useStyles from './styles';
 
 export default function RoomFilter(props: any) {
   const classes = useStyles();
-  const [input, setInput] = useState('');
+  const [curValue, setCurValue] = useState(null);
 
-  const sendRequest = () => {
-    props.setQuery(input);
+  const sendRequest = (data: any) => {
+    props.setRoomQuery(data !== null ? data['id'] : 0);
   };
   return (
-    <FormControl className={classes.searchBar} variant="standard">
-      <Input
-        value={input}
-        onChange={event => setInput(event.target.value)}
-        onKeyDown={async (event: React.KeyboardEvent) => {
-          if (event.code === 'Enter') {
-            sendRequest();
-          }
+    <FormControl className={classes.roomFilter} variant="standard" fullWidth>
+      <Autocomplete
+        options={props.roomData?.isLoading ? [] : props.roomData.data.rows}
+        fullWidth
+        loading={props.roomData?.isLoading}
+        getOptionLabel={(option: any) => (option.name ? option.name : null)}
+        onChange={(event, value) => {
+          setCurValue(value);
+          sendRequest(value);
         }}
-        endAdornment={
-          <InputAdornment position="end">
-            <IconButton aria-label="Tìm kiếm" onClick={sendRequest}>
-              <Search />
-            </IconButton>
-          </InputAdornment>
-        }
+        isOptionEqualToValue={(option, value) => option.id === value.id}
+        value={curValue}
+        renderInput={params => (
+          <TextField {...params} variant="standard" placeholder="Phòng chiếu" />
+        )}
       />
     </FormControl>
   );

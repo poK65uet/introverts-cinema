@@ -3,7 +3,13 @@ import { Helmet } from 'react-helmet-async';
 import { useGetMessage } from 'queries/message';
 import useStyles from './styles';
 import { Box } from '@mui/material';
-import { DataGrid, GridColDef, GridRenderCellParams, GridToolbar } from '@mui/x-data-grid';
+import {
+  DataGrid,
+  GridColDef,
+  GridRenderCellParams,
+  GridToolbar,
+} from '@mui/x-data-grid';
+import { useGetTickets } from 'queries/tickets';
 
 export default function BookedTicketManagementPage() {
   const classes = useStyles();
@@ -13,8 +19,10 @@ export default function BookedTicketManagementPage() {
     count: 0,
     pageSize: 20,
     page: 0,
-  })
-  
+  });
+
+  const { data, isLoading } = useGetTickets();
+
   const columns: GridColDef[] = [
     {
       field: 'id',
@@ -94,7 +102,7 @@ export default function BookedTicketManagementPage() {
           openingDay.getFullYear()
         );
       },
-    }
+    },
   ];
 
   return (
@@ -104,16 +112,15 @@ export default function BookedTicketManagementPage() {
         page={pageState.page}
         pageSize={pageState.pageSize}
         loading={pageState.isLoading}
-        onPageChange={newPage => setPageState({...pageState, page: newPage})}
-        onPageSizeChange={newPageSize => setPageState({...pageState, pageSize: newPageSize})}
+        onPageChange={newPage => setPageState({ ...pageState, page: newPage })}
+        onPageSizeChange={newPageSize =>
+          setPageState({ ...pageState, pageSize: newPageSize })
+        }
         rowsPerPageOptions={[10, 30, 50]}
         rowCount={pageState.count}
         rows={pageState.rows}
         disableSelectionOnClick
         columns={columns}
-        components={{
-          Toolbar: GridToolbar,
-        }}
       />
     </Box>
   );

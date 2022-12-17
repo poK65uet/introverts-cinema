@@ -11,6 +11,11 @@ import { addTimeByMinute } from 'utils/helpers/timeService';
 
 const NEXT_SHOWTIME = 30; // minutes;
 
+interface ShowtimeGroup {
+	date: Date;
+	showtimes: ShowtimeModel[];
+}
+
 const getShowtimes = async (req: Request) => {
 	try {
 		const { limit, offset, order, query } = paginate(req);
@@ -45,7 +50,7 @@ const getShowtimes = async (req: Request) => {
 
 const getShowtimesByFilm = async (req: Request) => {
 	try {
-		let data;
+		let data: ShowtimeGroup[];
 		let message: string;
 		let status: number;
 
@@ -85,7 +90,10 @@ const getShowtimesByFilm = async (req: Request) => {
 
 const getShowtimeById = async (req: Request) => {
 	try {
-		let data;
+		let data: {
+			showtime: ShowtimeModel;
+			price: number;
+		};
 		let message: string;
 		let status: number;
 
@@ -133,7 +141,7 @@ const getShowtimeById = async (req: Request) => {
 
 const addShowtime = async (req: Request) => {
 	try {
-		let data;
+		let data: ShowtimeModel;
 		let message: string;
 		let status: number;
 
@@ -143,11 +151,13 @@ const addShowtime = async (req: Request) => {
 			film: await Film.findByPk(newShowtime.film),
 			roomId: newShowtime.room
 		};
-		const now = new Date(Date.now());
 
-		if (!newSt.startTime || newSt.startTime < now || !newSt.film || !newSt.roomId) {
+		const now = new Date(Date.now());
+		const openingDay = new Date(newSt.film?.openingDay);
+
+		if (!newSt.startTime || !newSt.film || !newSt.roomId || newSt.startTime < now || newSt.startTime < openingDay) {
 			data = null;
-			message = 'Null.';
+			message = 'Invalid payload.';
 			status = ResponeCodes.BAD_REQUEST;
 		} else {
 			const checkShowtimes = await Showtime.findAll({
@@ -193,7 +203,7 @@ const addShowtime = async (req: Request) => {
 				});
 			} else {
 				data = null;
-				message = 'Conflict showtime';
+				message = 'Conflict showtime.';
 				status = ResponeCodes.OK;
 			}
 		}
@@ -278,7 +288,7 @@ const isInOneDay = (d1: Date, d2: Date) => {
 	return d1.getFullYear() === d2.getFullYear() && d1.getMonth() === d2.getMonth() && d1.getDate() === d2.getDate();
 };
 
-const groupShowtimeByDate = (showtimes: ShowtimeModel[]) => {
+const groupShowtimeByDate = (showtimes: ShowtimeModel[]): ShowtimeGroup[] => {
 	var newShowtimes = [];
 	for (let i = 0; i < showtimes.length; i++) {
 		const originDate = showtimes[i].startTime;

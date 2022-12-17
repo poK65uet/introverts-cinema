@@ -61,6 +61,7 @@ export const getShowtimes = async (
       authenticationHeader,
     );
   } catch (e) {
+    console.log(e);
     return [];
   }
   return response.data.data;
@@ -68,6 +69,43 @@ export const getShowtimes = async (
 
 export const useGetShowtimes = (page: number, size: number) =>
   useQuery(['getShowtimes', page, size], () => getShowtimes(page, size), {
-    // enabled: false,
     refetchOnWindowFocus: false,
   });
+
+export const getShowtimesQuery = async (
+  movie: number,
+  room: number,
+): Promise<any> => {
+  if (movie === 0 && room === 0) return undefined;
+  let response: AxiosResponse<any>;
+  const token = sessionStorage.getItem('token');
+  const authenticationHeader = {
+    headers: { Authorization: `Bearer ${token}` },
+  };
+  let additionalQuery = '';
+  if (movie !== 0) {
+    additionalQuery = additionalQuery + `&film=${movie}`;
+  }
+  if (room !== 0) {
+    additionalQuery = additionalQuery + `&room=${room}`;
+  }
+  try {
+    response = await axios.get(
+      `${config.apiEndpoint}/showtimes/pagination?${additionalQuery}`,
+      authenticationHeader,
+    );
+  } catch (e) {
+    console.log(e);
+    return [];
+  }
+  return response.data.data;
+};
+
+export const useGetShowtimesQuery = (movie: number, room: number) =>
+  useQuery(
+    ['getShowtimesQuery', movie, room],
+    () => getShowtimesQuery(movie, room),
+    {
+      refetchOnWindowFocus: false,
+    },
+  );

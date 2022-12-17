@@ -4,9 +4,9 @@ import { spacing } from '@mui/system';
 import { Theme } from '@mui/material';
 
 const useStyles = makeStyles((theme: Theme) => ({
-  searchBar: {
-    marginLeft: 'auto !important',
-    alignSelf: 'right !important',
+  roomFilter: {
+    maxWidth: '300px',
+    marginLeft: '3em !important',
   },
 }));
 
