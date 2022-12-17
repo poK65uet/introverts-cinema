@@ -77,12 +77,8 @@ const addDirector = async (req: Request) => {
 			status = ResponeCodes.BAD_REQUEST;
 		} else {
 			const transaction = await sequelize.transaction(async t => {
-				const director = await Director.create(newDirector, {
-					transaction: t
-				});
-				await director.setNationality(nationality, {
-					transaction: t
-				});
+				const director = await Director.create(newDirector, { transaction: t });
+				if (nationality) await director.setNationality(nationality, { transaction: t });
 
 				data = director;
 				message = 'Add successfully!';
@@ -118,9 +114,8 @@ const updateDirector = async (req: Request) => {
 
 			const transaction = await sequelize.transaction(async t => {
 				const director = await Director.findByPk(id, { transaction: t });
-				director.set(updateDirector);
-				await director.save({ transaction: t });
-				await director.setNationality(nationality, { transaction: t });
+				await director.update(updateDirector, { transaction: t });
+				if (nationality) await director.setNationality(nationality, { transaction: t });
 
 				data = director;
 				message = 'Updated successfully!';

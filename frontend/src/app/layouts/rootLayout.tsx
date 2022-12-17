@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   BrowserRouter,
   Route,
@@ -20,10 +20,18 @@ enum Role {
   CUSTOMER = 2,
 }
 
+
+
 const RootLayout = () => {
+
+  const [rendering, setRendering] = useState(true)
+
   useEffect(() => {
     document.body.style.margin = '0';
     document.body.style.color = '#1D1C1A';
+    setTimeout(() => {
+      setRendering(false)
+    }, 100);
   }, []);
 
   const store = useSelector<RootState, RootState>(state => state);
@@ -48,20 +56,21 @@ const RootLayout = () => {
   }, [user]);
 
   return (
-    <BrowserRouter>
-      <Switch>
-        {store.login.isAdmin ? (
-          <Redirect from="/admin" exact to="/admin/customers" />
-        ) : null}
-        <Route
-          path="/admin"
-          component={store.login.isAdmin ? AdminLayout : HomeLayout}
-        />
-        <Route path="/" component={HomeLayout} />
-      </Switch>
-      <MasterDialog />
-      <LoadingLayer />
-    </BrowserRouter>
+    !rendering ?
+      <BrowserRouter>
+        <Switch>
+          {store.login.isAdmin ? (
+            <Redirect from="/admin" exact to="/admin/customers" />
+          ) : null}
+          <Route
+            path="/admin"
+            component={store.login.isAdmin ? AdminLayout : HomeLayout}
+          />
+          <Route path="/" component={HomeLayout} />
+        </Switch>
+        <MasterDialog />
+        <LoadingLayer />
+      </BrowserRouter> : null
   );
 };
 
