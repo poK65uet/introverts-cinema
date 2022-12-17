@@ -158,7 +158,7 @@ const addShowtime = async (req: Request) => {
 		if (!newSt.startTime || !newSt.film || !newSt.roomId || newSt.startTime < now || newSt.startTime < openingDay) {
 			data = null;
 			message = 'Invalid payload.';
-			status = ResponeCodes.BAD_REQUEST;
+			status = ResponeCodes.OK;
 		} else {
 			const checkShowtimes = await Showtime.findAll({
 				where: {
