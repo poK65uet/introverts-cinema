@@ -33,7 +33,8 @@ import { useGetNationalities } from 'queries/nationality';
 import { useGetDirectors } from 'queries/directors';
 import { useGetCategories } from 'queries/categories';
 import { useGetAllRooms, useGetRooms } from 'queries/rooms';
-import { addShowtime } from 'queries/showtimes';
+import { addShowtime, useAddShowtime } from 'queries/showtimes';
+import { notify } from 'app/components/MasterDialog';
 export default function FilmDialog(props: any) {
   const classes = useStyles();
 
@@ -69,11 +70,38 @@ export default function FilmDialog(props: any) {
     props.onClose();
   };
 
+  const addShowtime = useAddShowtime(
+    values.filmId,
+    values.roomId,
+    values.startTime,
+  );
   const handleAddFilm = () => {
-    const data = addShowtime(values.filmId, values.roomId, values.startTime);
-    console.log(data);
+    addShowtime.refetch();
     handleCloseDialog();
   };
+
+  useEffect(() => {
+    console.log(addShowtime);
+    if (addShowtime.isSuccess) {
+      setTimeout(() => {
+        notify({
+          type: 'success',
+          content: 'Thêm suất chiếu thành công',
+          autocloseDelay: 1500,
+        });
+      }, 100);
+    }
+
+    if (addShowtime.isError) {
+      setTimeout(() => {
+        notify({
+          type: 'error',
+          content: 'Thêm suất chiếu thất bại',
+          autocloseDelay: 1500,
+        });
+      }, 100);
+    }
+  }, [addShowtime.isLoading]);
 
   // console.log(values);
   return (
