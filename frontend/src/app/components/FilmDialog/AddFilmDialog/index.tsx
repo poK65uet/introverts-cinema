@@ -309,7 +309,7 @@ export default function FilmDialog(props: any) {
                   onChange={(event, value) =>
                     setValues({
                       ...values,
-                      NationalityId: value.id,
+                      NationalityId: value?.id,
                       Nationality: value,
                     })
                   }

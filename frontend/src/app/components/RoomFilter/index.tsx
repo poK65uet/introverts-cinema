@@ -15,24 +15,24 @@ import useStyles from './styles';
 
 export default function RoomFilter(props: any) {
   const classes = useStyles();
-  const [value, setValue] = useState(null);
+  const [curValue, setCurValue] = useState(null);
 
-  const sendRequest = () => {
-    props.setMovieQuery(value);
+  const sendRequest = (data: any) => {
+    props.setRoomQuery(data !== null ? data['id'] : 0);
   };
   return (
     <FormControl className={classes.roomFilter} variant="standard" fullWidth>
       <Autocomplete
-        options={props.movieData?.isLoading ? [] : props.movieData.data.rows}
+        options={props.roomData?.isLoading ? [] : props.roomData.data.rows}
         fullWidth
-        loading={props.MovieData?.isLoading}
-        getOptionLabel={(option: any) => option.title}
+        loading={props.roomData?.isLoading}
+        getOptionLabel={(option: any) => (option.name ? option.name : null)}
         onChange={(event, value) => {
-          setValue(value);
-          sendRequest();
+          setCurValue(value);
+          sendRequest(value);
         }}
         isOptionEqualToValue={(option, value) => option.id === value.id}
-        value={value}
+        value={curValue}
         renderInput={params => (
           <TextField {...params} variant="standard" placeholder="Phòng chiếu" />
         )}
