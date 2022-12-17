@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react'
 import { Container, Tab, Typography } from '@mui/material';
 import { TabContext, TabList, TabPanel } from '@mui/lab';
 import { useSelector, useDispatch } from 'react-redux';
-import UserProfile from 'app/containers/UserProfile/index';
+import UserProfile from 'app/containers/UserProfile';
+import BookingHistory from 'app/containers/BookingHistory';
 import { getUserProfileThunk } from 'app/components/LoginDialog/slice';
 import { RootState } from 'store'
 import useStyles from './styles';
@@ -34,11 +35,18 @@ export default function UserPage() {
       <Container className={classes.container}>
         <TabContext value={tab.toString()}>
           <TabList className={classes.tabList} onChange={handleTabChange} >
-            <Tab className={classes.tab} value={TabNames.PROFILE} label='Thông Tin Chi Tiết' />
-            <Tab className={classes.tab} value={TabNames.BOOKING_HISTORY} label='Lịch Sử Đặt Vé' />
+            <Tab
+              className={classes.tab} disableFocusRipple
+              value={TabNames.PROFILE} label='Thông Tin Chi Tiết' />
+            <Tab
+              className={classes.tab} disableFocusRipple
+              value={TabNames.BOOKING_HISTORY} label='Lịch Sử Đặt Vé' />
           </TabList>
           <TabPanel value={TabNames.PROFILE} className={classes.tabPanel}>
             <UserProfile />
+          </TabPanel>
+          <TabPanel value={TabNames.BOOKING_HISTORY} className={classes.tabPanel}>
+            <BookingHistory />
           </TabPanel>
         </TabContext>
       </Container>

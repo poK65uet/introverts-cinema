@@ -9,7 +9,6 @@ import BookTicketPage from 'app/pages/BookTicketPage/index';
 import UserPage from 'app/pages/UserPage/index';
 import { Redirect, Route, Switch } from 'react-router-dom';
 import Footer from "app/containers/Footer";
-import MasterDialog, { notify } from "app/components/MasterDialog";
 import { useSelector } from 'react-redux';
 import { RootState } from 'store';
 import paths from "paths";
@@ -32,7 +31,6 @@ const HomeLayout = () => {
 				<Route path={`${paths.UserPage}`} component={UserPage} />
 				<Route path='/*' component={NotFoundPage} />
 			</Switch>
-			<MasterDialog />
 			<Footer />
 		</React.Fragment >
 	);
