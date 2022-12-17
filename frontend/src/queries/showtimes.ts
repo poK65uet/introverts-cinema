@@ -109,3 +109,32 @@ export const useGetShowtimesQuery = (movie: number, room: number) =>
       refetchOnWindowFocus: false,
     },
   );
+
+export const addShowtime = async (
+  film: number,
+  room: number,
+  startTime: Date,
+): Promise<any> => {
+  let response: AxiosResponse<any>;
+  const token = sessionStorage.getItem('token');
+  const authenticationHeader = {
+    headers: { Authorization: `Bearer ${token}` },
+  };
+  console.log(startTime.toString());
+  try {
+    response = await axios.post(
+      `${config.apiEndpoint}/showtimes`,
+      {
+        film: film,
+        room: room,
+        startTime: startTime.toString(),
+      },
+      authenticationHeader,
+    );
+  } catch (e) {
+    console.log(e);
+    return [];
+  }
+  console.log('ADD OK');
+  return response.data.data;
+};

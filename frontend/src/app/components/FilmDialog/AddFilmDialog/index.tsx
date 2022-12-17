@@ -22,11 +22,17 @@ import {
 import { CustomInput } from 'app/components/CustomInput';
 import useStyles from './styles';
 import { useForm } from 'hooks/useForm';
-import { addMovie, updateMovie, useGetMovieById } from 'queries/movies';
+import {
+  addMovie,
+  updateMovie,
+  useAddMovie,
+  useGetMovieById,
+} from 'queries/movies';
 import { usegetActors } from 'queries/actors';
 import { useGetNationalities } from 'queries/nationality';
 import { useGetDirectors } from 'queries/directors';
 import { useGetCategories } from 'queries/categories';
+import { notify } from 'app/components/MasterDialog';
 export default function FilmDialog(props: any) {
   const classes = useStyles();
 
@@ -70,25 +76,59 @@ export default function FilmDialog(props: any) {
     validate,
   );
 
+  const addMovie = useAddMovie(
+    values.title,
+    values.imageUrl,
+    values.trailerUrl,
+    values.duration,
+    values.openingDay,
+    values.description,
+    values.rated,
+    values.status,
+    values.NationalityId,
+    values.Categories,
+    values.Actors,
+    values.Directors,
+  );
+
+  useEffect(() => {
+    if (addMovie.isSuccess) {
+      setTimeout(() => {
+        notify({
+          type: 'success',
+          content: 'Thay đổi thông tin phim thành công',
+          autocloseDelay: 1500,
+        });
+      }, 100);
+    }
+
+    if (addMovie.isError) {
+      setTimeout(() => {
+        notify({
+          type: 'success',
+          content: 'Thay đổi thất bại',
+          autocloseDelay: 1500,
+        });
+      }, 100);
+    }
+  }, [addMovie.isLoading]);
   const handleCloseDialog = () => {
     props.onClose();
   };
 
+  const handleCancelDialog = () => {
+    handleCloseDialog();
+    console.log('cancel');
+    setTimeout(() => {
+      notify({
+        type: 'warning',
+        content: 'Đã hủy thao tác',
+        autocloseDelay: 1500,
+      });
+    }, 100);
+  };
   const handleAddFilm = () => {
-    const data = addMovie(
-      values.title,
-      values.imageUrl,
-      values.trailerUrl,
-      values.duration,
-      values.openingDay,
-      values.description,
-      values.rated,
-      values.status,
-      values.NationalityId,
-      values.Categories,
-      values.Actors,
-      values.Directors,
-    );
+    addMovie.refetch();
     handleCloseDialog();
   };
 
@@ -96,7 +136,7 @@ export default function FilmDialog(props: any) {
   return (
     <Dialog
       open={props.open}
-      onClose={handleCloseDialog}
+      onClose={handleCancelDialog}
       fullWidth
       maxWidth="md"
       scroll="paper"
@@ -309,7 +349,7 @@ export default function FilmDialog(props: any) {
                   onChange={(event, value) =>
                     setValues({
                       ...values,
-                      NationalityId: value?.id,
+                      NationalityId: value.id,
                       Nationality: value,
                     })
                   }
@@ -331,6 +371,7 @@ export default function FilmDialog(props: any) {
             <Grid xs={12} item={true}>
               <TextField
                 label="Mô tả"
+                variant="standard"
                 name="description"
                 multiline
                 onChange={handleInputChange}
@@ -349,7 +390,7 @@ export default function FilmDialog(props: any) {
               sx={{ mt: 2, p: 1, fontWeight: 'bold', color: 'white' }}
               disableFocusRipple
               className={classes.CancelButton}
-              onClick={handleCloseDialog}
+              onClick={handleCancelDialog}
             >
               Hủy thao tác
             </Button>

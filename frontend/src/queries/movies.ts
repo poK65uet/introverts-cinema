@@ -49,7 +49,7 @@ export const getMovies = async (page: number, size: number): Promise<any> => {
 
   try {
     response = await axios.get(
-      `${config.apiEndpoint}/films/pagination?page=${page}&size=${size}`,
+      `${config.apiEndpoint}/films/pagination?page=${page}&size=${size}&sort=openingDay,DESC`,
       authenticationHeader,
     );
   } catch (e) {
@@ -128,10 +128,47 @@ export const addMovie = async (
     console.log(e);
     return [];
   }
-  console.log('ADD OK');
   return response.data.data;
 };
 
+export const useAddMovie = (
+  id: string,
+  title: string,
+  imageUrl?: string,
+  trailerUrl?: string,
+  duration?: number,
+  openingDay?: Date,
+  description?: string,
+  rated?: string,
+  status?: string,
+  NationalityId?: number,
+  Categories?: number[],
+  Actors?: number[],
+  Directors?: number[],
+) =>
+  useQuery(
+    ['addMovie'],
+    () =>
+      addMovie(
+        id,
+        title,
+        imageUrl,
+        trailerUrl,
+        duration,
+        openingDay,
+        description,
+        rated,
+        status,
+        NationalityId,
+        Categories,
+        Actors,
+        Directors,
+      ),
+    {
+      enabled: false,
+      refetchOnWindowFocus: false,
+    },
+  );
 export const updateMovie = async (
   id: string,
   title: string,
@@ -172,12 +209,64 @@ export const updateMovie = async (
       authenticationHeader,
     );
   } catch (e) {
-    console.log(e);
     return [];
   }
-  console.log('EDIT OK');
   return response.data.data;
 };
+
+export const useUpdateMovie = (
+  id: string,
+  title: string,
+  imageUrl?: string,
+  trailerUrl?: string,
+  duration?: number,
+  openingDay?: Date,
+  description?: string,
+  rated?: string,
+  status?: string,
+  NationalityId?: number,
+  Categories?: number[],
+  Actors?: number[],
+  Directors?: number[],
+) =>
+  useQuery(
+    [
+      'updateMovie',
+      id,
+      title,
+      imageUrl,
+      trailerUrl,
+      duration,
+      openingDay,
+      description,
+      rated,
+      status,
+      NationalityId,
+      Categories,
+      Actors,
+      Directors,
+    ],
+    () =>
+      updateMovie(
+        id,
+        title,
+        imageUrl,
+        trailerUrl,
+        duration,
+        openingDay,
+        description,
+        rated,
+        status,
+        NationalityId,
+        Categories,
+        Actors,
+        Directors,
+      ),
+    {
+      refetchOnWindowFocus: false,
+      enabled: false,
+    },
+  );
 
 export const searchMovies = async (query: string): Promise<any> => {
   if (query === '') return undefined;
@@ -199,6 +288,5 @@ export const searchMovies = async (query: string): Promise<any> => {
 
 export const useSearchMovies = (query: string) =>
   useQuery(['getMovies', query], () => searchMovies(query), {
-    // enabled: false,
     refetchOnWindowFocus: false,
   });
