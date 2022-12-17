@@ -6,8 +6,8 @@ import {
   Redirect,
   Router,
 } from 'react-router-dom';
-import AdminPage from 'app/pages/AdminPage';
 import LoadingLayer from 'app/components/LoadingLayer';
+import MasterDialog from 'app/components/MasterDialog';
 import HomeLayout from './homeLayout';
 import AdminLayout from './adminLayout';
 import { useSelector, useDispatch } from 'react-redux';
@@ -59,6 +59,7 @@ const RootLayout = () => {
         />
         <Route path="/" component={HomeLayout} />
       </Switch>
+      <MasterDialog />
       <LoadingLayer />
     </BrowserRouter>
   );
