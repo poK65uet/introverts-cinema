@@ -309,7 +309,7 @@ export default function FilmDialog(props: any) {
                   onChange={(event, value) =>
                     setValues({
                       ...values,
-                      NationalityId: value?.id,
+                      NationalityId: value.id,
                       Nationality: value,
                     })
                   }
@@ -331,6 +331,7 @@ export default function FilmDialog(props: any) {
             <Grid xs={12} item={true}>
               <TextField
                 label="Mô tả"
+                variant="standard"
                 name="description"
                 multiline
                 onChange={handleInputChange}

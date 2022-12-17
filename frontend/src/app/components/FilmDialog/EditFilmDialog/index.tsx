@@ -365,6 +365,7 @@ export default function EditFilmDialog(props: any) {
             <Grid xs={12} item={true}>
               <TextField
                 label="Mô tả"
+                variant="standard"
                 name="description"
                 multiline
                 onChange={handleInputChange}
