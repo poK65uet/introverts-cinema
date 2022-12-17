@@ -148,42 +148,47 @@ export default function AppBar() {
         sx={{
           display: { xs: 'none', sm: 'flex' }
         }}
-      >
-        {openMenuMovie ?
-          <Button disableRipple color='inherit' className={classes.button}
-            onMouseOver={handleOpenMenuMovie}
-            onMouseLeave={handleCloseMenuMovie}>
-            <Slide in={openMenuMovie} mountOnEnter unmountOnExit>
-              <List className={classes.movieMenu}>
-                <Link style={{ all: 'unset' }} to={paths.NewMoviePage} >
-                  <ListItemButton className={classes.listButton} disableRipple>
-                    PHIM ĐANG CHIẾU
-                  </ListItemButton>
-                </Link>
-                <Link style={{ all: 'unset' }} to={paths.UpcomingMoviePage} >
-                  <ListItemButton className={classes.listButton} disableRipple>
-                    PHIM SẮP CHIẾU
-                  </ListItemButton>
-                </Link>
-              </List>
-            </Slide>
-          </Button>
-          :
-          <Fade in={!openMenuMovie}>
+      >{store.login.isAdmin ? null :
+        <React.Fragment>
+          {openMenuMovie ?
             <Button disableRipple color='inherit' className={classes.button}
               onMouseOver={handleOpenMenuMovie}
               onMouseLeave={handleCloseMenuMovie}>
-              Phim
-              < ExpandMoreIcon />
+              <Slide in={openMenuMovie} mountOnEnter unmountOnExit>
+                <List className={classes.movieMenu}>
+                  <Link style={{ all: 'unset' }} to={paths.NewMoviePage} >
+                    <ListItemButton className={classes.listButton} disableRipple>
+                      PHIM ĐANG CHIẾU
+                    </ListItemButton>
+                  </Link>
+                  <Link style={{ all: 'unset' }} to={paths.UpcomingMoviePage} >
+                    <ListItemButton className={classes.listButton} disableRipple>
+                      PHIM SẮP CHIẾU
+                    </ListItemButton>
+                  </Link>
+                </List>
+              </Slide>
             </Button>
-          </Fade>
-        }
-        <Link className={classes.buttonLink} to={paths.BookTicketPage}>
+            :
+            <Fade in={!openMenuMovie}>
+              <Button disableRipple color='inherit' className={classes.button}
+                onMouseOver={handleOpenMenuMovie}
+                onMouseLeave={handleCloseMenuMovie}>
+                Phim
+                < ExpandMoreIcon />
+              </Button>
+            </Fade>
+          }
+          <Link className={classes.buttonLink} to={paths.BookTicketPage}>
+            <Button disableRipple color='inherit' className={classes.button}>
+              Đặt vé
+            </Button>
+          </Link>
           <Button disableRipple color='inherit' className={classes.button}>
-            Đặt vé
+            Hỗ trợ
           </Button>
-        </Link>
-        <Button disableRipple color='inherit' className={classes.button}>Hỗ trợ</Button>
+        </React.Fragment>
+        }
         <Button
           sx={{
             position: 'absolute',
