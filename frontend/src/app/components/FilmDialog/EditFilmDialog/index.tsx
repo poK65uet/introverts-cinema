@@ -103,7 +103,7 @@ export default function EditFilmDialog(props: any) {
     if (editMovie.isError) {
       setTimeout(() => {
         notify({
-          type: 'success',
+          type: 'error',
           content: 'Thay đổi thất bại',
           autocloseDelay: 1500,
         });
@@ -128,7 +128,6 @@ export default function EditFilmDialog(props: any) {
 
   const handleEditFilm = () => {
     editMovie.refetch();
-    console.log('here');
     handleCloseDialog();
   };
 
@@ -149,7 +148,6 @@ export default function EditFilmDialog(props: any) {
   useEffect(() => {
     if (editFilmData !== undefined) {
       setValues({ ...editFilmData });
-      // console.log(values);
     }
   }, [isLoading, props.data]);
 

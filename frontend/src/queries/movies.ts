@@ -86,7 +86,6 @@ export const useGetAllMovies = () =>
   useQuery(['getAllMovies'], () => getAllMovies());
 
 export const addMovie = async (
-  id: string,
   title: string,
   imageUrl?: string,
   trailerUrl?: string,
@@ -105,34 +104,28 @@ export const addMovie = async (
   const authenticationHeader = {
     headers: { Authorization: `Bearer ${token}` },
   };
-  try {
-    response = await axios.post(
-      `${config.apiEndpoint}/films/${id}`,
-      {
-        title: title,
-        imageUrl: imageUrl,
-        trailerUrl: trailerUrl,
-        duration: duration,
-        openingDay: openingDay,
-        description: description,
-        rated: rated,
-        status: status,
-        NationalityId: NationalityId,
-        Categories: Categories,
-        Actors: Actors,
-        Directors: Directors,
-      },
-      authenticationHeader,
-    );
-  } catch (e) {
-    console.log(e);
-    return [];
-  }
+  response = await axios.post(
+    `${config.apiEndpoint}/films`,
+    {
+      title: title,
+      imageUrl: imageUrl,
+      trailerUrl: trailerUrl,
+      duration: duration,
+      openingDay: openingDay,
+      description: description,
+      rated: rated,
+      status: status,
+      NationalityId: NationalityId,
+      Categories: Categories,
+      Actors: Actors,
+      Directors: Directors,
+    },
+    authenticationHeader,
+  );
   return response.data.data;
 };
 
 export const useAddMovie = (
-  id: string,
   title: string,
   imageUrl?: string,
   trailerUrl?: string,
@@ -150,7 +143,6 @@ export const useAddMovie = (
     ['addMovie'],
     () =>
       addMovie(
-        id,
         title,
         imageUrl,
         trailerUrl,
@@ -189,28 +181,24 @@ export const updateMovie = async (
   const authenticationHeader = {
     headers: { Authorization: `Bearer ${token}` },
   };
-  try {
-    response = await axios.patch(
-      `${config.apiEndpoint}/films/${id}`,
-      {
-        title: title,
-        imageUrl: imageUrl,
-        trailerUrl: trailerUrl,
-        duration: duration,
-        openingDay: openingDay,
-        description: description,
-        rated: rated,
-        status: status,
-        Nationality: NationalityId,
-        Categories: Categories,
-        Actors: Actors,
-        Directors: Directors,
-      },
-      authenticationHeader,
-    );
-  } catch (e) {
-    return [];
-  }
+  response = await axios.patch(
+    `${config.apiEndpoint}/films/${id}`,
+    {
+      title: title,
+      imageUrl: imageUrl,
+      trailerUrl: trailerUrl,
+      duration: duration,
+      openingDay: openingDay,
+      description: description,
+      rated: rated,
+      status: status,
+      Nationality: NationalityId,
+      Categories: Categories,
+      Actors: Actors,
+      Directors: Directors,
+    },
+    authenticationHeader,
+  );
   return response.data.data;
 };
 

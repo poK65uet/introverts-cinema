@@ -32,11 +32,14 @@ export default function FilmManagementPage() {
 
   const handleClose = () => {
     setEditRowId('0');
+    refetch();
     setOpen(false);
     // window.location.reload();
   };
   const handleCloseEdit = () => {
     setOpenEdit(false);
+    // refetch();
+    remove();
     // window.location.reload();
   };
 
@@ -64,12 +67,12 @@ export default function FilmManagementPage() {
     setRows(rows.concat(newRows.slice(run - newRows.length + 1)));
   };
 
-  const { isLoading, data, remove } = useGetMovies(page, pageSize);
+  const { isLoading, data, refetch, remove } = useGetMovies(page, pageSize);
   const { isLoading: isLoadingQueryData, data: queryData } =
     useSearchMovies(query);
-
   useEffect(() => {
     if (data !== undefined && queryData === undefined) {
+      console.log('here');
       setCount(data.count);
       updateRows(data.rows);
     }

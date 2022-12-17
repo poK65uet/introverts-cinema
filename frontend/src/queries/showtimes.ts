@@ -120,21 +120,20 @@ export const addShowtime = async (
   const authenticationHeader = {
     headers: { Authorization: `Bearer ${token}` },
   };
-  console.log(startTime.toString());
-  try {
-    response = await axios.post(
-      `${config.apiEndpoint}/showtimes`,
-      {
-        film: film,
-        room: room,
-        startTime: startTime.toString(),
-      },
-      authenticationHeader,
-    );
-  } catch (e) {
-    console.log(e);
-    return [];
-  }
-  console.log('ADD OK');
+  response = await axios.post(
+    `${config.apiEndpoint}/showtimes`,
+    {
+      film: film,
+      room: room,
+      startTime: startTime.toString(),
+    },
+    authenticationHeader,
+  );
   return response.data.data;
 };
+
+export const useAddShowtime = (film: number, room: number, startTime: Date) =>
+  useQuery(['addShowtime'], () => addShowtime(film, room, startTime), {
+    enabled: false,
+    refetchOnWindowFocus: false,
+  });

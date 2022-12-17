@@ -96,7 +96,7 @@ export default function FilmDialog(props: any) {
       setTimeout(() => {
         notify({
           type: 'success',
-          content: 'Thay đổi thông tin phim thành công',
+          content: 'Thêm phim thành công',
           autocloseDelay: 1500,
         });
       }, 100);
@@ -105,8 +105,8 @@ export default function FilmDialog(props: any) {
     if (addMovie.isError) {
       setTimeout(() => {
         notify({
-          type: 'success',
-          content: 'Thay đổi thất bại',
+          type: 'error',
+          content: 'Thêm phim thất bại',
           autocloseDelay: 1500,
         });
       }, 100);
