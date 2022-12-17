@@ -94,6 +94,7 @@ export default function EditFilmDialog(props: any) {
       values.Actors,
       values.Directors,
     );
+    console.log(data);
 
     handleCloseDialog();
   };

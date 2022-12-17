@@ -128,7 +128,6 @@ export const addMovie = async (
     console.log(e);
     return [];
   }
-  console.log('ADD OK');
   return response.data.data;
 };
 
@@ -172,10 +171,8 @@ export const updateMovie = async (
       authenticationHeader,
     );
   } catch (e) {
-    console.log(e);
     return [];
   }
-  console.log('EDIT OK');
   return response.data.data;
 };
 
@@ -199,6 +196,5 @@ export const searchMovies = async (query: string): Promise<any> => {
 
 export const useSearchMovies = (query: string) =>
   useQuery(['getMovies', query], () => searchMovies(query), {
-    // enabled: false,
     refetchOnWindowFocus: false,
   });
