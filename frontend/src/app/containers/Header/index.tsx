@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import AppBar from 'app/components/AppBar';
 
 export function Header() {
