@@ -67,7 +67,6 @@ export default function FilmManagementPage() {
   const { isLoading, data, remove } = useGetMovies(page, pageSize);
   const { isLoading: isLoadingQueryData, data: queryData } =
     useSearchMovies(query);
-  // console.log(page, pageSize, data?.rows);
 
   useEffect(() => {
     if (data !== undefined && queryData === undefined) {
@@ -136,16 +135,6 @@ export default function FilmManagementPage() {
         );
       },
     },
-    // {
-    //   field: 'trailerUrl',
-    //   headerName: 'Trailer',
-    //   width: 90,
-    //   headerAlign: 'center',
-    //   align: 'center',
-    //   renderCell: (params: GridRenderCellParams<string>) => {
-    //     return params.value && <a href={params.value}>Trailer</a>;
-    //   },
-    // },
   ];
 
   return (

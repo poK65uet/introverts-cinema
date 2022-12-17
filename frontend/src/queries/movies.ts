@@ -176,6 +176,59 @@ export const updateMovie = async (
   return response.data.data;
 };
 
+export const useUpdateMovie = (
+  id: string,
+  title: string,
+  imageUrl?: string,
+  trailerUrl?: string,
+  duration?: number,
+  openingDay?: Date,
+  description?: string,
+  rated?: string,
+  status?: string,
+  NationalityId?: number,
+  Categories?: number[],
+  Actors?: number[],
+  Directors?: number[],
+) =>
+  useQuery(
+    [
+      'updateMovie',
+      id,
+      title,
+      imageUrl,
+      trailerUrl,
+      duration,
+      openingDay,
+      description,
+      rated,
+      status,
+      NationalityId,
+      Categories,
+      Actors,
+      Directors,
+    ],
+    () =>
+      updateMovie(
+        id,
+        title,
+        imageUrl,
+        trailerUrl,
+        duration,
+        openingDay,
+        description,
+        rated,
+        status,
+        NationalityId,
+        Categories,
+        Actors,
+        Directors,
+      ),
+    {
+      refetchOnWindowFocus: false,
+    },
+  );
+
 export const searchMovies = async (query: string): Promise<any> => {
   if (query === '') return undefined;
   let response: AxiosResponse<any>;

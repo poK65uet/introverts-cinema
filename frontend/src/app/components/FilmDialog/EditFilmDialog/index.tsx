@@ -23,11 +23,17 @@ import {
 import { CustomInput } from 'app/components/CustomInput';
 import useStyles from './styles';
 import { useForm } from 'hooks/useForm';
-import { addMovie, updateMovie, useGetMovieById } from 'queries/movies';
+import {
+  addMovie,
+  updateMovie,
+  useGetMovieById,
+  useUpdateMovie,
+} from 'queries/movies';
 import { usegetActors } from 'queries/actors';
 import { useGetNationalities } from 'queries/nationality';
 import { useGetCategories } from 'queries/categories';
 import { useGetDirectors } from 'queries/directors';
+import { notify } from 'app/components/MasterDialog';
 
 export default function EditFilmDialog(props: any) {
   const classes = useStyles();
@@ -72,14 +78,19 @@ export default function EditFilmDialog(props: any) {
     props.onClose();
   };
 
+  const handleCancelDialog = () => {
+    handleCloseDialog();
+    console.log('cancel');
+    setTimeout(() => {
+      notify({
+        type: 'warning',
+        content: 'Đã hủy thao tác',
+        autocloseDelay: 1500,
+      });
+    }, 100);
+  };
   const handleEditFilm = () => {
-    setValues({
-      ...values,
-      // Actors: values.Actors.map(({ id }: { id: any }) => id),
-      // Directors: values.Directors.map(({ id }: { id: any }) => id),
-      // Categories: values.Categories.map(({ id }: { id: any }) => id),
-    });
-    const data = updateMovie(
+    useUpdateMovie(
       values.id.toString(),
       values.title,
       values.imageUrl,
@@ -94,8 +105,6 @@ export default function EditFilmDialog(props: any) {
       values.Actors,
       values.Directors,
     );
-    console.log(data);
-
     handleCloseDialog();
   };
 
@@ -123,7 +132,7 @@ export default function EditFilmDialog(props: any) {
   return (
     <Dialog
       open={props.open}
-      onClose={handleCloseDialog}
+      onClose={handleCancelDialog}
       fullWidth
       maxWidth="md"
       scroll="paper"
@@ -321,7 +330,6 @@ export default function EditFilmDialog(props: any) {
                     setValues({ ...values, Actors: value.map(id => id) })
                   }
                   isOptionEqualToValue={(option, value) => {
-                    console.log(option, value);
                     return option.id === value.id;
                   }}
                   renderInput={params => (
@@ -385,7 +393,7 @@ export default function EditFilmDialog(props: any) {
               sx={{ mt: 2, p: 1, fontWeight: 'bold', color: 'white' }}
               disableFocusRipple
               className={classes.CancelButton}
-              onClick={handleCloseDialog}
+              onClick={handleCancelDialog}
             >
               Hủy thao tác
             </Button>
