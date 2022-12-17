@@ -32,11 +32,16 @@ export default function ShowtimeManagementPage() {
 
   const { data: queryData, isLoading: isLoadingQueryData } =
     useGetShowtimesQuery(movieQuery, roomQuery);
-  console.log(roomQuery, movieQuery, queryData);
   const movieData = useGetAllMovies();
   const roomData = useGetAllRooms();
+  console.log(isLoading, isLoading, data, queryData);
   useEffect(() => {
-    if (data !== undefined && queryData === undefined) {
+    if (
+      data !== undefined &&
+      queryData === undefined &&
+      movieQuery === 0 &&
+      roomQuery === 0
+    ) {
       setPageState({ ...pageState, count: data?.count, rows: data?.rows });
     }
     if (queryData !== undefined) {
@@ -46,7 +51,7 @@ export default function ShowtimeManagementPage() {
         count: queryData.count,
       });
     }
-  }, [isLoading, isLoadingQueryData]);
+  }, [isLoading, isLoadingQueryData, data, queryData]);
 
   const columns: GridColDef[] = [
     {
@@ -80,18 +85,25 @@ export default function ShowtimeManagementPage() {
       },
     },
     {
-      field: 'Room.name',
+      field: 'Room',
       headerName: 'Tên phòng chiếu',
       width: 150,
       headerAlign: 'center',
       align: 'center',
+      renderCell: (params: GridRenderCellParams<any>) => {
+        if (params.value === undefined) return null;
+        return params.value.name;
+      },
     },
     {
-      field: 'Film.title',
+      field: 'Film',
       headerName: 'Tên phim',
-      width: 150,
-      align: 'center',
+      width: 280,
       headerAlign: 'center',
+      renderCell: (params: GridRenderCellParams<any>) => {
+        if (params.value === undefined) return null;
+        return params.value.title;
+      },
     },
     {
       field: 'createdAt',

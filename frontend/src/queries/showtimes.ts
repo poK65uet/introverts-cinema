@@ -84,7 +84,7 @@ export const getShowtimesQuery = async (
   };
   let additionalQuery = '';
   if (movie !== 0) {
-    additionalQuery = additionalQuery + `&film=${room}`;
+    additionalQuery = additionalQuery + `&film=${movie}`;
   }
   if (room !== 0) {
     additionalQuery = additionalQuery + `&room=${room}`;
