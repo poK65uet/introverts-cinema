@@ -82,7 +82,7 @@ export default function FilmDialog(props: any) {
   console.log(addShowtime);
 
   useEffect(() => {
-    if (addShowtime.isError) {
+    if (addShowtime.data === null) {
       setTimeout(() => {
         notify({
           type: 'error',
@@ -90,17 +90,17 @@ export default function FilmDialog(props: any) {
           autocloseDelay: 1500,
         });
       }, 100);
-    }
-
-    if (addShowtime.isSuccess) {
-      setTimeout(() => {
-        notify({
-          type: 'success',
-          content: 'Thêm suất chiếu thành công',
-          autocloseDelay: 1500,
-        });
-      }, 100);
-      // window.location.reload();
+    } else {
+      if (addShowtime.isSuccess) {
+        setTimeout(() => {
+          notify({
+            type: 'success',
+            content: 'Thêm suất chiếu thành công',
+            autocloseDelay: 1500,
+          });
+        }, 100);
+        // window.location.reload();
+      }
     }
   }, [addShowtime.isLoading]);
 
