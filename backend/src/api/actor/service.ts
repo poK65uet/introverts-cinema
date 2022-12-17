@@ -77,12 +77,8 @@ const addActor = async (req: Request) => {
 			status = ResponeCodes.BAD_REQUEST;
 		} else {
 			const transaction = await sequelize.transaction(async t => {
-				const actor = await Actor.create(newActor, {
-					transaction: t
-				});
-				await actor.setNationality(nationality, {
-					transaction: t
-				});
+				const actor = await Actor.create(newActor, { transaction: t });
+				if (nationality) await actor.setNationality(nationality, { transaction: t });
 
 				data = actor;
 				message = 'Add successfully!';
@@ -120,11 +116,8 @@ const updateActor = async (req: Request) => {
 				const actor = await Actor.findByPk(id, {
 					transaction: t
 				});
-				actor.set(updateActor);
-				await actor.save({ transaction: t });
-				await actor.setNationality(nationality, {
-					transaction: t
-				});
+				await actor.update(updateActor, { transaction: t });
+				if (nationality) await actor.setNationality(nationality, { transaction: t });
 
 				data = actor;
 				message = 'Updated successfully!';
