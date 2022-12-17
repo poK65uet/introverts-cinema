@@ -17,7 +17,6 @@ const useStyles = makeStyles((theme: Theme) => ({
 
   adminMenu: {
     width: '300px !important',
-    minWidth: '17%',
     padding: '0 !important',
     borderRight: '1px solid #ccc',
     backgroundColor: '#d1e9ea',
