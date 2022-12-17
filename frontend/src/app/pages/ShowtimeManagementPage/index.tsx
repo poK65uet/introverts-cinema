@@ -34,7 +34,6 @@ export default function ShowtimeManagementPage() {
     useGetShowtimesQuery(movieQuery, roomQuery);
   const movieData = useGetAllMovies();
   const roomData = useGetAllRooms();
-  console.log(isLoading, isLoading, data, queryData);
   useEffect(() => {
     if (
       data !== undefined &&
