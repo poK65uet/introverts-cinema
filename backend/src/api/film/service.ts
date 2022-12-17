@@ -120,18 +120,11 @@ const addFilm = async (req: Request) => {
 				const film = await Film.create(newFilm, {
 					transaction: t
 				});
-				await film.setNationality(nationality, {
-					transaction: t
-				});
-				await film.setCategories(categories, {
-					transaction: t
-				});
-				await film.setActors(actors, {
-					transaction: t
-				});
-				await film.setDirectors(directors, {
-					transaction: t
-				});
+				if (nationality) await film.setNationality(nationality, { transaction: t });
+				if (categories) await film.setCategories(categories, { transaction: t });
+				if (actors) await film.setActors(actors, { transaction: t });
+				if (directors) await film.setDirectors(directors, { transaction: t });
+
 				data = film;
 				message = 'Add successfully!';
 				status = ResponeCodes.CREATED;
@@ -166,12 +159,11 @@ const updateFilm = async (req: Request) => {
 
 			const transaction = await sequelize.transaction(async t => {
 				const film = await Film.findByPk(id, { transaction: t });
-				film.set(updateFilm);
-				await film.save({ transaction: t });
-				await film.setNationality(nationality, { transaction: t });
-				await film.setCategories(categories, { transaction: t });
-				await film.setActors(actors, { transaction: t });
-				await film.setDirectors(directors, { transaction: t });
+				await film.update(updateFilm, { transaction: t })
+				if (nationality) await film.setNationality(nationality, { transaction: t });
+				if (categories) await film.setCategories(categories, { transaction: t });
+				if (actors) await film.setActors(actors, { transaction: t });
+				if (directors) await film.setDirectors(directors, { transaction: t });
 
 				data = film;
 				message = 'Updated successfully!';
@@ -241,7 +233,8 @@ const getOpeningFilm = async () => {
 				through: {
 					attributes: []
 				}
-			}
+			},
+			order: [['openingDay', 'DESC']]
 		});
 		message = 'Get opening film successfully!';
 		status = ResponeCodes.OK;
@@ -276,7 +269,8 @@ const getUpcomingFilm = async () => {
 				through: {
 					attributes: []
 				}
-			}
+			},
+			order: [['openingDay', 'ASC']]
 		});
 		message = 'Get upcoming film successfully!';
 		status = ResponeCodes.OK;
