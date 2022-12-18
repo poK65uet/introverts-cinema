@@ -1,16 +1,13 @@
+import { Height } from '@mui/icons-material';
 import { makeStyles } from '@mui/styles';
+import { spacing } from '@mui/system';
 import { Theme } from '@mui/material';
 
 const useStyles = makeStyles((theme: Theme) => ({
-  tab: {
-    justifyContent: 'left !important',
+  filmFilter: {
+    maxWidth: '300px',
+    marginLeft: '2em !important',
   },
-
-  activeTab: {
-    transition: '0.5s',
-  },
-
-  wrapper: {},
 }));
 
 export default useStyles;

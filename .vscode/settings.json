@@ -1,7 +1,0 @@
-{
-    "vscode-edge-devtools.pathMapping": {
-
-        "/": "${workspaceFolder}"
-    },
-    "npm.enableScriptExplorer": "true"
-}

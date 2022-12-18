@@ -48,7 +48,6 @@ const Film = sequelize.define<FilmModel>(
 		},
 		title: {
 			allowNull: false,
-			unique: true,
 			type: DataTypes.STRING
 		},
 		imageUrl: {

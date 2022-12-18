@@ -1,5 +1,5 @@
 import { Request } from 'express';
-import { Bill, Room, Seat, Ticket } from 'databases/models';
+import { Bill, Film, Room, Seat, Ticket } from 'databases/models';
 import { SeatModel } from 'databases/models/Seat';
 import BillPayload from './BillPayload';
 import sequelize from 'databases';
@@ -14,6 +14,7 @@ import { BillModel } from 'databases/models/Bill';
 import config from 'config';
 import { DESCRIPTION_PREFIX, getBillCodeById, verifyBillTransaction } from 'api/transaction/service';
 import { Transaction } from 'sequelize';
+import Status from 'utils/constants/Status';
 
 const MAX_SEAT = 10;
 export const MAX_PAY_TIME = 15; //minutes
@@ -30,6 +31,7 @@ const createBill = async (req: Request) => {
 		});
 
 		if (!showtime) {
+			t.commit();
 			return {
 				message: 'Showtime invalid',
 				status: ResponeCodes.BAD_REQUEST
@@ -37,6 +39,7 @@ const createBill = async (req: Request) => {
 		}
 		var totalPrice = 0;
 		if (payload.seats.length > MAX_SEAT) {
+			t.commit();
 			return {
 				message: 'Number of seats invalid',
 				status: ResponeCodes.BAD_REQUEST
@@ -132,12 +135,14 @@ const cancelBill = async (req: Request) => {
 		});
 
 		if (!bill || bill.paymentStatus === PaymentStatus.PAID) {
+			t.commit();
 			return {
 				message: 'Bill invalid',
 				status: ResponeCodes.BAD_REQUEST
 			};
 		}
 		if (bill.User.id !== req.user.id) {
+			t.commit();
 			return {
 				message: 'Error Authorization',
 				status: ResponeCodes.BAD_REQUEST
@@ -189,12 +194,16 @@ const verifyBillPayment = async (req: Request) => {
 					include: [
 						{
 							model: Room
+						},
+						{
+							model: Film
 						}
 					]
 				}
 			]
 		});
 		if (!bill) {
+			t.commit();
 			return {
 				message: 'Bill invalid!',
 				status: ResponeCodes.BAD_REQUEST
@@ -202,6 +211,7 @@ const verifyBillPayment = async (req: Request) => {
 		}
 
 		if (bill.User.id !== req.user.id) {
+			t.commit();
 			return {
 				message: 'Error Authorization',
 				status: ResponeCodes.BAD_REQUEST
@@ -209,6 +219,7 @@ const verifyBillPayment = async (req: Request) => {
 		}
 
 		if (bill.paymentStatus === PaymentStatus.PAID) {
+			t.commit();
 			return {
 				message: 'Payment had been paid',
 				status: ResponeCodes.BAD_REQUEST
@@ -217,14 +228,15 @@ const verifyBillPayment = async (req: Request) => {
 
 		const startTime = new Date(Date.now());
 		let isPaid = false;
-		while (timeDiffToMinute(new Date(Date.now()), startTime) <= 0.5) {
+		while (timeDiffToMinute(new Date(Date.now()), startTime) <= 0.3) {
 			isPaid = await verifyBillTransaction(bill);
 			if (isPaid) {
-				console.log(isPaid);
-
-				await bill.update({
-					paymentStatus: PaymentStatus.PAID
-				});
+				await bill.update(
+					{
+						paymentStatus: PaymentStatus.PAID
+					},
+					{ transaction: t }
+				);
 
 				await createTicketForBill(bill, t);
 				break;
@@ -233,14 +245,15 @@ const verifyBillPayment = async (req: Request) => {
 		t.commit();
 		if (isPaid) {
 			return {
-				data: 0,
+				data: true,
 				message: 'Successfully',
 				status: ResponeCodes.OK
 			};
 		} else {
 			return {
+				data: false,
 				message: `Not found payment`,
-				status: ResponeCodes.BAD_REQUEST
+				status: ResponeCodes.OK
 			};
 		}
 	} catch (error) {
@@ -287,11 +300,13 @@ const createTicketForBill = async (bill: BillModel, t: Transaction) => {
 				seatCode: seat.code,
 				time: bill.Showtime.startTime,
 				price,
-				room: bill.Showtime.Room.name
+				room: bill.Showtime.Room.name,
+				status: Status.ACTIVE
 			},
 			{ transaction: t }
 		);
 		await ticket.setUser(bill.User, { transaction: t });
+		await ticket.setFilm(bill.Showtime.Film, { transaction: t });
 	}
 };
 

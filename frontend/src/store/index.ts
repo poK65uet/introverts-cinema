@@ -4,6 +4,7 @@ import moviesReducer from 'app/components/Movies/slice';
 import bannersReducer from 'app/components/Banner/slice';
 import loginReducer from 'app/components/LoginDialog/slice';
 import registerReducer from 'app/components/LoginDialog/Register/slice';
+import forgotPasswordReducer from 'app/components/LoginDialog/ForgotPassword/slice';
 import loadingReducer from 'app/components/LoadingLayer/slice';
 import bookTicketReducer from 'app/pages/BookTicketPage/slice';
 
@@ -14,6 +15,7 @@ export const store = configureStore({
     movies: moviesReducer,
     login: loginReducer,
     register: registerReducer,
+    forgotPassword: forgotPasswordReducer,
     loading: loadingReducer,
     bookTicket: bookTicketReducer,
   },

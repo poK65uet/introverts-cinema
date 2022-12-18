@@ -26,6 +26,7 @@ import {
   Login as LoginIcon,
   Logout as LogoutIcon,
   Person as ProfileIcon,
+  QueryStats as StatsIcon,
   AccountCircle as AccountIcon,
   Menu as MenuIcon,
 } from '@mui/icons-material';
@@ -85,20 +86,14 @@ export default function AppBar() {
       position='sticky'
       sx={{
         fontSize: { xs: '10px !important', sm: '1em !important' }
-      }}
-    >
+      }}>
       <Link to='/' style={{ zIndex: 'inherit' }}>
         <Button disableRipple
           className={classes.logoButton}
           sx={{
             position: 'absolute'
           }}
-          onClick={() => window.scrollTo({
-            top: 0,
-            behavior: 'smooth'
-          })}
-          color='secondary'
-        >
+          color='secondary'>
           <img className={classes.logo} src={require('app/assets/images/logo.webp')} />
         </Button>
       </Link>
@@ -113,8 +108,7 @@ export default function AppBar() {
           disableFocusRipple
           color='inherit'
           onClick={handleClickMainMenu}
-          startIcon={<MenuIcon className={classes.icon} />}
-        />
+          startIcon={<MenuIcon className={classes.icon} />} />
         <Drawer
           open={openMainMenu}
           onClose={handleCloseMainMenu}
@@ -128,18 +122,25 @@ export default function AppBar() {
               top: '3rem',
             }
           }}
-          anchor='top' >
+          anchor='top'>
           <TreeView
             defaultCollapseIcon={<ExpandMoreIcon />}
-            defaultExpandIcon={<ChevronRightIcon />}
-          >
+            defaultExpandIcon={<ChevronRightIcon />}>
             <TreeItem nodeId='1' className={classes.menuItem} label='PHIM'>
-              <TreeItem nodeId='2' className={classes.menuItem} label='PHIM ĐANG CHIẾU' />
-              <TreeItem nodeId='3' className={classes.menuItem} label='PHIM SẮP CHIẾU' />
+              <Link to={`${paths.NewMoviePage}`} style={{ all: 'unset' }} onClick={handleCloseMainMenu}>
+                <TreeItem nodeId='2' className={classes.menuItem} label='PHIM ĐANG CHIẾU' />
+              </Link>
+              <Link to={`${paths.UpcomingMoviePage}`} style={{ all: 'unset' }} onClick={handleCloseMainMenu}>
+                <TreeItem nodeId='3' className={classes.menuItem} label='PHIM SẮP CHIẾU' />
+              </Link>
             </TreeItem>
-            <TreeItem nodeId='4' className={classes.menuItem} label='ĐẶT VÉ' />
+            <Link to={`${paths.BookTicketPage}`} style={{ all: 'unset' }} onClick={handleCloseMainMenu}>
+              <TreeItem nodeId='4' className={classes.menuItem} label='ĐẶT VÉ' />
+            </Link>
             <TreeItem nodeId='5' className={classes.menuItem} label='HỖ TRỢ' />
-            <TreeItem nodeId='6' className={classes.menuItem} label='TÀI KHOẢN' />
+            <Link to={`${paths.UserPage}`} style={{ all: 'unset' }} onClick={handleCloseMainMenu}>
+              <TreeItem nodeId='6' className={classes.menuItem} label='TÀI KHOẢN' />
+            </Link>
           </TreeView>
         </Drawer>
       </Container>
@@ -147,43 +148,48 @@ export default function AppBar() {
         className={classes.toolBar}
         sx={{
           display: { xs: 'none', sm: 'flex' }
-        }}
-      >
-        {openMenuMovie ?
-          <Button disableRipple color='inherit' className={classes.button}
-            onMouseOver={handleOpenMenuMovie}
-            onMouseLeave={handleCloseMenuMovie}>
-            <Slide in={openMenuMovie} mountOnEnter unmountOnExit>
-              <List className={classes.movieMenu}>
-                <Link style={{ all: 'unset' }} to={paths.NewMoviePage} >
-                  <ListItemButton className={classes.listButton} disableRipple>
-                    PHIM ĐANG CHIẾU
-                  </ListItemButton>
-                </Link>
-                <Link style={{ all: 'unset' }} to={paths.UpcomingMoviePage} >
-                  <ListItemButton className={classes.listButton} disableRipple>
-                    PHIM SẮP CHIẾU
-                  </ListItemButton>
-                </Link>
-              </List>
-            </Slide>
-          </Button>
-          :
-          <Fade in={!openMenuMovie}>
-            <Button disableRipple color='inherit' className={classes.button}
-              onMouseOver={handleOpenMenuMovie}
-              onMouseLeave={handleCloseMenuMovie}>
-              Phim
-              < ExpandMoreIcon />
+        }}>
+        {store.login.isAdmin ? null :
+          <React.Fragment>
+            {openMenuMovie ?
+              <Button disableRipple color='inherit' className={classes.button}
+                onMouseOver={handleOpenMenuMovie}
+                onMouseLeave={handleCloseMenuMovie}>
+                <Slide in={openMenuMovie} mountOnEnter unmountOnExit>
+                  <List className={classes.movieMenu}>
+                    <Link style={{ all: 'unset' }} to={paths.NewMoviePage} >
+                      <ListItemButton className={classes.listButton} disableRipple>
+                        PHIM ĐANG CHIẾU
+                      </ListItemButton>
+                    </Link>
+                    <Link style={{ all: 'unset' }} to={paths.UpcomingMoviePage} >
+                      <ListItemButton className={classes.listButton} disableRipple>
+                        PHIM SẮP CHIẾU
+                      </ListItemButton>
+                    </Link>
+                  </List>
+                </Slide>
+              </Button>
+              :
+              <Fade in={!openMenuMovie}>
+                <Button disableRipple color='inherit' className={classes.button}
+                  onMouseOver={handleOpenMenuMovie}
+                  onMouseLeave={handleCloseMenuMovie}>
+                  Phim
+                  < ExpandMoreIcon />
+                </Button>
+              </Fade>
+            }
+            <Link className={classes.buttonLink} to={paths.BookTicketPage}>
+              <Button disableRipple color='inherit' className={classes.button}>
+                Đặt vé
+              </Button>
+            </Link>
+            <Button disableRipple color='inherit' className={classes.button}>
+              Hỗ trợ
             </Button>
-          </Fade>
+          </React.Fragment>
         }
-        <Link className={classes.buttonLink} to={paths.BookTicketPage}>
-          <Button disableRipple color='inherit' className={classes.button}>
-            Đặt vé
-          </Button>
-        </Link>
-        <Button disableRipple color='inherit' className={classes.button}>Hỗ trợ</Button>
         <Button
           sx={{
             position: 'absolute',
@@ -198,16 +204,17 @@ export default function AppBar() {
             Đăng nhập
           </span>
         </Button>
-        <Button
-          sx={{
-            position: 'absolute',
-            display: store.login.isLoggedin ? 'flex' : 'none'
-          }}
-          disableRipple
-          color='inherit'
-          className={classes.accountButton}
-          startIcon={<AccountIcon className={classes.icon} />}
-        />
+        <Link to={`${paths.UserPage}`} style={{ all: 'unset' }}>
+          <Button
+            sx={{
+              position: 'absolute',
+              display: store.login.isLoggedin ? 'flex' : 'none'
+            }}
+            disableRipple
+            color='inherit'
+            className={classes.accountButton}
+            startIcon={<AccountIcon className={classes.icon} />} />
+        </Link>
         <Button
           sx={{
             position: 'absolute',
@@ -218,29 +225,27 @@ export default function AppBar() {
           className={classes.optButton}
           onClick={handleOpenOpt}
           disabled={!store.login.isLoggedin}
-          hidden={!store.login.isLoggedin}
-        ><ExpandMoreIcon />
+          hidden={!store.login.isLoggedin}>
+          <ExpandMoreIcon />
         </Button>
         <Popper
           sx={{ display: store.login.isLoggedin ? 'initial' : 'none' }}
           open={openOpt}
           anchorEl={anchorRef.current}
           role={undefined}
-          placement="bottom-start"
+          placement='bottom-start'
           transition
           disablePortal
           onResize={onResize}
           onResizeCapture={onResizeCapture}
-          nonce={''}
-        >
+          nonce={''}>
           {({ TransitionProps, placement }) => (
             <Grow
               {...TransitionProps}
               style={{
                 transformOrigin:
                   placement === 'top-end' ? 'right bottom' : 'right top',
-              }}
-            >
+              }}>
               <Paper sx={{
                 bgcolor: '#1D1C1A',
                 color: 'inherit',
@@ -257,6 +262,16 @@ export default function AppBar() {
                         Thông tin
                       </MenuItem>
                     </Link>
+                    <Link to={`${paths.CustomerManagement}`} style={{ all: 'unset' }}>
+                      {store.login.isAdmin ?
+                        <MenuItem
+                          disableRipple
+                          className={classes.optItems}
+                          onClick={handleCloseOpt}>
+                          <StatsIcon sx={{ pr: 1, mr: 'auto' }} />
+                          Quản lý
+                        </MenuItem> : null}
+                    </Link>
                     <MenuItem
                       disableRipple
                       className={classes.optItems}
@@ -272,6 +287,6 @@ export default function AppBar() {
         </Popper>
       </Toolbar>
       <LoginDialog open={openLoginDialog} onClose={handleCloseLoginDialog} />
-    </MuiAppBar >
+    </MuiAppBar>
   );
 }

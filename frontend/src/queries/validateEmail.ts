@@ -9,14 +9,9 @@ export const validateEmail = async (
   if (email == '') {
     return 'unfilled_email';
   }
-
-  try {
-    response = await axios.post(`${config.apiEndpoint}/register/checkEmail`, {
-      email: email,
-    });
-  } catch (e) {
-    return false;
-  }
+  response = await axios.post(`${config.apiEndpoint}/register/check-email`, {
+    email: email,
+  });
 
   return response.data.data;
 };

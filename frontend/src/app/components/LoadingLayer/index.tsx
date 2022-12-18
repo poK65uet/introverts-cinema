@@ -1,5 +1,5 @@
-import { Backdrop } from '@mui/material'
 import React, { useEffect, useState } from 'react'
+import { Backdrop } from '@mui/material'
 import { ThreeCircles } from 'react-loader-spinner';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from 'store';
@@ -12,6 +12,7 @@ export default function LoadingLayer() {
 	useEffect(() => {
 		setIsLoading(
 			loading.loading.isLoading
+			|| loading.home.isLoading
 			|| loading.movies.isLoading
 			|| loading.login.isLoading
 			|| loading.register.isLoading

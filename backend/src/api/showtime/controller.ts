@@ -12,15 +12,9 @@ const getShowtimes = async (req: Request, res: Response) => {
 	}
 };
 
-const getAllShowtimes = async (req: Request, res: Response) => {
+const getShowtimesByFilm = async (req: Request, res: Response) => {
 	try {
-		const filmId = parseInt(req.query.film as string);
-		let result;
-		if (isNaN(filmId)) {
-			result = await service.getAllShowtimes(req);
-		} else {
-			result = await service.getShowtimesByFilm(filmId);
-		}
+		const result = await service.getShowtimesByFilm(req);
 		const { data, message, status } = result;
 		return new ApiResponse(data, message, status).send(res);
 	} catch (error) {
@@ -68,4 +62,4 @@ const deleteShowtime = async (req: Request, res: Response) => {
 	}
 };
 
-export { getShowtimes, getAllShowtimes, getShowtime, addShowtime, updateShowtime, deleteShowtime };
+export { getShowtimes, getShowtimesByFilm, getShowtime, addShowtime, updateShowtime, deleteShowtime };

@@ -1,7 +1,8 @@
 import { makeStyles } from '@mui/styles';
+import { Theme } from '@mui/material';
 
-const useStyles = makeStyles(() => ({
-  AddFilmBox: {
+const useStyles = makeStyles((theme: Theme) => ({
+  forgotPasswordBox: {
     display: 'flex',
     flexDirection: 'column',
     backgroundColor: 'white',
@@ -9,20 +10,14 @@ const useStyles = makeStyles(() => ({
     overflow: 'hidden',
     padding: '2em',
   },
-
-  AddFilmButton: {
+  verifyButton: {
     borderRadius: '15px !important',
     transition: '0.5s !important',
     boxShadow: 'none !important',
-    // '&:hover': {
-    //   backgroundColor: theme.palette.primary.dark,
-    // },
+    '&:hover': {
+      backgroundColor: theme.palette.primary.dark,
+    },
   },
-
-  // registerButton: {
-  //   borderRadius: '15px !important',
-  //   transition: '0.5s !important',
-  // },
 }));
 
 export default useStyles;

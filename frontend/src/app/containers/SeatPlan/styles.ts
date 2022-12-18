@@ -67,7 +67,7 @@ const useStyles = makeStyles(() => ({
     },
   },
 
-  seatWaitingExplain: {
+  seatBookingExplain: {
     '&::before': {
       backgroundColor: '#F1C40F',
       content: '""',

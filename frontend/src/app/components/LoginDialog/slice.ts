@@ -1,22 +1,33 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { login } from 'queries/login';
-import { getUserProfile } from 'queries/user';
+import { getUserProfile } from 'queries/users';
 import { notify } from 'app/components/MasterDialog/index';
 
+export enum DialogActions {
+  LOGIN = 'login',
+  REGISTER = 'register',
+  FORGOT_PASSWORD = 'forgot-password',
+}
 export interface LoginState {
   isLoggedin: boolean;
+  isRequireLogin: boolean;
+  isRequireRegister: boolean;
   isLoading: boolean;
-  dialogAction: 'login' | 'register';
+  dialogAction: DialogActions;
   user: any;
+  isAdmin: boolean;
 }
 
 const initialState: LoginState = {
   isLoggedin:
     sessionStorage.getItem('token') !== undefined &&
     sessionStorage.getItem('token') !== null,
-  user: undefined,
+  isRequireLogin: false,
+  isRequireRegister: false,
   isLoading: false,
-  dialogAction: 'login',
+  dialogAction: DialogActions.LOGIN,
+  user: undefined,
+  isAdmin: false,
 };
 
 export const loginSlice = createSlice({
@@ -26,12 +37,28 @@ export const loginSlice = createSlice({
     logout: state => {
       state.isLoggedin = false;
       state.user = [];
+      state.isAdmin = false;
       sessionStorage.removeItem('token');
       notify({
         type: 'info',
         content: 'Đã đăng xuất',
         autocloseDelay: 1250,
       });
+    },
+    requireLogin: state => {
+      state.isRequireLogin = true;
+    },
+    requireRegister: state => {
+      state.isRequireRegister = true;
+      state.dialogAction = DialogActions.REGISTER;
+    },
+    denyRequire: state => {
+      state.isRequireLogin = false;
+      state.isRequireRegister = false;
+    },
+    setUser: (state, action) => {
+      state.user = action.payload;
+      state.isAdmin = state.user.Roles.some((role: any) => role.id == 1);
     },
     changeAction: (state, action) => {
       state.dialogAction = action.payload;
@@ -52,6 +79,10 @@ export const loginSlice = createSlice({
           autocloseDelay: 1250,
         });
         state.user = action.payload.user;
+        if (state.user.Roles.some((role: any) => role.id == 1)) {
+          window.location.href = '/admin';
+          state.isAdmin = true;
+        }
         console.log('LOGIN SUCCESS');
       } else {
         console.log('LOGIN FAILED');

@@ -11,14 +11,35 @@ import { addTimeByMinute } from 'utils/helpers/timeService';
 
 const NEXT_SHOWTIME = 30; // minutes;
 
+interface ShowtimeGroup {
+	date: Date;
+	showtimes: ShowtimeModel[];
+}
+
 const getShowtimes = async (req: Request) => {
 	try {
 		const { limit, offset, order, query } = paginate(req);
 
+		const roomId = parseInt(req.query.room as string);
+		const filmId = parseInt(req.query.film as string);
+
+		const whereRoom = isNaN(roomId) ? {} : { id: roomId };
+		const whereFilm = isNaN(filmId) ? {} : { id: filmId };
+
 		const showtimes = await Showtime.findAndCountAll({
 			limit,
 			offset,
-			order: [order]
+			order: [order],
+			include: [
+				{
+					model: Room,
+					where: whereRoom
+				},
+				{
+					model: Film,
+					where: whereFilm
+				}
+			]
 		});
 
 		return showtimes;
@@ -27,33 +48,14 @@ const getShowtimes = async (req: Request) => {
 	}
 };
 
-const getAllShowtimes = async (req: Request) => {
+const getShowtimesByFilm = async (req: Request) => {
 	try {
-		let data;
+		let data: ShowtimeGroup[];
 		let message: string;
 		let status: number;
 
-		const showtime = await Showtime.findAll();
-
-		data = showtime;
-		message = 'Get successfully!';
-		status = ResponeCodes.OK;
-
-		return {
-			data,
-			message,
-			status
-		};
-	} catch (error) {
-		throw error;
-	}
-};
-
-const getShowtimesByFilm = async (filmId: number) => {
-	try {
-		let data;
-		let message: string;
-		let status: number;
+		const filmId = parseInt(req.query.film as string);
+		const whereFilm = isNaN(filmId) ? {} : { id: filmId };
 		const now = new Date(Date.now());
 
 		const showtime = await Showtime.findAll({
@@ -66,9 +68,11 @@ const getShowtimesByFilm = async (filmId: number) => {
 				{
 					model: Film,
 					attributes: [],
-					where: {
-						id: filmId
-					}
+					where: whereFilm
+				},
+				{
+					model: Room,
+					attributes: ['visionType']
 				}
 			],
 			order: [['start_time', 'ASC']]
@@ -90,7 +94,10 @@ const getShowtimesByFilm = async (filmId: number) => {
 
 const getShowtimeById = async (req: Request) => {
 	try {
-		let data;
+		let data: {
+			showtime: ShowtimeModel;
+			price: number;
+		};
 		let message: string;
 		let status: number;
 
@@ -138,7 +145,7 @@ const getShowtimeById = async (req: Request) => {
 
 const addShowtime = async (req: Request) => {
 	try {
-		let data;
+		let data: ShowtimeModel;
 		let message: string;
 		let status: number;
 
@@ -148,12 +155,14 @@ const addShowtime = async (req: Request) => {
 			film: await Film.findByPk(newShowtime.film),
 			roomId: newShowtime.room
 		};
-		const now = new Date(Date.now());
 
-		if (!newSt.startTime || newSt.startTime < now || !newSt.film || !newSt.roomId) {
+		const now = new Date(Date.now());
+		const openingDay = new Date(newSt.film?.openingDay);
+
+		if (!newSt.startTime || !newSt.film || !newSt.roomId || newSt.startTime < now || newSt.startTime < openingDay) {
 			data = null;
-			message = 'Null.';
-			status = ResponeCodes.BAD_REQUEST;
+			message = 'Invalid payload.';
+			status = ResponeCodes.OK;
 		} else {
 			const checkShowtimes = await Showtime.findAll({
 				where: {
@@ -198,7 +207,7 @@ const addShowtime = async (req: Request) => {
 				});
 			} else {
 				data = null;
-				message = 'Conflict showtime';
+				message = 'Conflict showtime.';
 				status = ResponeCodes.OK;
 			}
 		}
@@ -283,7 +292,7 @@ const isInOneDay = (d1: Date, d2: Date) => {
 	return d1.getFullYear() === d2.getFullYear() && d1.getMonth() === d2.getMonth() && d1.getDate() === d2.getDate();
 };
 
-const groupShowtimeByDate = (showtimes: ShowtimeModel[]) => {
+const groupShowtimeByDate = (showtimes: ShowtimeModel[]): ShowtimeGroup[] => {
 	var newShowtimes = [];
 	for (let i = 0; i < showtimes.length; i++) {
 		const originDate = showtimes[i].startTime;
@@ -303,12 +312,4 @@ const groupShowtimeByDate = (showtimes: ShowtimeModel[]) => {
 	return newShowtimes;
 };
 
-export {
-	getShowtimes,
-	getShowtimeById,
-	getShowtimesByFilm,
-	getAllShowtimes,
-	addShowtime,
-	updateShowtime,
-	deleteShowtime
-};
+export { getShowtimes, getShowtimeById, getShowtimesByFilm, addShowtime, updateShowtime, deleteShowtime };

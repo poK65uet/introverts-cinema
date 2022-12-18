@@ -1,12 +1,13 @@
-import React, { useEffect, useLayoutEffect, useMemo, useState } from 'react';
-import { Seat } from 'app/components/Seat';
+import React, { useEffect, useMemo, useState } from 'react';
 import useStyles from './styles';
 import Grid from '@mui/material/Unstable_Grid2';
 import { useDispatch, useSelector } from 'react-redux';
+import { Seat, SeatState } from 'app/components/Seat';
 import { bookTicketActions } from 'app/pages/BookTicketPage/slice';
 import { RootState } from 'store';
 
 interface SeatPlanProps {
+  seats: any
   seatCols: number
   seatRows: number
   emptyCols?: number[] | string
@@ -14,10 +15,10 @@ interface SeatPlanProps {
 }
 
 const seatExplain = [
-  { state: 'vacant', explain: 'Ghế trống' },
-  { state: 'selected', explain: 'Ghế đã chọn' },
-  { state: 'booked', explain: 'Ghế đã bán' },
-  { state: 'waiting', explain: 'Ghế đang chờ' }
+  { state: SeatState.VACANT, explain: 'Ghế trống' },
+  { state: SeatState.SELECTED, explain: 'Ghế đã chọn' },
+  { state: SeatState.BOOKED, explain: 'Ghế đã bán' },
+  { state: SeatState.BOOKING, explain: 'Ghế đang chờ' }
 ]
 
 const splitString = (string: string) => {
@@ -142,10 +143,12 @@ export function SeatPlan(props: SeatPlanProps) {
               : seat.index == 'empty_label' ? <div style={{ height: '1em' }} />
                 : seat.seatRow == props.seatRows + 1 ? <div className={classes.colNum}>{seat.index}</div>
                   : seat.seatCol == props.seatCols + 1 ? <div className={classes.rowCharacter}>{seat.index}</div>
-                    : <Seat id={index} seatIndex={seat.index}
+                    : <Seat id={index} seatIndex={seat.index} seatRow={seat.seatRow} seatCol={seat.seatCol}
                       onClick={() => { }}
-                      status={store.bookTicket.selectedSeats.filter(selectedSeat => seat.index == selectedSeat.name).length != 0
-                        ? 'selected' : 'vacant'} />}
+                      status={props.seats?.find((propSeat: any) => propSeat?.code == seat.index)?.status == SeatState.BOOKED ? SeatState.BOOKED
+                        : props.seats?.find((propSeat: any) => propSeat?.code == seat.index)?.status == SeatState.BOOKING ? SeatState.BOOKING
+                          : store.bookTicket.selectedSeats.filter(selectedSeat => seat.index == selectedSeat.name).length != 0
+                            ? SeatState.SELECTED : SeatState.VACANT} />}
           </Grid>
         })
       }
@@ -153,9 +156,9 @@ export function SeatPlan(props: SeatPlanProps) {
         {seatExplain.map((seat) => {
           return <Grid xs={3} key={seat.state}>
             <div className={
-              seat.state == 'vacant' ? classes.seatVacantExplain :
-                seat.state == 'selected' ? classes.seatSelectedExplain :
-                  seat.state == 'booked' ? classes.seatBookedExplain : classes.seatWaitingExplain
+              seat.state == SeatState.VACANT ? classes.seatVacantExplain :
+                seat.state == SeatState.SELECTED ? classes.seatSelectedExplain :
+                  seat.state == SeatState.BOOKED ? classes.seatBookedExplain : classes.seatBookingExplain
             }>
               {seat.explain}
             </div>

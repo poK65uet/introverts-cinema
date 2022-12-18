@@ -1,24 +1,38 @@
-import React, { useEffect } from 'react'
-import { Button, CardMedia, Container, Typography } from '@mui/material';
-import RatedTag from 'app/components/RatedTag/index';
+import React, { useEffect, useState } from 'react'
+import { Button, CardMedia, Container, IconButton, Typography } from '@mui/material';
 import Grid from '@mui/material/Unstable_Grid2';
-import { RootState } from 'store';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { Link, useParams } from 'react-router-dom';
 import { useGetMovieById } from 'queries/movies';
 import useStyles from './styles';
-import { Update as DurationIcon } from '@mui/icons-material';
+import {
+  PlayArrow as Play,
+  Update as DurationIcon
+} from '@mui/icons-material';
+import RatedTag from 'app/components/RatedTag/index';
+import VideoPlayer from 'app/components/VideoPlayer';
 import NotFoundPage from 'app/pages/NotFoundPage/index';
 import { bookTicketActions } from '../BookTicketPage/slice';
-import paths from 'paths';
 import { formatDate } from 'utils/date';
-import { moviesActions } from '../../components/Movies/slice';
+import { moviesActions } from 'app/components/Movies/slice';
+import { notify } from 'app/components/MasterDialog';
+import paths from 'paths';
 
 export default function MovieDetailPage() {
 
-  let { movieId } = useParams<{ movieId: string | undefined }>()
+  const { movieId } = useParams<{ movieId: string | undefined }>()
+  const [showTrailer, setShowTrailer] = useState(false)
 
-  const { data: movie, isLoading } = useGetMovieById(movieId)
+  const onGetMovieError = () => {
+    notify({
+      type: 'error',
+      content: 'Không tìm thấy phim, hãy thử lại',
+      autocloseDelay: 1250
+    })
+    dispatch(moviesActions.loadingDone)
+  }
+
+  const { data: movie, isLoading } = useGetMovieById(movieId, { onError: onGetMovieError })
 
   useEffect(() => {
     window.scrollTo({
@@ -32,6 +46,13 @@ export default function MovieDetailPage() {
     isLoading ? dispatch(moviesActions.loading()) : dispatch(moviesActions.loadingDone())
   }, [isLoading])
 
+  const handleShowTrailer = () => {
+    setShowTrailer(true)
+  }
+
+  const handleCloseTrailer = () => {
+    setShowTrailer(false)
+  }
 
   const handleClickBookTicket = () => {
     dispatch(bookTicketActions.selectMovie(movieId))
@@ -50,15 +71,25 @@ export default function MovieDetailPage() {
           columnSpacing={{ xs: 0, md: 2 }}
           fontSize={{ xs: '0.75em', sm: '0.875em  ', md: '1em' }}
           my={4} px={{ xs: 4, sm: 8, md: 10 }}>
-          <Grid xs={12} md={3} lg={2.25}
+          <Grid xs={12} md={3} lg={1.875}
             px={{ xs: 8, sm: 20, md: 0, lg: 0 }}
             pb={{ xs: 4, md: 0 }}
-            display='flex' justifyContent='center'>
+            display='flex'
+            justifyContent='center'
+            alignItems='center'>
             <Container sx={{ px: '0 !important' }}>
               <CardMedia component='img' image={movie?.imageUrl} />
             </Container>
+            <IconButton
+              sx={{ fontSize: '2.25em' }} disableFocusRipple
+              className={classes.playTrailer} onClick={handleShowTrailer}>
+              <Play sx={{ fontSize: '1.5em', }} />
+            </IconButton>
+            <VideoPlayer
+              trailer={movie.trailerUrl}
+              show={showTrailer} onClose={handleCloseTrailer} />
           </Grid>
-          <Grid xs={12} md={8} lg={9.75}
+          <Grid xs={12} md={8} lg={10.125}
             container
             fontSize={{ xs: '1.25em', lg: '1.5em' }}
             fontWeight='bold'
@@ -180,13 +211,14 @@ export default function MovieDetailPage() {
           </Grid>
           <Grid xs={12}
             fontSize={{ xs: '1.25em', lg: '1.625em' }}
-            fontFamily=''
-            mt={4}>
+            fontFamily='' whiteSpace='pre-wrap'
+            mt={4} >
             {movie?.description}
           </Grid>
         </Grid>
         : isLoading ? <PageSekeleton />
-          : <NotFoundPage />}
+          : <NotFoundPage />
+      }
     </div >
   )
 }

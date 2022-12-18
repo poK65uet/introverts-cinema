@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { sendCode } from 'queries/sendCode';
+import { sendRegisterCode } from 'queries/sendCode';
 import { validateEmail } from 'queries/validateEmail';
 import { register } from 'queries/register';
 import { notify } from 'app/components/MasterDialog';
@@ -9,7 +9,7 @@ export interface RegisterState {
   OTP: number | undefined;
   isEmailValid: boolean | 'unfilled_email' | undefined;
   isOTPSent: boolean;
-  isRegisterSuccessAccount: { email: string; password: string } | undefined;
+  registerSuccessAccount: { email: string; password: string } | undefined;
 }
 
 const initialState: RegisterState = {
@@ -17,7 +17,7 @@ const initialState: RegisterState = {
   OTP: undefined,
   isEmailValid: undefined,
   isOTPSent: false,
-  isRegisterSuccessAccount: undefined,
+  registerSuccessAccount: undefined,
 };
 
 export const registerSlice = createSlice({
@@ -28,7 +28,7 @@ export const registerSlice = createSlice({
       state.isEmailValid = undefined;
       state.isOTPSent = false;
       state.OTP = undefined;
-      state.isRegisterSuccessAccount = undefined;
+      state.registerSuccessAccount = undefined;
     },
     changeEmail: state => {
       state.isEmailValid = undefined;
@@ -63,11 +63,11 @@ export const registerSlice = createSlice({
       console.log('VALIDATE ERROR');
     });
 
-    builder.addCase(sendCodeThunk.pending, state => {
+    builder.addCase(sendRegisterCodeThunk.pending, state => {
       state.isLoading = true;
       console.log('SENDING OTP');
     });
-    builder.addCase(sendCodeThunk.fulfilled, (state, action) => {
+    builder.addCase(sendRegisterCodeThunk.fulfilled, (state, action) => {
       state.isLoading = false;
       if (action.payload == '201') {
         state.isOTPSent = true;
@@ -84,7 +84,7 @@ export const registerSlice = createSlice({
         }
       }
     });
-    builder.addCase(sendCodeThunk.rejected, state => {
+    builder.addCase(sendRegisterCodeThunk.rejected, state => {
       state.isLoading = false;
       state.isOTPSent = false;
       console.log('SEND OTP ERROR');
@@ -102,10 +102,15 @@ export const registerSlice = createSlice({
     builder.addCase(registerThunk.fulfilled, (state, action) => {
       state.isLoading = false;
       if (action.payload.status == '201') {
-        state.isRegisterSuccessAccount = {
+        state.registerSuccessAccount = {
           email: action.payload.email,
           password: action.payload.password,
         };
+        notify({
+          type: 'success',
+          content: 'Đăng ký thành công',
+          autocloseDelay: 1250,
+        });
         console.log('REGISTER SUCCESS');
       } else {
         if (action.payload.status == '200') {
@@ -137,34 +142,31 @@ export const registerSlice = createSlice({
 });
 
 export const validateEmailThunk = createAsyncThunk(
-  'register/validateEmail',
-  async (data: { email: string }, reject) => {
+  'register/validate-email',
+  async (data: { email: string }) => {
     const receivedData = await validateEmail(data.email);
     return receivedData;
   },
 );
 
-export const sendCodeThunk = createAsyncThunk(
-  'register/sendCode',
-  async (data: { email: string | undefined }, reject) => {
-    const receivedData = await sendCode(data.email);
+export const sendRegisterCodeThunk = createAsyncThunk(
+  'register/send-code',
+  async (data: { email: string }) => {
+    const receivedData = await sendRegisterCode(data.email);
     return receivedData;
   },
 );
 
 export const registerThunk = createAsyncThunk(
   'register/register',
-  async (
-    data: {
-      email: string;
-      password: string;
-      otp: number;
-      fullName: string;
-      phone: string;
-      birthDay: string;
-    },
-    reject,
-  ) => {
+  async (data: {
+    email: string;
+    password: string;
+    otp: number;
+    fullName: string;
+    phone: string;
+    birthDay: string;
+  }) => {
     const receivedData = await register(
       data.email,
       data.password,

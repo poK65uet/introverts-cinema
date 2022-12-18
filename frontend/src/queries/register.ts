@@ -8,20 +8,17 @@ export const register = async (
   fullName: string,
   phone: string,
   birthDay: string,
-): Promise<string | boolean> => {
+): Promise<string> => {
   let response: AxiosResponse<any>;
-  try {
-    response = await axios.post(`${config.apiEndpoint}/register`, {
-      email: email,
-      password: password,
-      code: otp,
-      fullName: fullName,
-      phone: phone,
-      birthDay: birthDay,
-    });
-  } catch (e) {
-    return false;
-  }
+
+  response = await axios.post(`${config.apiEndpoint}/register`, {
+    email: email,
+    password: password,
+    code: otp,
+    fullName: fullName,
+    phone: phone,
+    birthDay: birthDay,
+  });
 
   return response.data.status;
 };

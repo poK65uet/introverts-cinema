@@ -3,17 +3,19 @@ import { makeStyles } from '@mui/styles';
 import { spacing } from '@mui/system';
 
 const useStyles = makeStyles(() => ({
-filmTable: {
-    height: 400, 
-    width: '95%',
-},
-collumnHeader: {
+  showtimeTable: {
+    height: 1100,
+    width: 'calc(100% - 360px)',
+    marginLeft: '330px',
+    marginTop: '20px',
+  },
+  collumnHeader: {
     fontWeight: 'bold',
-},
-addButton: {
+  },
+  addButton: {
     variant: 'outlined',
     align: 'left !important',
-}
+  },
 }));
 
 export default useStyles;

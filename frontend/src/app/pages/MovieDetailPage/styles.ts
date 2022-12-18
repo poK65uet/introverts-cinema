@@ -11,6 +11,18 @@ const useStyles = makeStyles(() => ({
   movieTitle: {
     textTransform: 'uppercase',
   },
+  playTrailer: {
+    '&.MuiButtonBase-root': {
+      position: 'absolute',
+      transition: '0.35s',
+      backgroundColor: '#000000AA',
+      color: '#FFFFFFEE',
+      '&:hover': {
+        backgroundColor: '#00000088',
+        color: '#FFFFFFBB',
+      },
+    },
+  },
   movieDetail: {
     display: 'inline',
   },

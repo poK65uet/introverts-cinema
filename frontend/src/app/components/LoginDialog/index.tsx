@@ -1,15 +1,16 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import {
   Dialog,
 } from '@mui/material';
 import useStyles from './styles';
-import { loginThunk, loginActions } from './slice';
+import { loginThunk, loginActions, DialogActions } from './slice';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from 'store';
 import { registerActions } from './Register/slice';
+import Login from './Login'
 import Register from './Register';
-import Login from './Login';
-import { notify } from 'app/components/MasterDialog';
+import ForgotPassword from './ForgotPassword';
+
 
 export default function LoginDialog(props: any) {
 
@@ -19,48 +20,42 @@ export default function LoginDialog(props: any) {
 
   const handleCloseDialog = () => {
     props.onClose()
+    dispatch(loginActions.denyRequire())
     setTimeout(() => {
       dispatch(registerActions.reset())
-      dispatch(loginActions.changeAction('login'))
+      dispatch(loginActions.changeAction(DialogActions.LOGIN))
     }, 500);
   }
 
   useEffect(() => {
-    if (store.register.isEmailValid === true) {
-      dispatch(loginActions.changeAction('register'))
-    }
-  }, [store.register.isEmailValid])
-
-  useEffect(() => {
-    if (store.login.isLoggedin) {
+    if (store.login.isLoggedin || store.forgotPassword.isResetPasswordSuccess) {
       handleCloseDialog()
     }
-  }, [store.login.isLoggedin])
+  }, [store.login.isLoggedin, store.forgotPassword.isResetPasswordSuccess])
 
   useEffect(() => {
-    if (store.register.isRegisterSuccessAccount !== undefined) {
+    if (store.register.registerSuccessAccount !== undefined) {
       dispatch(loginThunk({
-        email: store.register.isRegisterSuccessAccount.email,
-        password: store.register.isRegisterSuccessAccount.password
+        email: store.register.registerSuccessAccount.email,
+        password: store.register.registerSuccessAccount.password
       }))
-      notify(
-        {
-          type: 'success',
-          content: 'Đăng ký thành công',
-        })
     }
-  }, [store.register.isRegisterSuccessAccount])
+  }, [store.register.registerSuccessAccount])
 
   const classes = useStyles();
 
   return (
     <Dialog
-      open={props.open && !store.login.isLoggedin}
+      open={(props.open || store.login.isRequireLogin || store.login.isRequireRegister) && !store.login.isLoggedin}
       onClose={handleCloseDialog}
       className={classes.dialog}>
-      {store.login.dialogAction == 'login' ?
+      {store.login.dialogAction == DialogActions.LOGIN ?
         <Login />
-        : <Register />
+        : store.login.dialogAction == DialogActions.REGISTER ?
+          <Register />
+          : store.login.dialogAction == DialogActions.FORGOT_PASSWORD ?
+            <ForgotPassword />
+            : null
       }
     </Dialog >
   )

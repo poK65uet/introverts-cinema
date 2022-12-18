@@ -1,7 +1,6 @@
 import { makeStyles } from '@mui/styles';
-
 const useStyles = makeStyles(() => ({
-  AddFilmBox: {
+  EditFilmBox: {
     display: 'flex',
     flexDirection: 'column',
     backgroundColor: 'white',
@@ -9,20 +8,39 @@ const useStyles = makeStyles(() => ({
     overflow: 'hidden',
     padding: '2em',
   },
-
-  AddFilmButton: {
+  EditFilmButton: {
     borderRadius: '15px !important',
     transition: '0.5s !important',
     boxShadow: 'none !important',
-    // '&:hover': {
-    //   backgroundColor: theme.palette.primary.dark,
-    // },
   },
-
-  // registerButton: {
-  //   borderRadius: '15px !important',
-  //   transition: '0.5s !important',
-  // },
+  CancelButton: {
+    borderRadius: '15px !important',
+    transition: '0.5s !important',
+    boxShadow: 'none !important',
+    backgroundColor: '#909090 !important',
+  },
+  ActiveSelect: {
+    '&:before': {
+      borderColor: 'green !important',
+    },
+    '&:after': {
+      borderColor: 'green !important',
+    },
+    '&:not(.Mui-disabled):hover::before': {
+      borderColor: 'green !important',
+    },
+  },
+  InactiveSelect: {
+    '&:before': {
+      borderColor: 'red !important',
+    },
+    '&:after': {
+      borderColor: 'red !important',
+    },
+    '&:not(.Mui-disabled):hover::before': {
+      borderColor: 'red !important',
+    },
+  },
 }));
 
 export default useStyles;

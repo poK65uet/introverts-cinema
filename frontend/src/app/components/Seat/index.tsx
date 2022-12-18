@@ -4,15 +4,22 @@ import { ButtonBase, Tooltip } from '@mui/material';
 import { Chair as SeatIcon } from '@mui/icons-material';
 import { notify } from 'app/components/MasterDialog';
 import { useDispatch, useSelector } from 'react-redux';
-import { bookTicketActions } from '../../pages/BookTicketPage/slice';
+import { bookTicketActions } from 'app/pages/BookTicketPage/slice';
 import { RootState } from 'store';
 interface SeatProps {
   id: number
-  seatRow?: string
+  seatRow?: number
   seatCol?: number
   seatIndex?: string
-  status: 'vacant' | 'booked' | 'selected'
+  status: SeatState
   onClick(): void
+}
+
+export enum SeatState {
+  VACANT = 'vacant',
+  SELECTED = 'selected',
+  BOOKED = 'booked',
+  BOOKING = 'booking'
 }
 
 export function Seat(props: SeatProps) {
@@ -34,11 +41,23 @@ export function Seat(props: SeatProps) {
       notify({
         type: 'error',
         content: 'Có thể đặt tối đa 10 ghế',
-        autocloseDelay: 2000
+        autocloseDelay: 1750
       })
     } else {
-      !select ? dispatch(bookTicketActions.selectSeat({ id: props.id, name: props.seatIndex })) :
-        dispatch(bookTicketActions.unselectSeat({ id: props.id, name: props.seatIndex }))
+      !select ? dispatch(bookTicketActions.selectSeat({
+        id: props.id,
+        showtimeId: store.bookTicket.selectedShowtime.id,
+        name: props.seatIndex,
+        seatCol: props.seatCol,
+        seatRow: props.seatRow
+      })) :
+        dispatch(bookTicketActions.unselectSeat({
+          id: props.id,
+          showtimeId: store.bookTicket.selectedShowtime.id,
+          name: props.seatIndex,
+          seatCol: props.seatCol,
+          seatRow: props.seatRow
+        }))
       notify({
         type: !select ? 'success' : 'warning',
         content: `Đã ${select ? 'bỏ' : ''} chọn ghế ${props.seatIndex}`,
@@ -54,14 +73,16 @@ export function Seat(props: SeatProps) {
       <ButtonBase
         className={classes.seat}
         disableRipple
-        onClick={(event) => handleClick(event)}>
+        onClick={(event) => handleClick(event)}
+        disabled={props.status == SeatState.BOOKED || props.status == SeatState.BOOKING}>
         <SeatIcon className={
-          props.status == 'booked' ? classes.booked
-            : props.status == 'vacant' ? classes.vacant
-              : classes.selected
+          props.status == SeatState.BOOKED ? classes.booked :
+            props.status == SeatState.BOOKING ? classes.booking
+              : props.status == SeatState.VACANT ? classes.vacant
+                : classes.selected
         }
           fontSize='inherit' />
       </ButtonBase>
-    </Tooltip>
+    </Tooltip >
   );
 }

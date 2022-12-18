@@ -10,7 +10,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     overflow: 'hidden',
     padding: '2em',
   },
-  loginButton: {
+  registerButton: {
     borderRadius: '15px !important',
     transition: '0.5s !important',
     boxShadow: 'none !important',
