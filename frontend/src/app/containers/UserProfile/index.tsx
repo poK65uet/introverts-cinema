@@ -96,9 +96,9 @@ export default function UserProfile() {
       !(
         userData?.fullName == store.login.user?.fullName &&
         new Date(userData?.birthDay ? userData.birthDay : 0).toISOString() ==
-          new Date(
-            store.login.user?.birthDay ? store.login.user.birthDay : 0,
-          ).toISOString() &&
+        new Date(
+          store.login.user?.birthDay ? store.login.user.birthDay : 0,
+        ).toISOString() &&
         new Date(userData?.birthDay).toString() != 'Invalid Date' &&
         userData?.phone == store.login.user?.phone
       ),
