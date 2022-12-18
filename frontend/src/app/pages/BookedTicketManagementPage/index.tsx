@@ -41,10 +41,11 @@ export default function BookedTicketManagementPage() {
             roomName: row.room,
             setCode: row.seatCode,
             price: row.price.toLocaleString() + ' VNĐ',
-            createAt:
-              formatHour(new Date(row.createAt)) +
+            createdAt:
+              formatHour(new Date(row.createdAt)) +
               ' ' +
-              formatDate(new Date(row.createAt)),
+              formatDate(new Date(row.createdAt)),
+            filmDuration: row.Film?.duration + ' phút',
           };
         }),
       });
@@ -98,7 +99,7 @@ export default function BookedTicketManagementPage() {
     },
     {
       field: 'createdAt',
-      headerName: 'Ngày tạo',
+      headerName: 'Thời gian tạo',
       width: 180,
       align: 'center',
       headerAlign: 'center',
@@ -125,7 +126,7 @@ export default function BookedTicketManagementPage() {
         autoHeight
         page={pageState.page}
         pageSize={pageState.pageSize}
-        loading={pageState.isLoading}
+        loading={isLoading}
         onPageChange={newPage => setPageState({ ...pageState, page: newPage })}
         onPageSizeChange={newPageSize =>
           setPageState({ ...pageState, pageSize: newPageSize })
