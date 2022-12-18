@@ -34,6 +34,7 @@ import { useGetNationalities } from 'queries/nationality';
 import { useGetCategories } from 'queries/categories';
 import { useGetDirectors } from 'queries/directors';
 import { notify } from 'app/components/MasterDialog';
+import { AnyMap } from 'immer/dist/internal';
 
 export default function EditFilmDialog(props: any) {
   const classes = useStyles();
@@ -74,6 +75,26 @@ export default function EditFilmDialog(props: any) {
     validate,
   );
 
+  const updateData = () => {
+    const newRow = {
+      id: values.id,
+      NationalityId: values.NationalityId,
+      description: values.description,
+      duration: values.duration,
+      openingDay: values.openingDay,
+      rated: values.rated,
+      title: values.title,
+      createdAt: values.createdAt,
+      updatedAt: values.updatedAt,
+      status: values.status,
+    };
+    props.setRows((prevRows: any, something: any) => {
+      return prevRows.map((row: any, index: any) =>
+        row.id === newRow.id ? newRow : row,
+      );
+    });
+  };
+
   const editMovie = useUpdateMovie(
     values.id.toString(),
     values.title,
@@ -91,6 +112,7 @@ export default function EditFilmDialog(props: any) {
   );
   useEffect(() => {
     if (editMovie.isSuccess) {
+      updateData();
       setTimeout(() => {
         notify({
           type: 'success',

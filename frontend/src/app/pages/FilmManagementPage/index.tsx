@@ -14,6 +14,7 @@ import AddFilmDialog from '../../components/FilmDialog/AddFilmDialog';
 import { useGetMovies, useSearchMovies } from 'queries/movies';
 import EditFilmDialog from 'app/components/FilmDialog/EditFilmDialog';
 import CustomToolbar from 'app/containers/CustomToolbar';
+import { formatDate } from 'utils/date';
 
 export default function FilmManagementPage() {
   const classes = useStyles();
@@ -34,13 +35,11 @@ export default function FilmManagementPage() {
     setEditRowId('0');
     refetch();
     setOpen(false);
-    // window.location.reload();
   };
   const handleCloseEdit = () => {
     setOpenEdit(false);
     // refetch();
     remove();
-    // window.location.reload();
   };
 
   const handleClickOpenEditPage = (params: any) => {
@@ -72,7 +71,6 @@ export default function FilmManagementPage() {
     useSearchMovies(query);
   useEffect(() => {
     if (data !== undefined && queryData === undefined) {
-      console.log('here');
       setCount(data.count);
       updateRows(data.rows);
     }
@@ -128,14 +126,8 @@ export default function FilmManagementPage() {
       headerAlign: 'center',
       renderCell: (params: GridRenderCellParams<string>) => {
         if (params.value === undefined) return null;
-        const openingDay = new Date(params.value);
-        return (
-          openingDay.getDate() +
-          '/' +
-          openingDay.getMonth() +
-          '/' +
-          openingDay.getFullYear()
-        );
+        const openingDay = formatDate(new Date(params.value));
+        return openingDay;
       },
     },
   ];
@@ -147,6 +139,7 @@ export default function FilmManagementPage() {
         data={editRowId}
         open={openEdit}
         onClose={handleCloseEdit}
+        setRows={setRows}
       />
       <Button className={classes.addButton} onClick={handleClickOpenAddPage}>
         Thêm phim mới

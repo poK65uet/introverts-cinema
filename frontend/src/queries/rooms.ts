@@ -39,7 +39,6 @@ export const getRooms = async (page: number, size: number): Promise<any> => {
 
 export const useGetRooms = (page: number, size: number) =>
   useQuery(['getRooms', page, size], () => getRooms(page, size), {
-    // enabled: false,
     refetchOnWindowFocus: false,
   });
 
@@ -65,50 +64,103 @@ export const getAllRooms = async (): Promise<any> => {
 export const useGetAllRooms = () =>
   useQuery(['getAllRooms'], () => getAllRooms());
 
-export const addRoom = async (
-  fullName: string,
-  birthDay?: Date,
-  Room?: number,
+export const updateRoom = async (
+  id: string,
+  name: string,
+  visionType: string,
+  colNumber: number,
+  rowNumber: number,
+  colEmpty: string,
+  rowEmpty: string,
 ): Promise<any> => {
   let response: AxiosResponse<any>;
   const token = sessionStorage.getItem('token');
   const authenticationHeader = {
     headers: { Authorization: `Bearer ${token}` },
   };
-  try {
-    response = await axios.post(`${config.apiEndpoint}/rooms`, {
-      fullName: fullName,
-      birthDay: birthDay,
-      Room: Room,
-    });
-  } catch (e) {
-    return [];
-  }
+  response = await axios.patch(
+    `${config.apiEndpoint}/rooms/${id}`,
+    {
+      name,
+      visionType,
+      colNumber,
+      rowNumber,
+      colEmpty,
+      rowEmpty,
+    },
+    authenticationHeader,
+  );
   return response.data.data;
 };
 
-export const updateRoom = async (
-  fullName: string,
-  birthDay?: Date,
-  Room?: number,
+export const useUpdateRoom = (
+  id: string,
+  name: string,
+  visionType: string,
+  colNumber: number,
+  rowNumber: number,
+  colEmpty: string,
+  rowEmpty: string,
+) =>
+  useQuery(
+    ['updateRoom'],
+    () =>
+      updateRoom(
+        id,
+        name,
+        visionType,
+        colNumber,
+        rowNumber,
+        colEmpty,
+        rowEmpty,
+      ),
+    {
+      enabled: false,
+      refetchOnWindowFocus: false,
+    },
+  );
+
+export const addRoom = async (
+  name: string,
+  visionType: string,
+  colNumber: number,
+  rowNumber: number,
+  colEmpty: string,
+  rowEmpty: string,
 ): Promise<any> => {
   let response: AxiosResponse<any>;
   const token = sessionStorage.getItem('token');
   const authenticationHeader = {
     headers: { Authorization: `Bearer ${token}` },
   };
-  try {
-    response = await axios.patch(
-      `${config.apiEndpoint}/rooms`,
-      {
-        fullName: fullName,
-        birthDay: birthDay,
-        Room: Room,
-      },
-      authenticationHeader,
-    );
-  } catch (e) {
-    return [];
-  }
+  response = await axios.post(
+    `${config.apiEndpoint}/rooms`,
+    {
+      name: name,
+      visionType: visionType,
+      colNumber: colNumber,
+      rowNumber: rowNumber,
+      colEmpty: colEmpty,
+      rowEmpty: rowEmpty,
+    },
+    authenticationHeader,
+  );
   return response.data.data;
 };
+
+export const useAddRoom = (
+  name: string,
+  visionType: string,
+  colNumber: number,
+  rowNumber: number,
+  colEmpty: string,
+  rowEmpty: string,
+) =>
+  useQuery(
+    ['addRoom'],
+    () => addRoom(name, visionType, colNumber, rowNumber, colEmpty, rowEmpty),
+    {
+      enabled: false,
+      refetchOnWindowFocus: false,
+    },
+  );

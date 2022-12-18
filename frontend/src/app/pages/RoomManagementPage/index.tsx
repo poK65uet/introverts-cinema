@@ -2,14 +2,18 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { useGetMessage } from 'queries/message';
 import useStyles from './styles';
-import { Box } from '@mui/material';
+import { Box, Button } from '@mui/material';
 import {
   DataGrid,
   GridColDef,
   GridRenderCellParams,
+  GridRow,
   GridToolbar,
 } from '@mui/x-data-grid';
 import { useGetRooms } from 'queries/rooms';
+import { formatDate } from 'utils/date';
+import AddRoomDialog from 'app/components/RoomDialog/AddRoomDialog';
+import EditRoomDialog from 'app/components/RoomDialog/EditRoomDialog';
 
 export default function RoomManagementPage() {
   const classes = useStyles();
@@ -20,15 +24,37 @@ export default function RoomManagementPage() {
     pageSize: 20,
     page: 1,
   });
+  const [open, setOpen] = useState(false);
+  const [openEdit, setOpenEdit] = useState(false);
+  const [editData, setEditData] = useState(null);
 
-  const { data, isLoading } = useGetRooms(pageState.page, pageState.pageSize);
+  const handleCloseEdit = () => {
+    setOpenEdit(false);
+  };
+
+  const handleOpenEdit = (props: any) => {
+    setEditData(props);
+    setOpenEdit(true);
+  };
+
+  const { data, isLoading, refetch } = useGetRooms(
+    pageState.page,
+    pageState.pageSize,
+  );
   console.log(data);
   useEffect(() => {
     if (data !== undefined) {
       setPageState({ ...pageState, count: data.count, rows: data.rows });
     }
-  }, [isLoading]);
+  }, [data, refetch]);
 
+  const handleClickOpenAddPage = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
   const columns: GridColDef[] = [
     {
       field: 'id',
@@ -47,21 +73,21 @@ export default function RoomManagementPage() {
     },
     {
       field: 'visionType',
-      headerName: 'Định dạng phim',
+      headerName: 'Loại phòng',
       width: 220,
       headerAlign: 'center',
       align: 'center',
     },
     {
-      field: 'columnNumber',
-      headerName: 'Số cột ghế',
+      field: 'colNumber',
+      headerName: 'Số cột',
       width: 150,
       align: 'center',
       headerAlign: 'center',
     },
     {
       field: 'rowNumber',
-      headerName: 'Số hàng ghế',
+      headerName: 'Số hàng',
       width: 150,
       align: 'center',
       headerAlign: 'center',
@@ -75,14 +101,8 @@ export default function RoomManagementPage() {
       headerAlign: 'center',
       renderCell: (params: GridRenderCellParams<string>) => {
         if (params.value === undefined) return null;
-        const openingDay = new Date(params.value);
-        return (
-          openingDay.getDate() +
-          '/' +
-          openingDay.getMonth() +
-          '/' +
-          openingDay.getFullYear()
-        );
+        const openingDay = formatDate(new Date(params.value));
+        return openingDay;
       },
     },
     {
@@ -94,20 +114,24 @@ export default function RoomManagementPage() {
       headerAlign: 'center',
       renderCell: (params: GridRenderCellParams<string>) => {
         if (params.value === undefined) return null;
-        const openingDay = new Date(params.value);
-        return (
-          openingDay.getDate() +
-          '/' +
-          openingDay.getMonth() +
-          '/' +
-          openingDay.getFullYear()
-        );
+        const openingDay = formatDate(new Date(params.value));
+        return openingDay;
       },
     },
   ];
 
   return (
     <Box className={classes.roomTable}>
+      <AddRoomDialog open={open} onClose={handleClose} refetch={refetch} />
+      <EditRoomDialog
+        open={openEdit}
+        onClose={handleCloseEdit}
+        refetch={refetch}
+        data={editData}
+      />
+      <Button className={classes.addButton} onClick={handleClickOpenAddPage}>
+        Thêm phòng chiếu mới
+      </Button>
       <DataGrid
         autoHeight
         page={pageState.page - 1}
@@ -124,6 +148,7 @@ export default function RoomManagementPage() {
         rows={pageState?.rows}
         disableSelectionOnClick
         columns={columns}
+        onRowDoubleClick={GridRow => handleOpenEdit(GridRow.row)}
       />
     </Box>
   );

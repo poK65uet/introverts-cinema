@@ -35,7 +35,7 @@ import { useGetCategories } from 'queries/categories';
 import { useGetAllRooms, useGetRooms } from 'queries/rooms';
 import { addShowtime, useAddShowtime } from 'queries/showtimes';
 import { notify } from 'app/components/MasterDialog';
-export default function FilmDialog(props: any) {
+export default function AddShowtimeDialog(props: any) {
   const classes = useStyles();
 
   const validate = (fieldValues = values) => {
@@ -79,7 +79,6 @@ export default function FilmDialog(props: any) {
     addShowtime.refetch();
     handleCloseDialog();
   };
-  console.log(addShowtime);
 
   useEffect(() => {
     if (addShowtime.data === null) {
@@ -90,6 +89,7 @@ export default function FilmDialog(props: any) {
           autocloseDelay: 1500,
         });
       }, 100);
+      addShowtime.remove();
     } else {
       if (addShowtime.isSuccess) {
         setTimeout(() => {
@@ -99,12 +99,11 @@ export default function FilmDialog(props: any) {
             autocloseDelay: 1500,
           });
         }, 100);
-        // window.location.reload();
+        addShowtime.remove();
       }
     }
   }, [addShowtime.isLoading]);
 
-  // console.log(values);
   return (
     <Dialog
       open={props.open}

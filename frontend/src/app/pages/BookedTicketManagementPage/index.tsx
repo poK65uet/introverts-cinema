@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { useGetMessage } from 'queries/message';
 import useStyles from './styles';
-import { Box } from '@mui/material';
+import { Box, Chip } from '@mui/material';
 import {
   DataGrid,
   GridColDef,
@@ -11,6 +11,7 @@ import {
 } from '@mui/x-data-grid';
 import { useGetTickets, useGetTicketsPagination } from 'queries/tickets';
 import { formatDate, formatHour } from 'utils/date';
+import { fullDigit } from 'utils/number';
 
 export default function BookedTicketManagementPage() {
   const classes = useStyles();
@@ -35,8 +36,8 @@ export default function BookedTicketManagementPage() {
           return {
             id: row.id,
             filmTitle: row.Film?.title,
-            startDateTime: formatDate(new Date(row.startTime)),
-            startHourTime: formatHour(new Date(row.startTime)),
+            startDateTime: formatDate(new Date(row.time)),
+            startHourTime: formatHour(new Date(row.time)),
             roomName: row.room,
             setCode: row.seatCode,
             price: row.price.toLocaleString() + ' VNĐ',
@@ -54,9 +55,12 @@ export default function BookedTicketManagementPage() {
     {
       field: 'id',
       headerName: 'Mã vé',
-      width: 70,
+      width: 110,
       align: 'center',
       headerAlign: 'center',
+      valueFormatter: params => {
+        return 'TK' + fullDigit(params.value, 6).toString();
+      },
     },
     {
       field: 'filmTitle',
@@ -98,6 +102,20 @@ export default function BookedTicketManagementPage() {
       width: 180,
       align: 'center',
       headerAlign: 'center',
+    },
+    {
+      field: 'status',
+      headerName: 'Trạng thái',
+      width: 150,
+      align: 'center',
+      headerAlign: 'center',
+      renderCell: (params: GridRenderCellParams<string>) => {
+        return params.value === 'active' ? (
+          <Chip label="Còn hiệu lực" variant="outlined" color="success" />
+        ) : (
+          <Chip label="Hết hiệu lực" variant="outlined" color="error" />
+        );
+      },
     },
   ];
 
