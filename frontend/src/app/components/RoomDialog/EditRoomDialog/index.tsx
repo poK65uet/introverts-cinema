@@ -63,7 +63,6 @@ export default function EditRoomDialog(props: any) {
       setValues(props.data);
     }
   }, [props.data]);
-  console.log(values);
   const handleCloseDialog = () => {
     props.onClose();
   };
@@ -90,6 +89,7 @@ export default function EditRoomDialog(props: any) {
           autocloseDelay: 1500,
         });
       }, 100);
+      editRoom.remove();
     } else {
       if (editRoom.isSuccess) {
         setTimeout(() => {
@@ -100,6 +100,7 @@ export default function EditRoomDialog(props: any) {
           });
         }, 100);
         props.refetch();
+        editRoom.remove();
       }
     }
   }, [editRoom.isLoading]);
@@ -142,7 +143,7 @@ export default function EditRoomDialog(props: any) {
                 fullWidth
                 label="Trạng thái"
                 onChange={(event: any) => {
-                  setValues({ ...values, status: event.target.value });
+                  setValues({ ...values, visionType: event.target.value });
                 }}
               >
                 <MenuItem value={'2D'}>2D</MenuItem>
@@ -157,6 +158,7 @@ export default function EditRoomDialog(props: any) {
                 label="Số hàng"
                 name="rowNumber"
                 value={values?.rowNumber}
+                type="number"
                 onChange={handleInputChange}
                 inputProps={{ maxLength: '64' }}
               />
@@ -165,6 +167,7 @@ export default function EditRoomDialog(props: any) {
               <CustomInput.TextField
                 label="Số cột"
                 name="colNumber"
+                type="number"
                 value={values?.colNumber}
                 onChange={handleInputChange}
                 inputProps={{ maxLength: '64' }}
@@ -177,6 +180,7 @@ export default function EditRoomDialog(props: any) {
               <CustomInput.TextField
                 label="Hàng trống"
                 name="rowEmpty"
+                type="number"
                 value={values?.rowEmpty}
                 onChange={handleInputChange}
                 inputProps={{ maxLength: '64' }}
@@ -187,6 +191,7 @@ export default function EditRoomDialog(props: any) {
                 label="Cột trống"
                 name="colEmpty"
                 value={values?.colEmpty}
+                type="number"
                 onChange={handleInputChange}
                 inputProps={{ maxLength: '64' }}
               />

@@ -38,6 +38,9 @@ export default function TicketPriceManagementPage() {
     }
   }, [data]);
 
+  const updateTicketId = () => {};
+  const updateTicketPrice = () => {};
+
   const columns: GridColDef[] = [
     {
       field: 'id',
@@ -52,11 +55,6 @@ export default function TicketPriceManagementPage() {
       headerName: 'Thời gian',
       width: 170,
       headerAlign: 'center',
-      // renderCell: (params: GridRenderCellParams<string>) => {
-      //   if (params.value === undefined) return null;
-      //   const openingDay = new Date(params.value);
-      //   return openingDay;
-      // },
     },
     {
       field: 'value',
@@ -64,6 +62,7 @@ export default function TicketPriceManagementPage() {
       width: 220,
       headerAlign: 'center',
       align: 'center',
+      editable: true,
       renderCell: (params: GridRenderCellParams<string>) => {
         if (params.value === undefined) return null;
         const openingDay = params.value.toLocaleString() + ' VNĐ';
@@ -104,6 +103,9 @@ export default function TicketPriceManagementPage() {
             componentsProps={{
               toolbar: { setQuery },
             }}
+            onRowEditCommit={params => console.log(params)}
+            // onRowEditCommit={updateTicketPrice}
+            onRowEditStart={params => console.log(params)}
           />
         </Grid>
         <Grid item={true} xs={6}>

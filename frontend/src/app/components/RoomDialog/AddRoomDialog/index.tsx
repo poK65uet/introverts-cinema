@@ -81,7 +81,6 @@ export default function AddRoomDialog(props: any) {
     addRoom.refetch();
     handleCloseDialog();
   };
-  console.log(addRoom);
   useEffect(() => {
     if (addRoom.isError) {
       setTimeout(() => {
@@ -144,7 +143,7 @@ export default function AddRoomDialog(props: any) {
                 fullWidth
                 label="Trạng thái"
                 onChange={(event: any) => {
-                  setValues({ ...values, status: event.target.value });
+                  setValues({ ...values, visionType: event.target.value });
                 }}
               >
                 <MenuItem value={'2D'}>2D</MenuItem>
@@ -158,6 +157,7 @@ export default function AddRoomDialog(props: any) {
               <CustomInput.TextField
                 label="Số hàng"
                 name="rowNumber"
+                type="number"
                 onChange={handleInputChange}
                 inputProps={{ maxLength: '64' }}
               />
@@ -166,6 +166,7 @@ export default function AddRoomDialog(props: any) {
               <CustomInput.TextField
                 label="Số cột"
                 name="colNumber"
+                type="number"
                 onChange={handleInputChange}
                 inputProps={{ maxLength: '64' }}
               />
@@ -177,6 +178,7 @@ export default function AddRoomDialog(props: any) {
               <CustomInput.TextField
                 label="Hàng trống"
                 name="rowEmpty"
+                type="number"
                 onChange={handleInputChange}
                 inputProps={{ maxLength: '64' }}
               />
@@ -185,6 +187,7 @@ export default function AddRoomDialog(props: any) {
               <CustomInput.TextField
                 label="Cột trống"
                 name="colEmpty"
+                type="number"
                 onChange={handleInputChange}
                 inputProps={{ maxLength: '64' }}
               />
