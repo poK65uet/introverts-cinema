@@ -30,7 +30,7 @@ export const updatePrice = async (id: string, value: number): Promise<any> => {
   const authenticationHeader = {
     headers: { Authorization: `Bearer ${token}` },
   };
-  response = await axios.patch(
+  response = await axios.put(
     `${config.apiEndpoint}/prices/${id}`,
     {
       value: value,
