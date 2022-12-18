@@ -39,7 +39,6 @@ export const getRooms = async (page: number, size: number): Promise<any> => {
 
 export const useGetRooms = (page: number, size: number) =>
   useQuery(['getRooms', page, size], () => getRooms(page, size), {
-    // enabled: false,
     refetchOnWindowFocus: false,
   });
 
@@ -66,9 +65,13 @@ export const useGetAllRooms = () =>
   useQuery(['getAllRooms'], () => getAllRooms());
 
 export const updateRoom = async (
-  fullName: string,
-  birthDay?: Date,
-  Room?: number,
+  id: string,
+  name: string,
+  visionType: string,
+  colNumber: number,
+  rowNumber: number,
+  colEmpty: string,
+  rowEmpty: string,
 ): Promise<any> => {
   let response: AxiosResponse<any>;
   const token = sessionStorage.getItem('token');
@@ -76,25 +79,61 @@ export const updateRoom = async (
     headers: { Authorization: `Bearer ${token}` },
   };
   response = await axios.patch(
-    `${config.apiEndpoint}/rooms`,
-    {},
+    `${config.apiEndpoint}/rooms/${id}`,
+    {
+      name,
+      visionType,
+      colNumber,
+      rowNumber,
+      colEmpty,
+      rowEmpty,
+    },
     authenticationHeader,
   );
   return response.data.data;
 };
 
-export const addRoom = async (): Promise<any> => {
+export const addRoom = async (
+  name: string,
+  visionType: string,
+  colNumber: number,
+  rowNumber: number,
+  colEmpty: string,
+  rowEmpty: string,
+): Promise<any> => {
   let response: AxiosResponse<any>;
   const token = sessionStorage.getItem('token');
   const authenticationHeader = {
     headers: { Authorization: `Bearer ${token}` },
   };
-  response = await axios.post(`${config.apiEndpoint}/rooms`, {});
+  response = await axios.post(
+    `${config.apiEndpoint}/rooms`,
+    {
+      name: name,
+      visionType: visionType,
+      colNumber: colNumber,
+      rowNumber: rowNumber,
+      colEmpty: colEmpty,
+      rowEmpty: rowEmpty,
+    },
+    authenticationHeader,
+  );
   return response.data.data;
 };
 
-export const useAddRoom = () =>
-  useQuery(['addRoom'], () => addRoom(), {
-    enabled: false,
-    refetchOnWindowFocus: false,
-  });
+export const useAddRoom = (
+  name: string,
+  visionType: string,
+  colNumber: number,
+  rowNumber: number,
+  colEmpty: string,
+  rowEmpty: string,
+) =>
+  useQuery(
+    ['addRoom'],
+    () => addRoom(name, visionType, colNumber, rowNumber, colEmpty, rowEmpty),
+    {
+      enabled: false,
+      refetchOnWindowFocus: false,
+    },
+  );

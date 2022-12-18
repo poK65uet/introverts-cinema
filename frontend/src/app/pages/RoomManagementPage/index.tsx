@@ -24,13 +24,16 @@ export default function RoomManagementPage() {
   });
   const [open, setOpen] = useState(false);
 
-  const { data, isLoading } = useGetRooms(pageState.page, pageState.pageSize);
+  const { data, isLoading, refetch } = useGetRooms(
+    pageState.page,
+    pageState.pageSize,
+  );
   console.log(data);
   useEffect(() => {
     if (data !== undefined) {
       setPageState({ ...pageState, count: data.count, rows: data.rows });
     }
-  }, [isLoading]);
+  }, [data, refetch]);
 
   const handleClickOpenAddPage = () => {
     setOpen(true);
@@ -106,7 +109,7 @@ export default function RoomManagementPage() {
 
   return (
     <Box className={classes.roomTable}>
-      <AddRoomDialog open={open} onClose={handleClose} />
+      <AddRoomDialog open={open} onClose={handleClose} refetch={refetch} />
       <Button className={classes.addButton} onClick={handleClickOpenAddPage}>
         Thêm phòng chiếu mới
       </Button>

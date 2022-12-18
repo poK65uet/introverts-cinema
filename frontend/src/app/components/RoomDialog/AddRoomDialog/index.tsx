@@ -51,16 +51,15 @@ export default function AddRoomDialog(props: any) {
     }
   };
 
-  const { isLoading: loadingRooms, data: allRooms } = useGetAllRooms();
-  const { isLoading: loadingMovies, data: allMovies } = useGetAllMovies();
-
   const { values, setValues, errors, setErrors, handleInputChange } = useForm(
     {
       roomId: 0,
       name: '',
-      visionType: 0,
-      collumnNumber: 0,
+      visionType: '',
+      colNumber: 0,
       rowNumber: 0,
+      colEmpty: 0,
+      rowEmpty: 0,
     },
     true,
     validate,
@@ -70,18 +69,21 @@ export default function AddRoomDialog(props: any) {
     props.onClose();
   };
 
-  const addRoom = useAddRoom();
-  // values.name,
-  // values.visionType,
-  // values.collumnNumber,
-  // values.rowNumber,
+  const addRoom = useAddRoom(
+    values.name,
+    values.visionType,
+    values.colNumber,
+    values.rowNumber,
+    values.colEmpty,
+    values.rowEmpty,
+  );
   const handleAddFilm = () => {
     addRoom.refetch();
     handleCloseDialog();
   };
-
+  console.log(addRoom);
   useEffect(() => {
-    if (addRoom.data === null) {
+    if (addRoom.isError) {
       setTimeout(() => {
         notify({
           type: 'error',
@@ -98,7 +100,7 @@ export default function AddRoomDialog(props: any) {
             autocloseDelay: 1500,
           });
         }, 100);
-        // window.location.reload();
+        props.refetch();
       }
     }
   }, [addRoom.isLoading]);
@@ -145,8 +147,8 @@ export default function AddRoomDialog(props: any) {
                   setValues({ ...values, status: event.target.value });
                 }}
               >
-                <MenuItem value={2}>2D</MenuItem>
-                <MenuItem value={3}>3D</MenuItem>
+                <MenuItem value={'2D'}>2D</MenuItem>
+                <MenuItem value={'3D'}>3D</MenuItem>
               </Select>
             </Grid>
           </Grid>
