@@ -33,9 +33,9 @@ import { useGetNationalities } from 'queries/nationality';
 import { useGetDirectors } from 'queries/directors';
 import { useGetCategories } from 'queries/categories';
 import { useGetAllRooms, useGetRooms } from 'queries/rooms';
-import { addShowtime, useAddShowtime } from 'queries/showtimes';
+import { addRoom, useAddRoom } from 'queries/rooms';
 import { notify } from 'app/components/MasterDialog';
-export default function RoomDialog(props: any) {
+export default function AddRoomDialog(props: any) {
   const classes = useStyles();
 
   const validate = (fieldValues = values) => {
@@ -56,11 +56,11 @@ export default function RoomDialog(props: any) {
 
   const { values, setValues, errors, setErrors, handleInputChange } = useForm(
     {
-      filmId: 0,
-      film: null,
       roomId: 0,
-      room: null,
-      startTime: null,
+      name: '',
+      visionType: 0,
+      collumnNumber: 0,
+      rowNumber: 0,
     },
     true,
     validate,
@@ -70,19 +70,20 @@ export default function RoomDialog(props: any) {
     props.onClose();
   };
 
-  const addShowtime = useAddShowtime(
-    values.filmId,
-    values.roomId,
-    values.startTime,
-  );
+  const addRoom =
+    useAddRoom();
+    // values.name,
+    // values.visionType,
+    // values.collumnNumber,
+    // values.rowNumber,
   const handleAddFilm = () => {
-    addShowtime.refetch();
+    addRoom.refetch();
     handleCloseDialog();
   };
-  console.log(addShowtime);
+  console.log(addRoom);
 
   useEffect(() => {
-    if (addShowtime.data === null) {
+    if (addRoom.data === null) {
       setTimeout(() => {
         notify({
           type: 'error',
@@ -91,7 +92,7 @@ export default function RoomDialog(props: any) {
         });
       }, 100);
     } else {
-      if (addShowtime.isSuccess) {
+      if (addRoom.isSuccess) {
         setTimeout(() => {
           notify({
             type: 'success',
@@ -102,7 +103,7 @@ export default function RoomDialog(props: any) {
         // window.location.reload();
       }
     }
-  }, [addShowtime.isLoading]);
+  }, [addRoom.isLoading]);
 
   // console.log(values);
   return (
@@ -122,77 +123,49 @@ export default function RoomDialog(props: any) {
           variant="h5"
           fontWeight="bold"
         >
-          Thêm suất chiếu mới
+          Thêm phòng mới
         </Typography>
         <DialogContent>
           <Grid xs={12} spacing={3} item={true} container>
+            <Grid xs={4} item={true}>
+              <CustomInput.TextField
+                label="Tên phòng"
+                name="name"
+                value={values.name}
+                onChange={handleInputChange}
+                autoFocus
+                inputProps={{ maxLength: '64' }}
+              />
+            </Grid>
             <Grid xs={3} item={true}>
-              <CustomInput.DateTimePicker
-                label="Giờ chiếu"
-                name="startTime"
-                margin="dense"
-                type="datetime-local"
-                value={values.startTime}
-                inputProps={{ maxLength: '32' }}
-                onChange={(startTime: any) => {
-                  if (startTime === null) return;
-                  validate({ startTime: startTime });
-                  setValues({
-                    ...values,
-                    startTime: startTime,
-                  });
+              <CustomInput.TextField
+                label="Hàng ghế"
+                name=""
+                onChange={handleInputChange}
+                inputProps={{ maxLength: '64' }}
+              />
+            </Grid>
+            <Grid xs={3} item={true}>
+              <CustomInput.TextField
+                label="Cột ghế"
+                name=""
+                onChange={handleInputChange}
+                inputProps={{ maxLength: '64' }}
+              />
+            </Grid>
+            <Grid xs={2} item={true}>
+              <InputLabel>Định dạng video</InputLabel>
+              <Select
+                value={values.status}
+                fullWidth
+                label="Trạng thái"
+                onChange={(event: any) => {
+                  setValues({ ...values, status: event.target.value });
                 }}
-              />
-            </Grid>
-            <Grid xs={6} item={true}>
-              <Autocomplete
-                options={loadingMovies ? [] : allMovies}
-                loading={loadingMovies}
-                getOptionLabel={(option: any) => option.title}
-                onChange={(event, value) =>
-                  setValues({
-                    ...values,
-                    filmId: value?.id,
-                    film: value,
-                  })
-                }
-                isOptionEqualToValue={(option, value) => option.id === value.id}
-                value={values?.film}
-                renderInput={params => (
-                  <TextField
-                    {...params}
-                    variant="standard"
-                    label="Phim chiếu"
-                    placeholder=""
-                    margin="dense"
-                  />
-                )}
-              />
-            </Grid>
-            <Grid xs={3} item={true}>
-              <Autocomplete
-                options={loadingRooms ? [] : allRooms.rows}
-                loading={loadingRooms}
-                getOptionLabel={(option: any) => option.name}
-                onChange={(event, value) =>
-                  setValues({
-                    ...values,
-                    roomId: value?.id,
-                    room: value,
-                  })
-                }
-                isOptionEqualToValue={(option, value) => option.id === value.id}
-                value={values?.room}
-                renderInput={params => (
-                  <TextField
-                    {...params}
-                    variant="standard"
-                    label="Phòng chiếu"
-                    placeholder=""
-                    margin="dense"
-                  />
-                )}
-              />
+              >
+                <MenuItem value={2}>2D</MenuItem>
+                <MenuItem value={3}>3D</MenuItem>
+              </Select>
             </Grid>
           </Grid>
         </DialogContent>
@@ -218,7 +191,7 @@ export default function RoomDialog(props: any) {
               className={classes.AddFilmButton}
               onClick={handleAddFilm}
             >
-              Thêm suất chiếu
+              Thêm phòng
             </Button>
           </Grid>
         </Grid>

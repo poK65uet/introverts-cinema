@@ -11,6 +11,7 @@ import {
 } from '@mui/x-data-grid';
 import { useGetRooms } from 'queries/rooms';
 import { formatDate } from 'utils/date';
+import AddRoomDialog from 'app/components/RoomDialog/AddRoomDialog';
 
 export default function RoomManagementPage() {
   const classes = useStyles();
@@ -56,7 +57,7 @@ export default function RoomManagementPage() {
     },
     {
       field: 'visionType',
-      headerName: 'Định dạng phim',
+      headerName: 'Định dạng video',
       width: 220,
       headerAlign: 'center',
       align: 'center',
