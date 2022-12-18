@@ -11,14 +11,17 @@ import {
 } from '@mui/x-data-grid';
 import CustomToolbar from 'app/containers/CustomToolbar';
 import { useGetTickets, useGetTicketsPagination } from 'queries/tickets';
-import { useGetPrices } from 'queries/prices';
+import { useGetPrices, useUpdatePrice } from 'queries/prices';
 import { formatDate, formatHour } from 'utils/date';
+import { notify } from 'app/components/MasterDialog';
 
 export default function TicketPriceManagementPage() {
   const classes = useStyles();
   const [rows2D, setRows2D] = useState<any[]>([]);
   const [rows3D, setRows3D] = useState<any[]>([]);
   const [query, setQuery] = useState('');
+  const [editTicketId, setEditTicketId] = useState(0);
+  const [editTicketValue, setEditTicketValue] = useState(0);
 
   const { isLoading, data } = useGetPrices();
 
@@ -38,8 +41,33 @@ export default function TicketPriceManagementPage() {
     }
   }, [data]);
 
+  const update = useUpdatePrice(editTicketId.toString(), editTicketValue);
   const updateTicketId = () => {};
   const updateTicketPrice = () => {};
+
+  useEffect(() => {
+    if (update.isSuccess) {
+      setTimeout(() => {
+        notify({
+          type: 'success',
+          content: 'Thay đổi giá vé thành công',
+          autocloseDelay: 1500,
+        });
+      }, 100);
+      update.remove();
+    }
+
+    if (update.isError) {
+      setTimeout(() => {
+        notify({
+          type: 'error',
+          content: 'Thay đổi thất bại',
+          autocloseDelay: 1500,
+        });
+      }, 100);
+      update.remove();
+    }
+  });
 
   const columns: GridColDef[] = [
     {
@@ -103,9 +131,9 @@ export default function TicketPriceManagementPage() {
             componentsProps={{
               toolbar: { setQuery },
             }}
-            onRowEditCommit={params => console.log(params)}
+            onRowEditCommit={params => updateTicketPrice}
             // onRowEditCommit={updateTicketPrice}
-            onRowEditStart={params => console.log(params)}
+            onRowEditStart={params => updateTicketId}
           />
         </Grid>
         <Grid item={true} xs={6}>

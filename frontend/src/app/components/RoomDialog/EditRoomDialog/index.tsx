@@ -85,7 +85,7 @@ export default function EditRoomDialog(props: any) {
       setTimeout(() => {
         notify({
           type: 'error',
-          content: 'Thay đổi suất chiếu thất bại',
+          content: 'Thay đổi phòng chiếu thất bại',
           autocloseDelay: 1500,
         });
       }, 100);
@@ -95,7 +95,7 @@ export default function EditRoomDialog(props: any) {
         setTimeout(() => {
           notify({
             type: 'success',
-            content: 'Thay đổi suất chiếu thành công',
+            content: 'Thay đổi phòng chiếu thành công',
             autocloseDelay: 1500,
           });
         }, 100);

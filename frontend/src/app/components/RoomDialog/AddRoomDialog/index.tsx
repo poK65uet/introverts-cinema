@@ -86,7 +86,7 @@ export default function AddRoomDialog(props: any) {
       setTimeout(() => {
         notify({
           type: 'error',
-          content: 'Thêm suất chiếu thất bại',
+          content: 'Thêm phòng chiếu thất bại',
           autocloseDelay: 1500,
         });
       }, 100);
@@ -95,7 +95,7 @@ export default function AddRoomDialog(props: any) {
         setTimeout(() => {
           notify({
             type: 'success',
-            content: 'Thêm suất chiếu thành công',
+            content: 'Thêm phòng chiếu thành công',
             autocloseDelay: 1500,
           });
         }, 100);
