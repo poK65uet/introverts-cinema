@@ -5,8 +5,6 @@ import {
   CardActions,
   CardContent,
   CardMedia,
-  Chip,
-  Tooltip
 } from '@mui/material';
 import useStyles from './styles';
 import paths from 'paths';

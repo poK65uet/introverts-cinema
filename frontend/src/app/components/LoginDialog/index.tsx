@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import {
   Dialog,
 } from '@mui/material';
@@ -10,7 +10,7 @@ import { registerActions } from './Register/slice';
 import Login from './Login'
 import Register from './Register';
 import ForgotPassword from './ForgotPassword';
-import { notify } from 'app/components/MasterDialog';
+
 
 export default function LoginDialog(props: any) {
 
@@ -46,7 +46,7 @@ export default function LoginDialog(props: any) {
 
   return (
     <Dialog
-      open={(props.open || store.login.isRequireLogin) && !store.login.isLoggedin}
+      open={(props.open || store.login.isRequireLogin || store.login.isRequireRegister) && !store.login.isLoggedin}
       onClose={handleCloseDialog}
       className={classes.dialog}>
       {store.login.dialogAction == DialogActions.LOGIN ?

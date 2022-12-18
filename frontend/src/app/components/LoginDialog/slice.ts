@@ -11,6 +11,7 @@ export enum DialogActions {
 export interface LoginState {
   isLoggedin: boolean;
   isRequireLogin: boolean;
+  isRequireRegister: boolean;
   isLoading: boolean;
   dialogAction: DialogActions;
   user: any;
@@ -22,6 +23,7 @@ const initialState: LoginState = {
     sessionStorage.getItem('token') !== undefined &&
     sessionStorage.getItem('token') !== null,
   isRequireLogin: false,
+  isRequireRegister: false,
   isLoading: false,
   dialogAction: DialogActions.LOGIN,
   user: undefined,
@@ -46,8 +48,13 @@ export const loginSlice = createSlice({
     requireLogin: state => {
       state.isRequireLogin = true;
     },
+    requireRegister: state => {
+      state.isRequireRegister = true;
+      state.dialogAction = DialogActions.REGISTER;
+    },
     denyRequire: state => {
       state.isRequireLogin = false;
+      state.isRequireRegister = false;
     },
     setUser: (state, action) => {
       state.user = action.payload;

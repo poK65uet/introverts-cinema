@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Container, Tab, Typography } from '@mui/material';
+import { Container, Tab } from '@mui/material';
 import { TabContext, TabList, TabPanel } from '@mui/lab';
 import { useSelector, useDispatch } from 'react-redux';
 import UserProfile from 'app/containers/UserProfile';
@@ -25,6 +25,12 @@ export default function UserPage() {
   const dispatch = useDispatch()
 
   useEffect(() => {
+    window.scrollTo({
+      top: 0
+    })
+  }, [])
+
+  useEffect(() => {
     !store.login.user ? dispatch(getUserProfileThunk()) : null
   }, [store.login.user])
 
@@ -38,9 +44,11 @@ export default function UserPage() {
             <Tab
               className={classes.tab} disableFocusRipple
               value={TabNames.PROFILE} label='Thông Tin Chi Tiết' />
-            <Tab
-              className={classes.tab} disableFocusRipple
-              value={TabNames.BOOKING_HISTORY} label='Lịch Sử Đặt Vé' />
+            {!store.login.isAdmin ?
+              <Tab
+                className={classes.tab} disableFocusRipple
+                value={TabNames.BOOKING_HISTORY} label='Lịch Sử Đặt Vé' /> : null
+            }
           </TabList>
           <TabPanel value={TabNames.PROFILE} className={classes.tabPanel}>
             <UserProfile />

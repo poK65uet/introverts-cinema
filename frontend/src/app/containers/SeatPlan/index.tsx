@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import useStyles from './styles';
 import Grid from '@mui/material/Unstable_Grid2';
 import { useDispatch, useSelector } from 'react-redux';
@@ -43,12 +43,6 @@ export function SeatPlan(props: SeatPlanProps) {
     }
   }, [mappingDone])
 
-  useEffect(() => {
-    return () => {
-      seatPlan({ isReset: true })
-    }
-  }, [])
-
   const emptyCols = () => (props.emptyCols ?
     typeof (props.emptyCols) == 'string' ?
       splitString(props.emptyCols) :
@@ -59,7 +53,7 @@ export function SeatPlan(props: SeatPlanProps) {
       splitString(props.emptyRows) :
       props.emptyRows : []).filter(row => row <= Number(props?.seatRows) && row > 0).sort()
 
-  const seatPlan = (opts?: { isReset: boolean }) => {
+  const seatPlan = useMemo(() => {
 
     let seats: { index: string, seatCol?: number, seatRow?: number }[] = []
 
@@ -113,12 +107,8 @@ export function SeatPlan(props: SeatPlanProps) {
       }
       rowGap++
     })
-    if (opts?.isReset) {
-      return []
-    } else {
-      return seats;
-    }
-  }
+    return seats;
+  }, [props])
 
 
   const classes = useStyles();
@@ -142,7 +132,7 @@ export function SeatPlan(props: SeatPlanProps) {
       </Grid>
       <Grid xs={12 / (props.seatCols + emptyCols().length + 1)} />
       {
-        seatPlan().map((seat: { index: string, seatRow?: number, seatCol?: number }, index: number) => {
+        seatPlan.map((seat: { index: string, seatRow?: number, seatCol?: number }, index: number) => {
           { !mappingDone && seat.index == props.seatCols.toString() ? handleMappingDone() : null }
           return <Grid xs={12 / (props.seatCols + emptyCols().length + 1)}
             key={index}
