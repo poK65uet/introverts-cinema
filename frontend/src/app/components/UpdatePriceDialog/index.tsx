@@ -56,7 +56,7 @@ export default function UpdatePriceDialog(props: any) {
     validate,
   );
 
-  const update = useUpdatePrice(values.id.toString(), values.value);
+  const update = useUpdatePrice(values.id.toString(), parseInt(values.value));
 
   const handleCloseDialog = () => {
     props.onClose();
@@ -66,14 +66,15 @@ export default function UpdatePriceDialog(props: any) {
     update.refetch();
     handleCloseDialog();
   };
+  console.log(values);
 
   useEffect(() => {
-    if (props.data !== null) {
+    if (props.data.id !== 0) {
       setValues({
         ...values,
         id: props.data.id,
-        value: props.data.value,
-        type: props.type,
+        value: props.data.value.toString(),
+        type: props.data.type,
       });
     }
   }, [props.data]);
@@ -87,6 +88,7 @@ export default function UpdatePriceDialog(props: any) {
           autocloseDelay: 1500,
         });
       }, 100);
+      props.refetch();
       update.remove();
     }
 
@@ -118,30 +120,19 @@ export default function UpdatePriceDialog(props: any) {
           variant="h5"
           fontWeight="bold"
         >
-          Thay đổi phòng mới
+          Thay đổi giá vé
         </Typography>
         <DialogContent>
           <Grid xs={12} spacing={3} item={true} container>
-            <Grid xs={6} item={true}>
-              <CustomInput.TextField
-                label="Số hàng"
-                name="rowNumber"
-                value={values?.rowNumber}
-                type="number"
-                onChange={handleInputChange}
-                inputProps={{ maxLength: '64' }}
-              />
-            </Grid>
-            <Grid xs={6} item={true}>
-              <CustomInput.TextField
-                label="Số cột"
-                name="colNumber"
-                type="number"
-                value={values?.colNumber}
-                onChange={handleInputChange}
-                inputProps={{ maxLength: '64' }}
-              />
-            </Grid>
+            <CustomInput.TextField
+              label="Giá mới"
+              name="value"
+              type="number"
+              value={values?.value}
+              onChange={handleInputChange}
+              inputProps={{ maxLength: '64' }}
+              autoFocus
+            />
           </Grid>
         </DialogContent>
         <Grid item={true} container xs={12} spacing={2}>
@@ -166,7 +157,7 @@ export default function UpdatePriceDialog(props: any) {
               className={classes.EditRoomButton}
               onClick={handleUpdatePrice}
             >
-              Thay đổi phòng
+              Thay đổi giá vé
             </Button>
           </Grid>
         </Grid>

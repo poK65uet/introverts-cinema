@@ -24,13 +24,13 @@ export default function TicketPriceManagementPage() {
   const [query, setQuery] = useState('');
   const [open, setOpen] = useState(false);
   const [editRow, setEditRow] = useState({ type: '2D', id: 0, value: 0 });
-  const { isLoading, data } = useGetPrices();
+  const { isLoading, data, refetch } = useGetPrices();
 
   const handleClose = () => {
     setOpen(false);
   };
 
-  const handleOpen = (visionType: any, params: any) => {
+  const handleOpen = (visionType: string, params: any) => {
     setEditRow({ type: visionType, id: params.id, value: params.value });
     setOpen(true);
   };
@@ -51,14 +51,14 @@ export default function TicketPriceManagementPage() {
   }, [data]);
 
   const columns: GridColDef[] = [
-    {
-      field: 'id',
-      headerName: '#',
-      type: 'number',
-      width: 70,
-      align: 'center',
-      headerAlign: 'center',
-    },
+    // {
+    //   field: 'id',
+    //   headerName: '#',
+    //   type: 'number',
+    //   width: 70,
+    //   align: 'center',
+    //   headerAlign: 'center',
+    // },
     {
       field: 'dayCode',
       headerName: 'Thời gian',
@@ -71,7 +71,6 @@ export default function TicketPriceManagementPage() {
       width: 220,
       headerAlign: 'center',
       align: 'center',
-      editable: true,
       renderCell: (params: GridRenderCellParams<string>) => {
         if (params.value === undefined) return null;
         const openingDay = params.value.toLocaleString() + ' VNĐ';
@@ -95,7 +94,12 @@ export default function TicketPriceManagementPage() {
 
   return (
     <Box className={classes.roomTable}>
-      <UpdatePriceDialog open={open} onClose={handleClose} data={editRow} />
+      <UpdatePriceDialog
+        open={open}
+        onClose={handleClose}
+        data={editRow}
+        refetch={refetch}
+      />
 
       <Grid item={true} xs={12} container spacing={2}>
         <Grid item={true} xs={6}>
@@ -114,7 +118,7 @@ export default function TicketPriceManagementPage() {
             componentsProps={{
               toolbar: { setQuery },
             }}
-            onRowDoubleClick={params => handleOpen('2D', params)}
+            onRowDoubleClick={params => handleOpen('2D', params.row)}
           />
         </Grid>
         <Grid item={true} xs={6}>
@@ -133,7 +137,7 @@ export default function TicketPriceManagementPage() {
             componentsProps={{
               toolbar: { setQuery },
             }}
-            onRowDoubleClick={params => handleOpen('3D', params)}
+            onRowDoubleClick={params => handleOpen('3D', params.row)}
           />
         </Grid>
       </Grid>
