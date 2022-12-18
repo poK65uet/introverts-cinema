@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Stack } from '@mui/material';
-import { DataGrid, GridColDef, GridRenderCellParams, gridClasses } from '@mui/x-data-grid';
+import { DataGrid, GridColDef, GridRenderCellParams } from '@mui/x-data-grid';
 import useStyles from './styles';
 import { useGetUserTickets } from 'queries/tickets';
 import { formatDate, formatHour } from 'utils/date';

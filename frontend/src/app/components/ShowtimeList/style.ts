@@ -7,13 +7,18 @@ const useStyles = makeStyles((theme: Theme) => ({
       color: theme.palette.secondary.main,
       fontSize: '1rem',
       border: '1px solid #C1C1C1',
-      padding: '0.5rem',
-      margin: '1rem',
+      padding: '0.375rem',
+      margin: '0.5rem',
       '&:hover': {
         color: theme.palette.primary.main,
         border: `1px solid ${theme.palette.primary.main}`,
       },
     },
+  },
+  visionType: {
+    fontWeight: 'bold',
+    textAlign: 'center',
+    alignSelf: 'center',
   },
 }));
 

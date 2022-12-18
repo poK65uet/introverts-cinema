@@ -1,4 +1,4 @@
-import React, { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
+import React, { useLayoutEffect, useRef } from 'react'
 import { Box, Tab, Container } from '@mui/material';
 import { TabContext, TabList, TabPanel } from '@mui/lab';
 import useStyles from './styles';
@@ -105,6 +105,7 @@ export default function MoviePanel() {
             return <TabPanel
               className={classes.showtimeList}
               key={index}
+              sx={{ pb: 1 }}
               value={store.bookTicket.selectedMovie != '0' ? store.bookTicket.selectedMovie : ''}>
               <ShowtimeList
                 key={index}

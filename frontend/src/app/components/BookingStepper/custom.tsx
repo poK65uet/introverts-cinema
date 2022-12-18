@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import { styled } from '@mui/material/styles';
 import { CalendarMonth, Done, LocalActivity, MovieFilter, Payment } from '@mui/icons-material';
 import StepConnector, { stepConnectorClasses } from '@mui/material/StepConnector';

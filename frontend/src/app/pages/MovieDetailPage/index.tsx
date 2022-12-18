@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { Button, CardMedia, Container, IconButton, Typography } from '@mui/material';
 import Grid from '@mui/material/Unstable_Grid2';
-import { RootState } from 'store';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { Link, useParams } from 'react-router-dom';
 import { useGetMovieById } from 'queries/movies';
 import useStyles from './styles';
