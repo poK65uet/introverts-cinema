@@ -11,6 +11,7 @@ import {
 } from '@mui/x-data-grid';
 import { useGetTickets, useGetTicketsPagination } from 'queries/tickets';
 import { formatDate, formatHour } from 'utils/date';
+import { fullDigit } from 'utils/number';
 
 export default function BookedTicketManagementPage() {
   const classes = useStyles();
@@ -54,9 +55,12 @@ export default function BookedTicketManagementPage() {
     {
       field: 'id',
       headerName: 'Mã vé',
-      width: 70,
+      width: 110,
       align: 'center',
       headerAlign: 'center',
+      valueFormatter: params => {
+        return 'TK' + fullDigit(params.value, 6).toString();
+      },
     },
     {
       field: 'filmTitle',

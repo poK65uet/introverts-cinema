@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { useGetMessage } from 'queries/message';
 import useStyles from './styles';
-import { Box, Grid } from '@mui/material';
+import { Box, Grid, Typography } from '@mui/material';
 import {
   DataGrid,
   GridColDef,
@@ -10,6 +10,8 @@ import {
   GridToolbar,
 } from '@mui/x-data-grid';
 import CustomToolbar from 'app/containers/CustomToolbar';
+import { useGetTickets, useGetTicketsPagination } from 'queries/tickets';
+import { useGetPrices } from 'queries/prices';
 
 export default function TicketPriceManagementPage() {
   const classes = useStyles();
@@ -22,6 +24,10 @@ export default function TicketPriceManagementPage() {
   });
   const [query, setQuery] = useState('');
 
+  const { isLoading, data } = useGetPrices();
+
+  console.log(data);
+
   const columns: GridColDef[] = [
     {
       field: 'id',
@@ -33,24 +39,18 @@ export default function TicketPriceManagementPage() {
     },
     {
       field: 'dayCode',
-      headerName: 'Ngày',
+      headerName: 'Thời gian',
       width: 170,
       headerAlign: 'center',
       // renderCell: (params: GridRenderCellParams<string>) => {
       //   if (params.value === undefined) return null;
       //   const openingDay = new Date(params.value);
-      //   return (
-      //     openingDay.getDate() +
-      //     '/' +
-      //     openingDay.getMonth() +
-      //     '/' +
-      //     openingDay.getFullYear()
-      //   );
+      //   return openingDay;
       // },
     },
     {
       field: 'value',
-      headerName: 'Giá trị',
+      headerName: 'Giá tiền',
       width: 220,
       headerAlign: 'center',
     },
@@ -78,7 +78,8 @@ export default function TicketPriceManagementPage() {
   return (
     <Box className={classes.roomTable}>
       <Grid item={true} xs={12} container spacing={2}>
-        <Grid item={true} xs={6}>
+        <Grid item={true} xs={12}>
+          <Typography variant="h3">2D</Typography>
           <DataGrid
             autoHeight
             page={pageState.page}
@@ -103,7 +104,8 @@ export default function TicketPriceManagementPage() {
             }}
           />
         </Grid>
-        <Grid item={true} xs={6}>
+        {/* <Grid item={true} xs={6}>
+          <Typography variant="h3">3D</Typography>
           <DataGrid
             autoHeight
             page={pageState.page}
@@ -127,7 +129,7 @@ export default function TicketPriceManagementPage() {
               toolbar: { setQuery },
             }}
           />
-        </Grid>
+        </Grid> */}
       </Grid>
     </Box>
   );
