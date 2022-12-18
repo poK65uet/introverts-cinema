@@ -35,7 +35,7 @@ import { useGetCategories } from 'queries/categories';
 import { useGetAllRooms, useGetRooms } from 'queries/rooms';
 import { addShowtime, useAddShowtime } from 'queries/showtimes';
 import { notify } from 'app/components/MasterDialog';
-export default function AddShowtimeDialog(props: any) {
+export default function RoomDialog(props: any) {
   const classes = useStyles();
 
   const validate = (fieldValues = values) => {

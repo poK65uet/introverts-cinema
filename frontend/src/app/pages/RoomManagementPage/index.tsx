@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { useGetMessage } from 'queries/message';
 import useStyles from './styles';
-import { Box } from '@mui/material';
+import { Box, Button } from '@mui/material';
 import {
   DataGrid,
   GridColDef,
@@ -10,6 +10,7 @@ import {
   GridToolbar,
 } from '@mui/x-data-grid';
 import { useGetRooms } from 'queries/rooms';
+import { formatDate } from 'utils/date';
 
 export default function RoomManagementPage() {
   const classes = useStyles();
@@ -20,6 +21,7 @@ export default function RoomManagementPage() {
     pageSize: 20,
     page: 1,
   });
+  const [open, setOpen] = useState(false);
 
   const { data, isLoading } = useGetRooms(pageState.page, pageState.pageSize);
   console.log(data);
@@ -29,6 +31,13 @@ export default function RoomManagementPage() {
     }
   }, [isLoading]);
 
+  const handleClickOpenAddPage = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
   const columns: GridColDef[] = [
     {
       field: 'id',
@@ -75,14 +84,8 @@ export default function RoomManagementPage() {
       headerAlign: 'center',
       renderCell: (params: GridRenderCellParams<string>) => {
         if (params.value === undefined) return null;
-        const openingDay = new Date(params.value);
-        return (
-          openingDay.getDate() +
-          '/' +
-          openingDay.getMonth() +
-          '/' +
-          openingDay.getFullYear()
-        );
+        const openingDay = formatDate(new Date(params.value));
+        return openingDay;
       },
     },
     {
@@ -94,20 +97,18 @@ export default function RoomManagementPage() {
       headerAlign: 'center',
       renderCell: (params: GridRenderCellParams<string>) => {
         if (params.value === undefined) return null;
-        const openingDay = new Date(params.value);
-        return (
-          openingDay.getDate() +
-          '/' +
-          openingDay.getMonth() +
-          '/' +
-          openingDay.getFullYear()
-        );
+        const openingDay = formatDate(new Date(params.value));
+        return openingDay;
       },
     },
   ];
 
   return (
     <Box className={classes.roomTable}>
+      <AddRoomDialog open={open} onClose={handleClose} />
+      <Button className={classes.addButton} onClick={handleClickOpenAddPage}>
+        Thêm phòng chiếu mới
+      </Button>
       <DataGrid
         autoHeight
         page={pageState.page - 1}

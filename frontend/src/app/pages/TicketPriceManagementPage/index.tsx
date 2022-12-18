@@ -12,21 +12,31 @@ import {
 import CustomToolbar from 'app/containers/CustomToolbar';
 import { useGetTickets, useGetTicketsPagination } from 'queries/tickets';
 import { useGetPrices } from 'queries/prices';
+import { formatDate, formatHour } from 'utils/date';
 
 export default function TicketPriceManagementPage() {
   const classes = useStyles();
-  const [pageState, setPageState] = useState({
-    isLoading: false,
-    rows: [],
-    count: 0,
-    pageSize: 20,
-    page: 0,
-  });
+  const [rows2D, setRows2D] = useState<any[]>([]);
+  const [rows3D, setRows3D] = useState<any[]>([]);
   const [query, setQuery] = useState('');
 
   const { isLoading, data } = useGetPrices();
 
-  console.log(data);
+  useEffect(() => {
+    let tmpRows2D = [];
+    let tmpRows3D = [];
+    if (data !== undefined) {
+      for (const e of data) {
+        if (e.visionType === 2) {
+          tmpRows2D.push(e);
+        } else {
+          tmpRows3D.push(e);
+        }
+      }
+      setRows2D(tmpRows2D);
+      setRows3D(tmpRows3D);
+    }
+  }, [data]);
 
   const columns: GridColDef[] = [
     {
@@ -53,6 +63,12 @@ export default function TicketPriceManagementPage() {
       headerName: 'Giá tiền',
       width: 220,
       headerAlign: 'center',
+      align: 'center',
+      renderCell: (params: GridRenderCellParams<string>) => {
+        if (params.value === undefined) return null;
+        const openingDay = params.value.toLocaleString() + ' VNĐ';
+        return openingDay;
+      },
     },
     {
       field: 'updatedAt',
@@ -63,14 +79,8 @@ export default function TicketPriceManagementPage() {
       headerAlign: 'center',
       renderCell: (params: GridRenderCellParams<string>) => {
         if (params.value === undefined) return null;
-        const openingDay = new Date(params.value);
-        return (
-          openingDay.getDate() +
-          '/' +
-          openingDay.getMonth() +
-          '/' +
-          openingDay.getFullYear()
-        );
+        const openingDay = formatDate(new Date(params.value));
+        return openingDay;
       },
     },
   ];
@@ -78,22 +88,14 @@ export default function TicketPriceManagementPage() {
   return (
     <Box className={classes.roomTable}>
       <Grid item={true} xs={12} container spacing={2}>
-        <Grid item={true} xs={12}>
+        <Grid item={true} xs={6}>
           <Typography variant="h3">2D</Typography>
           <DataGrid
             autoHeight
-            page={pageState.page}
-            pageSize={pageState.pageSize}
-            loading={pageState.isLoading}
-            onPageChange={newPage =>
-              setPageState({ ...pageState, page: newPage })
-            }
-            onPageSizeChange={newPageSize =>
-              setPageState({ ...pageState, pageSize: newPageSize })
-            }
+            loading={isLoading}
             rowsPerPageOptions={[10, 30, 50]}
-            rowCount={pageState.count}
-            rows={pageState.rows}
+            rowCount={rows2D.length}
+            rows={rows2D}
             disableSelectionOnClick
             columns={columns}
             components={{
@@ -104,22 +106,14 @@ export default function TicketPriceManagementPage() {
             }}
           />
         </Grid>
-        {/* <Grid item={true} xs={6}>
+        <Grid item={true} xs={6}>
           <Typography variant="h3">3D</Typography>
           <DataGrid
             autoHeight
-            page={pageState.page}
-            pageSize={pageState.pageSize}
-            loading={pageState.isLoading}
-            onPageChange={newPage =>
-              setPageState({ ...pageState, page: newPage })
-            }
-            onPageSizeChange={newPageSize =>
-              setPageState({ ...pageState, pageSize: newPageSize })
-            }
+            loading={isLoading}
             rowsPerPageOptions={[10, 30, 50]}
-            rowCount={pageState.count}
-            rows={pageState.rows}
+            rowCount={rows3D.length}
+            rows={rows3D}
             disableSelectionOnClick
             columns={columns}
             components={{
@@ -129,7 +123,7 @@ export default function TicketPriceManagementPage() {
               toolbar: { setQuery },
             }}
           />
-        </Grid> */}
+        </Grid>
       </Grid>
     </Box>
   );
