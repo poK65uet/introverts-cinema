@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { useGetMessage } from 'queries/message';
 import useStyles from './styles';
-import { Box } from '@mui/material';
+import { Box, Chip } from '@mui/material';
 import {
   DataGrid,
   GridColDef,
@@ -102,6 +102,20 @@ export default function BookedTicketManagementPage() {
       width: 180,
       align: 'center',
       headerAlign: 'center',
+    },
+    {
+      field: 'status',
+      headerName: 'Trạng thái',
+      width: 150,
+      align: 'center',
+      headerAlign: 'center',
+      renderCell: (params: GridRenderCellParams<string>) => {
+        return params.value === 'active' ? (
+          <Chip label="Còn hiệu lực" variant="outlined" color="success" />
+        ) : (
+          <Chip label="Hết hiệu lực" variant="outlined" color="error" />
+        );
+      },
     },
   ];
 
