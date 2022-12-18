@@ -7,11 +7,13 @@ import {
   DataGrid,
   GridColDef,
   GridRenderCellParams,
+  GridRow,
   GridToolbar,
 } from '@mui/x-data-grid';
 import { useGetRooms } from 'queries/rooms';
 import { formatDate } from 'utils/date';
 import AddRoomDialog from 'app/components/RoomDialog/AddRoomDialog';
+import EditRoomDialog from 'app/components/RoomDialog/EditRoomDialog';
 
 export default function RoomManagementPage() {
   const classes = useStyles();
@@ -23,6 +25,17 @@ export default function RoomManagementPage() {
     page: 1,
   });
   const [open, setOpen] = useState(false);
+  const [openEdit, setOpenEdit] = useState(false);
+  const [editData, setEditData] = useState(null);
+
+  const handleCloseEdit = () => {
+    setOpenEdit(false);
+  };
+
+  const handleOpenEdit = (props: any) => {
+    setEditData(props);
+    setOpenEdit(true);
+  };
 
   const { data, isLoading, refetch } = useGetRooms(
     pageState.page,
@@ -110,6 +123,12 @@ export default function RoomManagementPage() {
   return (
     <Box className={classes.roomTable}>
       <AddRoomDialog open={open} onClose={handleClose} refetch={refetch} />
+      <EditRoomDialog
+        open={openEdit}
+        onClose={handleCloseEdit}
+        refetch={refetch}
+        data={editData}
+      />
       <Button className={classes.addButton} onClick={handleClickOpenAddPage}>
         Thêm phòng chiếu mới
       </Button>
@@ -129,6 +148,7 @@ export default function RoomManagementPage() {
         rows={pageState?.rows}
         disableSelectionOnClick
         columns={columns}
+        onRowDoubleClick={GridRow => handleOpenEdit(GridRow.row)}
       />
     </Box>
   );

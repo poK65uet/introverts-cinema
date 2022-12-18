@@ -93,6 +93,33 @@ export const updateRoom = async (
   return response.data.data;
 };
 
+export const useUpdateRoom = (
+  id: string,
+  name: string,
+  visionType: string,
+  colNumber: number,
+  rowNumber: number,
+  colEmpty: string,
+  rowEmpty: string,
+) =>
+  useQuery(
+    ['updateRoom'],
+    () =>
+      updateRoom(
+        id,
+        name,
+        visionType,
+        colNumber,
+        rowNumber,
+        colEmpty,
+        rowEmpty,
+      ),
+    {
+      enabled: false,
+      refetchOnWindowFocus: false,
+    },
+  );
+
 export const addRoom = async (
   name: string,
   visionType: string,
