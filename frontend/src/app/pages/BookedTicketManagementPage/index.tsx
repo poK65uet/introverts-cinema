@@ -36,8 +36,8 @@ export default function BookedTicketManagementPage() {
           return {
             id: row.id,
             filmTitle: row.Film?.title,
-            startDateTime: formatDate(new Date(row.startTime)),
-            startHourTime: formatHour(new Date(row.startTime)),
+            startDateTime: formatDate(new Date(row.time)),
+            startHourTime: formatHour(new Date(row.time)),
             roomName: row.room,
             setCode: row.seatCode,
             price: row.price.toLocaleString() + ' VNĐ',

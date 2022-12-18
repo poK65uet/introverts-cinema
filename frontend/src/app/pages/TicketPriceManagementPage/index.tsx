@@ -14,17 +14,26 @@ import { useGetTickets, useGetTicketsPagination } from 'queries/tickets';
 import { useGetPrices, useUpdatePrice } from 'queries/prices';
 import { formatDate, formatHour } from 'utils/date';
 import { notify } from 'app/components/MasterDialog';
+import UpdatePriceDialog from 'app/components/UpdatePriceDialog';
+import { SettingsPowerRounded } from '@mui/icons-material';
 
 export default function TicketPriceManagementPage() {
   const classes = useStyles();
   const [rows2D, setRows2D] = useState<any[]>([]);
   const [rows3D, setRows3D] = useState<any[]>([]);
   const [query, setQuery] = useState('');
-  const [editTicketId, setEditTicketId] = useState(0);
-  const [editTicketValue, setEditTicketValue] = useState(0);
-
+  const [open, setOpen] = useState(false);
+  const [editRow, setEditRow] = useState({ type: '2D', id: 0, value: 0 });
   const { isLoading, data } = useGetPrices();
 
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const handleOpen = (visionType: any, params: any) => {
+    setEditRow({ type: visionType, id: params.id, value: params.value });
+    setOpen(true);
+  };
   useEffect(() => {
     let tmpRows2D = [];
     let tmpRows3D = [];
@@ -40,34 +49,6 @@ export default function TicketPriceManagementPage() {
       setRows3D(tmpRows3D);
     }
   }, [data]);
-
-  const update = useUpdatePrice(editTicketId.toString(), editTicketValue);
-  const updateTicketId = () => {};
-  const updateTicketPrice = () => {};
-
-  useEffect(() => {
-    if (update.isSuccess) {
-      setTimeout(() => {
-        notify({
-          type: 'success',
-          content: 'Thay đổi giá vé thành công',
-          autocloseDelay: 1500,
-        });
-      }, 100);
-      update.remove();
-    }
-
-    if (update.isError) {
-      setTimeout(() => {
-        notify({
-          type: 'error',
-          content: 'Thay đổi thất bại',
-          autocloseDelay: 1500,
-        });
-      }, 100);
-      update.remove();
-    }
-  });
 
   const columns: GridColDef[] = [
     {
@@ -114,6 +95,8 @@ export default function TicketPriceManagementPage() {
 
   return (
     <Box className={classes.roomTable}>
+      <UpdatePriceDialog open={open} onClose={handleClose} data={editRow} />
+
       <Grid item={true} xs={12} container spacing={2}>
         <Grid item={true} xs={6}>
           <Typography variant="h3">2D</Typography>
@@ -131,9 +114,7 @@ export default function TicketPriceManagementPage() {
             componentsProps={{
               toolbar: { setQuery },
             }}
-            onRowEditCommit={params => updateTicketPrice}
-            // onRowEditCommit={updateTicketPrice}
-            onRowEditStart={params => updateTicketId}
+            onRowDoubleClick={params => handleOpen('2D', params)}
           />
         </Grid>
         <Grid item={true} xs={6}>
@@ -152,6 +133,7 @@ export default function TicketPriceManagementPage() {
             componentsProps={{
               toolbar: { setQuery },
             }}
+            onRowDoubleClick={params => handleOpen('3D', params)}
           />
         </Grid>
       </Grid>

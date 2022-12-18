@@ -22,9 +22,15 @@ import {
 import { CustomInput } from 'app/components/CustomInput';
 import useStyles from './styles';
 import { useForm } from 'hooks/useForm';
-import { addRoom, useAddRoom } from 'queries/rooms';
+import { updateMovie, useGetAllMovies, useGetMovieById } from 'queries/movies';
+import { usegetActors } from 'queries/actors';
+import { useGetNationalities } from 'queries/nationality';
+import { useGetDirectors } from 'queries/directors';
+import { useGetCategories } from 'queries/categories';
+import { useGetAllRooms, useGetRooms, useUpdateRoom } from 'queries/rooms';
 import { notify } from 'app/components/MasterDialog';
-export default function AddRoomDialog(props: any) {
+import { useUpdatePrice } from 'queries/prices';
+export default function UpdatePriceDialog(props: any) {
   const classes = useStyles();
 
   const validate = (fieldValues = values) => {
@@ -42,58 +48,59 @@ export default function AddRoomDialog(props: any) {
 
   const { values, setValues, errors, setErrors, handleInputChange } = useForm(
     {
-      roomId: 0,
-      name: '',
-      visionType: '',
-      colNumber: 0,
-      rowNumber: 0,
-      colEmpty: 0,
-      rowEmpty: 0,
+      id: 0,
+      value: 0,
+      type: '2D',
     },
     true,
     validate,
   );
 
+  const update = useUpdatePrice(values.id.toString(), values.value);
+
   const handleCloseDialog = () => {
     props.onClose();
   };
 
-  const addRoom = useAddRoom(
-    values.name,
-    values.visionType,
-    values.colNumber,
-    values.rowNumber,
-    values.colEmpty,
-    values.rowEmpty,
-  );
-  const handleAddFilm = () => {
-    addRoom.refetch();
+  const handleUpdatePrice = () => {
+    update.refetch();
     handleCloseDialog();
   };
+
   useEffect(() => {
-    if (addRoom.isError) {
+    if (props.data !== null) {
+      setValues({
+        ...values,
+        id: props.data.id,
+        value: props.data.value,
+        type: props.type,
+      });
+    }
+  }, [props.data]);
+
+  useEffect(() => {
+    if (update.isSuccess) {
       setTimeout(() => {
         notify({
-          type: 'error',
-          content: 'Thêm phòng chiếu thất bại',
+          type: 'success',
+          content: 'Thay đổi giá vé thành công',
           autocloseDelay: 1500,
         });
       }, 100);
-    } else {
-      if (addRoom.isSuccess) {
-        setTimeout(() => {
-          notify({
-            type: 'success',
-            content: 'Thêm phòng chiếu thành công',
-            autocloseDelay: 1500,
-          });
-        }, 100);
-        props.refetch();
-      }
+      update.remove();
     }
-  }, [addRoom.isLoading]);
 
-  // console.log(values);
+    if (update.isError) {
+      setTimeout(() => {
+        notify({
+          type: 'error',
+          content: 'Thay đổi thất bại',
+          autocloseDelay: 1500,
+        });
+      }, 100);
+      update.remove();
+    }
+  });
   return (
     <Dialog
       open={props.open}
@@ -102,7 +109,7 @@ export default function AddRoomDialog(props: any) {
       maxWidth="xs"
       scroll="paper"
     >
-      <Box className={classes.AddFilmBox}>
+      <Box className={classes.EditRoomBox}>
         <Typography
           sx={{
             textAlign: 'center',
@@ -111,41 +118,15 @@ export default function AddRoomDialog(props: any) {
           variant="h5"
           fontWeight="bold"
         >
-          Thêm phòng mới
+          Thay đổi phòng mới
         </Typography>
         <DialogContent>
           <Grid xs={12} spacing={3} item={true} container>
             <Grid xs={6} item={true}>
               <CustomInput.TextField
-                label="Tên phòng"
-                name="name"
-                value={values.name}
-                onChange={handleInputChange}
-                autoFocus
-                inputProps={{ maxLength: '64' }}
-              />
-            </Grid>
-            <Grid xs={6} item={true}>
-              <InputLabel>Loại phòng</InputLabel>
-              <Select
-                value={values.visionType}
-                fullWidth
-                label="Trạng thái"
-                onChange={(event: any) => {
-                  setValues({ ...values, visionType: event.target.value });
-                }}
-              >
-                <MenuItem value={'2D'}>2D</MenuItem>
-                <MenuItem value={'3D'}>3D</MenuItem>
-              </Select>
-            </Grid>
-          </Grid>
-
-          <Grid xs={12} spacing={3} item={true} container>
-            <Grid xs={6} item={true}>
-              <CustomInput.TextField
                 label="Số hàng"
                 name="rowNumber"
+                value={values?.rowNumber}
                 type="number"
                 onChange={handleInputChange}
                 inputProps={{ maxLength: '64' }}
@@ -156,27 +137,7 @@ export default function AddRoomDialog(props: any) {
                 label="Số cột"
                 name="colNumber"
                 type="number"
-                onChange={handleInputChange}
-                inputProps={{ maxLength: '64' }}
-              />
-            </Grid>
-          </Grid>
-
-          <Grid xs={12} spacing={3} item={true} container>
-            <Grid xs={6} item={true}>
-              <CustomInput.TextField
-                label="Hàng trống"
-                name="rowEmpty"
-                type="number"
-                onChange={handleInputChange}
-                inputProps={{ maxLength: '64' }}
-              />
-            </Grid>
-            <Grid xs={6} item={true}>
-              <CustomInput.TextField
-                label="Cột trống"
-                name="colEmpty"
-                type="number"
+                value={values?.colNumber}
                 onChange={handleInputChange}
                 inputProps={{ maxLength: '64' }}
               />
@@ -202,10 +163,10 @@ export default function AddRoomDialog(props: any) {
               variant="contained"
               sx={{ mt: 2, p: 1, fontWeight: 'bold', color: 'white' }}
               disableFocusRipple
-              className={classes.AddFilmButton}
-              onClick={handleAddFilm}
+              className={classes.EditRoomButton}
+              onClick={handleUpdatePrice}
             >
-              Thêm phòng
+              Thay đổi phòng
             </Button>
           </Grid>
         </Grid>
