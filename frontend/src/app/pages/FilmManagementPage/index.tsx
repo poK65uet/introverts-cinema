@@ -35,13 +35,11 @@ export default function FilmManagementPage() {
     setEditRowId('0');
     refetch();
     setOpen(false);
-    // window.location.reload();
   };
   const handleCloseEdit = () => {
     setOpenEdit(false);
     // refetch();
     remove();
-    // window.location.reload();
   };
 
   const handleClickOpenEditPage = (params: any) => {
@@ -141,6 +139,7 @@ export default function FilmManagementPage() {
         data={editRowId}
         open={openEdit}
         onClose={handleCloseEdit}
+        setRows={setRows}
       />
       <Button className={classes.addButton} onClick={handleClickOpenAddPage}>
         Thêm phim mới

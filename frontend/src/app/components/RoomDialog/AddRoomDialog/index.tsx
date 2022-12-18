@@ -70,17 +70,15 @@ export default function AddRoomDialog(props: any) {
     props.onClose();
   };
 
-  const addRoom =
-    useAddRoom();
-    // values.name,
-    // values.visionType,
-    // values.collumnNumber,
-    // values.rowNumber,
+  const addRoom = useAddRoom();
+  // values.name,
+  // values.visionType,
+  // values.collumnNumber,
+  // values.rowNumber,
   const handleAddFilm = () => {
     addRoom.refetch();
     handleCloseDialog();
   };
-  console.log(addRoom);
 
   useEffect(() => {
     if (addRoom.data === null) {
@@ -111,7 +109,7 @@ export default function AddRoomDialog(props: any) {
       open={props.open}
       onClose={handleCloseDialog}
       fullWidth
-      maxWidth="md"
+      maxWidth="xs"
       scroll="paper"
     >
       <Box className={classes.AddFilmBox}>
@@ -127,7 +125,7 @@ export default function AddRoomDialog(props: any) {
         </Typography>
         <DialogContent>
           <Grid xs={12} spacing={3} item={true} container>
-            <Grid xs={4} item={true}>
+            <Grid xs={6} item={true}>
               <CustomInput.TextField
                 label="Tên phòng"
                 name="name"
@@ -137,24 +135,8 @@ export default function AddRoomDialog(props: any) {
                 inputProps={{ maxLength: '64' }}
               />
             </Grid>
-            <Grid xs={3} item={true}>
-              <CustomInput.TextField
-                label="Hàng ghế"
-                name=""
-                onChange={handleInputChange}
-                inputProps={{ maxLength: '64' }}
-              />
-            </Grid>
-            <Grid xs={3} item={true}>
-              <CustomInput.TextField
-                label="Cột ghế"
-                name=""
-                onChange={handleInputChange}
-                inputProps={{ maxLength: '64' }}
-              />
-            </Grid>
-            <Grid xs={2} item={true}>
-              <InputLabel>Định dạng video</InputLabel>
+            <Grid xs={6} item={true}>
+              <InputLabel>Loại phòng</InputLabel>
               <Select
                 value={values.status}
                 fullWidth
@@ -166,6 +148,44 @@ export default function AddRoomDialog(props: any) {
                 <MenuItem value={2}>2D</MenuItem>
                 <MenuItem value={3}>3D</MenuItem>
               </Select>
+            </Grid>
+          </Grid>
+
+          <Grid xs={12} spacing={3} item={true} container>
+            <Grid xs={6} item={true}>
+              <CustomInput.TextField
+                label="Số hàng"
+                name="rowNumber"
+                onChange={handleInputChange}
+                inputProps={{ maxLength: '64' }}
+              />
+            </Grid>
+            <Grid xs={6} item={true}>
+              <CustomInput.TextField
+                label="Số cột"
+                name="colNumber"
+                onChange={handleInputChange}
+                inputProps={{ maxLength: '64' }}
+              />
+            </Grid>
+          </Grid>
+
+          <Grid xs={12} spacing={3} item={true} container>
+            <Grid xs={6} item={true}>
+              <CustomInput.TextField
+                label="Hàng trống"
+                name="rowEmpty"
+                onChange={handleInputChange}
+                inputProps={{ maxLength: '64' }}
+              />
+            </Grid>
+            <Grid xs={6} item={true}>
+              <CustomInput.TextField
+                label="Cột trống"
+                name="colEmpty"
+                onChange={handleInputChange}
+                inputProps={{ maxLength: '64' }}
+              />
             </Grid>
           </Grid>
         </DialogContent>
