@@ -49,7 +49,7 @@ export default function TicketPriceManagementPage() {
     let tmpRows3D = [];
     if (data !== undefined) {
       for (const e of data) {
-        if (e.visionType === 2) {
+        if (e.visionType === '2D') {
           tmpRows2D.push(e);
         } else {
           tmpRows3D.push(e);
