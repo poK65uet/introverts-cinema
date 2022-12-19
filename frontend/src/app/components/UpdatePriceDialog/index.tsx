@@ -75,6 +75,7 @@ export default function UpdatePriceDialog(props: any) {
         id: props.data.id,
         value: props.data.value.toString(),
         type: props.data.type,
+        dayCode: props.data.dayCode,
       });
     }
   }, [props.data]);
@@ -124,15 +125,35 @@ export default function UpdatePriceDialog(props: any) {
         </Typography>
         <DialogContent>
           <Grid xs={12} spacing={3} item={true} container>
-            <CustomInput.TextField
-              label="Giá mới"
-              name="value"
-              type="number"
-              value={values?.value}
-              onChange={handleInputChange}
-              inputProps={{ maxLength: '64' }}
-              autoFocus
-            />
+            <Grid xs={6} item={true}>
+              <CustomInput.TextField
+                label="Thời gian"
+                name="dayCode"
+                disabled
+                value={values?.dayCode}
+              />
+            </Grid>
+            <Grid xs={6} item={true}>
+              <CustomInput.TextField
+                label="Loại phòng"
+                name="type"
+                disabled
+                value={values.type}
+              />
+            </Grid>
+          </Grid>
+          <Grid xs={12} spacing={3} item={true} container>
+            <Grid xs={12} item={true}>
+              <CustomInput.TextField
+                label="Giá mới"
+                name="value"
+                type="number"
+                value={values?.value}
+                onChange={handleInputChange}
+                inputProps={{ maxLength: '64' }}
+                autoFocus
+              />
+            </Grid>
           </Grid>
         </DialogContent>
         <Grid item={true} container xs={12} spacing={2}>

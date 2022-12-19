@@ -23,7 +23,12 @@ export default function TicketPriceManagementPage() {
   const [rows3D, setRows3D] = useState<any[]>([]);
   const [query, setQuery] = useState('');
   const [open, setOpen] = useState(false);
-  const [editRow, setEditRow] = useState({ type: '2D', id: 0, value: 0 });
+  const [editRow, setEditRow] = useState({
+    type: '2D',
+    id: 0,
+    value: 0,
+    dayCode: null,
+  });
   const { isLoading, data, refetch } = useGetPrices();
 
   const handleClose = () => {
@@ -31,7 +36,12 @@ export default function TicketPriceManagementPage() {
   };
 
   const handleOpen = (visionType: string, params: any) => {
-    setEditRow({ type: visionType, id: params.id, value: params.value });
+    setEditRow({
+      type: visionType,
+      id: params.id,
+      value: params.value,
+      dayCode: params.dayCode,
+    });
     setOpen(true);
   };
   useEffect(() => {
@@ -51,14 +61,6 @@ export default function TicketPriceManagementPage() {
   }, [data]);
 
   const columns: GridColDef[] = [
-    // {
-    //   field: 'id',
-    //   headerName: '#',
-    //   type: 'number',
-    //   width: 70,
-    //   align: 'center',
-    //   headerAlign: 'center',
-    // },
     {
       field: 'dayCode',
       headerName: 'Thời gian',
@@ -103,7 +105,9 @@ export default function TicketPriceManagementPage() {
 
       <Grid item={true} xs={12} container spacing={2}>
         <Grid item={true} xs={6}>
-          <Typography variant="h3">2D</Typography>
+          <Typography variant="h3" sx={{ color: 'orange' }}>
+            2D
+          </Typography>
           <DataGrid
             autoHeight
             loading={isLoading}
@@ -122,7 +126,9 @@ export default function TicketPriceManagementPage() {
           />
         </Grid>
         <Grid item={true} xs={6}>
-          <Typography variant="h3">3D</Typography>
+          <Typography variant="h3" sx={{ color: 'orange' }}>
+            3D
+          </Typography>
           <DataGrid
             autoHeight
             loading={isLoading}
