@@ -20,6 +20,8 @@ export default function PaymentForm(props: PaymentFormProps) {
   const store = useSelector<RootState, RootState>(state => state);
   const [showConfirmCancel, setShowConfirmCancel] = useState(false)
 
+  const [rendering, setRendering] = useState(true)
+
   const dispatch = useDispatch()
 
   const handleCancelPayment = () => {
@@ -112,6 +114,13 @@ export default function PaymentForm(props: PaymentFormProps) {
     }
   }, [verifyBillData])
 
+  useEffect(() => {
+    if (billData)
+      setTimeout(() => {
+        setRendering(false)
+      }, 500);
+  }, [billData])
+
   const {
     refetch: cancelBill,
     isLoading: isCancelingBill,
@@ -143,17 +152,17 @@ export default function PaymentForm(props: PaymentFormProps) {
   }
 
   useEffect(() => {
-    if (isCreatingBill || isVerifyingBill || isCancelingBill) {
+    if (isCreatingBill || isVerifyingBill || isCancelingBill || rendering) {
       dispatch(bookTicketActions.loading())
     } else {
       dispatch(bookTicketActions.loadingDone())
     }
-  }, [isCreatingBill, isVerifyingBill, isCancelingBill])
+  }, [isCreatingBill, isVerifyingBill, isCancelingBill, rendering])
 
   const classes = useStyles()
 
   return (
-    <Card className={classes.form} sx={{ display: !billData ? 'none' : 'initial' }}>
+    <Card className={classes.form} sx={{ display: (!billData || rendering) ? 'none' : 'initial' }}>
       <CardHeader
         title={<Typography variant='h6' fontWeight='bold' display='flex' justifyContent='space-between'>
           THANH TOÁN VÉ&nbsp;
