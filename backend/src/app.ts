@@ -20,30 +20,33 @@ declare global {
 
 const app = express();
 
+const corsOptions = {
+	origin: '*',
+	optionsSuccessStatus: 200
+};
+
 const init = async () => {
 	await sequelize.sync();
 	console.log('Finish load database.');
 
 	app.use(cookieParser());
 
-	app.use(cors());
+	app.use(cors(corsOptions));
 
 	app.use(bodyParser.urlencoded({ extended: false }));
 
 	app.use(bodyParser.json());
-
-	app.use('/', express.static('build'));
 
 	const { xss } = require('express-xss-sanitizer');
 	app.use(xss());
 
 	app.use('/api', router);
 
-	// 	app.use(express.static('build'));
+	app.use(express.static('build'));
 
-	//     	app.get('/*', function (req, res) {
-	//        	    res.sendFile('build/index.html', {root: '.'});
-	//      	});
+	app.get('/*', function (req, res) {
+		res.sendFile('build/index.html', { root: '.' });
+	});
 };
 
 init();

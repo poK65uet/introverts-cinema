@@ -9,7 +9,6 @@ import {
 import useStyles from './styles';
 import { useSelector } from 'react-redux';
 import { RootState } from 'store';
-import { CalendarMonth, LocalActivity, MovieFilter, Payment } from '@mui/icons-material';
 import { CustomizedStepIcon, CustomizedConnector } from './custom';
 
 interface BookingStepperProps { }

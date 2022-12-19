@@ -17,6 +17,14 @@ export default function SeatsSelector() {
 
   const store = useSelector<RootState, RootState>(state => state);
 
+  const [rendering, setRendering] = useState(true)
+
+  useEffect(() => {
+    setTimeout(() => {
+      setRendering(false)
+    }, 100);
+  }, [])
+
   const onGetShowtimeDetailError = () => {
     notify({
       type: 'error',
@@ -105,43 +113,44 @@ export default function SeatsSelector() {
   const classes = useStyles();
 
   return (
-    <Container className={classes.seatSelectWrapper}>
-      <Container className={classes.seatPlanWrapper}>
-        <SeatPlan seats={seats}
-          seatCols={room?.colNumber} seatRows={room?.rowNumber}
-          emptyCols={room?.colEmpty} emptyRows={room?.rowEmpty} />
-      </Container>
-      <Container sx={{ all: 'unset', px: '0 !important' }} >
-        <TicketDetail
-          movie={selectedMovie()}
-          showtime={{
-            startTime: new Date(store.bookTicket.selectedShowtime.startTime),
-            visionType: room?.visionType,
-            room: room?.name
-          }}
-          seats={store.bookTicket.selectedSeats}
-          price={price * store.bookTicket.selectedSeats.length} />
-        <div className={classes.actions}>
-          <Button variant='contained' className={classes.button}
-            disableRipple startIcon={<West />}
-            onClick={handleReselectShowtime}>
-            Quay lại
-          </Button>
-          <Button variant='contained' className={classes.button}
-            disabled={store.bookTicket.selectedSeats.length <= 0}
-            disableRipple endIcon={<East />}
-            onClick={handleSelectSeatsDone}>
-            Tiếp tục
-          </Button>
-          <ConfirmDialog open={showConfirmSelectSeats}
-            title={`Xác nhận chọn ghế`}
-            content={confirmSelectSeatsContent()}
-            handleClose={handleCloseConfirmSelectSeats}
-            handleConfirm={handleConfirmSelectSeats}
-            handleCancel={handleCancelSelectSeats} />
-        </div>
-      </Container>
-    </Container>
+    !rendering ?
+      <Container className={classes.seatSelectWrapper}>
+        <Container className={classes.seatPlanWrapper}>
+          <SeatPlan seats={seats}
+            seatCols={room?.colNumber} seatRows={room?.rowNumber}
+            emptyCols={room?.colEmpty} emptyRows={room?.rowEmpty} />
+        </Container>
+        <Container sx={{ all: 'unset', px: '0 !important' }} >
+          <TicketDetail
+            movie={selectedMovie()}
+            showtime={{
+              startTime: new Date(store.bookTicket.selectedShowtime.startTime),
+              visionType: room?.visionType,
+              room: room?.name
+            }}
+            seats={store.bookTicket.selectedSeats}
+            price={price * store.bookTicket.selectedSeats.length} />
+          <div className={classes.actions}>
+            <Button variant='contained' className={classes.button}
+              disableRipple startIcon={<West />}
+              onClick={handleReselectShowtime}>
+              Quay lại
+            </Button>
+            <Button variant='contained' className={classes.button}
+              disabled={store.bookTicket.selectedSeats.length <= 0}
+              disableRipple endIcon={<East />}
+              onClick={handleSelectSeatsDone}>
+              Tiếp tục
+            </Button>
+            <ConfirmDialog open={showConfirmSelectSeats}
+              title={`Xác nhận chọn ghế`}
+              content={confirmSelectSeatsContent()}
+              handleClose={handleCloseConfirmSelectSeats}
+              handleConfirm={handleConfirmSelectSeats}
+              handleCancel={handleCancelSelectSeats} />
+          </div>
+        </Container>
+      </Container> : null
   )
 }
 

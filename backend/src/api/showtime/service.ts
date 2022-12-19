@@ -69,6 +69,10 @@ const getShowtimesByFilm = async (req: Request) => {
 					model: Film,
 					attributes: [],
 					where: whereFilm
+				},
+				{
+					model: Room,
+					attributes: ['visionType']
 				}
 			],
 			order: [['start_time', 'ASC']]

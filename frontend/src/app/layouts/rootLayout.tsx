@@ -55,13 +55,15 @@ const RootLayout = () => {
     }
   }, [user]);
 
+  useEffect(() => {
+    if (window.location.pathname == '/admin')
+      window.location.href = '/admin/customers'
+  }, [window.location.pathname == '/admin'])
+
   return (
     !rendering ?
       <BrowserRouter>
         <Switch>
-          {store.login.isAdmin ? (
-            <Redirect from="/admin" exact to="/admin/customers" />
-          ) : null}
           <Route
             path="/admin"
             component={store.login.isAdmin ? AdminLayout : HomeLayout}
