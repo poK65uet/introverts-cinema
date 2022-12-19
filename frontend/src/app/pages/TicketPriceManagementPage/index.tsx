@@ -12,7 +12,7 @@ import {
 import CustomToolbar from 'app/containers/CustomToolbar';
 import { useGetTickets, useGetTicketsPagination } from 'queries/tickets';
 import { useGetPrices, useUpdatePrice } from 'queries/prices';
-import { formatDate, formatHour } from 'utils/date';
+import { daysOfWeek, formatDate, formatHour } from 'utils/date';
 import { notify } from 'app/components/MasterDialog';
 import UpdatePriceDialog from 'app/components/UpdatePriceDialog';
 import { SettingsPowerRounded } from '@mui/icons-material';
@@ -63,9 +63,14 @@ export default function TicketPriceManagementPage() {
   const columns: GridColDef[] = [
     {
       field: 'dayCode',
-      headerName: 'Thời gian',
+      headerName: 'Thứ ngày',
       width: 170,
       headerAlign: 'center',
+      align: 'center',
+      renderCell: (params: GridRenderCellParams<number>) => {
+        if (params.value === undefined) return null;
+        return daysOfWeek[params.value];
+      },
     },
     {
       field: 'value',

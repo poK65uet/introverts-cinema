@@ -30,6 +30,7 @@ import { useGetCategories } from 'queries/categories';
 import { useGetAllRooms, useGetRooms, useUpdateRoom } from 'queries/rooms';
 import { notify } from 'app/components/MasterDialog';
 import { useUpdatePrice } from 'queries/prices';
+import { daysOfWeek } from 'utils/date';
 export default function UpdatePriceDialog(props: any) {
   const classes = useStyles();
 
@@ -127,10 +128,10 @@ export default function UpdatePriceDialog(props: any) {
           <Grid xs={12} spacing={3} item={true} container>
             <Grid xs={6} item={true}>
               <CustomInput.TextField
-                label="Thời gian"
+                label="Thứ ngày"
                 name="dayCode"
                 disabled
-                value={values?.dayCode}
+                value={values ? daysOfWeek[values.dayCode] : null}
               />
             </Grid>
             <Grid xs={6} item={true}>
