@@ -37,3 +37,13 @@ const Dayof = (day: number) => {
 export const formatDay = (date: Date) => {
   return Dayof(date.getDay());
 };
+
+export const daysOfWeek = [
+  'Chủ nhật',
+  'Thứ hai',
+  'Thứ ba',
+  'Thứ tư',
+  'Thứ năm',
+  'Thư sáu',
+  'Thứ bảy',
+];

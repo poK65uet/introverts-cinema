@@ -30,6 +30,7 @@ import { useGetCategories } from 'queries/categories';
 import { useGetAllRooms, useGetRooms, useUpdateRoom } from 'queries/rooms';
 import { notify } from 'app/components/MasterDialog';
 import { useUpdatePrice } from 'queries/prices';
+import { daysOfWeek } from 'utils/date';
 export default function UpdatePriceDialog(props: any) {
   const classes = useStyles();
 
@@ -75,6 +76,7 @@ export default function UpdatePriceDialog(props: any) {
         id: props.data.id,
         value: props.data.value.toString(),
         type: props.data.type,
+        dayCode: props.data.dayCode,
       });
     }
   }, [props.data]);
@@ -124,15 +126,35 @@ export default function UpdatePriceDialog(props: any) {
         </Typography>
         <DialogContent>
           <Grid xs={12} spacing={3} item={true} container>
-            <CustomInput.TextField
-              label="Giá mới"
-              name="value"
-              type="number"
-              value={values?.value}
-              onChange={handleInputChange}
-              inputProps={{ maxLength: '64' }}
-              autoFocus
-            />
+            <Grid xs={6} item={true}>
+              <CustomInput.TextField
+                label="Thứ ngày"
+                name="dayCode"
+                disabled
+                value={values ? daysOfWeek[values.dayCode] : null}
+              />
+            </Grid>
+            <Grid xs={6} item={true}>
+              <CustomInput.TextField
+                label="Loại phòng"
+                name="type"
+                disabled
+                value={values.type}
+              />
+            </Grid>
+          </Grid>
+          <Grid xs={12} spacing={3} item={true} container>
+            <Grid xs={12} item={true}>
+              <CustomInput.TextField
+                label="Giá mới"
+                name="value"
+                type="number"
+                value={values?.value}
+                onChange={handleInputChange}
+                inputProps={{ maxLength: '64' }}
+                autoFocus
+              />
+            </Grid>
           </Grid>
         </DialogContent>
         <Grid item={true} container xs={12} spacing={2}>

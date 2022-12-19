@@ -12,7 +12,7 @@ import {
 import CustomToolbar from 'app/containers/CustomToolbar';
 import { useGetTickets, useGetTicketsPagination } from 'queries/tickets';
 import { useGetPrices, useUpdatePrice } from 'queries/prices';
-import { formatDate, formatHour } from 'utils/date';
+import { daysOfWeek, formatDate, formatHour } from 'utils/date';
 import { notify } from 'app/components/MasterDialog';
 import UpdatePriceDialog from 'app/components/UpdatePriceDialog';
 import { SettingsPowerRounded } from '@mui/icons-material';
@@ -23,7 +23,12 @@ export default function TicketPriceManagementPage() {
   const [rows3D, setRows3D] = useState<any[]>([]);
   const [query, setQuery] = useState('');
   const [open, setOpen] = useState(false);
-  const [editRow, setEditRow] = useState({ type: '2D', id: 0, value: 0 });
+  const [editRow, setEditRow] = useState({
+    type: '2D',
+    id: 0,
+    value: 0,
+    dayCode: null,
+  });
   const { isLoading, data, refetch } = useGetPrices();
 
   const handleClose = () => {
@@ -31,7 +36,12 @@ export default function TicketPriceManagementPage() {
   };
 
   const handleOpen = (visionType: string, params: any) => {
-    setEditRow({ type: visionType, id: params.id, value: params.value });
+    setEditRow({
+      type: visionType,
+      id: params.id,
+      value: params.value,
+      dayCode: params.dayCode,
+    });
     setOpen(true);
   };
   useEffect(() => {
@@ -39,7 +49,7 @@ export default function TicketPriceManagementPage() {
     let tmpRows3D = [];
     if (data !== undefined) {
       for (const e of data) {
-        if (e.visionType === 2) {
+        if (e.visionType === '2D') {
           tmpRows2D.push(e);
         } else {
           tmpRows3D.push(e);
@@ -51,19 +61,16 @@ export default function TicketPriceManagementPage() {
   }, [data]);
 
   const columns: GridColDef[] = [
-    // {
-    //   field: 'id',
-    //   headerName: '#',
-    //   type: 'number',
-    //   width: 70,
-    //   align: 'center',
-    //   headerAlign: 'center',
-    // },
     {
       field: 'dayCode',
-      headerName: 'Thời gian',
+      headerName: 'Thứ ngày',
       width: 170,
       headerAlign: 'center',
+      align: 'center',
+      renderCell: (params: GridRenderCellParams<number>) => {
+        if (params.value === undefined) return null;
+        return daysOfWeek[params.value];
+      },
     },
     {
       field: 'value',
@@ -103,7 +110,9 @@ export default function TicketPriceManagementPage() {
 
       <Grid item={true} xs={12} container spacing={2}>
         <Grid item={true} xs={6}>
-          <Typography variant="h3">2D</Typography>
+          <Typography variant="h3" sx={{ color: 'orange' }}>
+            2D
+          </Typography>
           <DataGrid
             autoHeight
             loading={isLoading}
@@ -112,17 +121,13 @@ export default function TicketPriceManagementPage() {
             rows={rows2D}
             disableSelectionOnClick
             columns={columns}
-            components={{
-              Toolbar: CustomToolbar,
-            }}
-            componentsProps={{
-              toolbar: { setQuery },
-            }}
             onRowDoubleClick={params => handleOpen('2D', params.row)}
           />
         </Grid>
         <Grid item={true} xs={6}>
-          <Typography variant="h3">3D</Typography>
+          <Typography variant="h3" sx={{ color: 'orange' }}>
+            3D
+          </Typography>
           <DataGrid
             autoHeight
             loading={isLoading}
@@ -131,12 +136,6 @@ export default function TicketPriceManagementPage() {
             rows={rows3D}
             disableSelectionOnClick
             columns={columns}
-            components={{
-              Toolbar: CustomToolbar,
-            }}
-            componentsProps={{
-              toolbar: { setQuery },
-            }}
             onRowDoubleClick={params => handleOpen('3D', params.row)}
           />
         </Grid>
