@@ -116,12 +116,6 @@ export default function TicketPriceManagementPage() {
             rows={rows2D}
             disableSelectionOnClick
             columns={columns}
-            components={{
-              Toolbar: CustomToolbar,
-            }}
-            componentsProps={{
-              toolbar: { setQuery },
-            }}
             onRowDoubleClick={params => handleOpen('2D', params.row)}
           />
         </Grid>
@@ -137,12 +131,6 @@ export default function TicketPriceManagementPage() {
             rows={rows3D}
             disableSelectionOnClick
             columns={columns}
-            components={{
-              Toolbar: CustomToolbar,
-            }}
-            componentsProps={{
-              toolbar: { setQuery },
-            }}
             onRowDoubleClick={params => handleOpen('3D', params.row)}
           />
         </Grid>
