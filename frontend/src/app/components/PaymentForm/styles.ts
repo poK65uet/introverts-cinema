@@ -5,7 +5,8 @@ const useStyles = makeStyles((theme: Theme) => ({
   form: {
     width: 'fit-content',
     margin: 'auto',
-    padding: 20,
+    marginBottom: 0,
+    padding: 12.5,
     textAlign: 'center',
     '&.MuiPaper-root': {
       backgroundColor: theme.palette.primary.main,
@@ -15,13 +16,14 @@ const useStyles = makeStyles((theme: Theme) => ({
     justifyContent: 'center',
     '& .MuiCardHeader-root': {
       paddingTop: 0,
+      paddingBottom: 12.5,
     },
     '& .MuiCardContent-root': {
       backgroundColor: '#FFFFFF',
       color: theme.palette.text.primary,
       padding: '0 !important',
       '& .MuiCardMedia-root': {
-        maxWidth: '20rem',
+        maxWidth: '17.5rem',
         display: 'initial',
       },
       '& .MuiCardActions-root': {
