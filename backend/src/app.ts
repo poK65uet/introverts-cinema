@@ -2,6 +2,7 @@ import express from 'express';
 import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
+import path from 'path';
 
 import * as dotenv from 'dotenv';
 dotenv.config();
@@ -42,11 +43,17 @@ const init = async () => {
 
 	app.use('/api', router);
 
-	app.use(express.static('build'));
+	// app.use(express.static(path.join('../frontend/build')));
 
-	app.get('/*', function (req, res) {
-		res.sendFile('build/index.html', { root: '.' });
-	});
+	// app.get('/*', function (req, res) {
+	// 	res.sendFile(path.join('../frontend/build', 'index.html'));
+	// });
+
+	// app.use(express.static(path.join('./build')));
+
+	// app.get('/*', function (req, res) {
+	// 	res.sendFile(path.join('./build', 'index.html'));
+	// });
 };
 
 init();

@@ -1,0 +1,15 @@
+FROM node:20-alpine3.16 as build-stage
+
+WORKDIR /opt/client
+COPY package.json .
+RUN npm install -g npm@9.6.5
+RUN npm install
+COPY . .
+ARG REACT_APP_API_ENDPOINT
+ENV REACT_APP_API_ENDPOINT=$REACT_APP_API_ENDPOINT
+RUN npm run build
+
+FROM nginx:1.23.4-alpine
+COPY --from=build-stage /opt/client/build /usr/share/nginx/html
+# EXPOSE $REACT_DOCKER_PORT
+CMD ["nginx", "-g", "daemon off;"]

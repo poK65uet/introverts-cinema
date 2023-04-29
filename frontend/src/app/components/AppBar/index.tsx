@@ -236,8 +236,8 @@ export default function AppBar() {
           placement='bottom-start'
           transition
           disablePortal
-          onResize={onResize}
-          onResizeCapture={onResizeCapture}
+          // onResize={onResize}
+          // onResizeCapture={onResizeCapture}
           nonce={''}>
           {({ TransitionProps, placement }) => (
             <Grow

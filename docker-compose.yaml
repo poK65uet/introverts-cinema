@@ -1,0 +1,50 @@
+version: "1"
+services:
+  mysqldb:
+    image: mysql:latest
+    restart: always
+    environment:
+      - MYSQL_ROOT_PASSWORD=$MYSQL_PASSWORD
+      - MYSQL_DATABASE=$MYSQL_DATABASE
+    ports:
+      - 3307:3306
+    volumes:
+      - db:/var/lib/mysql
+    networks:
+      - introverts-cinema
+  api:
+    depends_on:
+      - mysqldb
+    build: ./backend
+    restart: always
+    env_file: ./backend/.env
+    ports:
+      - $NODE_LOCAL_PORT:$NODE_DOCKER_PORT
+    environment:
+      - MYSQL_HOST=mysqldb
+    #   - MYSQL_PORT=$MYSQL_PORT
+    #   - MYSQL_USERNAME=$MYSQL_USERNAME
+    #   - MYSQL_PASSWORD=$MYSQL_PASSWORD
+    #   - MYSQL_DATABASE=$MYSQL_DATABASE
+    networks:
+      - introverts-cinema
+
+  client:
+    depends_on:
+      - api
+    build:
+      context: ./frontend
+      args:
+        - REACT_APP_API_ENDPOINT=$REACT_APP_API_ENDPOINT
+    restart: always
+    env_file: ./frontend/.env
+    ports:
+      - $REACT_LOCAL_PORT:$REACT_DOCKER_PORT
+    networks:
+      - introverts-cinema
+
+volumes:
+  db:
+
+networks:
+  introverts-cinema:
