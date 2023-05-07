@@ -13,6 +13,7 @@ services:
     networks:
       - introverts-cinema
   api:
+    image: introverts-cinema-api
     depends_on:
       - mysqldb
     build: ./backend
@@ -26,10 +27,14 @@ services:
     #   - MYSQL_USERNAME=$MYSQL_USERNAME
     #   - MYSQL_PASSWORD=$MYSQL_PASSWORD
     #   - MYSQL_DATABASE=$MYSQL_DATABASE
+    # volumes:
+    #   - ./backend/src:/opt/api/src
     networks:
       - introverts-cinema
+    # command: ['npm', 'start']
 
   client:
+    image: introverts-cinema-client
     depends_on:
       - api
     build:
