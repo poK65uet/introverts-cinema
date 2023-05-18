@@ -57,7 +57,7 @@ const RootLayout = () => {
 
   useEffect(() => {
     if (window.location.pathname == '/admin')
-      window.location.href = '/admin/customers'
+      window.location.pathname = '/admin/customers'
   }, [window.location.pathname == '/admin'])
 
   return (
