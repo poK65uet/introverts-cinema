@@ -20,17 +20,14 @@ enum Role {
   CUSTOMER = 2,
 }
 
-
-
 const RootLayout = () => {
-
-  const [rendering, setRendering] = useState(true)
+  const [rendering, setRendering] = useState(true);
 
   useEffect(() => {
     document.body.style.margin = '0';
     document.body.style.color = '#1D1C1A';
     setTimeout(() => {
-      setRendering(false)
+      setRendering(false);
     }, 100);
   }, []);
 
@@ -57,23 +54,22 @@ const RootLayout = () => {
 
   useEffect(() => {
     if (window.location.pathname == '/admin')
-      window.location.pathname = '/admin/customers'
-  }, [window.location.pathname == '/admin'])
+      window.location.href = 'https://introverts-cinema.onrender.com/admin/customers';
+  }, [window.location.pathname == '/admin']);
 
-  return (
-    !rendering ?
-      <BrowserRouter>
-        <Switch>
-          <Route
-            path="/admin"
-            component={store.login.isAdmin ? AdminLayout : HomeLayout}
-          />
-          <Route path="/" component={HomeLayout} />
-        </Switch>
-        <MasterDialog />
-        <LoadingLayer />
-      </BrowserRouter> : null
-  );
+  return !rendering ? (
+    <BrowserRouter>
+      <Switch>
+        <Route
+          path="/admin"
+          component={store.login.isAdmin ? AdminLayout : HomeLayout}
+        />
+        <Route path="/" component={HomeLayout} />
+      </Switch>
+      <MasterDialog />
+      <LoadingLayer />
+    </BrowserRouter>
+  ) : null;
 };
 
 export default RootLayout;
