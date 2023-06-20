@@ -1,8 +1,8 @@
 import bcrypt from 'bcrypt';
 import LoginPayLoad from './LoginPayload';
-import { Role, User } from 'databases/models';
-import ResponeCodes from 'utils/constants/ResponeCode';
-import { generateToken } from 'utils/helpers/generate';
+import { Role, User } from '../../databases/models';
+import ResponeCodes from '../../utils/constants/ResponeCode';
+import { generateToken } from '../../utils/helpers/generate';
 
 const verifyEmail = async (email: string) => {
 	const user = await User.findOne({

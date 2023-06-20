@@ -1,11 +1,11 @@
 import { Request } from 'express';
-import { Actor, Category, Director, Film, Nationality } from 'databases/models';
-import ResponeCodes from 'utils/constants/ResponeCode';
+import { Actor, Category, Director, Film, Nationality } from '../../databases/models';
+import ResponeCodes from '../../utils/constants/ResponeCode';
 import FilmPayload from './FilmPayload';
 import { Op } from 'sequelize';
 import Status from '../../utils/constants/Status';
-import paginate from 'utils/helpers/pagination';
-import sequelize from 'databases';
+import paginate from '../../utils/helpers/pagination';
+import sequelize from '../../databases';
 
 const getFilms = async (req: Request) => {
 	try {

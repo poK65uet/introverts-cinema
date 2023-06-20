@@ -1,9 +1,9 @@
-import { User, UserCode } from 'databases/models';
+import { User, UserCode } from '../../databases/models';
 import { Request } from 'express';
 import bcrypt from 'bcrypt';
-import ResponeCodes from 'utils/constants/ResponeCode';
-import { sendForgotEmail } from 'utils/helpers/email';
-import { generateCode } from 'utils/helpers/generate';
+import ResponeCodes from '../../utils/constants/ResponeCode';
+import { sendForgotEmail } from '../../utils/helpers/email';
+import { generateCode } from '../../utils/helpers/generate';
 
 const checkEmail = async (req: Request) => {
 	try {

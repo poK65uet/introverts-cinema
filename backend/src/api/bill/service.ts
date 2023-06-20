@@ -1,20 +1,20 @@
 import { Request } from 'express';
-import { Bill, Film, Room, Seat, Ticket } from 'databases/models';
-import { SeatModel } from 'databases/models/Seat';
+import { Bill, Film, Room, Seat, Ticket } from '../../databases/models';
+import { SeatModel } from '../../databases/models/Seat';
 import BillPayload from './BillPayload';
-import sequelize from 'databases';
-import User, { UserModel } from 'databases/models/User';
-import Showtime, { ShowtimeModel } from 'databases/models/Showtime';
-import SeatStatus from 'utils/constants/SeatStatus';
-import { timeDiffToMinute } from 'utils/helpers/timeService';
-import ResponeCodes from 'utils/constants/ResponeCode';
-import { getPrice } from 'api/price/service';
-import PaymentStatus from 'utils/constants/PaymentStatus';
-import { BillModel } from 'databases/models/Bill';
-import config from 'config';
-import { DESCRIPTION_PREFIX, getBillCodeById, verifyBillTransaction } from 'api/transaction/service';
+import sequelize from '../../databases';
+import User, { UserModel } from '../../databases/models/User';
+import Showtime, { ShowtimeModel } from '../../databases/models/Showtime';
+import SeatStatus from '../../utils/constants/SeatStatus';
+import { timeDiffToMinute } from '../../utils/helpers/timeService';
+import ResponeCodes from '../../utils/constants/ResponeCode';
+import { getPrice } from '../../api/price/service';
+import PaymentStatus from '../../utils/constants/PaymentStatus';
+import { BillModel } from '../../databases/models/Bill';
+import config from '../../config';
+import { DESCRIPTION_PREFIX, getBillCodeById, verifyBillTransaction } from '../../api/transaction/service';
 import { Transaction } from 'sequelize';
-import Status from 'utils/constants/Status';
+import Status from '../../utils/constants/Status';
 
 const MAX_SEAT = 10;
 export const MAX_PAY_TIME = 15; //minutes

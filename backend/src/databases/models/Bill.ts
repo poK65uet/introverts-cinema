@@ -8,7 +8,7 @@ import {
 	BelongsToSetAssociationMixin,
 	HasManyAddAssociationMixin
 } from 'sequelize';
-import sequelize from 'databases';
+import sequelize from '../../databases';
 import User, { UserModel } from './User';
 import Seat, { SeatModel } from './Seat';
 import Showtime, { ShowtimeModel } from './Showtime';

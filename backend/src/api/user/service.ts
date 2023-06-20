@@ -1,14 +1,14 @@
 import bcrypt from 'bcrypt';
 import { Request } from 'express';
-import { Role, User, UserRole } from 'databases/models';
-import { UserModel } from 'databases/models/IModel';
-import ResponeCodes from 'utils/constants/ResponeCode';
+import { Role, User, UserRole } from '../../databases/models';
+import { UserModel } from '../../databases/models/IModel';
+import ResponeCodes from '../../utils/constants/ResponeCode';
 import UserPayload from './UserPayload';
 import UserInfo from './UserInfo';
-import paginate from 'utils/helpers/pagination';
+import paginate from '../../utils/helpers/pagination';
 import { Op } from 'sequelize';
-import sequelize from 'databases';
-import RoleCodes from 'utils/constants/RoleCode';
+import sequelize from '../../databases';
+import RoleCodes from '../../utils/constants/RoleCode';
 
 const getUsers = async (req: Request) => {
 	try {

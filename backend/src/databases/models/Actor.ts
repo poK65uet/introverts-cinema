@@ -7,7 +7,7 @@ import {
 	Model,
 	NonAttribute
 } from 'sequelize';
-import sequelize from 'databases';
+import sequelize from '../../databases';
 import Nationality, { NationalityModel } from './Nationality';
 
 export interface ActorModel extends Model<InferAttributes<ActorModel>, InferCreationAttributes<ActorModel>> {

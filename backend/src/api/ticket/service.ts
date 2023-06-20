@@ -1,12 +1,10 @@
 import { Request } from 'express';
-import ResponeCodes from 'utils/constants/ResponeCode';
-import paginate from 'utils/helpers/pagination';
+import paginate from '../../utils/helpers/pagination';
 import { Op } from 'sequelize';
-import { Film, Ticket, User } from 'databases/models';
-import { create } from 'domain';
-import { TicketModel } from 'databases/models/Ticket';
-import Status from 'utils/constants/Status';
-import { addTimeByMinute, timeDiffToMinute } from 'utils/helpers/timeService';
+import { Film, Ticket, User } from '../../databases/models';
+import { TicketModel } from '../../databases/models/Ticket';
+import Status from '../../utils/constants/Status';
+import { addTimeByMinute } from '../../utils/helpers/timeService';
 
 const getTickets = async (req: Request) => {
 	try {

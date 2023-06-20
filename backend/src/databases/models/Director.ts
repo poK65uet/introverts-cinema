@@ -7,7 +7,7 @@ import {
 	NonAttribute,
 	BelongsToSetAssociationMixin
 } from 'sequelize';
-import sequelize from 'databases';
+import sequelize from '../../databases';
 import Nationality, { NationalityModel } from './Nationality';
 
 export interface DirectorModel extends Model<InferAttributes<DirectorModel>, InferCreationAttributes<DirectorModel>> {

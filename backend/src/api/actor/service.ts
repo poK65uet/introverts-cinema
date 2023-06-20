@@ -1,10 +1,10 @@
 import { Request } from 'express';
-import { Actor, Nationality } from 'databases/models';
-import ResponeCodes from 'utils/constants/ResponeCode';
+import { Actor, Nationality } from '../../databases/models';
+import ResponeCodes from '../../utils/constants/ResponeCode';
 import ActorPayload from './ActorPayload';
-import paginate from 'utils/helpers/pagination';
+import paginate from '../../utils/helpers/pagination';
 import { Op } from 'sequelize';
-import sequelize from 'databases';
+import sequelize from '../../databases';
 
 const getActors = async (req: Request) => {
 	try {

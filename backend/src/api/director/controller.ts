@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import * as service from './service';
-import { ApiResponse } from 'utils/rest/ApiResponse';
-import ResponeCodes from 'utils/constants/ResponeCode';
+import { ApiResponse } from '../../utils/rest/ApiResponse';
+import ResponeCodes from '../../utils/constants/ResponeCode';
 
 const getDirectors = async (req: Request, res: Response) => {
 	try {

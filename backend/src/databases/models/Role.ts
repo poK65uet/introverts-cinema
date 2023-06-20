@@ -1,5 +1,5 @@
 import { CreationOptional, DataTypes, InferAttributes, InferCreationAttributes, Model } from 'sequelize';
-import sequelize from 'databases';
+import sequelize from '../../databases';
 
 export interface RoleModel extends Model<InferAttributes<RoleModel>, InferCreationAttributes<RoleModel>> {
 	// Some fields are optional when calling RoleModel.create() or RoleModel.build(	)

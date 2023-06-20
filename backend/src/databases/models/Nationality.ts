@@ -1,5 +1,5 @@
 import { CreationOptional, DataTypes, InferAttributes, InferCreationAttributes, Model } from 'sequelize';
-import sequelize from 'databases';
+import sequelize from '../../databases';
 
 export interface NationalityModel
 	extends Model<InferAttributes<NationalityModel>, InferCreationAttributes<NationalityModel>> {

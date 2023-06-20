@@ -1,8 +1,8 @@
 import { Request } from 'express';
-import { Room } from 'databases/models';
-import ResponeCodes from 'utils/constants/ResponeCode';
+import { Room } from '../../databases/models';
+import ResponeCodes from '../../utils/constants/ResponeCode';
 import RoomPayload from './RoomPayload';
-import paginate from 'utils/helpers/pagination';
+import paginate from '../../utils/helpers/pagination';
 import { Op } from 'sequelize';
 
 const getRooms = async (req: Request) => {

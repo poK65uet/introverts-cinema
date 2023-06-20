@@ -1,5 +1,5 @@
-import { Price } from 'databases/models';
-import { ShowtimeModel } from 'databases/models/Showtime';
+import { Price } from '../../databases/models';
+import { ShowtimeModel } from '../../databases/models/Showtime';
 import { Request } from 'express';
 
 const getAllPrices = async () => {

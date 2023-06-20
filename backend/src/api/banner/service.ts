@@ -1,8 +1,8 @@
 import { Request } from 'express';
-import { Banner } from 'databases/models';
-import ResponeCodes from 'utils/constants/ResponeCode';
+import { Banner } from '../../databases/models';
+import ResponeCodes from '../../utils/constants/ResponeCode';
 import BannerPayload from './BannerPayload';
-import Status from 'utils/constants/Status';
+import Status from '../../utils/constants/Status';
 
 const getBanners = async (req: Request) => {
 	try {

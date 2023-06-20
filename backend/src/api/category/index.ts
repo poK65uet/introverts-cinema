@@ -1,5 +1,5 @@
 import Router from 'express';
-import { verifyAdmin, verifyToken } from 'middlewares';
+import { verifyAdmin, verifyToken } from '../../middlewares';
 import { getCategories, getCategory, addCategory, updateCategory, deleteCategory } from './controller';
 
 const router = Router();

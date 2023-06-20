@@ -1,13 +1,13 @@
 import { Request } from 'express';
-import { Showtime, Room, Film } from 'databases/models';
-import ResponeCodes from 'utils/constants/ResponeCode';
+import { Showtime, Room, Film } from '../../databases/models';
+import ResponeCodes from '../../utils/constants/ResponeCode';
 import ShowtimePayload from './ShowtimePayload';
-import { ShowtimeModel } from 'databases/models/Showtime';
+import { ShowtimeModel } from '../../databases/models/Showtime';
 import { Op } from 'sequelize';
-import { getPrice } from 'api/price/service';
-import paginate from 'utils/helpers/pagination';
-import sequelize from 'databases';
-import { addTimeByMinute } from 'utils/helpers/timeService';
+import { getPrice } from '../../api/price/service';
+import paginate from '../../utils/helpers/pagination';
+import sequelize from '../../databases';
+import { addTimeByMinute } from '../../utils/helpers/timeService';
 
 const NEXT_SHOWTIME = 30; // minutes;
 

@@ -1,5 +1,5 @@
 import { Sequelize } from 'sequelize';
-import config from 'config';
+import config from '../config';
 
 console.log('Connecting to database.');
 const sequelize = new Sequelize(config.mysql_database, config.mysql_username, config.mysql_password, {

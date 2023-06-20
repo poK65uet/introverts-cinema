@@ -1,8 +1,8 @@
 import { Request } from 'express';
-import { Category } from 'databases/models';
-import ResponeCodes from 'utils/constants/ResponeCode';
+import { Category } from '../../databases/models';
+import ResponeCodes from '../../utils/constants/ResponeCode';
 import CategoryPayload from './CategoryPayload';
-import paginate from 'utils/helpers/pagination';
+import paginate from '../../utils/helpers/pagination';
 import { Op } from 'sequelize';
 
 const getCategories = async (req: Request) => {

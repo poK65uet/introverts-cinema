@@ -1,5 +1,5 @@
 import Router from 'express';
-import { verifyAdmin, verifyToken } from 'middlewares';
+import { verifyAdmin, verifyToken } from '../../middlewares';
 import { getBanners, getBanner, addBanner, updateBanner, deleteBanner } from './controller';
 
 const router = Router();

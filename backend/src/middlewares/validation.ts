@@ -1,11 +1,11 @@
 import { Request, Response, NextFunction } from 'express';
-import { ApiResponse } from 'utils/rest/ApiResponse';
+import { ApiResponse } from '../utils/rest/ApiResponse';
 import jwt from 'jsonwebtoken';
 import config from '../config';
-import RoleCodes from 'utils/constants/RoleCode';
-import ResponeCodes from 'utils/constants/ResponeCode';
-import User, { UserModel } from 'databases/models/User';
-import { Role } from 'databases/models';
+import RoleCodes from '../utils/constants/RoleCode';
+import ResponeCodes from '../utils/constants/ResponeCode';
+import User, { UserModel } from '../databases/models/User';
+import { Role } from '../databases/models';
 
 interface IToken {
 	userId: number;

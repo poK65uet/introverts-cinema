@@ -1,6 +1,6 @@
 import axios from 'axios';
-import config from 'config';
-import { BillModel } from 'databases/models/Bill';
+import config from '../../config';
+import { BillModel } from '../../databases/models/Bill';
 import GetTransactionResponse, { GetTransactionData } from './GetTransactionResponse';
 import Transaction from './Transaction';
 

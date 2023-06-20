@@ -1,5 +1,5 @@
 import Router from 'express';
-import { verifyAdmin, verifyCustomer, verifyToken } from 'middlewares';
+import { verifyAdmin, verifyCustomer, verifyToken } from '../../middlewares';
 import { createBill, cancelBill, verifyPayment } from './controller';
 
 const router = Router();

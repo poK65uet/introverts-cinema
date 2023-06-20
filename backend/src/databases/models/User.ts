@@ -9,7 +9,7 @@ import {
 	NonAttribute,
 	HasManySetAssociationsMixin
 } from 'sequelize';
-import sequelize from 'databases';
+import sequelize from '../../databases';
 import { RoleModel } from './Role';
 export interface UserModel extends Model<InferAttributes<UserModel>, InferCreationAttributes<UserModel>> {
 	// Some fields are optional when calling UserModel.create() or UserModel.build(	)

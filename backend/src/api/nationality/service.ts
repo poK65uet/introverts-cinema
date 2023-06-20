@@ -1,8 +1,8 @@
 import { Request } from 'express';
-import { Nationality } from 'databases/models';
-import ResponeCodes from 'utils/constants/ResponeCode';
+import { Nationality } from '../../databases/models';
+import ResponeCodes from '../../utils/constants/ResponeCode';
 import NationalityPayload from './NationalityPayload';
-import paginate from 'utils/helpers/pagination';
+import paginate from '../../utils/helpers/pagination';
 import { Op } from 'sequelize';
 
 const getNationalities = async (req: Request) => {

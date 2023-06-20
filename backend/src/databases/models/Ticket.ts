@@ -7,7 +7,7 @@ import {
 	BelongsToSetAssociationMixin,
 	NonAttribute
 } from 'sequelize';
-import sequelize from 'databases';
+import sequelize from '../../databases';
 import User, { UserModel } from './User';
 import Film, { FilmModel } from './Film';
 

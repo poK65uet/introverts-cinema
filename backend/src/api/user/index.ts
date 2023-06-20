@@ -9,7 +9,7 @@ import {
 	changePassword,
 	verifyPassword
 } from './controller';
-import { verifyToken, verifyAdmin, verifyCustomer } from 'middlewares';
+import { verifyToken, verifyAdmin, verifyCustomer } from '../../middlewares';
 
 const router = Router();
 

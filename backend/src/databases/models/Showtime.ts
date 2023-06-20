@@ -7,7 +7,7 @@ import {
 	Model,
 	NonAttribute
 } from 'sequelize';
-import sequelize from 'databases';
+import sequelize from '../../databases';
 import Room, { RoomModel } from './Room';
 import Film, { FilmModel } from './Film';
 

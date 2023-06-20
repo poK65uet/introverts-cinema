@@ -8,10 +8,10 @@ import {
 	Model,
 	NonAttribute
 } from 'sequelize';
-import sequelize from 'databases';
+import sequelize from '../../databases';
 import Nationality from './Nationality';
 import { ActorModel, CategoryModel, DirectorModel, NationalityModel } from './IModel';
-import Status from 'utils/constants/Status';
+import Status from '../../utils/constants/Status';
 
 export interface FilmModel extends Model<InferAttributes<FilmModel>, InferCreationAttributes<FilmModel>> {
 	id: CreationOptional<number>;

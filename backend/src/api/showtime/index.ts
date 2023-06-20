@@ -1,5 +1,5 @@
 import Router from 'express';
-import { verifyToken, verifyAdmin } from 'middlewares';
+import { verifyToken, verifyAdmin } from '../../middlewares';
 import {
 	addShowtime,
 	deleteShowtime,

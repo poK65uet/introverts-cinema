@@ -1,11 +1,11 @@
 import { Request } from 'express';
 import RegisterPayLoad from './RegisterPayLoad';
-import { User, UserCode } from 'databases/models';
-import RoleCodes from 'utils/constants/RoleCode';
-import ResponeCodes from 'utils/constants/ResponeCode';
-import { sendRegisterEmail } from 'utils/helpers/email';
-import sequelize from 'databases';
-import { generateCode, generateToken } from 'utils/helpers/generate';
+import { User, UserCode } from '../../databases/models';
+import RoleCodes from '../../utils/constants/RoleCode';
+import ResponeCodes from '../../utils/constants/ResponeCode';
+import { sendRegisterEmail } from '../../utils/helpers/email';
+import sequelize from '../../databases';
+import { generateCode, generateToken } from '../../utils/helpers/generate';
 
 const checkEmail = async (req: Request) => {
 	try {
